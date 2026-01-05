@@ -56,27 +56,31 @@ https://aristonwash.gr/coupons
 
 from email.message import EmailMessage
 
+import requests
+import os
+
 def send_email(to, subject, body):
-    sender_email = "aristonwashing@gmail.com"
-    sender_password = "vdsaxmheninuvqtg"
-    print("=== USING THIS SEND_EMAIL ===")
+    print("=== USING BREVO SEND_EMAIL ===")
     print("EMAIL SUBJECT:", subject)
 
-    msg = EmailMessage()
-    msg.set_content(body)
-    msg["Subject"] = subject
-    msg["From"] = sender_email
-    msg["To"] = to
+    url = "https://api.brevo.com/v3/smtp/email"
+    api_key = os.getenv("qSRPc6fa2jC0svI4")
 
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.send_message(msg)
-        server.quit()
-        print("Email sent successfully")
-    except Exception as e:
-        print("Error sending email:", e)
+    data = {
+        "sender": {"name": "ARISTON Wash & Dry", "email": "aristonwashing@gmail.com"},
+        "to": [{"email": to}],
+        "subject": subject,
+        "htmlContent": body.replace("\n", "<br>")
+    }
+
+    headers = {
+        "accept": "application/json",
+        "api-key": api_key,
+        "content-type": "application/json"
+    }
+
+    response = requests.post(url, json=data, headers=headers)
+    print("BREVO RESPONSE:", response.status_code, response.text)
 
 @login_manager.user_loader
 def load_user(user_id):
