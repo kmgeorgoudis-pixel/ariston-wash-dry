@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Επαλήθευση Κωδικού – ARISTON Wash & Dry</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .verify-container {
+            max-width: 450px;
+            margin: 60px auto;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .verify-title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            color: #0d47a1;
+            margin-bottom: 10px;
+        }
+
+        .verify-subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cfd8dc;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #fafbfc;
+            transition: 0.25s;
+        }
+
+        .form-field input:focus {
+            border-color: #0d47a1;
+            box-shadow: 0 0 8px rgba(13,71,161,0.25);
+            background: #ffffff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(13,71,161,0.35);
+        }
+
+        /* Flash Component */
+        .flash-box {
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            animation: fadeIn 0.35s ease-out;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            border-left: 6px solid;
+        }
+
+        .flash-box.success {
+            background: #e3f2fd;
+            color: #0d47a1;
+            border-color: #0d47a1;
+        }
+
+        .flash-box.error,
+        .flash-box.danger {
+            background: #ffebee;
+            color: #c62828;
+            border-color: #c62828;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="verify-container">
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-box {{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="verify-title">Επαλήθευση Κωδικού</div>
+
+        <!-- Σταθερό μήνυμα -->
+        <div class="verify-subtitle">
+            Ο 6ψήφιος κωδικός στάλθηκε στο email σας.
+        </div>
+
+        <form action="/verify-code" method="POST">
+
+            <div class="form-field">
+                <input type="text" name="code" maxlength="6" placeholder="6ψήφιος κωδικός" required>
+            </div>
+
+            <button class="submit-btn" type="submit">Επαλήθευση</button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

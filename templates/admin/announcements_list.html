@@ -1,0 +1,32 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Ανακοινώσεις που έχουν σταλεί{% endblock %}
+{% set active_page = 'announcements' %}
+
+{% block header_title %}
+📄 Ανακοινώσεις που έχουν σταλεί
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-card">
+    <div class="admin-card-title">Σύνολο ανακοινώσεων: {{ announcements|length }}</div>
+
+    {% for ann in announcements %}
+        <div class="admin-card" style="margin-top:15px;">
+            <div class="admin-card-title">{{ ann.title }}</div>
+            <div style="color:#555; margin-bottom:8px;">{{ ann.description }}</div>
+            <div style="font-size:12px; color:#777;">
+                {{ ann.date.strftime("%d/%m/%Y %H:%M") }}
+            </div>
+
+            <form method="POST" action="/admin/announcement/{{ ann.id }}/delete" style="margin-top:10px;">
+                <button style="padding:8px 12px; background:#dc2626; color:white; border:none; border-radius:8px; cursor:pointer;">
+                    Διαγραφή
+                </button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

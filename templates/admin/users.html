@@ -1,0 +1,105 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Μέλη{% endblock %}
+{% set active_page = 'users' %}
+
+{% block header_title %}
+Μέλη
+{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+    <div style="font-size:15px; color:#4b5563;">
+        Συνολικά μέλη: <strong>{{ users|length }}</strong>
+    </div>
+
+    <form method="GET" action="/admin/users" style="display:flex; gap:8px; align-items:center;">
+        <input
+            type="text"
+            name="search"
+            value="{{ search }}"
+            placeholder="Αναζήτηση με email ή όνομα..."
+            style="padding:8px 10px; border-radius:8px; border:1px solid #d1d5db; font-size:14px; min-width:220px;"
+        >
+        <button
+            type="submit"
+            style="padding:8px 14px; border:none; border-radius:8px; background:#0d47a1; color:#fff; font-size:14px; cursor:pointer;">
+            Αναζήτηση
+        </button>
+    </form>
+</div>
+
+<div style="overflow-x:auto;">
+    <table style="width:100%; border-collapse:collapse; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 4px 16px rgba(15,23,42,0.06);">
+        <thead style="background:#e5e7eb; font-size:13px; text-align:left; color:#374151;">
+            <tr>
+                <th style="padding:10px 12px;">ID</th>
+                <th style="padding:10px 12px;">Όνομα</th>
+                <th style="padding:10px 12px;">Email</th>
+                <th style="padding:10px 12px;">Ημ. Εγγραφής</th>
+                <th style="padding:10px 12px;">Admin</th>
+                <th style="padding:10px 12px;">Ενέργειες</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if users %}
+            {% for user in users %}
+            <tr style="font-size:14px; border-top:1px solid #e5e7eb;">
+                <td style="padding:9px 12px; color:#4b5563;">{{ user.id }}</td>
+                <td style="padding:9px 12px;">
+    <a href="/admin/users/{{ user.id }}"
+       style="color:#0d47a1; font-weight:600; text-decoration:none;">
+        {{ user.fullname or "-" }}
+    </a>
+</td>
+                <td style="padding:9px 12px; color:#1d4ed8;">{{ user.email }}</td>
+                <td style="padding:9px 12px; color:#6b7280;">
+                    {{ user.created_at.strftime('%d/%m/%Y') if user.created_at else '-' }}
+                </td>
+                <td style="padding:9px 12px; color:#6b7280;">
+                    {% if user.is_admin %}
+                        <span style="padding:2px 8px; border-radius:999px; background:#0d47a1; color:#fff; font-size:12px;">
+                            Admin
+                        </span>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td style="padding:9px 12px;">
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                        <!-- Οριστική διαγραφή -->
+                        <form action="/admin/users/{{ user.id }}/delete" method="POST" onsubmit="return confirm('Οριστική διαγραφή χρήστη;');">
+                            <button type="submit"
+                                style="padding:6px 10px; border:none; border-radius:8px; font-size:12px; cursor:pointer; background:#fee2e2; color:#b91c1c;">
+                                Διαγραφή
+                            </button>
+                        </form>
+
+                        <!-- Προσθήκη κουπονιού -->
+                        <a href="/admin/users/{{ user.id }}/coupon"
+                           style="padding:6px 10px; border-radius:8px; font-size:12px; text-decoration:none; background:#e0f2fe; color:#0369a1;">
+                            Κουπόνι
+                        </a>
+
+                        <!-- Αποστολή ανακοίνωσης -->
+                        <a href="/admin/users/{{ user.id }}/announcement"
+                           style="padding:6px 10px; border-radius:8px; font-size:12px; text-decoration:none; background:#fef3c7; color:#92400e;">
+                            Ανακοίνωση
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6" style="padding:14px 12px; text-align:center; font-size:14px; color:#6b7280;">
+                    Δεν βρέθηκαν μέλη με τα τρέχοντα κριτήρια.
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

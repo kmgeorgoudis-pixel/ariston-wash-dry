@@ -1,0 +1,81 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Κριτικές{% endblock %}
+{% set active_page = 'reviews' %}
+
+{% block header_title %}
+Κριτικές Χρηστών
+{% endblock %}
+
+{% block content %}
+
+<!-- Φίλτρο -->
+<div class="admin-card" style="margin-bottom:20px;">
+    <div class="admin-card-title">Φίλτρο Βαθμολογίας</div>
+
+    <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+
+        <a href="/admin/reviews?rating=all"
+           class="admin-link {% if rating_filter == 'all' %}active{% endif %}"
+           style="padding:8px 12px; background:#e5e7eb; border-radius:8px; text-decoration:none;">
+            Όλες
+        </a>
+
+        {% for r in [5,4,3,2,1] %}
+        <a href="/admin/reviews?rating={{ r }}"
+           class="admin-link {% if rating_filter == r|string %}active{% endif %}"
+           style="padding:8px 12px; background:#e5e7eb; border-radius:8px; text-decoration:none;">
+            {{ r }} ⭐
+        </a>
+        {% endfor %}
+
+    </div>
+</div>
+
+<!-- Λίστα Κριτικών -->
+<div class="admin-card">
+    <div class="admin-card-title">Λίστα Κριτικών</div>
+
+    <div style="margin-top:12px;">
+
+        {% if reviews %}
+            {% for review in reviews %} <form action="/admin/review/delete/{{ review.id }}" method="POST" style="display:inline;">
+    <button class="delete-btn" onclick="return confirm('Σίγουρα θέλετε να διαγράψετε αυτή την κριτική;')">
+        Διαγραφή
+    </button>
+</form>
+            
+            <!-- Κάθε κριτική clickable -->
+            <a href="/admin/review/{{ review.id }}"
+               style="display:block; padding:14px; border-bottom:1px solid #e5e7eb; 
+                      text-decoration:none; color:inherit;">
+
+                <div style="font-size:15px; font-weight:700; color:#111827;">
+                    {{ review.user.fullname or review.user.email }}
+                </div>
+
+                <div style="color:#f59e0b; margin:4px 0;">
+                    {% for i in range(review.rating) %}⭐{% endfor %}
+                </div>
+
+                <div style="font-size:14px; color:#374151;">
+                    {{ review.comment or "—" }}
+                </div>
+
+                <div style="font-size:12px; color:#6b7280; margin-top:6px;">
+                    {{ review.created_at.strftime('%d/%m/%Y %H:%M') }}
+                </div>
+
+            </a>
+
+            {% endfor %}
+        {% else %}
+            <div style="padding:14px; text-align:center; color:#6b7280;">
+                Δεν υπάρχουν κριτικές με αυτό το φίλτρο.
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

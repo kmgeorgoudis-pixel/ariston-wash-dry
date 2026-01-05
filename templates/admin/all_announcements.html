@@ -1,0 +1,45 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Όλες οι Ανακοινώσεις{% endblock %}
+{% set active_page = 'announcements' %}
+
+{% block header_title %}
+Όλες οι Ανακοινώσεις
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-card">
+    <div class="admin-card-title">Λίστα Ανακοινώσεων</div>
+
+    {% if announcements %}
+        <div style="margin-top:12px;">
+            {% for a in announcements %}
+                <div style="padding:14px; border-bottom:1px solid #e5e7eb;">
+
+                    <div style="font-size:15px; font-weight:700; color:#f59e0b;">
+                        {{ a.title }}
+                    </div>
+
+                    <div style="font-size:14px; color:#374151; margin-top:4px;">
+                        {{ a.description }}
+                    </div>
+
+                    <div style="font-size:13px; color:#6b7280; margin-top:6px;">
+                        {{ a.date.strftime('%d/%m/%Y %H:%M') }}
+                    </div>
+
+                    <div style="font-size:13px; margin-top:6px;">
+                        Χρήστης:
+                        <strong>{{ a.user.name or a.user.email }}</strong>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="margin-top:12px; color:#6b7280;">Δεν υπάρχουν ανακοινώσεις.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

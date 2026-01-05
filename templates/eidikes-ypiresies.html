@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ειδικές Υπηρεσίες – ARISTON Wash & Dry</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header>
+        <div class="logo">
+    <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+    ARISTON <span>WASH & DRY</span>
+</div>
+        <nav>
+    <a href="/">Αρχική</a>
+<a href="/timokatalogos">Τιμοκατάλογος</a>
+<a href="/fwtografies">Φωτογραφίες</a>
+<a href="/eidikes-ypiresies">Ειδικές Υπηρεσίες</a>
+<a href="/kritikes">Κριτικές</a>
+<a href="/epikoinonia">Επικοινωνία</a>
+
+{% if current_user.is_authenticated %}
+<div class="user-menu" onclick="toggleMenu()">
+    <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+    <div class="user-dropdown" id="dropdownMenu">
+        <a href="/settings-menu">Ρυθμίσεις</a>
+        <a href="/updates-menu">Ενημερώσεις</a>
+        <a href="/logout" class="logout">Αποσύνδεση</a>
+    </div>
+</div>
+{% else %}
+<a href="/login" class="nav-btn">Εγγραφή / Σύνδεση</a>
+{% endif %}
+</nav>
+    </header>
+
+    <!-- Page Title -->
+    <section class="page-title">
+        <h1>Ειδικές Υπηρεσίες</h1>
+        <p>Επαγγελματικές λύσεις καθαρισμού για επιχειρήσεις, Airbnb και καταλύματα.</p>
+    </section>
+
+    <!-- MAIN BLOCK -->
+    <section class="photo-blocks">
+
+        <!-- Μεγάλο κουτί με φωτογραφία σιδερώματος -->
+        <div class="photo-block">
+            <img src="{{ url_for('static', filename='images/13.png') }}" alt="Μηχάνημα σιδερώματος">
+            <div class="photo-block-text">
+                <h3>Επαγγελματικό Σιδέρωμα & Υπηρεσίες Καθαρισμού</h3>
+                <p>
+                    Το Ariston Wash & Dry προσφέρει εξειδικευμένες υπηρεσίες καθαρισμού και σιδερώματος 
+                    για επαγγελματίες που χρειάζονται σταθερή ποιότητα, αξιοπιστία και άψογο αποτέλεσμα.
+                </p>
+                <p>
+                    Συνεργαζόμαστε με <strong>Airbnb, ξενοδοχεία, ενοικιαζόμενα δωμάτια, εστιατόρια, καφέ, 
+                    μικρές επιχειρήσεις και επαγγελματικούς χώρους</strong> που απαιτούν καθαρά λευκά είδη, 
+                    σεντόνια, πετσέτες, τραπεζομάντηλα και στολές προσωπικού.
+                </p>
+                <p>
+                    Με σύγχρονα μηχανήματα σιδερώματος και επαγγελματικό εξοπλισμό, 
+                    παραδίδουμε τα υφάσματα <strong>καθαρά, απολυμασμένα, καλοσιδερωμένα και έτοιμα για χρήση</strong>.
+                </p>
+                <p>
+                    Παρέχουμε επίσης <strong>τιμολόγιο παροχής υπηρεσιών</strong> για όλες τις επαγγελματικές συνεργασίες, 
+                    με δυνατότητα σταθερής εβδομαδιαίας ή μηνιαίας συνεργασίας.
+                </p>
+            </div>
+        </div>
+
+        <!-- Δεύτερο κουτί με αναπτυγμένο κείμενο -->
+        <div class="photo-block">
+            <img src="{{ url_for('static', filename='images/14.png') }}" alt="Επαγγελματικός καθαρισμός">
+            <div class="photo-block-text">
+                <h3>Γιατί να μας επιλέξετε</h3>
+                <p>
+                    ✔ Σταθερή ποιότητα σε κάθε πλύση  
+                    ✔ Επαγγελματικό σιδέρωμα με ειδικά μηχανήματα  
+                    ✔ Γρήγορη παράδοση – ιδανικό για Airbnb με συνεχείς check-in  
+                    ✔ Καθαριότητα, υγιεινή και φροντίδα σε κάθε ύφασμα  
+                    ✔ Εμπιστοσύνη, συνέπεια και επαγγελματισμός  
+                </p>
+                <p>
+                    Είτε έχετε μικρή επιχείρηση είτε μεγάλο κατάλυμα, 
+                    μπορούμε να αναλάβουμε πλήρως τη φροντίδα των λευκών ειδών σας, 
+                    ώστε να έχετε περισσότερο χρόνο για αυτό που έχει πραγματικά σημασία: 
+                    την εξυπηρέτηση των πελατών σας.
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Contact -->
+    <section class="contact">
+        <h3>Επικοινωνία</h3>
+        <p>📍 Διεύθυνση: 10 Δερβενακίων, Βαθύ, Σάμος 83100</p>
+        <p>📞 Τηλέφωνο: +30 698 759 8416</p>
+        <p>📧 Email: aristonwashing@gmail.com</p>
+    </section>
+
+    <footer>
+        © 2025 Ariston Wash & Dry — All Rights Reserved
+    </footer>
+<script>
+function toggleMenu() {
+    const menu = document.getElementById("dropdownMenu");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+</script>
+</body>
+</html>

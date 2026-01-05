@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Κριτικές – ARISTON Wash & Dry</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+    <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+    ARISTON <span>WASH & DRY</span>
+</div>
+    <nav>
+        <a href="/">Αρχική</a>
+        <a href="/timokatalogos">Τιμοκατάλογος</a>
+        <a href="/fwtografies">Φωτογραφίες</a>
+        <a href="/eidikes-ypiresies">Ειδικές Υπηρεσίες</a>
+        <a href="/kritikes">Κριτικές</a>
+        <a href="/epikoinonia">Επικοινωνία</a>
+
+        {% if current_user.is_authenticated %}
+        <div class="user-menu" onclick="toggleMenu()">
+            <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+            <div class="user-dropdown" id="dropdownMenu">
+                <a href="/settings-menu">Ρυθμίσεις</a>
+                <a href="/updates-menu">Ενημερώσεις</a>
+                <a href="/logout" class="logout">Αποσύνδεση</a>
+            </div>
+        </div>
+        {% else %}
+        <a href="/login" class="nav-btn">Εγγραφή / Σύνδεση</a>
+        {% endif %}
+    </nav>
+</header>
+
+<section class="page-title">
+    <h1>Κριτικές</h1>
+    <p>Θέλουμε να γνωρίζουμε τη γνώμη σας!</p>
+</section>
+
+<section class="photo-blocks">
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/15.png') }}" alt="Κριτικές">
+        <div class="photo-block-text">
+            <h3>Η άποψή σας μετράει</h3>
+            <p>Στο Ariston Wash & Dry πιστεύουμε ότι κάθε πελάτης αξίζει την καλύτερη εμπειρία.</p>
+            <p>Μοιραστείτε μαζί μας τις εντυπώσεις σας!</p>
+        </div>
+    </div>
+</section>
+
+<section class="google-form">
+
+    <h2>Αξιολόγηση Εμπειρίας – Ariston Wash & Dry Σάμος</h2>
+    <p class="anonymous">Η φόρμα είναι 100% ανώνυμη — δεν συλλέγουμε προσωπικά δεδομένα.</p>
+    <p>Συμπληρώστε τη φόρμα — χρειάζονται λιγότερο από 2 λεπτά 🧺</p>
+
+    <!-- ⭐ ΣΩΣΤΗ ΦΟΡΜΑ -->
+    <form id="reviewForm" action="/submit_review" method="POST">
+
+        <!-- Ερώτηση 1 – Αστεράκια -->
+        <div class="form-field">
+            <label>Πόσο ικανοποιημένος/η είστε από την εμπειρία σας; *</label>
+
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" required>
+                <label for="star5">★</label>
+
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4">★</label>
+
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3">★</label>
+
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2">★</label>
+
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1">★</label>
+            </div>
+        </div>
+
+        <!-- Ερώτηση 2 -->
+        <div class="form-field">
+            <label>Πόσο εύκολη ήταν η χρήση των πλυντηρίων και στεγνωτηρίων; *</label>
+
+            <div class="horizontal-options">
+                <label><span class="option-number">1</span><input type="radio" name="q2" value="1" required></label>
+                <label><span class="option-number">2</span><input type="radio" name="q2" value="2"></label>
+                <label><span class="option-number">3</span><input type="radio" name="q2" value="3"></label>
+                <label><span class="option-number">4</span><input type="radio" name="q2" value="4"></label>
+                <label><span class="option-number">5</span><input type="radio" name="q2" value="5"></label>
+            </div>
+        </div>
+
+        <!-- Ερώτηση 3 -->
+        <div class="form-field">
+            <label>Πόσο καθαρός και άνετος βρήκατε τον χώρο; *</label>
+
+            <div class="horizontal-options">
+                <label><span class="option-number">1</span><input type="radio" name="q3" value="1" required></label>
+                <label><span class="option-number">2</span><input type="radio" name="q3" value="2"></label>
+                <label><span class="option-number">3</span><input type="radio" name="q3" value="3"></label>
+                <label><span class="option-number">4</span><input type="radio" name="q3" value="4"></label>
+                <label><span class="option-number">5</span><input type="radio" name="q3" value="5"></label>
+            </div>
+        </div>
+
+        <!-- Ερώτηση 4 -->
+        <div class="form-field">
+            <label>Πόσο ικανοποιημένος/η είστε από τις τιμές μας; *</label>
+
+            <div class="horizontal-options">
+                <label><span class="option-number">1</span><input type="radio" name="q4" value="1" required></label>
+                <label><span class="option-number">2</span><input type="radio" name="q4" value="2"></label>
+                <label><span class="option-number">3</span><input type="radio" name="q4" value="3"></label>
+                <label><span class="option-number">4</span><input type="radio" name="q4" value="4"></label>
+                <label><span class="option-number">5</span><input type="radio" name="q4" value="5"></label>
+            </div>
+        </div>
+
+        <!-- Ερώτηση 5 -->
+        <div class="form-field">
+            <label>Θα προτείνατε το Ariston Wash & Dry; *</label>
+            <select id="recommend" name="recommend" required>
+                <option value="">Επιλέξτε</option>
+                <option value="yes">Ναι, σίγουρα</option>
+                <option value="maybe">Ίσως</option>
+                <option value="no">Όχι</option>
+            </select>
+        </div>
+
+        <!-- Ερώτηση 6 -->
+        <div class="form-field">
+            <label>Τι σας άρεσε περισσότερο;</label>
+            <textarea name="comment_like"></textarea>
+        </div>
+
+        <!-- Ερώτηση 7 -->
+        <div class="form-field">
+            <label>Υπάρχει κάτι που θα θέλατε να βελτιώσουμε;</label>
+            <textarea name="comment_improve"></textarea>
+        </div>
+
+        <!-- Ερώτηση 8 -->
+        <div class="form-field">
+            <label>Όνομα (προαιρετικό):</label>
+            <input type="text" name="name">
+        </div>
+
+        <!-- Ερώτηση 9 -->
+        <div class="form-field">
+            <label>Θα θέλατε να επικοινωνήσουμε μαζί σας; *</label>
+            <select id="wantContact" name="wantContact" required>
+                <option value="">Επιλέξτε</option>
+                <option value="yes">Ναι</option>
+                <option value="no">Όχι</option>
+            </select>
+        </div>
+
+        <!-- Ερώτηση 10 -->
+        <div id="contactInfoBlock" class="form-field" style="display:none;">
+            <label>Email ή Τηλέφωνο *</label>
+            <input type="text" id="contactInfo" name="contactInfo">
+        </div>
+
+        <button class="submit-btn" type="submit">Υποβολή</button>
+
+    </form>
+    <div id="thankYouMessage" class="thankyou" style="display:none; text-align:center; margin-top:30px;">
+    <h2>Αξιολόγηση Εμπειρίας – Ariston Wash & Dry Σάμος</h2>
+    <p>✅ Ευχαριστούμε θερμά για τη συμμετοχή σας!</p>
+    <p>Η άποψή σας είναι πολύτιμη και μας βοηθά να προσφέρουμε πάντα την καλύτερη εμπειρία πλύσης.</p>
+    <p>— Ariston Wash & Dry, Σάμος 🧺</p>
+    <button onclick="location.reload()" class="submit-btn">Υποβολή νέας απάντησης</button>
+</div>
+
+</section>
+
+<section class="contact">
+    <h3>Επικοινωνία</h3>
+    <p>📍 Διεύθυνση: 10 Δερβενακίων, Βαθύ, Σάμος 83100</p>
+    <p>📞 Τηλέφωνο: +30 698 759 8416</p>
+    <p>📧 Email: aristonwashing@gmail.com</p>
+</section>
+
+<footer>
+    © 2025 Ariston Wash & Dry — All Rights Reserved
+</footer>
+
+<script>
+const wantContact = document.getElementById("wantContact");
+const contactInfoBlock = document.getElementById("contactInfoBlock");
+const contactInfoInput = document.getElementById("contactInfo");
+const form = document.getElementById("reviewForm");
+const thankYou = document.getElementById("thankYouMessage");
+
+// Ερώτηση 9 – Αν θέλει επικοινωνία
+wantContact.addEventListener("change", () => {
+
+    if (wantContact.value === "yes") {
+        // Δείξε την ερώτηση 10
+        contactInfoBlock.style.display = "block";
+        contactInfoInput.required = true;
+
+    } else if (wantContact.value === "no") {
+        // Κρύψε την ερώτηση 10
+        contactInfoBlock.style.display = "none";
+        contactInfoInput.required = false;
+
+        // Αυτόματη υποβολή
+        form.requestSubmit();
+    }
+});
+
+// Μετά την υποβολή – εμφάνιση thank you
+form.addEventListener("submit", (e) => {
+    e.preventDefault(); // σταματάμε το default redirect
+
+    // Στέλνουμε τη φόρμα χειροκίνητα
+    fetch("/submit_review", {
+        method: "POST",
+        body: new FormData(form)
+    }).then(() => {
+        form.style.display = "none";
+        thankYou.style.display = "block";
+    });
+});
+</script>
+
+</body>
+</html>

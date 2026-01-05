@@ -1,0 +1,37 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Νέα Ανακοίνωση{% endblock %}
+{% set active_page = 'users' %}
+
+{% block header_title %}
+Νέα Ανακοίνωση για {{ user.name or user.email }}
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-card" style="max-width:600px; margin:auto;">
+
+    <form method="POST">
+
+        <div style="margin-bottom:14px;">
+            <label>Τίτλος</label>
+            <input type="text" name="title" required
+                   style="width:100%; padding:10px; border-radius:10px; border:1px solid #d1d5db;">
+        </div>
+
+        <div style="margin-bottom:14px;">
+            <label>Περιγραφή</label>
+            <textarea name="description" rows="5" required
+                      style="width:100%; padding:10px; border-radius:10px; border:1px solid #d1d5db;"></textarea>
+        </div>
+
+        <button type="submit"
+                style="padding:12px 18px; background:#f59e0b; color:white; border:none; border-radius:10px; cursor:pointer;">
+            Αποστολή Ανακοίνωσης
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

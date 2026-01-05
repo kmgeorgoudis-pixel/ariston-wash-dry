@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Αποστολή Κουπονιών</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #0f172a;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 960px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow:
+                0 20px 40px rgba(15, 23, 42, 0.25),
+                0 0 0 1px rgba(148, 163, 184, 0.4);
+            padding: 26px 26px 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        form {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.3fr);
+            gap: 22px;
+        }
+
+        .form-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+            margin-bottom: 10px;
+        }
+
+        .field-group {
+            margin-bottom: 12px;
+        }
+
+        .field-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .field-label span.hint {
+            font-weight: 400;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .form-control,
+        textarea,
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 9px 11px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            color: #111827;
+            outline: none;
+            background: #f9fafb;
+            transition: 0.15s ease;
+        }
+
+        .form-control:focus,
+        textarea:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.4), 0 0 0 4px rgba(191, 219, 254, 0.7);
+            background: #ffffff;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .inline-fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .amount-input-wrapper {
+            position: relative;
+        }
+
+        .amount-input-wrapper span.currency {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* Χρήστες */
+        .users-panel {
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .users-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .users-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .chip {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .chip:hover {
+            border-color: #9ca3af;
+        }
+
+        .user-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 8px;
+            border-radius: 10px;
+            background: #ffffff;
+            border: 1px solid transparent;
+            transition: 0.15s ease;
+            font-size: 13px;
+        }
+
+        .user-row:hover {
+            border-color: #bfdbfe;
+            background: #eff6ff;
+        }
+
+        .user-checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-main {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        .user-meta {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 18px 0;
+        }
+
+        .card-footer {
+            margin-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 9px 18px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 840px) {
+            form {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Αποστολή Κουπονιών</div>
+                <div class="card-subtitle">
+                    Συμπλήρωσε τα στοιχεία του κουπονιού και επίλεξε σε ποιους χρήστες θα σταλεί.
+                </div>
+            </div>
+            <div class="badge">
+                Μαζική αποστολή
+            </div>
+        </div>
+
+        <form action="/admin/coupons/send" method="POST">
+            <!-- ΣΤΟΙΧΕΙΑ ΚΟΥΠΟΝΙΟΥ -->
+            <div>
+                <div class="form-section-title">Στοιχεία κουπονιού</div>
+
+                <div class="field-group">
+                    <label class="field-label">
+                        Τίτλος
+                        <span class="hint">Π.χ. “Έκπτωση 20% σε service”</span>
+                    </label>
+                    <input type="text" name="title" required class="form-control">
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">
+                        Περιγραφή
+                        <span class="hint">Σύντομη, καθαρή περιγραφή του κουπονιού</span>
+                    </label>
+                    <textarea name="description" required class="form-control"></textarea>
+                </div>
+
+                <div class="inline-fields">
+                    <div class="field-group amount-input-wrapper">
+                        <label class="field-label">
+                            Ποσό
+                            <span class="hint">Σε ευρώ</span>
+                        </label>
+                        <input type="number"
+                               name="amount"
+                               step="0.01"
+                               min="0"
+                               required
+                               class="form-control"
+                               placeholder="0.00">
+                        <span class="currency">€</span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">
+                            Ημερομηνία Έναρξης
+                        </label>
+                        <input type="date" name="start_date" required class="form-control">
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">
+                        Ημερομηνία Λήξης
+                        <span class="hint">Ημερομηνία μέχρι την οποία ισχύει το κουπόνι</span>
+                    </label>
+                    <input type="date" name="end_date" required class="form-control">
+                </div>
+            </div>
+
+            <!-- ΕΠΙΛΟΓΗ ΧΡΗΣΤΩΝ -->
+            <div>
+                <div class="form-section-title">Επιλογή χρηστών</div>
+
+                <div class="users-header-row">
+                    <div class="card-subtitle" style="margin:0;">
+                        Επίλεξε έναν ή περισσότερους χρήστες για να λάβουν το κουπόνι.
+                    </div>
+                    <div class="users-actions">
+                        <button type="button" class="chip" onclick="toggleSelectAll(true)">
+                            Επιλογή όλων
+                        </button>
+                        <button type="button" class="chip" onclick="toggleSelectAll(false)">
+                            Καθαρισμός
+                        </button>
+                    </div>
+                </div>
+
+                <div class="users-panel">
+                    {% for user in users %}
+<label class="user-row">
+    <span class="user-checkbox">
+        <input type="checkbox" name="selected_users" value="{{ user.id }}">
+    </span>
+
+    <div class="user-main">
+        <div class="user-name">{{ user.fullname }}</div>
+        <div class="user-email">{{ user.email }}</div>
+        <div class="user-meta">ID: {{ user.id }}</div>
+    </div>
+</label>
+{% endfor %}
+                </div>
+            </div>
+        </form>
+
+        <div class="card-footer">
+            <button type="button" class="btn btn-secondary" onclick="history.back()">
+                Άκυρο
+            </button>
+            <button type="submit" form="coupon-form" class="btn btn-primary" onclick="document.forms[0].submit();">
+                Αποστολή κουπονιών
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSelectAll(flag) {
+        const checkboxes = document.querySelectorAll('input[name="selected_users"]');
+        checkboxes.forEach(cb => cb.checked = flag);
+    }
+</script>
+
+</body>
+</html>

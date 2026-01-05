@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Εγγραφή – ARISTON Wash & Dry</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .register-container {
+            max-width: 450px;
+            margin: 60px auto;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .register-logo {
+            width: 120px;
+            margin-bottom: 15px;
+        }
+
+        .register-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0d47a1;
+            margin-bottom: 5px;
+        }
+
+        .register-subtitle {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .form-field {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-field label {
+            font-weight: 600;
+            color: #0d47a1;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cfd8dc;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #fafbfc;
+            transition: 0.25s;
+        }
+
+        .form-field input:focus {
+            border-color: #0d47a1;
+            box-shadow: 0 0 8px rgba(13,71,161,0.25);
+            background: #ffffff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(13,71,161,0.35);
+        }
+
+        .login-link {
+            margin-top: 20px;
+            font-size: 15px;
+        }
+
+        .login-link a {
+            color: #0d47a1;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- REGISTER BOX -->
+    <div class="register-container">
+
+        <!-- Logo -->
+        <img src="{{ url_for('static', filename='images/1.png') }}" class="register-logo" alt="Logo">
+
+        <!-- Title -->
+        <div class="register-title">ARISTON WASH & DRY</div>
+        <div class="register-subtitle">Δημιουργία νέου λογαριασμού</div>
+
+        <!-- Register Form -->
+        <form action="/register" method="POST">
+
+            <div class="form-field">
+                <label>Ονοματεπώνυμο</label>
+                <input type="text" name="fullname" required>
+            </div>
+
+            <div class="form-field">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+
+            <div class="form-field">
+                <label>Κωδικός</label>
+                <input type="password" name="password" required>
+            </div>
+
+            <div class="form-field">
+                <label>Επιβεβαίωση Κωδικού</label>
+                <input type="password" name="confirm_password" required>
+            </div>
+
+            <button class="submit-btn" type="submit">Εγγραφή</button>
+        </form>
+
+        <div class="login-link">
+            Έχετε ήδη λογαριασμό; <a href="/login">Σύνδεση εδώ</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

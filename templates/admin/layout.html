@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARISTON Admin – {% block title %}{% endblock %}</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+        }
+
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .admin-sidebar {
+            width: 260px;
+            background: #020617;
+            color: #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 18px;
+            box-shadow: 4px 0 18px rgba(0,0,0,0.45);
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .admin-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+        }
+
+        .admin-logo-text {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-section-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin: 18px 0 8px;
+            padding-left: 4px;
+        }
+
+        .admin-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .admin-menu li {
+            margin-bottom: 6px;
+        }
+
+        .admin-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .admin-link span.icon {
+            width: 22px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .admin-link:hover {
+            background: #111827;
+        }
+
+        .admin-link.active {
+            background: linear-gradient(135deg, #0d47a1, #2563eb);
+            box-shadow: 0 0 0 1px rgba(59,130,246,0.5);
+        }
+
+        .admin-link.active span,
+        .admin-link.active {
+            color: #f9fafb;
+        }
+
+        .admin-footer {
+            margin-top: auto;
+            font-size: 12px;
+            color: #6b7280;
+            padding-top: 15px;
+            border-top: 1px solid #1f2937;
+        }
+
+        /* MAIN AREA */
+        .admin-main {
+            flex: 1;
+            background: #f3f4f6;
+            padding: 20px 28px;
+        }
+
+        .admin-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-top-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .admin-top-user {
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        .admin-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .admin-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 4px 16px rgba(15,23,42,0.08);
+        }
+
+        .admin-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+
+        .admin-card-text {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* Flash (αν το χρειαστείς εδώ) */
+        .flash-box {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-left: 5px solid;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+        .flash-box.danger,
+        .flash-box.error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border-color: #b91c1c;
+        }
+
+        @media (max-width: 900px) {
+            .admin-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .admin-wrapper {
+                flex-direction: column;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 12px 10px;
+            }
+
+            .admin-section-title {
+                display: none;
+            }
+
+            .admin-menu {
+                display: flex;
+                gap: 4px;
+            }
+
+            .admin-footer {
+                display: none;
+            }
+        }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<div class="admin-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+        <div class="admin-logo">
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" alt="ARISTON">
+            <div class="admin-logo-text">ARISTON Admin</div>
+        </div>
+
+        <div class="admin-section-title">Πίνακας ελέγχου</div>
+        <ul class="admin-menu">
+            <li>
+                <a href="/admin" class="admin-link {% if active_page == 'dashboard' %}active{% endif %}">
+                    <span class="icon">🏠</span>
+                    <span>Επισκόπηση</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="admin-section-title">Διαχείριση</div>
+        <ul class="admin-menu">
+            <li>
+                <a href="/admin/users" class="admin-link {% if active_page == 'users' %}active{% endif %}">
+                    <span class="icon">👥</span>
+                    <span>Μέλη</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/coupons" class="admin-link {% if active_page == 'coupons' %}active{% endif %}">
+                    <span class="icon">🎟️</span>
+                    <span>Κουπόνια</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/announcements" class="admin-link {% if active_page == 'announcements' %}active{% endif %}">
+                    <span class="icon">📢</span>
+                    <span>Ανακοινώσεις</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/reviews" class="admin-link {% if active_page == 'reviews' %}active{% endif %}">
+                    <span class="icon">⭐</span>
+                    <span>Κριτικές</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/messages" class="admin-link {% if active_page == 'messages' %}active{% endif %}">
+                    <span class="icon">✉️</span>
+                    <span>Φόρμες Επικοινωνίας</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="admin-footer">
+            Συνδεδεμένος ως admin<br>
+            <a href="/logout" style="color:#9ca3af; text-decoration:none;">Αποσύνδεση</a>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+
+        <div class="admin-topbar">
+            <div class="admin-top-title">
+                {% block header_title %}{% endblock %}
+            </div>
+            <div class="admin-top-user">
+                {{ current_user.email }}
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-box {{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+</div>
+
+</body>
+</html>

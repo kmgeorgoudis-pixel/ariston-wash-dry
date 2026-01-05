@@ -1,0 +1,88 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Ανακοινώσεις{% endblock %}
+{% set active_page = 'announcements' %}
+
+{% block header_title %}
+Ανακοινώσεις – Μαζική Αποστολή
+{% endblock %}
+
+{% block content %}
+<div style="margin-bottom:20px; display:flex; justify-content:flex-end;">
+    <a href="/admin/announcements/list"
+       style="padding:10px 14px; background:#2563eb; color:white; border-radius:8px; 
+              text-decoration:none; font-size:14px;">
+        📄 Ανακοινώσεις που έχουν σταλεί
+    </a>
+</div>
+
+<div class="admin-card" style="margin-bottom:20px;">
+    <div class="admin-card-title">Φίλτρα Μελών</div>
+
+    <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+
+        <a href="/admin/announcements?filter=all"
+           class="admin-link {% if filter_type == 'all' %}active{% endif %}"
+           style="padding:8px 12px; background:#e5e7eb; border-radius:8px; text-decoration:none;">
+            Όλα τα μέλη
+        </a>
+
+        <a href="/admin/announcements?filter=1month"
+           class="admin-link {% if filter_type == '1month' %}active{% endif %}"
+           style="padding:8px 12px; background:#e5e7eb; border-radius:8px; text-decoration:none;">
+            Μέλη 1 μήνα
+        </a>
+
+        <a href="/admin/announcements?filter=3months"
+           class="admin-link {% if filter_type == '3months' %}active{% endif %}"
+           style="padding:8px 12px; background:#e5e7eb; border-radius:8px; text-decoration:none;">
+            Μέλη 3 μηνών
+        </a>
+
+        <a href="/admin/announcements?filter=6months"
+           class="admin-link {% if filter_type == '6months' %}active{% endif %}"
+           style="padding:8px 12px; background:#e5e7eb; border-radius:8px; text-decoration:none;">
+            Μέλη 6 μηνών
+        </a>
+
+    </div>
+</div>
+
+<div class="admin-card" style="margin-bottom:20px;">
+    <div class="admin-card-title">Δημιουργία Ανακοίνωσης</div>
+
+    <form method="POST" action="/admin/announcements/send" style="margin-top:12px;">
+
+        <div style="margin-bottom:14px;">
+            <label>Τίτλος</label>
+            <input type="text" name="title" required
+                   style="width:100%; padding:10px; border-radius:10px; border:1px solid #d1d5db;">
+        </div>
+
+        <div style="margin-bottom:14px;">
+            <label>Περιγραφή</label>
+            <textarea name="description" rows="5" required
+                      style="width:100%; padding:10px; border-radius:10px; border:1px solid #d1d5db;"></textarea>
+        </div>
+
+        <input type="hidden" name="filter_type" value="{{ filter_type }}">
+
+        <button type="submit"
+                style="padding:12px 18px; background:#f59e0b; color:white; border:none; border-radius:10px; cursor:pointer;">
+            Αποστολή Ανακοίνωσης στα Φιλτραρισμένα Μέλη
+        </button>
+
+    </form>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-title">Μέλη που θα λάβουν την ανακοίνωση</div>
+
+    <ul style="margin-top:12px; padding-left:18px;">
+        {% for user in users %}
+            <li>{{ user.email }} ({{ user.name or "Χωρίς όνομα" }})</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

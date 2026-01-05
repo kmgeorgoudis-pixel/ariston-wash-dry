@@ -1,0 +1,83 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Φόρμες Επικοινωνίας{% endblock %}
+{% set active_page = 'messages' %}
+
+{% block header_title %}
+Φόρμες Επικοινωνίας
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-card" style="margin-bottom:20px;">
+    <div class="admin-card-title">📩 Όλα τα Μηνύματα</div>
+    <p style="font-size:14px; color:#444; margin-top:6px;">
+        Εδώ εμφανίζονται όλα τα μηνύματα που έχουν σταλεί από τη φόρμα επικοινωνίας του site.
+        Ο διαχειριστής μπορεί να δει τα στοιχεία και να επικοινωνήσει με τον πελάτη μέσω email ή τηλεφώνου.
+    </p>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-title">Λίστα Μηνυμάτων</div>
+
+    <div style="margin-top:12px;">
+
+        {% if messages %}
+            {% for m in messages %}
+                <div style="
+                    position:relative;
+                    border-bottom:1px solid #e5e7eb;
+                    padding:16px;
+                    transition:0.2s;
+                "
+                onmouseover="this.style.background='#f3f4f6'"
+                onmouseout="this.style.background='white'">
+
+                    <!-- ΚΟΥΜΠΙ ΔΙΑΓΡΑΦΗΣ -->
+                    <form action="/admin/messages/{{ m.id }}/delete" method="POST"
+                          style="position:absolute; right:16px; top:16px;"
+                          onsubmit="return confirm('Σίγουρα θέλετε να διαγράψετε αυτό το μήνυμα;');">
+                        <button type="submit"
+                                style="
+                                    background:#dc2626;
+                                    color:white;
+                                    border:none;
+                                    padding:6px 10px;
+                                    border-radius:6px;
+                                    font-size:12px;
+                                    cursor:pointer;
+                                ">
+                            Διαγραφή
+                        </button>
+                    </form>
+
+                    <!-- CLICKABLE LINK ΓΙΑ ΠΡΟΒΟΛΗ ΜΗΝΥΜΑΤΟΣ -->
+                    <a href="/admin/messages/{{ m.id }}"
+                       style="text-decoration:none; color:#111827; display:block;">
+
+                        <div style="font-size:16px; font-weight:700; color:#0d47a1;">
+                            {{ m.subject }}
+                        </div>
+
+                        <div style="font-size:14px; color:#374151; margin-top:4px;">
+                            Από: {{ m.name }} — {{ m.email }}
+                        </div>
+
+                        <div style="font-size:12px; color:#6b7280; margin-top:6px;">
+                            Ημερομηνία: {{ m.created_at.strftime('%d/%m/%Y %H:%M') }}
+                        </div>
+
+                    </a>
+
+                </div>
+            {% endfor %}
+        {% else %}
+            <div style="padding:14px; text-align:center; color:#6b7280;">
+                Δεν υπάρχουν μηνύματα επικοινωνίας.
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

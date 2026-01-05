@@ -1,0 +1,33 @@
+{% extends "admin/layout.html" %}
+{% block title %}Μήνυμα{% endblock %}
+{% set active_page = 'messages' %}
+
+{% block header_title %}
+Λεπτομέρειες Μηνύματος
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-card">
+    <div class="admin-card-title">📩 Μήνυμα Επικοινωνίας</div>
+
+    <p><strong>Ημερομηνία:</strong> {{ m.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+
+    {% if m.user_id %}
+        <p><strong>Από μέλος:</strong>
+            <a href="/admin/users/{{ m.user_id }}">{{ m.name }}</a>
+        </p>
+    {% else %}
+        <p><strong>Από επισκέπτη:</strong> {{ m.name or "Χωρίς όνομα" }}</p>
+    {% endif %}
+
+    <p><strong>Email:</strong> {{ m.email }}</p>
+    <p><strong>Θέμα:</strong> {{ m.subject }}</p>
+
+    <p style="margin-top:20px;"><strong>Μήνυμα:</strong></p>
+    <div style="padding:12px; background:#f9fafb; border-radius:8px; border:1px solid #e5e7eb;">
+        {{ m.message }}
+    </div>
+</div>
+
+{% endblock %}

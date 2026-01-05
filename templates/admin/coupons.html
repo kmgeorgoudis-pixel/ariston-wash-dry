@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block title %}Κουπόνια Χρηστών{% endblock %}
+
+{% block content %}
+
+<a href="/admin/coupons/send" 
+   style="display:inline-block; margin-bottom:20px; padding:10px 16px; background:#0d47a1; color:white; border-radius:8px; text-decoration:none;">
+    ➕ Αποστολή Κουπονιών
+</a>
+<div class="coupons-container">
+
+    <div class="coupons-title">Κουπόνια Χρηστών</div>
+    <div class="coupons-subtitle">Όλα τα κουπόνια που έχουν σταλεί</div>
+
+    {% if coupons and coupons|length > 0 %}
+        {% for c in coupons %}
+
+        <div class="coupon-box {% if c.used %}used{% endif %}">
+            
+            <h3>
+                {{ c.title }}
+                {% if c.used %}
+                    <span style="color:#b91c1c; font-size:14px;">(Χρησιμοποιήθηκε)</span>
+                {% endif %}
+            </h3>
+
+            <p>{{ c.description }}</p>
+
+            <small>
+                Αποδέκτης: <strong>{{ c.user.fullname }} ({{ c.user.email }})</strong>
+            </small><br>
+
+            <small>
+                Ημερομηνία αποστολής: {{ c.created_at.strftime('%d/%m/%Y') }}
+            </small><br>
+
+            {% if c.used %}
+                <small>Χρησιμοποιήθηκε στις: {{ c.used_at.strftime('%d/%m/%Y') }}</small>
+            {% else %}
+                <small>Λήξη: {{ c.end_date.strftime('%d/%m/%Y') }}</small>
+            {% endif %}
+
+            <div style="margin-top:15px; display:flex; gap:10px;">
+
+                {% if not c.used %}
+                <!-- Κουμπί Χρησιμοποιήθηκε -->
+                <form action="/admin/coupons/{{ c.id }}/use" method="POST">
+                    <button class="btn btn-success" style="
+                        padding:8px 14px;
+                        background:#2e7d32;
+                        color:white;
+                        border:none;
+                        border-radius:8px;
+                        cursor:pointer;
+                    ">
+                        Χρησιμοποιήθηκε
+                    </button>
+                </form>
+                {% endif %}
+
+                <!-- Κουμπί Διαγραφής -->
+                <form action="/admin/coupons/{{ c.id }}/delete" method="POST">
+                    <button class="btn btn-danger" style="
+                        padding:8px 14px;
+                        background:#b91c1c;
+                        color:white;
+                        border:none;
+                        border-radius:8px;
+                        cursor:pointer;
+                    ">
+                        Διαγραφή
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+    {% else %}
+        <div class="no-coupons">
+            Δεν υπάρχουν κουπόνια αυτή τη στιγμή.
+        </div>
+    {% endif %}
+
+</div>
+
+<style>
+    .coupon-box {
+        background: #eef3ff;
+        padding: 18px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        border-left: 5px solid #0d47a1;
+    }
+
+    .coupon-box.used {
+        background: #f0f0f0;
+        border-left: 5px solid #9e9e9e;
+        opacity: 0.7;
+    }
+</style>
+
+{% endblock %}

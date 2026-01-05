@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Τιμοκατάλογος – ARISTON Wash & Dry</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header>
+        <div class="logo">
+    <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+    ARISTON <span>WASH & DRY</span>
+</div>
+        <nav>
+    <a href="/">Αρχική</a>
+<a href="/timokatalogos">Τιμοκατάλογος</a>
+<a href="/fwtografies">Φωτογραφίες</a>
+<a href="/eidikes-ypiresies">Ειδικές Υπηρεσίες</a>
+<a href="/kritikes">Κριτικές</a>
+<a href="/epikoinonia">Επικοινωνία</a>
+
+{% if current_user.is_authenticated %}
+<div class="user-menu" onclick="toggleMenu()">
+    <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+    <div class="user-dropdown" id="dropdownMenu">
+        <a href="/settings-menu">Ρυθμίσεις</a>
+        <a href="/updates-menu">Ενημερώσεις</a>
+        <a href="/logout" class="logout">Αποσύνδεση</a>
+    </div>
+</div>
+{% else %}
+<a href="/login" class="nav-btn">Εγγραφή / Σύνδεση</a>
+{% endif %}
+</nav>
+    </header>
+
+    <!-- Page Title -->
+    <section class="page-title">
+        <h1>Τιμοκατάλογος</h1>
+        <p>Καθαρά ρούχα, εύκολα και οικονομικά!</p>
+    </section>
+
+    <section class="page-title">
+        <p>Στο Ariston Wash & Dry πλένετε και στεγνώνετε ό,τι χρειάζεστε γρήγορα, απλά και φθηνά.</p>
+        <p>Διαλέξτε το μέγεθος πλυντηρίου που ταιριάζει στις ανάγκες σας και αφήστε τα υπόλοιπα σε εμάς!</p>
+        <p>Είτε έχετε λίγα ρούχα είτε ολόκληρη οικογενειακή πλύση, εδώ θα βρείτε το πλυντήριο που σας ταιριάζει.</p>
+        <p>Ρίξτε τα ρούχα, επιλέξτε πρόγραμμα, πατήστε Start — τόσο απλά!</p>
+    </section>
+
+    <!-- ΠΛΥΣΙΜΟ -->
+    <section class="pricing-section">
+        <div class="pricing-header">
+            <h2>🧺 Πλύσιμο — Τιμοκατάλογος</h2>
+            <p>Καθαρά & φρέσκα σε λιγότερο από 1 ώρα</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Κάρτα 10 κιλών -->
+            <div class="pricing-card">
+                <div class="pricing-badge">10 κιλών</div>
+                <div class="pricing-price">4,50 €</div>
+                <div class="pricing-subtitle">Ιδανικό για μικρές πλύσεις</div>
+                <ul class="pricing-list">
+                    <li>👕 8–10 μπλούζες</li>
+                    <li>👖 4–5 παντελόνια</li>
+                    <li>🛏️ 2 σετ σεντόνια (μονά ή 1 διπλό)</li>
+                    <li>🧺 6–8 πετσέτες</li>
+                </ul>
+                <div class="pricing-tagline">
+                    Καθημερινά ρούχα & γρήγορες πλύσεις.
+                </div>
+            </div>
+
+            <!-- Κάρτα 14 κιλών -->
+            <div class="pricing-card">
+                <div class="pricing-badge badge-highlight">14 κιλών</div>
+                <div class="pricing-price">6,50 €</div>
+                <div class="pricing-subtitle">Ιδανικό για οικογένειες</div>
+                <ul class="pricing-list">
+                    <li>👕 12–15 μπλούζες</li>
+                    <li>👖 6–8 παντελόνια</li>
+                    <li>🛏️ 3 σετ σεντόνια</li>
+                    <li>🧥 1–2 μπουφάν / 🛌 1–2 παπλώματα μεσαίου μεγέθους</li>
+                </ul>
+                <div class="pricing-tagline">
+                    Ολόκληρες οικογενειακές πλύσεις, σεντόνια & παπλώματα.
+                </div>
+            </div>
+        </div>
+
+        <p class="note">
+            Σημείωση: Μην γεμίζετε το πλυντήριο πάνω από ~80% — αφήστε χώρο για σωστό καθαρισμό και περιστροφή.
+        </p>
+    </section>
+
+    <!-- ΣΤΕΓΝΩΤΗΡΙΑ -->
+    <section class="pricing-section">
+        <div class="pricing-header">
+            <h2>💨 Τιμές Στεγνωτηρίων</h2>
+            <p>Τιμές ανά 15λεπτο κύκλο</p>
+        </div>
+
+        <div class="pricing-grid small">
+            <!-- 14 κιλών στεγνωτήριο -->
+            <div class="pricing-card">
+                <div class="pricing-badge">Στεγνωτήριο 14 κιλών</div>
+                <div class="pricing-price">1,50 €</div>
+                <div class="pricing-subtitle">ανά 15 λεπτά</div>
+                <div class="pricing-tagline">
+                    Ιδανικό για κανονικές πλύσεις ρούχων.
+                </div>
+            </div>
+
+            <!-- 18 κιλών στεγνωτήριο -->
+            <div class="pricing-card">
+                <div class="pricing-badge badge-highlight">Στεγνωτήριο 18 κιλών</div>
+                <div class="pricing-price">2,00 €</div>
+                <div class="pricing-subtitle">ανά 15 λεπτά</div>
+                <div class="pricing-tagline">
+                    Ιδανικό για παπλώματα, κουβέρτες & μεγάλες ποσότητες.
+                </div>
+            </div>
+        </div>
+
+        <p class="note">
+            Μπορείτε να προσθέσετε επιπλέον χρόνο στέγνωσης αν χρειάζεται. Οι τιμές αναφέρονται ανά 15 λεπτά κύκλου.
+        </p>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact">
+        <h3>Επικοινωνία</h3>
+        <p>📍 Διεύθυνση: 10 Δερβενακίων, Βαθύ, Σάμος 83100</p>
+        <p>📞 Τηλέφωνο: +30 698 759 8416</p>
+        <p>📧 Email: aristonwashing@gmail.com</p>
+    </section>
+
+    <footer>
+        © 2025 Ariston Wash & Dry — All Rights Reserved
+    </footer>
+<script>
+function toggleMenu() {
+    const menu = document.getElementById("dropdownMenu");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+</script>
+</body>
+</html>

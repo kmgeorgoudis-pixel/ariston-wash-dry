@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Πληροφορίες Μέλους – ARISTON Wash & Dry</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .member-container {
+            max-width: 600px;
+            margin: 60px auto;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .member-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: #0d47a1;
+            margin-bottom: 10px;
+        }
+
+        .member-subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .info-block {
+            margin-bottom: 25px;
+        }
+
+        .info-block h3 {
+            color: #0d47a1;
+            margin-bottom: 10px;
+        }
+
+        .info-block p {
+            color: #444;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        .stats-box {
+            background: #eef3ff;
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 15px;
+            border-left: 5px solid #0d47a1;
+        }
+
+        .stats-box p {
+            margin: 5px 0;
+            color: #0d47a1;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 14px;
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 25px;
+            transition: 0.25s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(13,71,161,0.35);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="member-container">
+
+        <div class="member-title">Πληροφορίες Μέλους</div>
+        <div class="member-subtitle">Στοιχεία λογαριασμού & διάρκεια συμμετοχής</div>
+
+        <div class="info-block">
+            <h3>Βασικά Στοιχεία</h3>
+            <p><strong>Όνομα:</strong> {{ current_user.fullname }}</p>
+            <p><strong>Email:</strong> {{ current_user.email }}</p>
+        </div>
+
+        <div class="info-block">
+            <h3>Διάρκεια Μέλους</h3>
+            <p><strong>Ημερομηνία Εγγραφής:</strong> {{ current_user.created_at.strftime('%d/%m/%Y') }}</p>
+            <p><strong>Μέρες Μέλος:</strong> {{ days_member }}</p>
+
+            <div class="stats-box">
+                <p>🎉 Ευχαριστούμε που είστε μέλος της κοινότητάς μας!</p>
+                <p>🧺 Απολαμβάνετε προνόμια & ενημερώσεις για μέλη</p>
+            </div>
+        </div>
+
+        <a href="/settings-menu" class="back-btn">Επιστροφή στις Ρυθμίσεις</a>
+
+    </div>
+
+</body>
+</html>

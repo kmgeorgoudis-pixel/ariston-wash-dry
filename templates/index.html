@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARISTON Wash & Dry</title>
+    
+
+<meta name="description" content="Ariston Wash & Dry στη Σάμο – σύγχρονο self-service πλυντήριο ρούχων. Πλύσιμο & στέγνωμα γρήγορα, οικονομικά και εύκολα. Ανοιχτά καθημερινά.">
+
+<meta name="keywords" content="
+πλυντήρια Σάμος,
+πλυντήριο ρούχων Σάμος,
+self service laundry Samos,
+laundry Samos,
+πλυντήρια Βαθύ Σάμος,
+στεγνωτήριο Σάμος,
+πλύσιμο ρούχων Σάμος,
+πλυντήριο Σάμος 24 ώρες,
+πλυντήριο αυτόματο Σάμος,
+πλυντήριο self service Σάμος,
+Ariston Wash & Dry,
+καθαριστήριο Σάμος,
+πλυντήριο ρούχων Βαθύ,
+πλυντήριο ρούχων κοντά μου,
+laundromat Samos,
+washing machine Samos,
+dryers Samos,
+coin laundry Samos,
+laundry near me Samos,
+best laundry Samos,
+cheap laundry Samos,
+fast laundry Samos,
+Konstantinos Georgoudis,
+Κωνσταντίνος Γεωργούδης
+">
+
+<meta name="author" content="Konstantinos Georgoudis | Κωνσταντίνος Γεωργούδης">
+
+<!-- English SEO -->
+<meta name="description" lang="en" content="Ariston Wash & Dry in Samos – modern self-service laundry. Fast, affordable washing & drying. Open daily. Clean, easy and convenient.">
+<meta name="keywords" lang="en" content="
+laundry Samos,
+self service laundry Samos,
+laundromat Samos,
+washing Samos,
+drying Samos,
+coin laundry Samos,
+best laundry in Samos,
+Samos washing machines,
+Samos dryers,
+Samos laundry service,
+Ariston Wash & Dry Samos,
+Konstantinos Georgoudis
+">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header>
+        <div class="logo">
+    <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+    ARISTON <span>WASH & DRY</span>
+</div>
+        <nav>
+    <a href="/">Αρχική</a>
+    <a href="/timokatalogos">Τιμοκατάλογος</a>
+    <a href="/fwtografies">Φωτογραφίες</a>
+    <a href="/eidikes-ypiresies">Ειδικές Υπηρεσίες</a>
+    <a href="/kritikes">Κριτικές</a>
+    <a href="/epikoinonia">Επικοινωνία</a>
+
+    {% if current_user.is_authenticated %}
+    <div class="user-menu">
+    <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+    <div class="user-dropdown">
+        <a href="/settings-menu">Ρυθμίσεις</a>
+        <a href="/updates-menu">Ενημερώσεις</a>
+        <a href="/logout" class="logout">Αποσύνδεση</a>
+    </div>
+</div>
+    {% else %}
+    <a href="/login" class="nav-btn">Εγγραφή / Σύνδεση</a>
+    {% endif %}
+</nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>ARISTON WASH & DRY</h1>
+        <h2>Easy, Fast, Affordable & Effective</h2>
+        <p>Το νέο self-service πλυντήριο στη Σάμο είναι εδώ!</p>
+        <p>Ariston Wash & Dry – πλύνετε και στεγνώστε τα ρούχα σας μόνοι σας, εύκολα, γρήγορα και οικονομικά.</p>
+        <p>Ανοικτό καθημερινά, έτοιμο να σας εξυπηρετήσει όποτε το χρειαστείτε.</p>
+    </section>
+
+    <!-- Info Section with Image -->
+    <section class="info-section">
+        <div class="info-text">
+            <h3>Καλώς ήρθατε στο Ariston Wash & Dry!</h3>
+            <p>Στο Ariston Wash & Dry μπορείτε να πλύνετε και να στεγνώσετε τα ρούχα σας εύκολα, γρήγορα και οικονομικά, σε λιγότερο από μία ώρα.</p>
+            <p>Απολαύστε έναν καθαρό, μοντέρνο χώρο με σύγχρονα μηχανήματα υψηλής απόδοσης και απλή λειτουργία.</p>
+            <p>Ιδανικό για κατοίκους, φοιτητές και ταξιδιώτες που θέλουν καθαρά ρούχα χωρίς αναμονή.</p>
+            <p>Δεν χρειάζεται ραντεβού — απλώς φέρτε τα ρούχα σας, πατήστε start και χαλαρώστε!</p>
+            <p>Ενώ περιμένετε, μπορείτε να απολαύσετε έναν καφέ ή να περιηγηθείτε στο κινητό σας με το δωρεάν Wi-Fi.</p>
+            <p>Στον χώρο θα βρείτε επίσης αυτόματο πωλητή καφέ, αναψυκτικών, νερών, χυμών και snacks, ώστε η αναμονή σας να είναι ακόμη πιο ευχάριστη.</p>
+            <p><strong>Καθαριότητα, ευκολία και οικονομία — όλα σε ένα μέρος.</strong></p>
+            <p><strong>Ariston Wash & Dry – Καθαρά ρούχα, καθαρό μυαλό.</strong></p>
+        </div>
+
+        <div class="info-image">
+            <img src="{{ url_for('static', filename='images/1.png') }}" alt="Ariston Wash & Dry">
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <h3>Επικοινωνία</h3>
+        <p>📍 Διεύθυνση: 10 Δερβενακίων, Βαθύ, Σάμος 83100</p>
+        <p>📞 Τηλέφωνο: +30 698 759 8416</p>
+        <p>📧 Email: aristonwashing@gmail.com</p>
+    </section>
+
+    <footer>
+        © 2025 Ariston Wash & Dry — All Rights Reserved
+    </footer>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const avatar = document.querySelector(".user-avatar");
+    const dropdown = document.querySelector(".user-dropdown");
+
+    if (avatar) {
+        avatar.addEventListener("click", () => {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+    }
+});
+</script>
+{% if not current_user.is_authenticated %}
+<div id="promo-overlay" class="promo-overlay">
+    <div class="promo-modal">
+        <div class="promo-logo">
+            ARISTON <span>Members</span>
+        </div>
+
+        <h2 class="promo-title">Γίνε μέλος της ARISTON Wash & Dry</h2>
+        <p class="promo-text">
+            Απόκτησε πρόσβαση σε αποκλειστικά κουπόνια, προσφορές για συχνά μέλη
+            και άμεση ενημέρωση για όλες τις νέες υπηρεσίες.
+        </p>
+
+        <ul class="promo-benefits">
+            <li>• Προσωπικά κουπόνια και ειδικές εκπτώσεις</li>
+            <li>• Ιστορικό χρήσης & ενημερώσεων σε ένα σημείο</li>
+            <li>• Γρηγορότερη εξυπηρέτηση και προσαρμοσμένες προτάσεις</li>
+        </ul>
+
+        <a href="/login" class="promo-btn">Εγγραφή / Σύνδεση</a>
+
+        <button class="promo-close" id="promo-close-btn">Δεν επιθυμώ τώρα</button>
+    </div>
+</div>
+{% endif %}
+{% if not current_user.is_authenticated %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const overlay = document.getElementById("promo-overlay");
+        const closeBtn = document.getElementById("promo-close-btn");
+
+        // Εμφάνιση μετά από 10 δευτερόλεπτα
+        setTimeout(function () {
+            if (overlay) {
+                overlay.classList.add("show");
+            }
+        }, 10000);
+
+        // Κλείσιμο με το κουμπί "Δεν επιθυμώ τώρα"
+        if (closeBtn) {
+            closeBtn.addEventListener("click", function () {
+                overlay.classList.remove("show");
+            });
+        }
+    });
+</script>
+{% endif %}
+</body>
+</html>

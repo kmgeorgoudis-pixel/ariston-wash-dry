@@ -1,0 +1,80 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Όλα τα Κουπόνια{% endblock %}
+{% set active_page = 'coupons' %}
+
+{% block header_title %}
+Όλα τα Κουπόνια
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-card" style="margin-bottom:20px;">
+    <div class="admin-card-title">Φίλτρα</div>
+
+    <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+        <a href="/admin/all-coupons?filter=all"
+           style="padding:8px 12px; border-radius:8px; background:#e5e7eb; text-decoration:none;
+                  {% if filter_type == 'all' %}font-weight:700;{% endif %}">
+            Όλα
+        </a>
+
+        <a href="/admin/all-coupons?filter=active"
+           style="padding:8px 12px; border-radius:8px; background:#d1fae5; text-decoration:none;
+                  {% if filter_type == 'active' %}font-weight:700;{% endif %}">
+            Ενεργά
+        </a>
+
+        <a href="/admin/all-coupons?filter=expired"
+           style="padding:8px 12px; border-radius:8px; background:#fee2e2; text-decoration:none;
+                  {% if filter_type == 'expired' %}font-weight:700;{% endif %}">
+            Ληγμένα
+        </a>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-title">Λίστα Κουπονιών</div>
+
+    {% if coupons %}
+        <div style="margin-top:12px;">
+            {% for c in coupons %}
+                <div style="padding:14px; border-bottom:1px solid #e5e7eb;">
+
+                    <div style="font-size:15px; font-weight:700; color:#0d47a1;">
+                        {{ c.title }} — {{ "%.2f"|format(c.amount) }}€
+                    </div>
+
+                    <div style="font-size:14px; color:#374151; margin-top:4px;">
+                        {{ c.description or "-" }}
+                    </div>
+
+                    <div style="font-size:13px; color:#6b7280; margin-top:6px;">
+                        Από {{ c.start_date.strftime('%d/%m/%Y') }}
+                        έως {{ c.end_date.strftime('%d/%m/%Y') }}
+                    </div>
+
+                    <div style="font-size:13px; margin-top:6px;">
+                        Χρήστης:
+                        <strong>{{ c.user.name or c.user.email }}</strong>
+                    </div>
+
+                    {% if c.end_date < now().date() %}
+                        <div style="color:#b91c1c; font-size:12px; margin-top:4px;">
+                            Ληγμένο
+                        </div>
+                    {% else %}
+                        <div style="color:#059669; font-size:12px; margin-top:4px;">
+                            Ενεργό
+                        </div>
+                    {% endif %}
+
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="margin-top:12px; color:#6b7280;">Δεν υπάρχουν κουπόνια.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Προφίλ – ARISTON Wash & Dry</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .profile-container {
+            max-width: 450px;
+            margin: 70px auto;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .profile-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0d47a1;
+            margin-bottom: 10px;
+        }
+
+        .success-box {
+            background: #e3f2fd;
+            color: #0d47a1;
+            border-left: 6px solid #0d47a1;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .profile-info {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .home-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.25s;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(13,71,161,0.35);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+
+        <div class="success-box">
+            Το όνομα ενημερώθηκε με επιτυχία!
+        </div>
+
+        <div class="profile-title">Τα στοιχεία σας</div>
+
+        <div class="profile-info">
+            <strong>Όνομα:</strong> {{ current_user.fullname }}<br>
+            <strong>Email:</strong> {{ current_user.email }}
+        </div>
+
+        <a href="/" class="home-btn">Επιστροφή στην Αρχική</a>
+
+    </div>
+
+</body>
+</html>

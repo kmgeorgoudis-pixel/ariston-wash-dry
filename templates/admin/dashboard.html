@@ -1,0 +1,56 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% set active_page = 'dashboard' %}
+
+{% block header_title %}
+Dashboard – Στατιστικά Συστήματος
+{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; flex-wrap:wrap; gap:20px;">
+
+    <!-- Μέλη -->
+    <div class="admin-card" style="flex:1; min-width:220px;">
+        <div class="admin-card-title">Μέλη</div>
+        <div style="font-size:32px; font-weight:800; color:#0d47a1; margin-top:10px;">
+            {{ total_users }}
+        </div>
+    </div>
+
+    <!-- Κουπόνια -->
+    <div class="admin-card" style="flex:1; min-width:220px;">
+        <div class="admin-card-title">Κουπόνια</div>
+        <div style="font-size:32px; font-weight:800; color:#0369a1; margin-top:10px;">
+            {{ total_coupons }}
+        </div>
+    </div>
+
+    <!-- Ανακοινώσεις -->
+    <div class="admin-card" style="flex:1; min-width:220px;">
+        <div class="admin-card-title">Ανακοινώσεις</div>
+        <div style="font-size:32px; font-weight:800; color:#f59e0b; margin-top:10px;">
+            {{ total_announcements }}
+        </div>
+    </div>
+
+    <!-- Κριτικές -->
+    <div class="admin-card" style="flex:1; min-width:220px;">
+        <div class="admin-card-title">Κριτικές</div>
+        <div style="font-size:32px; font-weight:800; color:#10b981; margin-top:10px;">
+            {{ total_reviews }}
+        </div>
+    </div>
+
+    <!-- Μηνύματα -->
+    <div class="admin-card" style="flex:1; min-width:220px;">
+        <div class="admin-card-title">Μηνύματα Επικοινωνίας</div>
+        <div style="font-size:32px; font-weight:800; color:#b91c1c; margin-top:10px;">
+            {{ total_messages }}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

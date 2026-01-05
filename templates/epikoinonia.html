@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Επικοινωνία – ARISTON Wash & Dry</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* PAGE TITLE */
+        .page-title {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .page-title h1 {
+            font-size: 42px;
+            color: #0d47a1;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .page-title p {
+            font-size: 17px;
+            color: #444;
+            max-width: 700px;
+            margin: 0 auto 10px;
+            line-height: 1.6;
+        }
+
+        /* CONTACT INFO BOX */
+        .contact-box {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .contact-box h2 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+
+        .contact-box p {
+            font-size: 17px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        /* MAP */
+        .map-container {
+            margin: 40px auto;
+            max-width: 900px;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        /* FORM */
+        .contact-form {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .contact-form h2 {
+            color: #0d47a1;
+            margin-bottom: 10px;
+        }
+
+        .contact-form p {
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        .form-field {
+            margin-bottom: 25px;
+        }
+
+        .form-field label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: #0d47a1;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cfd8dc;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #fafbfc;
+            transition: 0.25s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #0d47a1;
+            box-shadow: 0 0 8px rgba(13,71,161,0.25);
+            background: #ffffff;
+        }
+
+        .submit-btn {
+            padding: 14px 26px;
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            width: 100%;
+            transition: 0.25s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(13,71,161,0.35);
+        }
+
+        .contact {
+            max-width: 900px;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        /* SUCCESS BOX */
+        .success-box {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .success-box h2 {
+            color: #1b5e20;
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .success-box p {
+            color: #2e7d32;
+            font-size: 17px;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header>
+        <div class="logo">
+    <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+    ARISTON <span>WASH & DRY</span>
+</div>
+        <nav>
+            <a href="/">Αρχική</a>
+            <a href="/timokatalogos">Τιμοκατάλογος</a>
+            <a href="/fwtografies">Φωτογραφίες</a>
+            <a href="/eidikes-ypiresies">Ειδικές Υπηρεσίες</a>
+            <a href="/kritikes">Κριτικές</a>
+            <a href="/epikoinonia">Επικοινωνία</a>
+
+            {% if current_user.is_authenticated %}
+            <div class="user-menu" onclick="toggleMenu()">
+                <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+                <div class="user-dropdown" id="dropdownMenu">
+                    <a href="/settings-menu">Ρυθμίσεις</a>
+                    <a href="/updates-menu">Ενημερώσεις</a>
+                    <a href="/logout" class="logout">Αποσύνδεση</a>
+                </div>
+            </div>
+            {% else %}
+            <a href="/login" class="nav-btn">Εγγραφή / Σύνδεση</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <!-- Page Title -->
+    <section class="page-title">
+        <h1>💙 Επικοινωνήστε μαζί μας</h1>
+        <p>Έχουμε πάντα χαρά να σας εξυπηρετούμε! Αν έχετε οποιαδήποτε απορία σχετικά με τις υπηρεσίες μας, τα πλυντήρια ή τις τιμές, μη διστάσετε να επικοινωνήσετε μαζί μας.</p>
+    </section>
+
+    <!-- CONTACT INFO -->
+    <div class="contact-box">
+        <h2>📍 Στοιχεία Επικοινωνίας</h2>
+
+        <p><strong>Διεύθυνση:</strong><br>10 Δερβενακίων, Βαθύ, Σάμος 83100</p>
+
+        <p><strong>Τηλέφωνο:</strong><br>+30 698 759 8416</p>
+
+        <p><strong>Email:</strong><br>aristonwashing@gmail.com</p>
+
+        <p><strong>Ώρες λειτουργίας:</strong><br>Καθημερινά 07:00 – 23:00</p>
+
+        <p><strong>Πού θα μας βρείτε:</strong><br>
+        Το Ariston Wash & Dry βρίσκεται στο κέντρο του Βαθιού, στη Σάμο.  
+        Ελάτε εύκολα με τα πόδια ή με το αυτοκίνητό σας — υπάρχει διαθέσιμο πάρκινγκ κοντά στο κατάστημα.</p>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-container">
+        <iframe 
+            src="https://www.google.com/maps?q=10%20Δερβενακίων%20Βαθύ%20Σάμος&output=embed"
+            width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+    </div>
+
+   <!-- CONTACT FORM OR SUCCESS -->
+<div id="form-container">
+
+    <div class="contact-form" id="contact-form">
+        <h2>📩 Φόρμα Επικοινωνίας</h2>
+        <p>Συμπληρώστε τη φόρμα και η ομάδα μας θα επικοινωνήσει μαζί σας άμεσα.</p>
+
+        <form id="contactForm">
+            {% if current_user.is_authenticated %}
+                <p style="margin-bottom:20px; font-size:14px; color:#444;">
+                    Είστε συνδεδεμένος ως <strong>{{ current_user.fullname }}</strong> ({{ current_user.email }}).  
+                    Το μήνυμά σας θα αποσταλεί με αυτά τα στοιχεία.
+                </p>
+            {% else %}
+                <div class="form-field">
+                    <label>Ονοματεπώνυμο *</label>
+                    <input type="text" name="name" required>
+                </div>
+
+                <div class="form-field">
+                    <label>Email ή Τηλέφωνο επικοινωνίας *</label>
+                    <input type="text" name="email" required>
+                </div>
+            {% endif %}
+
+            <div class="form-field">
+                <label>Θέμα / Λόγος επικοινωνίας *</label>
+                <input type="text" name="subject" required>
+            </div>
+
+            <div class="form-field">
+                <label>Μήνυμα *</label>
+                <textarea name="message" rows="5" required></textarea>
+            </div>
+
+            <button class="submit-btn" type="submit">Αποστολή</button>
+        </form>
+    </div>
+
+    <!-- SUCCESS BOX (ΑΡΧΙΚΑ ΚΡΥΜΜΕΝΟ) -->
+    <div class="success-box" id="success-box" style="display:none;">
+        <h2>✔ Το μήνυμά σας στάλθηκε με επιτυχία</h2>
+        <p>Η ομάδα του ARISTON Wash & Dry έλαβε το αίτημά σας και θα επικοινωνήσει μαζί σας το συντομότερο δυνατόν.</p>
+
+        <button onclick="resetForm()" class="submit-btn" style="margin-top:25px; width:250px;">
+            Νέα Φόρμα
+        </button>
+    </div>
+
+</div>
+
+<script>
+document.getElementById("contactForm").addEventListener("submit", async function(e) {
+    e.preventDefault(); // Μην κάνει reload
+
+    const formData = new FormData(this);
+
+    // Στέλνουμε τη φόρμα στο Flask
+    await fetch("/epikoinonia", {
+        method: "POST",
+        body: formData
+    });
+
+    // Κρύβουμε τη φόρμα
+    document.getElementById("contact-form").style.display = "none";
+
+    // Εμφανίζουμε το success box
+    document.getElementById("success-box").style.display = "block";
+});
+
+function resetForm() {
+    document.getElementById("success-box").style.display = "none";
+    document.getElementById("contact-form").style.display = "block";
+    document.getElementById("contactForm").reset();
+}
+</script>
+
+    <!-- Contact (footer-style) -->
+    <section class="contact">
+        <h3>Επικοινωνία</h3>
+        <p>📍 Διεύθυνση: 10 Δερβενακίων, Βαθύ, Σάμος 83100</p>
+        <p>📞 Τηλέφωνο: +30 698 759 8416</p>
+        <p>📧 Email: aristonwashing@gmail.com</p>
+    </section>
+
+    <footer>
+        © 2025 Ariston Wash & Dry — All Rights Reserved
+    </footer>
+
+    <script>
+    function toggleMenu() {
+        const menu = document.getElementById("dropdownMenu");
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+    </script>
+</body>
+</html>

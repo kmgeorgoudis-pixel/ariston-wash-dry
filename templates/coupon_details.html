@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Λεπτομέρειες Κουπονιού</title>
+
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .details-container {
+            max-width: 650px;
+            margin: 60px auto;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .details-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0d47a1;
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            margin-bottom: 15px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .value {
+            color: #555;
+        }
+
+        .used-badge {
+            display: inline-block;
+            background: #b91c1c;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .active-badge {
+            display: inline-block;
+            background: #2e7d32;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #0d47a1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="details-container">
+
+        <div class="details-title">{{ coupon.title }}</div>
+
+        {% if coupon.used %}
+            <div class="used-badge">Χρησιμοποιήθηκε</div>
+        {% else %}
+            <div class="active-badge">Ενεργό Κουπόνι</div>
+        {% endif %}
+
+        <div class="detail-row">
+            <span class="label">Περιγραφή:</span>
+            <div class="value">{{ coupon.description }}</div>
+        </div>
+
+        <div class="detail-row">
+            <span class="label">Ημερομηνία Έναρξης:</span>
+            <div class="value">{{ coupon.start_date.strftime('%d/%m/%Y') }}</div>
+        </div>
+
+        <div class="detail-row">
+            <span class="label">Ημερομηνία Λήξης:</span>
+            <div class="value">{{ coupon.end_date.strftime('%d/%m/%Y') }}</div>
+        </div>
+
+        {% if coupon.used %}
+        <div class="detail-row">
+            <span class="label">Ημερομηνία Χρήσης:</span>
+            <div class="value">{{ coupon.used_at.strftime('%d/%m/%Y') }}</div>
+        </div>
+        {% endif %}
+
+        <a href="/coupons" class="back-link">← Επιστροφή στα κουπόνια</a>
+
+    </div>
+
+</body>
+</html>
