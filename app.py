@@ -3,31 +3,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from email.header import Header
 from database import db, init_db
 from register import register_user
-from flask_mail import Message
-from flask_mail import Mail, Message
-from datetime import datetime
 from datetime import datetime, timedelta
-from flask_migrate import Migrate
-
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
-# === IMPORT ALL MODELS ===
 from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage
 
 import random
 import smtplib
 from email.mime.text import MIMEText
+from email.message import EmailMessage
 
 app = Flask(__name__, template_folder="templates", static_folder="templates")
 app.secret_key = "supersecretkey123"
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'aristonwashing@gmail.com'
-app.config['MAIL_PASSWORD'] = 'vdsaxmheninuvqtg'
 
-mail = Mail(app)
 # === SQLAlchemy Init ===
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
