@@ -64,7 +64,7 @@ def send_email(to, subject, body):
     print("EMAIL SUBJECT:", subject)
 
     url = "https://api.brevo.com/v3/smtp/email"
-    api_key = os.getenv("qSRPc6fa2jC0svI4")
+    api_key = os.getenv("BREVO_API_KEY")
 
     data = {
         "sender": {"name": "ARISTON Wash & Dry", "email": "aristonwashing@gmail.com"},
