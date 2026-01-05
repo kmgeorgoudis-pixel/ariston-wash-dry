@@ -60,27 +60,27 @@ import requests
 import os
 
 def send_email(to, subject, body):
-    print("=== USING BREVO SEND_EMAIL ===")
+    print("=== USING RESEND SEND_EMAIL ===")
     print("EMAIL SUBJECT:", subject)
 
-    url = "https://api.brevo.com/v3/smtp/email"
-    api_key = os.getenv("BREVO_API_KEY")
+    api_key = os.getenv("RESEND_API_KEY")
+
+    url = "https://api.resend.com/emails"
 
     data = {
-        "sender": {"name": "ARISTON Wash & Dry", "email": "aristonwashing@gmail.com"},
-        "to": [{"email": to}],
+        "from": "ARISTON Wash & Dry <onboarding@resend.dev>",
+        "to": [to],
         "subject": subject,
-        "htmlContent": body.replace("\n", "<br>")
+        "html": body.replace("\n", "<br>")
     }
 
     headers = {
-        "accept": "application/json",
-        "api-key": api_key,
-        "content-type": "application/json"
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
     }
 
     response = requests.post(url, json=data, headers=headers)
-    print("BREVO RESPONSE:", response.status_code, response.text)
+    print("RESEND RESPONSE:", response.status_code, response.text)
 
 @login_manager.user_loader
 def load_user(user_id):
