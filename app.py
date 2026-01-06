@@ -940,7 +940,7 @@ def updates():
     announcements = Announcement.query.filter(
         (Announcement.user_id == None) |
         (Announcement.user_id == current_user.id)
-    ).order_by(Announcement.date.desc()).all()
+    ).order_by(Announcement.id.desc()).all()
 
     return render_template("updates.html", announcements=announcements)
 
