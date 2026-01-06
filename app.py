@@ -443,7 +443,12 @@ def admin_user_profile(user_id):
         flash("Ο χρήστης δεν βρέθηκε.", "danger")
         return redirect("/admin/users")
 
-    announcements = Announcement.query.filter_by(user_id=user.id).order_by(Announcement.id.desc()).all()
+    # 🔥 Φέρνουμε ΚΑΙ προσωπικές ΚΑΙ μαζικές ανακοινώσεις
+    announcements = Announcement.query.filter(
+        (Announcement.user_id == user.id) |
+        (Announcement.user_id == None)
+    ).order_by(Announcement.id.desc()).all()
+
     coupons = Coupon.query.filter_by(user_id=user.id).order_by(Coupon.id.desc()).all()
 
     return render_template(
