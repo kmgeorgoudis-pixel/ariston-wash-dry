@@ -699,8 +699,8 @@ def admin_announcement_submit(user_id):
     db.session.add(announcement)
     db.session.commit()
 
-    # Αποστολή email (premium)
-    subject = f"Νέα ανακοίνωση από το ARISTON Wash & Dry"
+    # Αποστολή email μέσω Resend
+    subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
 
     body = f"""
 Αγαπητέ/ή {user.fullname},
@@ -721,16 +721,15 @@ def admin_announcement_submit(user_id):
 ARISTON Wash & Dry
 """
 
-    msg = Message(
-        subject=subject,
-        recipients=[user.email],
-        body=body,
-        sender="aristonwashing@gmail.com"
+    # Χρήση της send_email που ήδη δουλεύει
+    send_email(
+        user.email,
+        subject,
+        body
     )
-    mail.send(msg)
 
     flash("Η ανακοίνωση στάλθηκε επιτυχώς.", "success")
-    return redirect(f"/admin/users/{user.id}")   
+    return redirect(f"/admin/users/{user.id}")
 @app.route("/admin/users/<int:user_id>/announcement", methods=["GET"])
 @login_required
 def admin_announcement_form(user_id):
