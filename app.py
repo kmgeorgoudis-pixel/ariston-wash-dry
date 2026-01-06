@@ -791,13 +791,13 @@ def admin_send_announcements():
 Με εκτίμηση,
 ARISTON Wash & Dry
 """
-        msg = Message(
-            subject=subject,
-            recipients=[user.email],
-            body=body,
-            sender="aristonwashing@gmail.com"
+
+        # Αποστολή email μέσω Resend
+        send_email(
+            user.email,
+            subject,
+            body
         )
-        mail.send(msg)
 
     flash("Η ανακοίνωση στάλθηκε σε όλους.", "success")
     return redirect("/admin/announcements")
