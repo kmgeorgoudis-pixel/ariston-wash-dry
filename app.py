@@ -68,7 +68,7 @@ def send_email(to, subject, body):
     url = "https://api.resend.com/emails"
 
     data = {
-        "from": "ARISTON Wash & Dry <onboarding@resend.dev>",
+        "from": "ARISTON Wash & Dry <info@aristonwashdry.gr>",
         "to": [to],
         "subject": subject,
         "html": body.replace("\n", "<br>")
