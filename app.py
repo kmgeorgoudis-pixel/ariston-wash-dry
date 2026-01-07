@@ -90,7 +90,9 @@ def load_user(user_id):
 # ============================
 #       PUBLIC PAGES
 # ============================
-
+@app.context_processor
+def inject_coming_soon_flag():
+    return dict(show_coming_soon=True)
 @app.route("/")
 def home():
     return render_template("index.html")
