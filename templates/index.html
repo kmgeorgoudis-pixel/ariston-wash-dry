@@ -79,10 +79,7 @@ Konstantinos Georgoudis
     <a href="/kritikes">Κριτικές</a>
     <a href="/epikoinonia">Επικοινωνία</a>
     <div class="language-switcher">
-  <img src="/templates/images/gr-flag.png" alt="Ελληνικά" onclick="translateTo('el')" class="lang-flag">
-  <img src="/templates/images/en-flag.png" alt="English" onclick="translateTo('en')" class="lang-flag">
-</div>
-<div id="google_translate_element" style="display: none;"></div>
+  
     
 
     {% if current_user.is_authenticated %}
@@ -202,23 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
 {% endif %}
 
 </div>
-<script type="text/javascript">
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'el',
-      includedLanguages: 'el,en',
-      autoDisplay: false
-    }, 'google_translate_element');
-  }
 
-  function translateTo(lang) {
-    const select = document.querySelector('.goog-te-combo');
-    if (select) {
-      select.value = lang;
-      select.dispatchEvent(new Event('change'));
-    }
-  }
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

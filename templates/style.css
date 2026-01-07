@@ -1046,35 +1046,7 @@ nav .nav-btn:hover {
     display: inline-block;
     vertical-align: middle;
 }
-.language-switcher {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-left: auto;
-  padding-right: 20px;
-}
 
-.lang-flag {
-  width: 28px;
-  height: 20px;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: transform 0.2s ease;
-}
-
-.lang-flag:hover {
-  transform: scale(1.1);
-}
-
-.goog-te-banner-frame.skiptranslate,
-.goog-te-gadget {
-  display: none !important;
-}
-
-body {
-  top: 0px !important;
-}
 
 
 
