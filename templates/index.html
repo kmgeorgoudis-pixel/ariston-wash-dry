@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARISTON Wash & Dry</title>
+    <script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'el',
+      includedLanguages: 'el,en',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     
 
 <meta name="description" content="Ariston Wash & Dry στη Σάμο – σύγχρονο self-service πλυντήριο ρούχων. Πλύσιμο & στέγνωμα γρήγορα, οικονομικά και εύκολα. Ανοιχτά καθημερινά.">
@@ -83,12 +94,14 @@ Konstantinos Georgoudis
         <a href="/settings-menu">Ρυθμίσεις</a>
         <a href="/updates-menu">Ενημερώσεις</a>
         <a href="/logout" class="logout">Αποσύνδεση</a>
+        <div id="google_translate_element"></div>
     </div>
 </div>
     {% else %}
     <a href="/login" class="nav-btn">Εγγραφή / Σύνδεση</a>
     {% endif %}
 </nav>
+
     </header>
 
     <!-- Hero Section -->
@@ -189,22 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 </script>
 {% endif %}
-<div id="coming-soon-overlay">
-  <div class="coming-soon-content">
-    <img src="/templates/images/logo3.png" class="coming-logo" alt="Logo">
 
-    <h1 class="coming-title">Ariston Wash & Dry</h1>
-
-    <p class="coming-text">
-      Η ιστοσελίδα θα ενεργοποιηθεί με το άνοιγμα του καταστήματος.<br>
-      Σας ευχαριστούμε για την κατανόηση.
-    </p>
-
-    <p class="coming-text">
-      The website will be activated when the store officially opens.<br>
-      Thank you for your understanding.
-    </p>
-  </div>
 </div>
 </body>
 </html>
