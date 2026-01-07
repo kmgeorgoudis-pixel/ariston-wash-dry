@@ -4,15 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARISTON Wash & Dry</title>
-    <script type="text/javascript">
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'el',
-      includedLanguages: 'el,en',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-  }
-</script>
+    
 
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     
@@ -86,7 +78,12 @@ Konstantinos Georgoudis
     <a href="/eidikes-ypiresies">Ειδικές Υπηρεσίες</a>
     <a href="/kritikes">Κριτικές</a>
     <a href="/epikoinonia">Επικοινωνία</a>
-    <div id="google_translate_element"></div>
+    <div class="language-switcher">
+  <img src="/templates/images/gr-flag.png" alt="Ελληνικά" onclick="translateTo('el')" class="lang-flag">
+  <img src="/templates/images/en-flag.png" alt="English" onclick="translateTo('en')" class="lang-flag">
+</div>
+<div id="google_translate_element" style="display: none;"></div>
+    
 
     {% if current_user.is_authenticated %}
     <div class="user-menu">
@@ -205,5 +202,23 @@ document.addEventListener("DOMContentLoaded", () => {
 {% endif %}
 
 </div>
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'el',
+      includedLanguages: 'el,en',
+      autoDisplay: false
+    }, 'google_translate_element');
+  }
+
+  function translateTo(lang) {
+    const select = document.querySelector('.goog-te-combo');
+    if (select) {
+      select.value = lang;
+      select.dispatchEvent(new Event('change'));
+    }
+  }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

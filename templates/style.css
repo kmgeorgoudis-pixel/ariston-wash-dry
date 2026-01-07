@@ -1046,17 +1046,36 @@ nav .nav-btn:hover {
     display: inline-block;
     vertical-align: middle;
 }
-#google_translate_element {
-  display: inline-block;
-  margin-left: 10px;
-  font-size: 14px;
-  z-index: 9999;
+.language-switcher {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+  padding-right: 20px;
 }
-.goog-te-banner-frame.skiptranslate {
+
+.lang-flag {
+  width: 28px;
+  height: 20px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+}
+
+.lang-flag:hover {
+  transform: scale(1.1);
+}
+
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget {
   display: none !important;
 }
+
 body {
   top: 0px !important;
 }
+
+
 
 
