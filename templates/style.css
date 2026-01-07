@@ -1046,7 +1046,60 @@ nav .nav-btn:hover {
     display: inline-block;
     vertical-align: middle;
 }
+/* Fullscreen overlay */
+#coming-soon-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/templates/images/1.png') center/cover no-repeat;
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
 
+/* Content box */
+.coming-soon-content {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 40px 50px;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 600px;
+  box-shadow: 0 0 35px rgba(0,0,0,0.25);
+  animation: fadeIn 0.8s ease;
+}
+
+/* Logo */
+.coming-logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+/* Title */
+.coming-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #222;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Text */
+.coming-text {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 15px;
+  line-height: 1.5;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opa
 
 
 
