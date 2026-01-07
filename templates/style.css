@@ -1046,4 +1046,17 @@ nav .nav-btn:hover {
     display: inline-block;
     vertical-align: middle;
 }
+#google_translate_element {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 14px;
+  z-index: 9999;
+}
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+body {
+  top: 0px !important;
+}
+
 
