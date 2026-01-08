@@ -230,5 +230,16 @@ document.addEventListener("DOMContentLoaded", () => {
   window.isAuthenticated = false;
 </script>
 <script src="{{ url_for('static', filename='js/leketes.js') }}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("play-now-btn");
+    if (btn) {
+      btn.addEventListener("click", () => {
+        document.querySelector(".coming-soon-content").style.display = "none";
+        startGame();
+      });
+    }
+  });
+</script>
 </body>
 </html>
