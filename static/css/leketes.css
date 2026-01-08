@@ -1,0 +1,81 @@
+#leketes-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Λεκές */
+.leke {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle at center, #2196f3, #0d47a1);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.leke:hover {
+  transform: scale(1.2);
+}
+
+/* Σκορ & Χρονόμετρο */
+#leketes-score, #leketes-timer {
+  position: absolute;
+  top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(13, 71, 161, 0.8);
+  padding: 8px 14px;
+  border-radius: 12px;
+  z-index: 20;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#leketes-score { right: 20px; }
+#leketes-timer { left: 20px; }
+
+/* Game Over */
+#leketes-area.game-over {
+  background-color: rgba(255, 0, 0, 0.3);
+  animation: flashRed 0.5s alternate infinite;
+}
+
+@keyframes flashRed {
+  from { background-color: rgba(255, 0, 0, 0.3); }
+  to { background-color: rgba(255, 0, 0, 0.6); }
+}
+
+/* Game Win */
+#leketes-area.game-win {
+  background-color: rgba(0, 255, 0, 0.2);
+  animation: confetti 1s ease-in-out infinite;
+}
+
+@keyframes confetti {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
+}
+
+/* Κουμπί Παίξε Τώρα */
+.play-now-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #0d47a1;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.play-now-button:hover {
+  background-color: #1565c0;
+}
