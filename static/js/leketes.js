@@ -37,8 +37,8 @@ function spawnBatch() {
 function spawnLekes() {
   const leke = document.createElement("div");
   leke.className = "leke";
-  leke.style.left = Math.random() * 90 + "%";
-  leke.style.top = Math.random() * 80 + "%";
+  leke.style.left = Math.random() * 80 + 10 + "%";
+  leke.style.top = Math.random() * 70 + 10 + "%";
 
   leke.onclick = () => {
     score++;
@@ -71,7 +71,12 @@ function endGame(won) {
   clearInterval(gameInterval);
   clearInterval(timerInterval);
   bgAudio.pause();
+  try {
   bgAudio.currentTime = 0;
+  bgAudio.play();
+} catch (e) {
+  console.warn("Audio play blocked:", e);
+}
 
   const area = document.getElementById("leketes-area");
   area.innerHTML = "";

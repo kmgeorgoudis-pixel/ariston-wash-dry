@@ -1,3 +1,8 @@
+html, body, #coming-soon-overlay {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 #leketes-area {
   position: relative;
   width: 100%;
