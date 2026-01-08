@@ -1,31 +1,305 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-  <meta charset="UTF-8">
-  <title>Λεκέδες σε Πανικό</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/leketes.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ariston Wash & Dry Game</title>
+  
   <style>
-    html, body {
-      height: 100%;
+    body {
       margin: 0;
       padding: 0;
+      background: linear-gradient(to bottom, #ffffff, #d6ecff);
+      background-image:
+        radial-gradient(circle at top left, #e0f7ff 10%, transparent 40%),
+        radial-gradient(circle at bottom right, #cce6ff 10%, transparent 50%);
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    #splash {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeOut 2s ease 2s forwards;
+    }
+    #splash img {
+      width: 200px;
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    #instructions {
+      text-align: center;
+      padding: 3rem;
+      background: #ffffff;
+      color: #003366;
+    }
+
+    #instructions button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #leketes-score, #leketes-timer {
+      position: absolute;
+      top: 10px;
+      font-size: 20px;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #003366;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 8px;
+      z-index: 10;
+    }
+
+    #leketes-score { left: 10px; }
+    #leketes-timer { right: 10px; }
+
+    #leketes-area {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .leke {
+      width: 60px;
+      height: 60px;
+      background-image: url("https://i.postimg.cc/3x3QzSGq/leke.png");
+      background-size: cover;
+      background-position: center;
+      position: absolute;
+      cursor: pointer;
+      animation: fall 5.5s linear forwards, spin 5.5s linear infinite;
+    }
+
+    @keyframes fall {
+      from { top: -80px; }
+      to { top: 100vh; }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .game-win {
+      background: #d4ffd4 !important;
+    }
+
+    .game-over {
+      background: #ffd4d4 !important;
+    }
+
+    #gameover-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 0, 0, 0.05);
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #990000;
+      font-size: 1.5rem;
+      z-index: 10000;
+    }
+
+    #gameover-screen button {
+      margin-top: 1rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      background: #cc0000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
+<link rel="icon" type="image/png" href="images/logo3.png">
 </head>
 <body>
-  <div id="leketes-score">🏆 Σκορ: 0</div>
-  <div id="leketes-timer">⏱️ 2:00</div>
-  <div id="leketes-area"></div>
+
+  <div id="splash">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ariston_logo.svg/512px-Ariston_logo.svg.png" alt="Ariston Wash & Dry" />
+  </div>
+
+  <div id="instructions">
+    <h1>🧼 Ariston Wash & Dry: Πιάσε τον Λεκέ / Catch the Stain!</h1>
+    <p>Έχεις 2 λεπτά για να καθαρίσεις όσους περισσότερους λεκέδες μπορείς.<br>
+    You have 2 minutes to clean as many stains as you can.</p>
+    <p>Κάθε 5 δευτερόλεπτα εμφανίζονται 6 λεκέδες. Αν δεν τους πατήσεις σε 5,5 δευτερόλεπτα, χάνεις.<br>
+    Every 5 seconds, 6 stains appear. If you miss one in 5.5 seconds, you lose.</p>
+    <button onclick="startGame()">Ξεκίνα / Start</button>
+  </div>
+
+  <div id="game-ui" style="display:none;">
+    <div id="leketes-score">🏆 Score: 0</div>
+    <div id="leketes-timer">⏱️ 2:00</div>
+    <div id="leketes-area"></div>
+  </div>
+
+  <div id="gameover-screen" style="display:none;">
+    <h2>❌ Game Over / Τέλος Παιχνιδιού</h2>
+    <p>Προσπάθησε ξανά! / Try again!</p>
+    <button onclick="restartGame()">Παίξε Ξανά / Play Again</button>
+  </div>
 
   <script>
-    window.isAuthenticated = {{ 'true' if current_user.is_authenticated else 'false' }};
-    window.siteOpen = {{ 'true' if site_open else 'false' }};
-  </script>
-  <script src="{{ url_for('static', filename='js/leketes.js') }}"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      startGame();
+        let score = 0;
+    let timeLeft = 120;
+    let gameInterval;
+    let timerInterval;
+    let gameRunning = false;
+
+    const bgAudio = new Audio("https://media.vocaroo.com/mp3/1e82R0rWcA2w");
+    const popAudio = new Audio("https://media.vocaroo.com/mp3/1b3h6zXAKhdo");
+    const winAudio = new Audio("https://media.vocaroo.com/mp3/1dmGGEdj376Y");
+    const failAudio = new Audio("https://media.vocaroo.com/mp3/1lykkPnAt8Kv");
+
+    bgAudio.loop = false;
+    bgAudio.volume = 0.5;
+    popAudio.volume = 0.6;
+    winAudio.volume = 0.9;
+    failAudio.volume = 0.9;
+
+    bgAudio.addEventListener("ended", () => {
+      if (gameRunning) {
+        bgAudio.currentTime = 0;
+        bgAudio.play();
+      }
     });
+
+    function startGame() {
+      document.getElementById("instructions").style.display = "none";
+      document.getElementById("game-ui").style.display = "block";
+      document.getElementById("gameover-screen").style.display = "none";
+
+      score = 0;
+      timeLeft = 120;
+      gameRunning = true;
+
+      document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
+      document.getElementById("leketes-timer").innerText = `⏱️ 2:00`;
+      document.getElementById("leketes-area").className = "";
+
+      try {
+        bgAudio.currentTime = 0;
+        bgAudio.play();
+      } catch (e) {
+        console.warn("Audio play blocked:", e);
+      }
+
+      gameInterval = setInterval(spawnBatch, 5000);
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function spawnBatch() {
+      for (let i = 0; i < 6; i++) {
+        spawnLekes();
+      }
+    }
+
+    function spawnLekes() {
+      const leke = document.createElement("div");
+      leke.className = "leke";
+      leke.style.left = Math.random() * 90 + "%";
+      leke.style.top = "-80px";
+
+      leke.onclick = () => {
+        score += 10;
+        leke.remove();
+        document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
+        popAudio.currentTime = 0;
+        popAudio.play();
+      };
+
+      document.getElementById("leketes-area").appendChild(leke);
+
+      setTimeout(() => {
+        if (document.body.contains(leke)) {
+          endGame(false);
+        }
+      }, 5500);
+    }
+
+    function updateTimer() {
+      timeLeft--;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      document.getElementById("leketes-timer").innerText = `⏱️ ${minutes}:${seconds.toString().padStart(2, "0")}`;
+      if (timeLeft <= 0) {
+        endGame(true);
+      }
+    }
+
+    function endGame(won) {
+      clearInterval(gameInterval);
+      clearInterval(timerInterval);
+      gameRunning = false;
+      bgAudio.pause();
+      bgAudio.currentTime = 0;
+
+      const area = document.getElementById("leketes-area");
+      area.innerHTML = "";
+
+      if (won) {
+        area.classList.add("game-win");
+        winAudio.play();
+        confetti();
+        setTimeout(() => {
+          alert(`🏆 Τελικό σκορ / Final Score: ${score}`);
+        }, 1000);
+      } else {
+        area.classList.add("game-over");
+        failAudio.play();
+        document.getElementById("game-ui").style.display = "none";
+        document.getElementById("gameover-screen").style.display = "flex";
+      }
+    }
+
+    function restartGame() {
+      document.getElementById("gameover-screen").style.display = "none";
+      document.getElementById("instructions").style.display = "block";
+    }
+
+    function confetti() {
+      for (let i = 0; i < 100; i++) {
+        const dot = document.createElement("div");
+        dot.style.position = "absolute";
+        dot.style.width = "6px";
+        dot.style.height = "6px";
+        dot.style.borderRadius = "50%";
+        dot.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        dot.style.left = Math.random() * window.innerWidth + "px";
+        dot.style.top = Math.random() * window.innerHeight + "px";
+        dot.style.opacity = 0.8;
+        dot.style.zIndex = 1000;
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 2000);
+      }
+    }
+
+    // ✅ Κάνει τις συναρτήσεις διαθέσιμες στο HTML
+    window.startGame = startGame;
+    window.restartGame = restartGame;
   </script>
 </body>
 </html>
