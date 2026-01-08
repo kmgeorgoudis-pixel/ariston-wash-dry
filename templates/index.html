@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 <div id="coming-soon-overlay">
   <div class="coming-soon-content">
-    <img src="{{ url_for('static', filename='images/logo3.png') }}" class="coming-logo" alt="Logo">
+    <img src="/templates/images/logo3.png" class="coming-logo" alt="Logo">
 
     <h1 class="coming-title">Ariston Wash & Dry</h1>
 
@@ -214,12 +214,8 @@ document.addEventListener("DOMContentLoaded", () => {
       The website will be activated when the store officially opens.<br>
       Thank you for your understanding.
     </p>
-
-    <a href="{{ url_for('game') }}" class="play-now-button">🎮 Παίξε τώρα</a>
   </div>
-</div>
 
-<!-- Φόρτωση μόνο του CSS για εμφάνιση -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/leketes.css') }}">
+
 </body>
 </html>
