@@ -19,6 +19,7 @@
 
   <script>
     window.isAuthenticated = {{ 'true' if current_user.is_authenticated else 'false' }};
+    window.siteOpen = {{ 'true' if site_open else 'false' }};
   </script>
   <script src="{{ url_for('static', filename='js/leketes.js') }}"></script>
   <script>

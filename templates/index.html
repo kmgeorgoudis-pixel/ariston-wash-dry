@@ -217,29 +217,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <a href="{{ url_for('game') }}" class="play-now-button">🎮 Παίξε τώρα</a>
   </div>
-
-  <!-- Περιοχή παιχνιδιού -->
-  <div id="leketes-score">🏆 Σκορ: 0</div>
-  <div id="leketes-timer">⏱️ 2:00</div>
-  <div id="leketes-area"></div>
 </div>
 
-<!-- Φόρτωση CSS/JS και εκκίνηση -->
+<!-- Φόρτωση μόνο του CSS για εμφάνιση -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/leketes.css') }}">
-<script>
-  window.isAuthenticated = false;
-</script>
-<script src="{{ url_for('static', filename='js/leketes.js') }}"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById("play-now-btn");
-    if (btn) {
-      btn.addEventListener("click", () => {
-        document.querySelector(".coming-soon-content").style.display = "none";
-        startGame();
-      });
-    }
-  });
-</script>
 </body>
 </html>

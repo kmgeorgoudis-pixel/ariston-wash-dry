@@ -98,7 +98,8 @@ def home():
     return render_template("index.html")
 @app.route("/game")
 def game():
-    return render_template("game.html")
+    site_open = datetime.now() >= datetime(2026, 1, 15)  # ή όποτε ανοίγει
+    return render_template("game.html", site_open=site_open)
 @app.route("/timokatalogos")
 def timokatalogos():
     return render_template("timokatalogos.html")

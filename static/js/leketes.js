@@ -21,8 +21,12 @@ function startGame() {
   document.getElementById("leketes-timer").innerText = `⏱️ 2:00`;
   document.getElementById("leketes-area").className = "";
 
-  bgAudio.currentTime = 0;
-  bgAudio.play();
+  try {
+    bgAudio.currentTime = 0;
+    bgAudio.play();
+  } catch (e) {
+    console.warn("Audio play blocked:", e);
+  }
 
   gameInterval = setInterval(spawnBatch, 5000);
   timerInterval = setInterval(updateTimer, 1000);
@@ -72,11 +76,11 @@ function endGame(won) {
   clearInterval(timerInterval);
   bgAudio.pause();
   try {
-  bgAudio.currentTime = 0;
-  bgAudio.play();
-} catch (e) {
-  console.warn("Audio play blocked:", e);
-}
+    bgAudio.currentTime = 0;
+    bgAudio.play();
+  } catch (e) {
+    console.warn("Audio play blocked:", e);
+  }
 
   const area = document.getElementById("leketes-area");
   area.innerHTML = "";
@@ -91,7 +95,7 @@ function endGame(won) {
 
   setTimeout(() => {
     alert(`Τελικό σκορ: ${score}`);
-    if (window.isAuthenticated) {
+    if (window.siteOpen === "true" && window.isAuthenticated === "true") {
       fetch("/save-score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -102,11 +106,8 @@ function endGame(won) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("play-now-btn");
-  if (btn) {
-    btn.addEventListener("click", () => {
-      document.querySelector(".coming-soon-content").style.display = "none";
-      startGame();
-    });
+  // Αν είμαστε στη σελίδα /game, ξεκινάμε αυτόματα
+  if (document.getElementById("leketes-area")) {
+    startGame();
   }
 });
