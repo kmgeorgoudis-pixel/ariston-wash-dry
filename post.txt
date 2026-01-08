@@ -1,3 +1,3 @@
 git add .
-git commit -m "Update comingsoon"
+git commit -m "game"
 git push
