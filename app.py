@@ -96,7 +96,9 @@ def inject_coming_soon_flag():
 @app.route("/")
 def home():
     return render_template("index.html")
-
+@app.route("/game")
+def game():
+    return render_template("game.html")
 @app.route("/timokatalogos")
 def timokatalogos():
     return render_template("timokatalogos.html")

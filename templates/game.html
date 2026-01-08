@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <title>Λεκέδες σε Πανικό</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/leketes.css') }}">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="leketes-score">🏆 Σκορ: 0</div>
+  <div id="leketes-timer">⏱️ 2:00</div>
+  <div id="leketes-area"></div>
+
+  <script>
+    window.isAuthenticated = {{ 'true' if current_user.is_authenticated else 'false' }};
+  </script>
+  <script src="{{ url_for('static', filename='js/leketes.js') }}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      startGame();
+    });
+  </script>
+</body>
+</html>
