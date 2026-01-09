@@ -1046,3 +1046,114 @@ nav .nav-btn:hover {
     display: inline-block;
     vertical-align: middle;
 }
+/* ============================================
+   RESPONSIVE SYSTEM — ARISTON WASH & DRY
+   Κάνει ΟΛΟ το site να φαίνεται premium σε mobile/tablet
+   ============================================ */
+
+/* Βασική ρύθμιση για εικόνες */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Κάνει όλα τα containers να προσαρμόζονται */
+.container, .content, .section, .wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Κουμπιά */
+button, .btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+}
+
+/* Τίτλοι */
+h1, h2, h3 {
+    word-wrap: break-word;
+}
+
+/* ============================================
+   MOBILE (κάτω από 768px)
+   ============================================ */
+@media (max-width: 768px) {
+
+    body {
+        font-size: 16px;
+    }
+
+    /* Header */
+    header, .navbar {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px 0;
+    }
+
+    .navbar a {
+        padding: 10px 0;
+        font-size: 1.1rem;
+    }
+
+    /* Κάρτες */
+    .card {
+        width: 100% !important;
+        margin-bottom: 20px;
+    }
+
+    /* Φόρμες */
+    input, select, textarea {
+        width: 100% !important;
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    /* Πίνακες */
+    table {
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+        border-spacing: 0;
+    }
+
+    /* Κουμπιά */
+    button, .btn {
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    /* Τίτλοι */
+    h1 {
+        font-size: 1.8rem;
+    }
+    h2 {
+        font-size: 1.4rem;
+    }
+}
+
+/* ============================================
+   SMALL MOBILE (κάτω από 480px)
+   ============================================ */
+@media (max-width: 480px) {
+
+    body {
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .navbar a {
+        font-size: 1rem;
+    }
+
+    .card {
+        padding: 15px;
+    }
+}
