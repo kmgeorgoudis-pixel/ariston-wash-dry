@@ -15,6 +15,7 @@
         radial-gradient(circle at bottom right, #cce6ff 10%, transparent 50%);
       font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
+      color: #003366;
     }
 
     #splash {
@@ -35,23 +36,150 @@
       to { opacity: 0; visibility: hidden; }
     }
 
-    #instructions {
+    /* Κεντρικό wrapper για instructions + nickname */
+    #intro-wrapper {
       text-align: center;
-      padding: 3rem;
+      padding: 3rem 1.5rem;
       background: #ffffff;
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      margin-top: 40px;
+    }
+
+    #intro-title {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    #intro-subtitle {
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      color: #335577;
+    }
+
+    /* Nickname block */
+    #nickname-block {
+      margin-bottom: 2rem;
+      padding: 1.2rem 1rem;
+      background: #f3f8ff;
+      border-radius: 12px;
+      border: 1px solid #d0e2ff;
+    }
+
+    #nickname-block h2 {
+      margin: 0 0 0.6rem 0;
+      font-size: 1.2rem;
+    }
+
+    #nickname-block p {
+      margin: 0 0 0.8rem 0;
+      font-size: 0.95rem;
+      color: #446688;
+    }
+
+    #nickname-input {
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #aac4e8;
+      width: 220px;
+      max-width: 80%;
+      outline: none;
+    }
+
+    #nickname-input:focus {
+      border-color: #0077cc;
+      box-shadow: 0 0 0 2px rgba(0,119,204,0.15);
+    }
+
+    #nickname-error {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #cc0000;
+      min-height: 1.1em;
+    }
+
+    #change-nickname-btn {
+      margin-top: 0.8rem;
+      background: transparent;
+      border: none;
+      color: #0077cc;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Οδηγίες */
+    #instructions-text {
+      margin-top: 1.5rem;
+      text-align: left;
+      font-size: 0.97rem;
+      line-height: 1.7;
+      color: #24405e;
+    }
+
+    #instructions-text strong {
       color: #003366;
     }
 
-    #instructions button {
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
+    /* Διάταξη κάτω: Start + Top10 */
+    #intro-actions {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    #start-btn {
+      padding: 0.9rem 2.1rem;
+      font-size: 1.1rem;
       background: #0077cc;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 8px 18px rgba(0,119,204,0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
 
+    #start-btn:hover {
+      background: #005fa3;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,95,163,0.3);
+    }
+
+    #top10-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.95rem;
+      background: #ffffff;
+      color: #003366;
+      border-radius: 999px;
+      border: 1px solid #ccd9ee;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    #top10-btn:hover {
+      transform: translateY(-1px);
+      border-color: #0077cc;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    }
+
+    #top10-icon {
+      font-size: 1.2rem;
+    }
+
+    /* Σκορ & χρόνος */
     #leketes-score, #leketes-timer {
       position: absolute;
       top: 10px;
@@ -105,6 +233,10 @@
       background: #ffd4d4 !important;
     }
 
+    #game-ui {
+      display: none;
+    }
+
     #gameover-screen {
       position: fixed;
       top: 0;
@@ -132,8 +264,23 @@
       border-radius: 8px;
       cursor: pointer;
     }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      #intro-wrapper {
+        margin-top: 20px;
+        padding: 2rem 1rem;
+      }
+      #intro-title {
+        font-size: 1.6rem;
+      }
+      #instructions-text {
+        font-size: 0.9rem;
+      }
+    }
   </style>
-<link rel="icon" type="image/png" href="images/logo3.png">
+
+  <link rel="icon" type="image/png" href="images/logo3.png">
 </head>
 <body>
 
@@ -141,165 +288,376 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ariston_logo.svg/512px-Ariston_logo.svg.png" alt="Ariston Wash & Dry" />
   </div>
 
+  <!-- Εισαγωγή + Ψευδώνυμο + Οδηγίες -->
   <div id="instructions">
-    <h1>🧼 Ariston Wash & Dry: Πιάσε τον Λεκέ / Catch the Stain!</h1>
-    <p>Έχεις 2 λεπτά για να καθαρίσεις όσους περισσότερους λεκέδες μπορείς.<br>
-    You have 2 minutes to clean as many stains as you can.</p>
-    <p>Κάθε 5 δευτερόλεπτα εμφανίζονται 6 λεκέδες. Αν δεν τους πατήσεις σε 5,5 δευτερόλεπτα, χάνεις.<br>
-    Every 5 seconds, 6 stains appear. If you miss one in 5.5 seconds, you lose.</p>
-    <button onclick="startGame()">Ξεκίνα / Start</button>
+    <div id="intro-wrapper">
+      <h1 id="intro-title">🧼 Ariston Wash & Dry: Πιάσε τον Λεκέ / Catch the Stain!</h1>
+      <p id="intro-subtitle">
+        Έχεις 2 λεπτά για να καθαρίσεις όσους περισσότερους λεκέδες μπορείς.  
+        You have 2 minutes to clean as many stains as you can.
+      </p>
+
+      <!-- Ψευδώνυμο -->
+      <div id="nickname-block">
+        <h2>Ψευδώνυμο παίκτη / Player nickname</h2>
+        <p>
+          Πριν ξεκινήσεις, επίλεξε ένα ψευδώνυμο που θα εμφανίζεται στον πίνακα κατάταξης Top 10.  
+          Each score is saved with your nickname in the Top 10 leaderboard.
+        </p>
+        <input type="text" id="nickname-input" placeholder="Πληκτρολόγησε το ψευδώνυμο σου" maxlength="20">
+        <div id="nickname-error"></div>
+        <button id="change-nickname-btn" type="button" style="display:none;">
+          Αλλαγή ψευδωνύμου
+        </button>
+      </div>
+
+      <!-- Οδηγίες παιχνιδιού -->
+      <div id="instructions-text">
+        <p>
+          <strong>Πώς παίζεται:</strong><br>
+          Κάθε 5 δευτερόλεπτα εμφανίζονται 6 λεκέδες. Αν ένας λεκές μείνει στην οθόνη για πολλή ώρα χωρίς να τον πατήσεις, το παιχνίδι τελειώνει.
+        </p>
+        <p>
+          <strong>Στόχος:</strong><br>
+          Πάτησε όσο περισσότερους λεκέδες μπορείς μέσα σε 2 λεπτά για να συγκεντρώσεις το υψηλότερο σκορ.
+        </p>
+        <p>
+          <strong>Extra πόντοι:</strong><br>
+          Κατά τη διάρκεια του παιχνιδιού, εμφανίζονται κατά διαστήματα ειδικά bonus αντικείμενα που δίνουν επιπλέον πόντους όταν τα πετυχαίνεις.
+          Μην τα αφήνεις να σου ξεφύγουν!
+        </p>
+        <p>
+          <strong>Leaderboard:</strong><br>
+          Τα καλύτερα σκορ εμφανίζονται στον πίνακα Top 10 μόνο με τα ψευδώνυμα των παικτών.
+        </p>
+      </div>
+
+      <!-- Κουμπιά: Start + Top10 -->
+      <div id="intro-actions">
+        <button id="start-btn" onclick="startGame()">Ξεκίνα / Start</button>
+
+        <a id="top10-btn" href="/top10">
+          <span id="top10-icon">🏆</span>
+          <span>Top 10 παίκτες</span>
+        </a>
+      </div>
+    </div>
   </div>
 
+  <!-- Game UI -->
   <div id="game-ui" style="display:none;">
     <div id="leketes-score">🏆 Score: 0</div>
     <div id="leketes-timer">⏱️ 2:00</div>
     <div id="leketes-area"></div>
   </div>
 
+  <!-- Game Over -->
   <div id="gameover-screen" style="display:none;">
     <h2>❌ Game Over / Τέλος Παιχνιδιού</h2>
     <p>Προσπάθησε ξανά! / Try again!</p>
     <button onclick="restartGame()">Παίξε Ξανά / Play Again</button>
   </div>
 
-  <script>
-        let score = 0;
-    let timeLeft = 120;
-    let gameInterval;
-    let timerInterval;
-    let gameRunning = false;
+<script>
+/* -----------------------------------------
+   ΒΑΣΙΚΕΣ ΜΕΤΑΒΛΗΤΕΣ ΠΑΙΧΝΙΔΙΟΥ
+----------------------------------------- */
+let score = 0;
+let timeLeft = 120;
+let gameInterval;
+let timerInterval;
+let bonusStarInterval;
+let bonusDiamondInterval;
+let gameRunning = false;
 
-    const bgAudio = new Audio("https://media.vocaroo.com/mp3/1e82R0rWcA2w");
-    const popAudio = new Audio("https://media.vocaroo.com/mp3/1b3h6zXAKhdo");
-    const winAudio = new Audio("https://media.vocaroo.com/mp3/1dmGGEdj376Y");
-    const failAudio = new Audio("https://media.vocaroo.com/mp3/1lykkPnAt8Kv");
+/* -----------------------------------------
+   ΗΧΟΙ
+----------------------------------------- */
+const bgAudio = new Audio("https://media.vocaroo.com/mp3/1e82R0rWcA2w");
+const popAudio = new Audio("https://media.vocaroo.com/mp3/1b3h6zXAKhdo");
+const winAudio = new Audio("https://media.vocaroo.com/mp3/1dmGGEdj376Y");
+const failAudio = new Audio("https://media.vocaroo.com/mp3/1lykkPnAt8Kv");
+const bonusAudio = new Audio("https://alternative-coffee-dx0gnrlsin.edgeone.app/bonus-143026.mp3");
 
-    bgAudio.loop = false;
-    bgAudio.volume = 0.5;
-    popAudio.volume = 0.6;
-    winAudio.volume = 0.9;
-    failAudio.volume = 0.9;
+bgAudio.loop = false;
+bgAudio.volume = 0.5;
+popAudio.volume = 0.6;
+winAudio.volume = 0.9;
+failAudio.volume = 0.9;
+bonusAudio.volume = 1.0;
 
-    bgAudio.addEventListener("ended", () => {
-      if (gameRunning) {
-        bgAudio.currentTime = 0;
-        bgAudio.play();
-      }
-    });
+bgAudio.addEventListener("ended", () => {
+  if (gameRunning) {
+    bgAudio.currentTime = 0;
+    bgAudio.play();
+  }
+});
 
-    function startGame() {
-      document.getElementById("instructions").style.display = "none";
-      document.getElementById("game-ui").style.display = "block";
-      document.getElementById("gameover-screen").style.display = "none";
+/* -----------------------------------------
+   NICKNAME SYSTEM
+----------------------------------------- */
+function getNickname() {
+  return localStorage.getItem("ariston_nickname") || "";
+}
 
-      score = 0;
-      timeLeft = 120;
-      gameRunning = true;
+function setNickname(nick) {
+  localStorage.setItem("ariston_nickname", nick);
+}
 
-      document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
-      document.getElementById("leketes-timer").innerText = `⏱️ 2:00`;
-      document.getElementById("leketes-area").className = "";
+function initNickname() {
+  const input = document.getElementById("nickname-input");
+  const error = document.getElementById("nickname-error");
+  const changeBtn = document.getElementById("change-nickname-btn");
 
-      try {
-        bgAudio.currentTime = 0;
-        bgAudio.play();
-      } catch (e) {
-        console.warn("Audio play blocked:", e);
-      }
+  const saved = getNickname();
+  if (saved) {
+    input.value = saved;
+    changeBtn.style.display = "inline-block";
+    error.textContent = "";
+  }
 
-      gameInterval = setInterval(spawnBatch, 5000);
-      timerInterval = setInterval(updateTimer, 1000);
+  changeBtn.addEventListener("click", () => {
+    input.focus();
+  });
+}
+
+function validateNickname() {
+  const input = document.getElementById("nickname-input");
+  const error = document.getElementById("nickname-error");
+  const nickname = input.value.trim();
+
+  if (!nickname) {
+    error.textContent = "Πρέπει να εισάγεις ψευδώνυμο για να ξεκινήσεις.";
+    return false;
+  }
+  if (nickname.length < 3) {
+    error.textContent = "Το ψευδώνυμο πρέπει να έχει τουλάχιστον 3 χαρακτήρες.";
+    return false;
+  }
+
+  error.textContent = "";
+  setNickname(nickname);
+  return true;
+}
+
+/* -----------------------------------------
+   ΕΝΑΡΞΗ ΠΑΙΧΝΙΔΙΟΥ
+----------------------------------------- */
+function startGame() {
+  if (!validateNickname()) return;
+
+  document.getElementById("instructions").style.display = "none";
+  document.getElementById("game-ui").style.display = "block";
+  document.getElementById("gameover-screen").style.display = "none";
+
+  score = 0;
+  timeLeft = 120;
+  gameRunning = true;
+
+  document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
+  document.getElementById("leketes-timer").innerText = `⏱️ 2:00`;
+  document.getElementById("leketes-area").className = "";
+
+  try {
+    bgAudio.currentTime = 0;
+    bgAudio.play();
+  } catch (e) {}
+
+  gameInterval = setInterval(spawnBatch, 5000);
+  timerInterval = setInterval(updateTimer, 1000);
+
+  // ⭐ BONUS κάθε ~10s μετά το 1 λεπτό
+  setTimeout(() => {
+    bonusStarInterval = setInterval(spawnStar, 10000);
+  }, 60000);
+
+  // 💎 BONUS κάθε ~20s μετά το 1 λεπτό
+  setTimeout(() => {
+    bonusDiamondInterval = setInterval(spawnDiamond, 20000);
+  }, 60000);
+}
+
+/* -----------------------------------------
+   ΣΠΑWN ΛΕΚΕΔΩΝ
+----------------------------------------- */
+function spawnBatch() {
+  for (let i = 0; i < 6; i++) {
+    spawnLekes();
+  }
+}
+
+function spawnLekes() {
+  const leke = document.createElement("div");
+  leke.className = "leke";
+  leke.style.left = Math.random() * 90 + "%";
+  leke.style.top = "-80px";
+
+  leke.onclick = () => {
+    score += 10;
+    leke.remove();
+    document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
+    popAudio.currentTime = 0;
+    popAudio.play();
+  };
+
+  document.getElementById("leketes-area").appendChild(leke);
+
+  setTimeout(() => {
+    if (document.body.contains(leke)) {
+      endGame(false);
     }
+  }, 5500);
+}
 
-    function spawnBatch() {
-      for (let i = 0; i < 6; i++) {
-        spawnLekes();
-      }
-    }
+/* -----------------------------------------
+   ⭐ BONUS STAR (+25)
+----------------------------------------- */
+function spawnStar() {
+  if (!gameRunning) return;
 
-    function spawnLekes() {
-      const leke = document.createElement("div");
-      leke.className = "leke";
-      leke.style.left = Math.random() * 90 + "%";
-      leke.style.top = "-80px";
+  const star = document.createElement("div");
+  star.className = "leke";
+  star.style.backgroundImage = "none";
+  star.style.fontSize = "40px";
+  star.style.textAlign = "center";
+  star.style.lineHeight = "60px";
+  star.style.color = "#ffcc00";
+  star.style.fontWeight = "bold";
+  star.innerHTML = "⭐";
 
-      leke.onclick = () => {
-        score += 10;
-        leke.remove();
-        document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
-        popAudio.currentTime = 0;
-        popAudio.play();
-      };
+  star.style.left = Math.random() * 90 + "%";
+  star.style.top = "-80px";
 
-      document.getElementById("leketes-area").appendChild(leke);
+  star.onclick = () => {
+    score += 25;
+    star.remove();
+    document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
+    bonusAudio.currentTime = 0;
+    bonusAudio.play();
+  };
 
-      setTimeout(() => {
-        if (document.body.contains(leke)) {
-          endGame(false);
-        }
-      }, 5500);
-    }
+  document.getElementById("leketes-area").appendChild(star);
 
-    function updateTimer() {
-      timeLeft--;
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      document.getElementById("leketes-timer").innerText = `⏱️ ${minutes}:${seconds.toString().padStart(2, "0")}`;
-      if (timeLeft <= 0) {
-        endGame(true);
-      }
-    }
+  setTimeout(() => {
+    if (document.body.contains(star)) star.remove();
+  }, 5500);
+}
 
-    function endGame(won) {
-      clearInterval(gameInterval);
-      clearInterval(timerInterval);
-      gameRunning = false;
-      bgAudio.pause();
-      bgAudio.currentTime = 0;
+/* -----------------------------------------
+   💎 BONUS DIAMOND (+50)
+----------------------------------------- */
+function spawnDiamond() {
+  if (!gameRunning) return;
 
-      const area = document.getElementById("leketes-area");
-      area.innerHTML = "";
+  const diamond = document.createElement("div");
+  diamond.className = "leke";
+  diamond.style.backgroundImage = "none";
+  diamond.style.fontSize = "40px";
+  diamond.style.textAlign = "center";
+  diamond.style.lineHeight = "60px";
+  diamond.style.color = "#00aaff";
+  diamond.style.fontWeight = "bold";
+  diamond.innerHTML = "💎";
 
-      if (won) {
-        area.classList.add("game-win");
-        winAudio.play();
-        confetti();
-        setTimeout(() => {
-          alert(`🏆 Τελικό σκορ / Final Score: ${score}`);
-        }, 1000);
-      } else {
-        area.classList.add("game-over");
-        failAudio.play();
-        document.getElementById("game-ui").style.display = "none";
-        document.getElementById("gameover-screen").style.display = "flex";
-      }
-    }
+  diamond.style.left = Math.random() * 90 + "%";
+  diamond.style.top = "-80px";
 
-    function restartGame() {
-      document.getElementById("gameover-screen").style.display = "none";
-      document.getElementById("instructions").style.display = "block";
-    }
+  diamond.onclick = () => {
+    score += 50;
+    diamond.remove();
+    document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
+    bonusAudio.currentTime = 0;
+    bonusAudio.play();
+  };
 
-    function confetti() {
-      for (let i = 0; i < 100; i++) {
-        const dot = document.createElement("div");
-        dot.style.position = "absolute";
-        dot.style.width = "6px";
-        dot.style.height = "6px";
-        dot.style.borderRadius = "50%";
-        dot.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-        dot.style.left = Math.random() * window.innerWidth + "px";
-        dot.style.top = Math.random() * window.innerHeight + "px";
-        dot.style.opacity = 0.8;
-        dot.style.zIndex = 1000;
-        document.body.appendChild(dot);
-        setTimeout(() => dot.remove(), 2000);
-      }
-    }
+  document.getElementById("leketes-area").appendChild(diamond);
 
-    // ✅ Κάνει τις συναρτήσεις διαθέσιμες στο HTML
-    window.startGame = startGame;
-    window.restartGame = restartGame;
-  </script>
+  setTimeout(() => {
+    if (document.body.contains(diamond)) diamond.remove();
+  }, 5500);
+}
+
+/* -----------------------------------------
+   TIMER
+----------------------------------------- */
+function updateTimer() {
+  timeLeft--;
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  document.getElementById("leketes-timer").innerText =
+    `⏱️ ${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+  if (timeLeft <= 0) {
+    endGame(true);
+  }
+}
+
+/* -----------------------------------------
+   GAME END
+----------------------------------------- */
+function endGame(won) {
+  clearInterval(gameInterval);
+  clearInterval(timerInterval);
+  clearInterval(bonusStarInterval);
+  clearInterval(bonusDiamondInterval);
+
+  gameRunning = false;
+  bgAudio.pause();
+  bgAudio.currentTime = 0;
+
+  const area = document.getElementById("leketes-area");
+  area.innerHTML = "";
+
+  if (won) {
+    area.classList.add("game-win");
+    winAudio.play();
+    confetti();
+    setTimeout(() => {
+      alert(`🏆 Τελικό σκορ / Final Score: ${score}`);
+    }, 1000);
+  } else {
+    area.classList.add("game-over");
+    failAudio.play();
+    document.getElementById("game-ui").style.display = "none";
+    document.getElementById("gameover-screen").style.display = "flex";
+  }
+}
+
+/* -----------------------------------------
+   RESTART
+----------------------------------------- */
+function restartGame() {
+  document.getElementById("gameover-screen").style.display = "none";
+  document.getElementById("instructions").style.display = "block";
+}
+
+/* -----------------------------------------
+   CONFETTI
+----------------------------------------- */
+function confetti() {
+  for (let i = 0; i < 100; i++) {
+    const dot = document.createElement("div");
+    dot.style.position = "absolute";
+    dot.style.width = "6px";
+    dot.style.height = "6px";
+    dot.style.borderRadius = "50%";
+    dot.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+    dot.style.left = Math.random() * window.innerWidth + "px";
+    dot.style.top = Math.random() * window.innerHeight + "px";
+    dot.style.opacity = 0.8;
+    dot.style.zIndex = 1000;
+    document.body.appendChild(dot);
+    setTimeout(() => dot.remove(), 2000);
+  }
+}
+
+/* -----------------------------------------
+   INIT
+----------------------------------------- */
+window.startGame = startGame;
+window.restartGame = restartGame;
+
+document.addEventListener("DOMContentLoaded", initNickname);
+</script>
 </body>
 </html>

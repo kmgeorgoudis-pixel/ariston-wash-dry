@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 10 Παίκτες – Ariston Wash & Dry</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #ffffff, #d6ecff);
+            font-family: 'Segoe UI', sans-serif;
+            color: #003366;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            font-size: 1rem;
+            color: #446688;
+            margin-bottom: 30px;
+        }
+
+        .leaderboard {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .leaderboard li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            background: #f3f8ff;
+            border: 1px solid #d0e2ff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* TOP 1 */
+        .leaderboard li:nth-child(1) {
+            background: linear-gradient(to right, #ffe08a, #ffd65c);
+            border: none;
+            color: #5a3d00;
+            font-size: 1.25rem;
+            box-shadow: 0 6px 16px rgba(255, 200, 0, 0.35);
+        }
+
+        /* TOP 2 */
+        .leaderboard li:nth-child(2) {
+            background: linear-gradient(to right, #e6e6e6, #d9d9d9);
+            border: none;
+            color: #333333;
+            font-size: 1.2rem;
+            box-shadow: 0 6px 16px rgba(180, 180, 180, 0.35);
+        }
+
+        /* TOP 3 */
+        .leaderboard li:nth-child(3) {
+            background: linear-gradient(to right, #f3c7a7, #e8a475);
+            border: none;
+            color: #4a2e14;
+            font-size: 1.15rem;
+            box-shadow: 0 6px 16px rgba(200, 120, 60, 0.35);
+        }
+
+        .rank {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .nickname {
+            flex: 1;
+            text-align: left;
+        }
+
+        .score {
+            font-weight: bold;
+            color: #003366;
+        }
+
+        .back-btn {
+            margin-top: 25px;
+            display: inline-block;
+            padding: 12px 22px;
+            background: #0077cc;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 8px 18px rgba(0,119,204,0.25);
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #005fa3;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .leaderboard li {
+                font-size: 1rem;
+            }
+            .leaderboard li:nth-child(1),
+            .leaderboard li:nth-child(2),
+            .leaderboard li:nth-child(3) {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏆 Top 10 Παίκτες</h1>
+    <p class="subtitle">Τα καλύτερα σκορ από το Ariston Wash & Dry Game</p>
+
+    <ul class="leaderboard">
+        {% for p in players %}
+        <li>
+            <span class="rank">#{{ loop.index }}</span>
+            <span class="nickname">{{ p.nickname }}</span>
+            <span class="score">{{ p.best_score }} πόντοι</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="/game" class="back-btn">⬅ Επιστροφή στο Παιχνίδι</a>
+</div>
+
+</body>
+</html>

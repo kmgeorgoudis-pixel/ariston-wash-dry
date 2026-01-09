@@ -7,8 +7,7 @@ from datetime import datetime, timedelta
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
-from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage
-
+from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage, Score
 import random
 import smtplib
 from email.mime.text import MIMEText
@@ -96,6 +95,46 @@ def inject_coming_soon_flag():
 @app.route("/")
 def home():
     return render_template("index.html")
+@app.route("/check_nickname", methods=["POST"])
+def check_nickname():
+    data = request.get_json()
+    nickname = data.get("nickname", "").strip()
+
+    if not nickname:
+        return {"ok": False, "error": "Empty nickname"}
+
+    exists = Score.query.filter_by(nickname=nickname).first()
+    return {"exists": bool(exists)}
+@app.route("/submit_score", methods=["POST"])
+def submit_score():
+    data = request.get_json()
+    nickname = data.get("nickname", "").strip()
+    score = int(data.get("score", 0))
+
+    if not nickname:
+        return {"ok": False, "error": "No nickname"}
+
+    entry = Score.query.filter_by(nickname=nickname).first()
+
+    if entry:
+        if score > entry.best_score:
+            entry.best_score = score
+            entry.last_played = datetime.utcnow()
+            db.session.commit()
+    else:
+        new_entry = Score(
+            nickname=nickname,
+            best_score=score,
+            last_played=datetime.utcnow()
+        )
+        db.session.add(new_entry)
+        db.session.commit()
+
+    return {"ok": True}
+@app.route("/top10")
+def top10():
+    top_players = Score.query.order_by(Score.best_score.desc()).limit(10).all()
+    return render_template("top10.html", players=top_players)
 @app.route("/game")
 def game():
     return render_template("game.html")
