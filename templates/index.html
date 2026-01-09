@@ -83,15 +83,20 @@ Konstantinos Georgoudis
     
 
     {% if current_user.is_authenticated %}
-    <div class="user-menu">
+<div class="user-menu">
     <div class="user-avatar">{{ current_user.fullname[0] }}</div>
     <div class="user-dropdown">
         <a href="/settings-menu">Ρυθμίσεις</a>
         <a href="/updates-menu">Ενημερώσεις</a>
+
+        <!-- 🔵 ΝΕΟ ΚΟΥΜΠΙ ΠΑΙΧΝΙΔΙΟΥ -->
+        <a href="/game">ARISTON Game</a>
+
         <a href="/logout" class="logout">Αποσύνδεση</a>
         <div id="google_translate_element"></div>
     </div>
 </div>
+
     {% else %}
     <a href="/login" class="nav-btn">Εγγραφή / Σύνδεση</a>
     {% endif %}
@@ -198,30 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 {% endif %}
 
-</div>
-<div id="coming-soon-overlay">
-  <div class="coming-soon-content">
-    <img src="/templates/images/logo3.png" class="coming-logo" alt="Logo">
-
-    <h1 class="coming-title">Ariston Wash & Dry</h1>
-
-    <p class="coming-text">
-      Η ιστοσελίδα θα ενεργοποιηθεί με το άνοιγμα του καταστήματος.<br>
-      Σας ευχαριστούμε για την κατανόηση.
-    </p>
-
-    <p class="coming-text">
-      The website will be activated when the store officially opens.<br>
-      Thank you for your understanding.
-    </p>
-
-    <p class="coming-text">
-      Μέχρι τότε, μπορείτε να διασκεδάσετε με το διαδραστικό μας παιχνίδι!<br>
-      Until then, feel free to enjoy our interactive game!
-    </p>
-
-    <a href="/game" class="play-button">🎮 Παίξε το Παιχνίδι / Play the Game</a>
-  </div>
 </div>
 
 
