@@ -44,7 +44,7 @@ def send_coupon_email(user, coupon):
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 Για να δείτε όλα τα κουπόνια σας, συνδεθείτε στον λογαριασμό σας:
-https://aristonwash.gr/coupons
+https://aristonwashdry.gr/coupons
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Με εκτίμηση,
