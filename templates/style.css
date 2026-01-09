@@ -1055,7 +1055,6 @@ nav .nav-btn:hover {
 img {
     max-width: 100%;
     height: auto;
-    display: block;
 }
 
 /* Κάνει όλα τα containers να προσαρμόζονται */
