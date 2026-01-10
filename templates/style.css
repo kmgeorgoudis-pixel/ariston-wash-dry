@@ -1207,3 +1207,38 @@ header {
         text-align: left;
     }
 }
+/* Smooth transition */
+body, header, nav, .photo-block, .contact, footer {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode */
+body.dark-mode {
+    background-color: #121212;
+    color: #f1f1f1;
+}
+
+body.dark-mode header {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .photo-block {
+    background-color: #1c1c1c;
+    border-color: #333;
+}
+
+body.dark-mode .contact {
+    background-color: #1c1c1c;
+}
+
+body.dark-mode footer {
+    background-color: #1e1e1e;
+}
+
+/* Toggle button */
+.theme-toggle {
+    cursor: pointer;
+    font-size: 22px;
+    margin-left: 15px;
+    user-select: none;
+}

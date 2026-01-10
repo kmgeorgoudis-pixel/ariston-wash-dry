@@ -21,6 +21,7 @@
         <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
         ARISTON <span>Wash & Dry</span>
     </div>
+    <div class="theme-toggle" id="themeToggle">🌓</div>
 
     <!-- NAVIGATION (κάτω από το logo) -->
     <nav class="main-nav">
@@ -147,6 +148,30 @@ document.addEventListener("DOMContentLoaded", () => {
             dropdown.classList.toggle("open");
         });
     }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("themeToggle");
+    const body = document.body;
+
+    // Φόρτωση αποθηκευμένου theme
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+        body.classList.add("dark-mode");
+    }
+
+    // Toggle
+    toggle.addEventListener("click", () => {
+        body.classList.toggle("dark-mode");
+
+        // Αποθήκευση προτίμησης
+        if (body.classList.contains("dark-mode")) {
+            localStorage.setItem("theme", "dark");
+        } else {
+            localStorage.setItem("theme", "light");
+        }
+    });
 });
 </script>
 </body>
