@@ -329,5 +329,10 @@ function resetForm() {
         menu.style.display = (menu.style.display === "block") ? "none" : "block";
     }
     </script>
+<script>
+document.getElementById("hamburger-btn").onclick = function() {
+    document.getElementById("nav-menu").classList.toggle("active");
+};
+</script>
 </body>
 </html>

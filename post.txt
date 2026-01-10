@@ -1,3 +1,3 @@
 git add .
-git commit -m "phone menu  "
+git commit -m "phone menu update  "
 git push

@@ -1162,22 +1162,46 @@ h1, h2, h3 {
     }
 }
 /* ============================
-   HAMBURGER MENU (MOBILE)
+   HEADER + LOGO
    ============================ */
 
-.hamburger {
-    display: none;
-    font-size: 32px;
-    cursor: pointer;
-    user-select: none;
-    padding: 5px 10px;
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
 }
 
-/* Desktop menu */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    font-family: "Bookman Old Style", serif !important;
+}
+
+.logo span {
+    font-weight: 400;
+}
+
+.logo-icon {
+    height: 1.1em;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* ============================
+   DESKTOP NAVIGATION
+   ============================ */
+
 .main-nav {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    gap: 20px;
 }
 
 .nav-links {
@@ -1186,9 +1210,33 @@ h1, h2, h3 {
     gap: 20px;
 }
 
-/* MOBILE MODE */
+.nav-links a,
+.nav-links .nav-btn {
+    font-size: 17px;
+    text-decoration: none;
+    color: #003366;
+    font-weight: 600;
+}
+
+/* ============================
+   HAMBURGER (MOBILE ONLY)
+   ============================ */
+
+.hamburger {
+    display: none;
+    font-size: 32px;
+    cursor: pointer;
+    padding: 5px 10px;
+    user-select: none;
+}
+
+/* ============================
+   MOBILE MODE
+   ============================ */
+
 @media (max-width: 768px) {
 
+    /* Show hamburger */
     .hamburger {
         display: block;
         position: absolute;
@@ -1197,30 +1245,32 @@ h1, h2, h3 {
         z-index: 9999;
     }
 
+    /* Hide desktop menu */
     .nav-links {
         display: none;
         flex-direction: column;
+        background: white;
         position: absolute;
         top: 70px;
         right: 20px;
-        background: white;
+        width: 220px;
         padding: 20px;
         border-radius: 12px;
         box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        width: 220px;
         z-index: 9998;
     }
 
+    /* When active */
     .nav-links.active {
         display: flex;
     }
 
     .nav-links a,
     .nav-links .nav-btn {
-        font-size: 18px;
-        padding: 10px 0;
         width: 100%;
         text-align: right;
+        padding: 10px 0;
+        font-size: 18px;
     }
 
     /* User menu inside mobile */
