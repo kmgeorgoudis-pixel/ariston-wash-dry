@@ -1,3 +1,3 @@
 git add .
-git commit -m "index me polh bathiou  "
+git commit -m "REGISTER BTOON UPDATE  "
 git push
