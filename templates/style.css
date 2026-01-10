@@ -1337,3 +1337,38 @@ body.dark-mode .theme-toggle {
 body.dark-mode .theme-toggle:hover {
     background: #333;
 }
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Logo αριστερά – κουμπί δεξιά */
+    width: 100%;
+}
+
+/* Το κουμπί dark mode */
+.theme-toggle {
+    cursor: pointer;
+    font-size: 22px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #f2f2f2;
+    color: #333;
+    border: 1px solid #ccc;
+    transition: 0.25s ease;
+}
+
+/* Hover */
+.theme-toggle:hover {
+    background: #e6e6e6;
+    transform: scale(1.05);
+}
+
+/* Dark mode version */
+body.dark-mode .theme-toggle {
+    background: #2a2a2a;
+    color: #fff;
+    border-color: #444;
+}
+
+body.dark-mode .theme-toggle:hover {
+    background: #333;
+}
