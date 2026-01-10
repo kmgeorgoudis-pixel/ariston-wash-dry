@@ -169,30 +169,37 @@
     <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
     ARISTON <span>Wash & Dry</span>
 </div>
-        <nav>
-    <a href="/">Αρχική</a>
-    <a href="/timokatalogos">Τιμοκατάλογος</a>
-    <a href="/fwtografies">Φωτογραφίες</a>
-    <a href="/eidikes-ypiresies">Ειδικές Υπηρεσίες</a>
-    <a href="/kritikes">Κριτικές</a>
-    <a href="/epikoinonia">Επικοινωνία</a>
+        <nav class="main-nav">
 
-    {% if current_user.is_authenticated %}
-    <div class="user-menu" onclick="toggleMenu()">
-        <div class="user-avatar">{{ current_user.fullname[0] }}</div>
-        <div class="user-dropdown" id="dropdownMenu">
-            <a href="/settings-menu">Ρυθμίσεις</a>
-            <a href="/updates-menu">Ενημερώσεις</a>
+    <!-- Hamburger button (mobile only) -->
+    <div class="hamburger" id="hamburger-btn">☰</div>
 
-            <!-- 🔵 ΝΕΟ ΚΟΥΜΠΙ ΠΑΙΧΝΙΔΙΟΥ -->
-            <a href="/game">ARISTON Game</a>
+    <!-- Menu links -->
+    <div class="nav-links" id="nav-menu">
 
-            <a href="/logout" class="logout">Αποσύνδεση</a>
+        <a href="/">Αρχική</a>
+        <a href="/timokatalogos">Τιμοκατάλογος</a>
+        <a href="/fwtografies">Φωτογραφίες</a>
+        <a href="/eidikes-ypiresies">Ειδικές Υπηρεσίες</a>
+        <a href="/kritikes">Κριτικές</a>
+        <a href="/epikoinonia">Επικοινωνία</a>
+
+        {% if current_user.is_authenticated %}
+        <div class="user-menu">
+            <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+            <div class="user-dropdown">
+                <a href="/settings-menu">Ρυθμίσεις</a>
+                <a href="/updates-menu">Ενημερώσεις</a>
+                <a href="/game">ARISTON Game</a>
+                <a href="/logout" class="logout">Αποσύνδεση</a>
+                <div id="google_translate_element"></div>
+            </div>
         </div>
+        {% else %}
+        <a href="/login" class="nav-btn">Εγγραφή / Σύνδεση</a>
+        {% endif %}
+
     </div>
-    {% else %}
-    <a href="/login" class="nav-btn">Εγγραφή / Σύνδεση</a>
-    {% endif %}
 </nav>
     </header>
 

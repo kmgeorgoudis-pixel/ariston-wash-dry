@@ -1161,3 +1161,71 @@ h1, h2, h3 {
         padding: 15px;
     }
 }
+/* ============================
+   HAMBURGER MENU (MOBILE)
+   ============================ */
+
+.hamburger {
+    display: none;
+    font-size: 32px;
+    cursor: pointer;
+    user-select: none;
+    padding: 5px 10px;
+}
+
+/* Desktop menu */
+.main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* MOBILE MODE */
+@media (max-width: 768px) {
+
+    .hamburger {
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 9999;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        width: 220px;
+        z-index: 9998;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a,
+    .nav-links .nav-btn {
+        font-size: 18px;
+        padding: 10px 0;
+        width: 100%;
+        text-align: right;
+    }
+
+    /* User menu inside mobile */
+    .user-menu {
+        width: 100%;
+        text-align: right;
+    }
+}
