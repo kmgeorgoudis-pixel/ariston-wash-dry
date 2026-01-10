@@ -1236,16 +1236,18 @@ body.dark-mode footer {
 }
 
 /* Toggle button */
+/* MINI dark mode button */
 .theme-toggle {
     cursor: pointer;
-    font-size: 16px;      /* Μικρότερο μέγεθος */
-    padding: 4px 8px;     /* Πιο μικρό κουμπί */
-    border-radius: 6px;   /* Πιο διακριτικό */
+    font-size: 14px;      /* ακόμα πιο μικρό */
+    padding: 2px 6px;     /* πολύ μικρό κουμπί */
+    border-radius: 5px;   /* διακριτικό */
     background: #f2f2f2;
     color: #333;
     border: 1px solid #ccc;
     transition: 0.25s ease;
 }
+
 
 /* Smooth transitions */
 body, header, nav, footer, .photo-block, .contact, .card, .box, .section {
