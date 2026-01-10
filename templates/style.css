@@ -1167,8 +1167,8 @@ h1, h2, h3 {
 
 header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column; /* LOGO ΠΑΝΩ, MENU ΚΑΤΩ */
+    align-items: flex-start; /* ΟΛΑ ΑΡΙΣΤΕΡΑ */
     padding: 18px 20px;
 }
 
@@ -1198,15 +1198,12 @@ header {
    ============================ */
 
 .main-nav {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 20px;
+    width: 100%;
+    margin-top: 10px; /* ΚΑΤΩ ΑΠΟ ΤΟ LOGO */
 }
 
 .nav-links {
     display: flex;
-    align-items: center;
     gap: 20px;
 }
 
@@ -1226,7 +1223,7 @@ header {
     display: none;
     font-size: 32px;
     cursor: pointer;
-    padding: 5px 10px;
+    margin-top: 10px;
     user-select: none;
 }
 
@@ -1236,31 +1233,24 @@ header {
 
 @media (max-width: 768px) {
 
-    /* Show hamburger */
+    /* Hamburger κάτω από το logo */
     .hamburger {
         display: block;
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        z-index: 9999;
     }
 
-    /* Hide desktop menu */
+    /* Κρύβουμε το menu */
     .nav-links {
         display: none;
         flex-direction: column;
         background: white;
-        position: absolute;
-        top: 70px;
-        right: 20px;
-        width: 220px;
-        padding: 20px;
+        width: 100%;
+        padding: 15px;
+        margin-top: 10px;
         border-radius: 12px;
         box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        z-index: 9998;
     }
 
-    /* When active */
+    /* Όταν πατηθεί */
     .nav-links.active {
         display: flex;
     }
@@ -1268,14 +1258,13 @@ header {
     .nav-links a,
     .nav-links .nav-btn {
         width: 100%;
-        text-align: right;
+        text-align: left;
         padding: 10px 0;
         font-size: 18px;
     }
 
-    /* User menu inside mobile */
     .user-menu {
         width: 100%;
-        text-align: right;
+        text-align: left;
     }
 }
