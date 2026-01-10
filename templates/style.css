@@ -1238,10 +1238,15 @@ body.dark-mode footer {
 /* Toggle button */
 .theme-toggle {
     cursor: pointer;
-    font-size: 22px;
-    margin-left: 15px;
-    user-select: none;
+    font-size: 16px;      /* Μικρότερο μέγεθος */
+    padding: 4px 8px;     /* Πιο μικρό κουμπί */
+    border-radius: 6px;   /* Πιο διακριτικό */
+    background: #f2f2f2;
+    color: #333;
+    border: 1px solid #ccc;
+    transition: 0.25s ease;
 }
+
 /* Smooth transitions */
 body, header, nav, footer, .photo-block, .contact, .card, .box, .section {
     transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
