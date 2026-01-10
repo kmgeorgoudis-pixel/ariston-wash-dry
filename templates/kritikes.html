@@ -261,5 +261,17 @@ document.getElementById("hamburger-btn").onclick = function() {
     document.getElementById("nav-menu").classList.toggle("active");
 };
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const avatar = document.querySelector(".user-avatar");
+    const dropdown = document.querySelector(".user-dropdown");
+
+    if (avatar && dropdown) {
+        avatar.addEventListener("click", () => {
+            dropdown.classList.toggle("open");
+        });
+    }
+});
+</script>
 </body>
 </html>
