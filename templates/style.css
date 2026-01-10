@@ -1038,10 +1038,15 @@ nav .nav-btn:hover {
     font-size: 22px;
     font-weight: 900;
     letter-spacing: 0.05em;
+    font-family: "Bookman Old Style", serif !important;
+}
+
+.logo span {
+    font-weight: 400; /* πιο elegant το Wash & Dry */
 }
 
 .logo-icon {
-    height: 1em;      /* ίδιο ύψος με τη γραμματοσειρά */
+    height: 1.1em; /* λίγο μεγαλύτερο για premium ισορροπία */
     width: auto;
     display: inline-block;
     vertical-align: middle;
