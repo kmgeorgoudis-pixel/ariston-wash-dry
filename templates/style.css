@@ -1372,3 +1372,18 @@ body.dark-mode .theme-toggle {
 body.dark-mode .theme-toggle:hover {
     background: #333;
 }
+/* Container για logo + dark mode button */
+.header-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Logo αριστερά – κουμπί δεξιά */
+    padding: 10px 0;
+}
+
+/* Logo alignment */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
