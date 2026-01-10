@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from email.header import Header
 from database import db, init_db
-from register import register_user
+
 from datetime import datetime, timedelta
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -12,6 +12,21 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 from email.message import EmailMessage
+def register_user(fullname, email, password, confirm):
+    if password != confirm:
+        return "Οι κωδικοί δεν ταιριάζουν."
+
+    existing = User.query.filter_by(email=email).first()
+    if existing:
+        return "Το email υπάρχει ήδη."
+
+    hashed = generate_password_hash(password)
+
+    user = User(fullname=fullname, email=email, password=hashed)
+    db.session.add(user)
+    db.session.commit()
+
+    return "OK"
 
 app = Flask(__name__, template_folder="templates", static_folder="templates")
 app.secret_key = "supersecretkey123"
