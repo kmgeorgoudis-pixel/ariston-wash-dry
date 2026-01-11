@@ -28,7 +28,7 @@ def register_user(fullname, email, password, confirm):
 
     return "OK"
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
+app = Flask(__name__, template_folder="templates", static_folder="templates")
 app.secret_key = "supersecretkey123"
 
 # === SQLAlchemy Init ===
