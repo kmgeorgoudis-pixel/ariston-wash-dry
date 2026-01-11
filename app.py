@@ -660,37 +660,38 @@ import threading
 import time
 
 def send_coupons_background(users, title, description, amount, start_date, end_date):
-    count = 0
+    with app.app_context():  # 🔥 ΑΠΑΡΑΙΤΗΤΟ
+        count = 0
 
-    for user in users:
-        try:
-            if not user.email or user.email.strip() == "":
-                print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
+        for user in users:
+            try:
+                if not user.email or user.email.strip() == "":
+                    print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
+                    continue
+
+                coupon = Coupon(
+                    user_id=user.id,
+                    title=title,
+                    description=description,
+                    amount=amount,
+                    start_date=start_date,
+                    end_date=end_date
+                )
+
+                db.session.add(coupon)
+                db.session.flush()
+
+                send_coupon_email(user, coupon)
+                count += 1
+
+                if count % 2 == 0:
+                    time.sleep(1)
+
+            except Exception as e:
+                print(f"❌ ERROR sending coupon to user {user.id}: {e}")
                 continue
 
-            coupon = Coupon(
-                user_id=user.id,
-                title=title,
-                description=description,
-                amount=amount,
-                start_date=start_date,
-                end_date=end_date
-            )
-
-            db.session.add(coupon)
-            db.session.flush()
-
-            send_coupon_email(user, coupon)
-            count += 1
-
-            if count % 2 == 0:
-                time.sleep(1)
-
-        except Exception as e:
-            print(f"❌ ERROR sending coupon to user {user.id}: {e}")
-            continue
-
-    db.session.commit()
+        db.session.commit()
 
 
 @app.route("/admin/coupons/send", methods=["POST"])
