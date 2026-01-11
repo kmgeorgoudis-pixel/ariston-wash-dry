@@ -656,6 +656,43 @@ def admin_send_coupons_form():
     )
 from datetime import datetime
 
+import threading
+import time
+
+def send_coupons_background(users, title, description, amount, start_date, end_date):
+    count = 0
+
+    for user in users:
+        try:
+            if not user.email or user.email.strip() == "":
+                print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
+                continue
+
+            coupon = Coupon(
+                user_id=user.id,
+                title=title,
+                description=description,
+                amount=amount,
+                start_date=start_date,
+                end_date=end_date
+            )
+
+            db.session.add(coupon)
+            db.session.flush()
+
+            send_coupon_email(user, coupon)
+            count += 1
+
+            if count % 2 == 0:
+                time.sleep(1)
+
+        except Exception as e:
+            print(f"❌ ERROR sending coupon to user {user.id}: {e}")
+            continue
+
+    db.session.commit()
+
+
 @app.route("/admin/coupons/send", methods=["POST"])
 @login_required
 def admin_send_coupons_selected():
@@ -671,48 +708,17 @@ def admin_send_coupons_selected():
     amount_raw = request.form.get("amount")
     amount = float(amount_raw) if amount_raw else 0.0
 
-    selected_users = request.form.getlist("selected_users")
+    selected_ids = request.form.getlist("selected_users")
+    users = User.query.filter(User.id.in_(selected_ids)).all()
 
-    import time
+    # 🔥 Background thread
+    threading.Thread(
+        target=send_coupons_background,
+        args=(users, title, description, amount, start_date, end_date),
+        daemon=True
+    ).start()
 
-    count = 0  # Μετρητής για batches των 2
-
-    for user_id in selected_users:
-        try:
-            user = User.query.get(user_id)
-
-            # Skip αν δεν έχει email
-            if not user.email or user.email.strip() == "":
-                print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
-                continue
-
-            coupon = Coupon(
-                user_id=user_id,
-                title=title,
-                description=description,
-                amount=amount,
-                start_date=start_date,
-                end_date=end_date
-            )
-
-            db.session.add(coupon)
-            db.session.flush()
-
-            send_coupon_email(user, coupon)
-            count += 1
-
-            # 🔥 Κάθε 2 emails → περίμενε 15 δευτερόλεπτα
-            if count % 2 == 0:
-                print("⏳ Pause 15 seconds (batch of 2 coupons sent)")
-                time.sleep(15)
-
-        except Exception as e:
-            print(f"❌ ERROR sending coupon to user {user_id}: {e}")
-            continue
-
-    db.session.commit()
-
-    flash("Τα κουπόνια στάλθηκαν επιτυχώς.", "success")
+    flash("Η αποστολή κουπονιών ξεκίνησε στο παρασκήνιο.", "success")
     return redirect("/admin/coupons")
 
 
@@ -877,41 +883,14 @@ def admin_announcements_page():
         users=users,
         active_page="announcements"
     )
-@app.route("/admin/announcements2/send", methods=["POST"])
-@login_required
-def admin_send_announcements():
-    if not current_user.is_admin:
-        return redirect("/")
+import threading
+import time
 
-    title = request.form.get("title")
-    description = request.form.get("description")
-
-    # Ποιοι χρήστες επιλέχθηκαν
-    selected_ids = request.form.getlist("selected_users")
-
-    if not selected_ids:
-        flash("Δεν επιλέχθηκαν χρήστες.", "danger")
-        return redirect("/admin/announcements2")
-
-    # Αποθήκευση ανακοίνωσης (γενική)
-    announcement = Announcement(
-        user_id=None,
-        title=title,
-        description=description
-    )
-    db.session.add(announcement)
-    db.session.commit()
-
-    # Φέρε μόνο τους επιλεγμένους χρήστες
-    users = User.query.filter(User.id.in_(selected_ids)).all()
-
-    import time
-
-    count = 0  # Μετρητής για τα batches των 2
+def send_announcements_background(users, title, description):
+    count = 0
 
     for user in users:
         try:
-            # Skip αν δεν έχει email
             if not user.email or user.email.strip() == "":
                 print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
                 continue
@@ -941,16 +920,47 @@ https://aristonwashdry.gr/
             send_email(user.email, subject, body)
             count += 1
 
-            # 🔥 Κάθε 2 emails → περίμενε 15 δευτερόλεπτα
+            # Resend → 2 emails/sec
             if count % 2 == 0:
-                print("⏳ Pause 15 seconds (batch of 2 sent)")
-                time.sleep(15)
+                time.sleep(1)
 
         except Exception as e:
             print(f"❌ ERROR sending to user {user.id}: {e}")
             continue
 
-    flash("Η ανακοίνωση στάλθηκε στα επιλεγμένα μέλη.", "success")
+
+@app.route("/admin/announcements2/send", methods=["POST"])
+@login_required
+def admin_send_announcements():
+    if not current_user.is_admin:
+        return redirect("/")
+
+    title = request.form.get("title")
+    description = request.form.get("description")
+    selected_ids = request.form.getlist("selected_users")
+
+    if not selected_ids:
+        flash("Δεν επιλέχθηκαν χρήστες.", "danger")
+        return redirect("/admin/announcements2")
+
+    announcement = Announcement(
+        user_id=None,
+        title=title,
+        description=description
+    )
+    db.session.add(announcement)
+    db.session.commit()
+
+    users = User.query.filter(User.id.in_(selected_ids)).all()
+
+    # 🔥 Background thread
+    threading.Thread(
+        target=send_announcements_background,
+        args=(users, title, description),
+        daemon=True
+    ).start()
+
+    flash("Η αποστολή ξεκίνησε στο παρασκήνιο.", "success")
     return redirect("/admin/announcements2")
 @app.route("/admin/announcements/list")
 @login_required
