@@ -8,7 +8,96 @@
 {% endblock %}
 
 {% block content %}
+<style>
+.form-section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #111827;
+}
 
+.users-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.card-subtitle {
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.users-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.chip {
+    padding: 6px 12px;
+    background: #e5e7eb;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s ease;
+}
+
+.chip:hover {
+    background: #d1d5db;
+}
+
+.users-panel {
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f9fafb;
+}
+
+.user-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-bottom: 1px solid #e5e7eb;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.user-row:hover {
+    background: #eef2ff;
+}
+
+.user-checkbox input {
+    width: 18px;
+    height: 18px;
+}
+
+.user-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #111827;
+}
+
+.user-email {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.user-meta {
+    font-size: 12px;
+    color: #9ca3af;
+}
+</style>
 <div style="margin-bottom:20px; display:flex; justify-content:flex-end;">
     <a href="/admin/announcements/list"
        style="padding:10px 14px; background:#2563eb; color:white; border-radius:8px;
