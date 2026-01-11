@@ -64,9 +64,16 @@ https://aristonwashdry.gr/coupons
 
 Με εκτίμηση,
 Η ομάδα του ARISTON Wash & Dry
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+  <img src="https://aristonwashdry.gr/templates/images/1new.png"
+       alt="ARISTON Wash & Dry"
+       style="height:55px; width:auto; margin-top:12px;">
+</a>
     """
 
     send_email(user.email, "Νέο Κουπόνι από το ARISTON Wash & Dry", body)
+
 
 from email.message import EmailMessage
 
@@ -392,9 +399,11 @@ def register():
             "Σε ευχαριστούμε που μας εμπιστεύτηκες.\n"
             "Αν χρειαστείς οτιδήποτε, είμαστε πάντα δίπλα σου.\n\n"
             "Με εκτίμηση,\n"
-            "Η ομάδα του Ariston Wash & Dry"
-            "https://aristonwashdry.gr/"
-             
+            "Η ομάδα του Ariston Wash & Dry\n\n"
+            '<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">'
+            '<img src="https://aristonwashdry.gr/templates/images/1new.png" '
+            'alt="ARISTON Wash & Dry" style="height:55px; width:auto; margin-top:12px;">'
+            "</a>"
         )
 
         send_email(
@@ -786,6 +795,12 @@ def admin_announcement_submit(user_id):
 Με εκτίμηση,
 ARISTON Wash & Dry
 https://aristonwashdry.gr/
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+  <img src="https://aristonwashdry.gr/templates/images/1new.png"
+       alt="ARISTON Wash & Dry"
+       style="height:55px; width:auto; margin-top:12px;">
+</a>
 """
 
     # Χρήση της send_email που ήδη δουλεύει
@@ -857,7 +872,13 @@ def admin_send_announcements():
 Δες τις ανακοινώσεις σου απο εδώ: https://aristonwashdry.gr/updates
 Με εκτίμηση,
 ARISTON Wash & Dry
-https://aristonwashdry.gr/ 
+https://aristonwashdry.gr/
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+  <img src="https://aristonwashdry.gr/templates/images/1new.png"
+       alt="ARISTON Wash & Dry"
+       style="height:55px; width:auto; margin-top:12px;">
+</a>
 """
 
         # Αποστολή email μέσω Resend
@@ -922,7 +943,11 @@ def forgot_password():
             "Αν δεν ζητήσατε εσείς την επαναφορά, μπορείτε να αγνοήσετε αυτό το μήνυμα.\n\n"
             "Με εκτίμηση,\n"
             "Η ομάδα του ARISTON Wash & Dry"
-            "https://aristonwashdry.gr/"
+            "   https://aristonwashdry.gr/\n\n"
+            '<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">'
+            '<img src="https://aristonwashdry.gr/templates/images/1new.png" '
+            'alt="ARISTON Wash & Dry" style="height:55px; width:auto; margin-top:12px;">'
+            "</a>"
         )
 
         send_email(
@@ -1074,7 +1099,11 @@ def delete_account():
             "έχουν αφαιρεθεί από το σύστημά μας σύμφωνα με την πολιτική απορρήτου.\n\n"
             "Δεν είστε πλέον μέλος της υπηρεσίας.\n\n"
             "Ευχαριστούμε που χρησιμοποιήσατε το ARISTON Wash & Dry."
-            "https://aristonwashdry.gr/"
+            "https://aristonwashdry.gr/\n\n"
+            '<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">'
+            '<img src="https://aristonwashdry.gr/templates/images/1new.png" '
+            'alt="ARISTON Wash & Dry" style="height:55px; width:auto; margin-top:12px;">'
+            "</a>"
         )
     )
 
