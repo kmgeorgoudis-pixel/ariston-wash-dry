@@ -665,15 +665,15 @@ def admin_send_coupons_selected():
     title = request.form.get("title")
     description = request.form.get("description")
 
-    # Μετατροπή από string -> Python date
     start_date = datetime.strptime(request.form.get("start_date"), "%Y-%m-%d").date()
     end_date = datetime.strptime(request.form.get("end_date"), "%Y-%m-%d").date()
 
-    # Ποσό κουπονιού
     amount_raw = request.form.get("amount")
     amount = float(amount_raw) if amount_raw else 0.0
 
     selected_users = request.form.getlist("selected_users")
+
+    import time
 
     for user_id in selected_users:
         user = User.query.get(user_id)
@@ -688,9 +688,12 @@ def admin_send_coupons_selected():
         )
 
         db.session.add(coupon)
-        db.session.flush()  # παίρνει ID πριν το commit
+        db.session.flush()
 
         send_coupon_email(user, coupon)
+
+        # 🔥 Delay 15 δευτερόλεπτα ανά email
+        time.sleep(15)
 
     db.session.commit()
 
@@ -891,6 +894,8 @@ def admin_send_announcements():
     # Φέρε μόνο τους επιλεγμένους χρήστες
     users = User.query.filter(User.id.in_(selected_ids)).all()
 
+    import time  # 🔥 Χρειαζόμαστε το time για το delay
+
     for user in users:
         subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
         body = f"""
@@ -920,8 +925,11 @@ https://aristonwashdry.gr/
 
         send_email(user.email, subject, body)
 
+        # 🔥 Delay 15 δευτερόλεπτα ανά email
+        time.sleep(15)
+
     flash("Η ανακοίνωση στάλθηκε στα επιλεγμένα μέλη.", "success")
-    return redirect("/admin/announcements")
+    return redirect("/admin/announcements2")
 @app.route("/admin/announcements/list")
 @login_required
 def admin_announcements_list():
