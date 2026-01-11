@@ -24,8 +24,11 @@
     <div id="ariston-chat-window">
       <div id="ariston-chat-messages">
         <div class="ai-msg">
-          <img class="ai-avatar" src="/ariston/templates/images/logo3.png">
-          <span id="ai-greeting"></span>
+          <!-- ΕΔΩ περνάμε το avatar και το fullname -->
+          <img class="ai-avatar" id="ai-avatar" src="/ariston/templates/images/logo3.png">
+          <span id="ai-greeting"
+                data-fullname="{{ current_user.fullname }}"
+                data-avatar="/ariston/templates/images/logo3.png"></span>
         </div>
       </div>
     </div>

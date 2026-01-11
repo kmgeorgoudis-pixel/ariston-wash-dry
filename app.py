@@ -157,6 +157,11 @@ def submit_score():
 def top10():
     top_players = Score.query.order_by(Score.best_score.desc()).limit(10).all()
     return render_template("top10.html", players=top_players)
+from flask import send_from_directory
+
+@app.route('/ai-image/<path:filename>')
+def ai_image(filename):
+    return send_from_directory('templates/images', filename)
 @app.route("/ai")
 def ai_page():
     return render_template("ai/ai.html")

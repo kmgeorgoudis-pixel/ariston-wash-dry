@@ -24,7 +24,8 @@ const faqData = [
   { id: 22, question: "Είστε ανοιχτά τις Κυριακές και αργίες;", answer: "Ναι, το κατάστημα λειτουργεί και Κυριακές και αργίες, εκτός αν υπάρχει ειδική ανακοίνωση στην ιστοσελίδα." },
   { id: 23, question: "Μπορώ να έρθω αργά το βράδυ;", answer: "Ναι, μπορείτε να μας επισκεφθείτε εντός του ωραρίου λειτουργίας." },
   { id: 24, question: "Υπάρχει προσωπικό στο κατάστημα;", answer: "Ναι, υπάρχουν συγκεκριμένες ώρες που είναι παρόν προσωπικό." },
-  { id: 25, question: "Υπάρχει κάμερα ασφαλείας στο χώρο;", answer: "Ναι, ο χώρος παρακολουθείται για την ασφάλεια των πελατών και του εξοπλισμού." },  { id: 26, question: "Πώς μπορώ να πληρώσω;", answer: "Μπορείτε να πληρώσετε είτε με κάρτα είτε με μετρητά, ανάλογα με το τι σας εξυπηρετεί." },
+  { id: 25, question: "Υπάρχει κάμερα ασφαλείας στο χώρο;", answer: "Ναι, ο χώρος παρακολουθείται για την ασφάλεια των πελατών και του εξοπλισμού." },
+  { id: 26, question: "Πώς μπορώ να πληρώσω;", answer: "Μπορείτε να πληρώσετε είτε με κάρτα είτε με μετρητά, ανάλογα με το τι σας εξυπηρετεί." },
   { id: 27, question: "Δέχεστε ηλεκτρονικά πορτοφόλια;", answer: "Αν η κάρτα σας υποστηρίζει Revolut, Apple Pay ή Google Pay, μπορείτε να τα χρησιμοποιήσετε." },
   { id: 28, question: "Υπάρχουν εκπτώσεις ή προσφορές;", answer: "Ναι, κατά διαστήματα υπάρχουν προσφορές και εκπτωτικά προγράμματα." },
   { id: 29, question: "Πώς μπορώ να χρησιμοποιήσω κουπόνι;", answer: "Μπορείτε να χρησιμοποιήσετε κουπόνι όταν υπάρχει προσωπικό στο κατάστημα." },
@@ -50,11 +51,16 @@ const faqData = [
   { id: 49, question: "Τα ρούχα βγαίνουν σχεδόν στεγνά;", answer: "Βγαίνουν καλά στραγγισμένα." },
   { id: 50, question: "Πού υπάρχουν οδηγίες;", answer: "Πάνω στα μηχανήματα και στην ιστοσελίδα." }
 ];
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    const fullName = "{{ current_user.fullname }}";
+    // Παίρνουμε το όνομα και το avatar από το HTML
+    const greetingEl = document.getElementById("ai-greeting");
+    const fullName = greetingEl.dataset.fullname;
+    const avatarPath = greetingEl.dataset.avatar;
 
-    document.getElementById("ai-greeting").textContent =
+    // Greeting στο πρώτο μήνυμα
+    greetingEl.textContent =
         `Γεια σου, ${fullName}! Είμαι ο ARISTON AI Assistant. Επίλεξε μια ερώτηση από αριστερά.`;
 
     const faqQuestionsContainer = document.getElementById("ariston-chat-questions");
@@ -82,8 +88,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 faqMessagesContainer.innerHTML += `
                     <div class="ai-msg">
-                        <img class="ai-avatar" src="/ariston/templates/images/logo3.png">
-                        <span>${fullName}, ${item.answer}</span>
+                        <img class="ai-avatar" src="${avatarPath}">
+                        <span>${item.answer}</span>
                     </div>
                 `;
 
