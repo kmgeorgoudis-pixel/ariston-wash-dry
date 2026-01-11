@@ -850,7 +850,7 @@ def admin_announcement_form(user_id):
 # ============================
 #  ΜΑΖΙΚΗ ΑΠΟΣΤΟΛΗ ΑΝΑΚΟΙΝΩΣΕΩΝ
 # ============================
-@app.route("/admin/announcements", methods=["GET"])
+@app.route("/admin/announcements2", methods=["GET"])
 @login_required
 def admin_announcements_page():
     print("🔥 ROUTE ANNOUNCEMENTS LOADED")
