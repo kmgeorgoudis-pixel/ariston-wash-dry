@@ -814,11 +814,7 @@ def admin_announcement_submit(user_id):
 ARISTON Wash & Dry
 https://aristonwashdry.gr/
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-  <img src="https://aristonwashdry.gr/templates/images/1new.png"
-       alt="ARISTON Wash & Dry"
-       style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
 """
 
     # Χρήση της send_email που ήδη δουλεύει
