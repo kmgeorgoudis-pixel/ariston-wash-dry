@@ -152,7 +152,7 @@
 
             <div class="users-panel">
                 {% for user in users %}
-                <label class="user-row">
+                <div class="user-row">
                     <span class="user-checkbox">
                         <input type="checkbox" name="selected_users" value="{{ user.id }}">
                     </span>
@@ -162,7 +162,7 @@
                         <div class="user-email">{{ user.email }}</div>
                         <div class="user-meta">ID: {{ user.id }}</div>
                     </div>
-                </label>
+                </div>
                 {% endfor %}
             </div>
         </div>
