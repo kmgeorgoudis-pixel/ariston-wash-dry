@@ -846,6 +846,18 @@ def admin_announcement_form(user_id):
 # ============================
 #  ΜΑΖΙΚΗ ΑΠΟΣΤΟΛΗ ΑΝΑΚΟΙΝΩΣΕΩΝ
 # ============================
+@app.route("/admin/announcements", methods=["GET"])
+@login_required
+def admin_announcements():
+    if not current_user.is_admin:
+        return redirect("/")
+
+    users = User.query.all()  # 🔥 Φέρνει όλους τους χρήστες
+    return render_template(
+        "admin/announcements.html",
+        users=users,
+        active_page="announcements"
+    )
 @app.route("/admin/announcements/send", methods=["POST"])
 @login_required
 def admin_send_announcements():
