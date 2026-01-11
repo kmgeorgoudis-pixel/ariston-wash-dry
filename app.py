@@ -855,17 +855,25 @@ def admin_send_announcements():
     title = request.form.get("title")
     description = request.form.get("description")
 
-    # 1 ανακοίνωση στη βάση για όλους
+    # Ποιοι χρήστες επιλέχθηκαν
+    selected_ids = request.form.getlist("selected_users")
+
+    if not selected_ids:
+        flash("Δεν επιλέχθηκαν χρήστες.", "danger")
+        return redirect("/admin/announcements")
+
+    # Αποθήκευση ανακοίνωσης (γενική)
     announcement = Announcement(
-        user_id=None,   # 🔥 ΑΝΑΚΟΙΝΩΣΗ ΓΙΑ ΟΛΟΥΣ
+        user_id=None,
         title=title,
         description=description
     )
     db.session.add(announcement)
     db.session.commit()
 
-    # Email σε όλους τους χρήστες
-    selected_ids = request.form.getlist("selected_users")
+    # Φέρε μόνο τους επιλεγμένους χρήστες
+    users = User.query.filter(User.id.in_(selected_ids)).all()
+
     for user in users:
         subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
         body = f"""
@@ -881,6 +889,7 @@ def admin_send_announcements():
 {description}
 ──────────────────────────────────
 Δες τις ανακοινώσεις σου απο εδώ: https://aristonwashdry.gr/updates
+
 Με εκτίμηση,
 ARISTON Wash & Dry
 https://aristonwashdry.gr/
@@ -892,14 +901,9 @@ https://aristonwashdry.gr/
 </a>
 """
 
-        # Αποστολή email μέσω Resend
-        send_email(
-            user.email,
-            subject,
-            body
-        )
+        send_email(user.email, subject, body)
 
-    flash("Η ανακοίνωση στάλθηκε σε όλους.", "success")
+    flash("Η ανακοίνωση στάλθηκε στα επιλεγμένα μέλη.", "success")
     return redirect("/admin/announcements")
 @app.route("/admin/announcements/list")
 @login_required
