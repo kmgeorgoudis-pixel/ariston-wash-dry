@@ -863,7 +863,7 @@ def admin_announcements_page():
         users=users,
         active_page="announcements"
     )
-@app.route("/admin/announcements/send", methods=["POST"])
+@app.route("/admin/announcements2/send", methods=["POST"])
 @login_required
 def admin_send_announcements():
     if not current_user.is_admin:
@@ -877,7 +877,7 @@ def admin_send_announcements():
 
     if not selected_ids:
         flash("Δεν επιλέχθηκαν χρήστες.", "danger")
-        return redirect("/admin/announcements")
+        return redirect("/admin/announcements2")
 
     # Αποθήκευση ανακοίνωσης (γενική)
     announcement = Announcement(
