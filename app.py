@@ -675,25 +675,40 @@ def admin_send_coupons_selected():
 
     import time
 
+    count = 0  # Μετρητής για batches των 3
+
     for user_id in selected_users:
-        user = User.query.get(user_id)
+        try:
+            user = User.query.get(user_id)
 
-        coupon = Coupon(
-            user_id=user_id,
-            title=title,
-            description=description,
-            amount=amount,
-            start_date=start_date,
-            end_date=end_date
-        )
+            # Skip αν δεν έχει email
+            if not user.email or user.email.strip() == "":
+                print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
+                continue
 
-        db.session.add(coupon)
-        db.session.flush()
+            coupon = Coupon(
+                user_id=user_id,
+                title=title,
+                description=description,
+                amount=amount,
+                start_date=start_date,
+                end_date=end_date
+            )
 
-        send_coupon_email(user, coupon)
+            db.session.add(coupon)
+            db.session.flush()
 
-        # 🔥 Delay 15 δευτερόλεπτα ανά email
-        time.sleep(15)
+            send_coupon_email(user, coupon)
+            count += 1
+
+            # 🔥 Κάθε 3 emails → περίμενε 15 δευτερόλεπτα
+            if count % 3 == 0:
+                print("⏳ Pause 15 seconds (batch of 3 coupons sent)")
+                time.sleep(15)
+
+        except Exception as e:
+            print(f"❌ ERROR sending coupon to user {user_id}: {e}")
+            continue
 
     db.session.commit()
 
@@ -890,11 +905,19 @@ def admin_send_announcements():
     # Φέρε μόνο τους επιλεγμένους χρήστες
     users = User.query.filter(User.id.in_(selected_ids)).all()
 
-    import time  # 🔥 Χρειαζόμαστε το time για το delay
+    import time
+
+    count = 0  # Μετρητής για τα batches των 3
 
     for user in users:
-        subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
-        body = f"""
+        try:
+            # Skip αν δεν έχει email
+            if not user.email or user.email.strip() == "":
+                print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
+                continue
+
+            subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
+            body = f"""
 Αγαπητέ/ή {user.fullname},
 
 Υπάρχει μια νέα ανακοίνωση από το ARISTON Wash & Dry.
@@ -912,17 +935,20 @@ def admin_send_announcements():
 ARISTON Wash & Dry
 https://aristonwashdry.gr/
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-  <img src="https://aristonwashdry.gr/templates/images/1new.png"
-       alt="ARISTON Wash & Dry"
-       style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
 """
 
-        send_email(user.email, subject, body)
+            send_email(user.email, subject, body)
+            count += 1
 
-        # 🔥 Delay 15 δευτερόλεπτα ανά email
-        time.sleep(15)
+            # 🔥 Κάθε 3 emails → περίμενε 15 δευτερόλεπτα
+            if count % 3 == 0:
+                print("⏳ Pause 15 seconds (batch of 3 sent)")
+                time.sleep(15)
+
+        except Exception as e:
+            print(f"❌ ERROR sending to user {user.id}: {e}")
+            continue
 
     flash("Η ανακοίνωση στάλθηκε στα επιλεγμένα μέλη.", "success")
     return redirect("/admin/announcements2")
