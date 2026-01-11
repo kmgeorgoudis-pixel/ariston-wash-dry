@@ -848,7 +848,7 @@ def admin_announcement_form(user_id):
 # ============================
 @app.route("/admin/announcements", methods=["GET"])
 @login_required
-def admin_announcements():
+def admin_announcements_page():
     if not current_user.is_admin:
         return redirect("/")
 
