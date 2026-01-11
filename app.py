@@ -865,7 +865,7 @@ def admin_send_announcements():
     db.session.commit()
 
     # Email σε όλους τους χρήστες
-    users = User.query.all()
+    selected_ids = request.form.getlist("selected_users")
     for user in users:
         subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
         body = f"""
