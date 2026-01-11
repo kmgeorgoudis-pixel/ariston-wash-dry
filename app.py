@@ -675,7 +675,7 @@ def admin_send_coupons_selected():
 
     import time
 
-    count = 0  # Μετρητής για batches των 3
+    count = 0  # Μετρητής για batches των 2
 
     for user_id in selected_users:
         try:
@@ -701,9 +701,9 @@ def admin_send_coupons_selected():
             send_coupon_email(user, coupon)
             count += 1
 
-            # 🔥 Κάθε 3 emails → περίμενε 15 δευτερόλεπτα
-            if count % 3 == 0:
-                print("⏳ Pause 15 seconds (batch of 3 coupons sent)")
+            # 🔥 Κάθε 2 emails → περίμενε 15 δευτερόλεπτα
+            if count % 2 == 0:
+                print("⏳ Pause 15 seconds (batch of 2 coupons sent)")
                 time.sleep(15)
 
         except Exception as e:
@@ -907,7 +907,7 @@ def admin_send_announcements():
 
     import time
 
-    count = 0  # Μετρητής για τα batches των 3
+    count = 0  # Μετρητής για τα batches των 2
 
     for user in users:
         try:
@@ -941,9 +941,9 @@ https://aristonwashdry.gr/
             send_email(user.email, subject, body)
             count += 1
 
-            # 🔥 Κάθε 3 emails → περίμενε 15 δευτερόλεπτα
-            if count % 3 == 0:
-                print("⏳ Pause 15 seconds (batch of 3 sent)")
+            # 🔥 Κάθε 2 emails → περίμενε 15 δευτερόλεπτα
+            if count % 2 == 0:
+                print("⏳ Pause 15 seconds (batch of 2 sent)")
                 time.sleep(15)
 
         except Exception as e:
