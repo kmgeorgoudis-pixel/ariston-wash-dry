@@ -162,6 +162,9 @@ from flask import send_from_directory
 @app.route('/ai-image/<path:filename>')
 def ai_image(filename):
     return send_from_directory('templates/images', filename)
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('templates/images', 'logo3.png')
 @app.route("/ai")
 def ai_page():
     return render_template("ai/ai.html")
