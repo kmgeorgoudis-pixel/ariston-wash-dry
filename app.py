@@ -157,6 +157,9 @@ def submit_score():
 def top10():
     top_players = Score.query.order_by(Score.best_score.desc()).limit(10).all()
     return render_template("top10.html", players=top_players)
+@app.route("/ai")
+def ai_page():
+    return render_template("ai/ai.html")
 @app.route("/game")
 def game():
     return render_template("game.html")

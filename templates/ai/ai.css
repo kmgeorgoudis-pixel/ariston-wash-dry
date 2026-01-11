@@ -1,0 +1,135 @@
+#ariston-chat-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  font-family: "Inter", system-ui, sans-serif;
+  background: #f3f4f6;
+}
+
+/* SIDEBAR */
+#ariston-chat-sidebar {
+  width: 32%;
+  background: #1b2a3a;
+  color: white;
+  padding: 25px;
+  overflow-y: auto;
+  box-shadow: 4px 0 12px rgba(0,0,0,0.2);
+}
+
+#ariston-chat-sidebar h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+#ariston-chat-sidebar .sub {
+  margin-top: 4px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+#ariston-chat-questions {
+  margin-top: 20px;
+}
+
+.question-item {
+  background: rgba(255,255,255,0.08);
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.15s;
+  font-size: 14px;
+}
+
+.question-item:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+.question-item.active {
+  background: #ffffff;
+  color: #1b2a3a;
+  font-weight: 600;
+}
+
+/* MAIN CHAT AREA */
+#ariston-chat-main {
+  width: 68%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+#ariston-chat-window {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+#ariston-chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* AI MESSAGE */
+.ai-msg {
+  background: #e8f0fe;
+  padding: 12px 14px;
+  border-radius: 12px;
+  max-width: 70%;
+  border: 1px solid #cbd5e1;
+  color: #1b2a3a;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* USER MESSAGE */
+.user-msg {
+  background: #1b2a3a;
+  color: white;
+  padding: 12px 14px;
+  border-radius: 12px;
+  max-width: 70%;
+  align-self: flex-end;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ai-msg, .user-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ai-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.back-btn {
+  display: inline-block;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: #ffffff15;
+  color: #ffffff;
+  border: 1px solid #ffffff30;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  background: #ffffff25;
+  border-color: #ffffff60;
+}

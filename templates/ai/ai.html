@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARISTON AI Assistant</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='ai/ai.css') }}">
+</head>
+<body>
+
+<div id="ariston-chat-wrapper">
+
+  <div id="ariston-chat-sidebar">
+    <h2>ARISTON AI ASSISTANT</h2>
+    <p class="sub">Επιλέξτε ερώτηση</p>
+    <a href="{{ url_for('index') }}" class="back-btn">← Επιστροφή στην αρχική</a>
+
+    <div id="ariston-chat-questions"></div>
+  </div>
+
+  <div id="ariston-chat-main">
+    <div id="ariston-chat-window">
+      <div id="ariston-chat-messages">
+        <div class="ai-msg">
+          <img class="ai-avatar" src="/ariston/templates/images/logo3.png">
+          <span id="ai-greeting"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- JS -->
+<script src="{{ url_for('static', filename='ai/ai.js') }}"></script>
+
+</body>
+</html>
