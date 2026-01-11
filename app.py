@@ -68,7 +68,7 @@ https://aristonwashdry.gr/coupons
 <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
   <img src="https://aristonwashdry.gr/templates/images/1new.png"
        alt="ARISTON Wash & Dry"
-       style="height:55px; width:auto; margin-top:12px;">
+       style="height:100px; width:auto; margin-top:12px;">
 </a>
     """
 
@@ -402,7 +402,7 @@ def register():
             "Η ομάδα του Ariston Wash & Dry\n\n"
             '<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">'
             '<img src="https://aristonwashdry.gr/templates/images/1new.png" '
-            'alt="ARISTON Wash & Dry" style="height:55px; width:auto; margin-top:12px;">'
+            'alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">'
             "</a>"
         )
 
@@ -799,7 +799,7 @@ https://aristonwashdry.gr/
 <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
   <img src="https://aristonwashdry.gr/templates/images/1new.png"
        alt="ARISTON Wash & Dry"
-       style="height:55px; width:auto; margin-top:12px;">
+       style="height:100px; width:auto; margin-top:12px;">
 </a>
 """
 
@@ -877,7 +877,7 @@ https://aristonwashdry.gr/
 <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
   <img src="https://aristonwashdry.gr/templates/images/1new.png"
        alt="ARISTON Wash & Dry"
-       style="height:55px; width:auto; margin-top:12px;">
+       style="height:100px; width:auto; margin-top:12px;">
 </a>
 """
 
@@ -946,7 +946,7 @@ def forgot_password():
             "   https://aristonwashdry.gr/\n\n"
             '<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">'
             '<img src="https://aristonwashdry.gr/templates/images/1new.png" '
-            'alt="ARISTON Wash & Dry" style="height:55px; width:auto; margin-top:12px;">'
+            'alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">'
             "</a>"
         )
 
@@ -1102,7 +1102,7 @@ def delete_account():
             "https://aristonwashdry.gr/\n\n"
             '<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">'
             '<img src="https://aristonwashdry.gr/templates/images/1new.png" '
-            'alt="ARISTON Wash & Dry" style="height:55px; width:auto; margin-top:12px;">'
+            'alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">'
             "</a>"
         )
     )
