@@ -8,7 +8,9 @@
 {% endblock %}
 
 {% block content %}
+
 <style>
+/* ΤΙΤΛΟΣ ΕΝΟΤΗΤΑΣ */
 .form-section-title {
     font-size: 18px;
     font-weight: 700;
@@ -16,6 +18,7 @@
     color: #111827;
 }
 
+/* HEADER ΠΑΝΩ ΑΠΟ ΤΗ ΛΙΣΤΑ */
 .users-header-row {
     display: flex;
     justify-content: space-between;
@@ -30,6 +33,7 @@
     color: #4b5563;
 }
 
+/* ΚΟΥΜΠΙΑ SELECT ALL / CLEAR */
 .users-actions {
     display: flex;
     gap: 8px;
@@ -49,6 +53,7 @@
     background: #d1d5db;
 }
 
+/* PANEL ΜΕ ΤΟΥΣ ΧΡΗΣΤΕΣ */
 .users-panel {
     max-height: 350px;
     overflow-y: auto;
@@ -58,6 +63,7 @@
     background: #f9fafb;
 }
 
+/* ΚΑΘΕ ΓΡΑΜΜΗ ΧΡΗΣΤΗ */
 .user-row {
     display: flex;
     align-items: center;
@@ -72,11 +78,13 @@
     background: #eef2ff;
 }
 
+/* CHECKBOX */
 .user-checkbox input {
     width: 18px;
     height: 18px;
 }
 
+/* ΣΤΟΙΧΕΙΑ ΧΡΗΣΤΗ */
 .user-main {
     display: flex;
     flex-direction: column;
@@ -98,6 +106,7 @@
     color: #9ca3af;
 }
 </style>
+
 <div style="margin-bottom:20px; display:flex; justify-content:flex-end;">
     <a href="/admin/announcements/list"
        style="padding:10px 14px; background:#2563eb; color:white; border-radius:8px;
@@ -111,12 +120,14 @@
 
     <form method="POST" action="/admin/announcements/send" style="margin-top:12px;">
 
+        <!-- ΤΙΤΛΟΣ -->
         <div style="margin-bottom:14px;">
             <label>Τίτλος</label>
             <input type="text" name="title" required
                    style="width:100%; padding:10px; border-radius:10px; border:1px solid #d1d5db;">
         </div>
 
+        <!-- ΠΕΡΙΓΡΑΦΗ -->
         <div style="margin-bottom:14px;">
             <label>Περιγραφή</label>
             <textarea name="description" rows="5" required
@@ -127,32 +138,35 @@
         <div style="margin-top:30px;">
             <div class="form-section-title">Επιλογή χρηστών</div>
 
-            <div class="users-header-row" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                <div class="card-subtitle" style="font-size:14px; color:#4b5563;">
+            <div class="users-header-row">
+                <div class="card-subtitle">
                     Επίλεξε έναν ή περισσότερους χρήστες για να λάβουν την ανακοίνωση.
                 </div>
-                <div class="users-actions" style="display:flex; gap:8px;">
+
+                <div class="users-actions">
                     <button type="button" class="chip" onclick="toggleSelectAll(true)">Επιλογή όλων</button>
                     <button type="button" class="chip" onclick="toggleSelectAll(false)">Καθαρισμός</button>
                 </div>
             </div>
 
-            <div class="users-panel" style="max-height:350px; overflow-y:auto; border:1px solid #e5e7eb; border-radius:10px; padding:10px; background:#f9fafb;">
+            <div class="users-panel">
                 {% for user in users %}
-                <label class="user-row" style="display:flex; align-items:center; gap:12px; padding:10px; border-bottom:1px solid #e5e7eb; cursor:pointer;">
+                <label class="user-row">
                     <span class="user-checkbox">
-                        <input type="checkbox" name="selected_users" value="{{ user.id }}" style="width:18px; height:18px;">
+                        <input type="checkbox" name="selected_users" value="{{ user.id }}">
                     </span>
-                    <div class="user-main" style="display:flex; flex-direction:column;">
-                        <div class="user-name" style="font-weight:600; font-size:15px;">{{ user.fullname }}</div>
-                        <div class="user-email" style="font-size:13px; color:#6b7280;">{{ user.email }}</div>
-                        <div class="user-meta" style="font-size:12px; color:#9ca3af;">ID: {{ user.id }}</div>
+
+                    <div class="user-main">
+                        <div class="user-name">{{ user.fullname }}</div>
+                        <div class="user-email">{{ user.email }}</div>
+                        <div class="user-meta">ID: {{ user.id }}</div>
                     </div>
                 </label>
                 {% endfor %}
             </div>
         </div>
 
+        <!-- SUBMIT -->
         <button type="submit"
                 style="margin-top:20px; padding:12px 18px; background:#f59e0b; color:white; border:none; border-radius:10px; cursor:pointer;">
             Αποστολή Ανακοίνωσης στα Επιλεγμένα Μέλη
