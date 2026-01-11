@@ -853,6 +853,7 @@ def admin_announcement_form(user_id):
 @app.route("/admin/announcements", methods=["GET"])
 @login_required
 def admin_announcements_page():
+    print("🔥 ROUTE ANNOUNCEMENTS LOADED")
     if not current_user.is_admin:
         return redirect("/")
 
