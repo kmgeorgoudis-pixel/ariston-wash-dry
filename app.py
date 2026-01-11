@@ -761,6 +761,10 @@ def admin_delete_user(user_id):
 # ============================
 #  ΦΟΡΜΑ ΑΝΑΚΟΙΝΩΣΗΣ (GET)
 # ============================
+@app.route("/admin/announcements/")
+@login_required
+def admin_announcements_page_slash():
+    return redirect("/admin/announcements")
 @app.route("/admin/users/<int:user_id>/announcement", methods=["POST"])
 @login_required
 def admin_announcement_submit(user_id):
