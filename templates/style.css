@@ -1235,6 +1235,27 @@ body, header, nav, .photo-block, .contact, footer {
     box-shadow: 0 4px 10px rgba(0, 80, 160, 0.15);
     transform: translateY(-1px);
 }
+.store-notice {
+    font-size: 16px;
+    font-weight: 800;
+    color: #ff2b2b; /* έντονο κόκκινο */
+    margin-left: 20px;
+    padding: 6px 14px;
+    border: 2px solid #ff2b2b;
+    border-radius: 6px;
+    background: rgba(255, 0, 0, 0.08);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    animation: pulseNotice 1.8s infinite ease-in-out;
+}
 
+/* 🔥 Premium animation */
+@keyframes pulseNotice {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.03); opacity: 0.85; }
+    100% { transform: scale(1); opacity: 1; }
+}
 
 

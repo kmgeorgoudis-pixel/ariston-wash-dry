@@ -1,3 +1,3 @@
 git add .
-git commit -m "newmail1"
+git commit -m "COMING SOON"
 git push
