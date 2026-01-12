@@ -1010,21 +1010,28 @@ def forgot_password():
         user.reset_code = str(code)
         db.session.commit()
 
-        body = (
-            f"Αγαπητέ/ή {user.fullname},\n\n"
-            "Λάβαμε αίτημα για επαναφορά του κωδικού πρόσβασής σας στο ARISTON Wash & Dry.\n"
-            "Για να συνεχίσετε, χρησιμοποιήστε τον παρακάτω 6ψήφιο κωδικό επαλήθευσης:\n\n"
-            f"{code}\n\n"
-            "Ο κωδικός ισχύει για περιορισμένο χρονικό διάστημα.\n\n"
-            "Αν δεν ζητήσατε εσείς την επαναφορά, μπορείτε να αγνοήσετε αυτό το μήνυμα.\n\n"
-            "Με εκτίμηση,\n"
-            "Η ομάδα του ARISTON Wash & Dry"
-            "   https://aristonwashdry.gr/\n\n"
-            '<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">'
-            '<img src="https://aristonwashdry.gr/templates/images/1new.png" '
-            'alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">'
-            "</a>"
-        )
+        body = f"""
+Αγαπητέ/ή {user.fullname},
+
+Λάβαμε αίτημα για επαναφορά του κωδικού πρόσβασής σας στο ARISTON Wash & Dry.
+
+Για να συνεχίσετε, χρησιμοποιήστε τον παρακάτω 6ψήφιο κωδικό επαλήθευσης:
+
+{code}
+
+Ο κωδικός ισχύει για περιορισμένο χρονικό διάστημα.
+
+Αν δεν ζητήσατε εσείς την επαναφορά, μπορείτε να αγνοήσετε αυτό το μήνυμα.
+
+Με εκτίμηση,
+Η ομάδα του ARISTON Wash & Dry
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+    <img src="https://aristonwashdry.gr/templates/images/1new.png"
+         alt="ARISTON Wash & Dry"
+         style="height:100px; width:auto; margin-top:12px;">
+</a>
+"""
 
         send_email(
             to=email,
@@ -1222,6 +1229,31 @@ def change_email():
     return render_template("change-email.html")
 
 
+def send_password_change_email(user):
+    subject = "Η αλλαγή κωδικού ολοκληρώθηκε"
+    content = f"""
+Γεια σου {user.fullname},
+
+Ο κωδικός πρόσβασής σου στο Ariston Wash & Dry άλλαξε με επιτυχία.
+
+Αν δεν έκανες εσύ αυτή την αλλαγή, επικοινώνησε άμεσα μαζί μας.
+
+Με εκτίμηση,
+Ariston Wash & Dry
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+    <img src="https://aristonwashdry.gr/templates/images/1new.png"
+         alt="ARISTON Wash & Dry"
+         style="height:100px; width:auto; margin-top:12px;">
+</a>
+"""
+
+    send_email(
+        to=user.email,
+        subject=subject,
+        content=content
+    )
+
 @app.route("/change-password", methods=["GET", "POST"])
 @login_required
 def change_password():
@@ -1241,8 +1273,11 @@ def change_password():
         current_user.password = generate_password_hash(new_password)
         db.session.commit()
 
+        # ⭐ ΣΤΕΛΝΟΥΜΕ EMAIL ΕΠΙΒΕΒΑΙΩΣΗΣ
+        send_password_change_email(current_user)
+
         flash("Ο κωδικός ενημερώθηκε επιτυχώς.", "success")
-        return redirect("/change-password")   # ⭐ ΕΔΩ Η ΑΛΛΑΓΗ
+        return redirect("/change-password")
 
     return render_template("change-password.html")
 
