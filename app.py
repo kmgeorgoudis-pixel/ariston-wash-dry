@@ -170,7 +170,7 @@ from flask_login import login_required
 @app.route("/ai")
 @login_required
 def ai():
-    return render_template("ai.html")
+    return render_template("ai/ai.html")
 @app.route("/game")
 def game():
     return render_template("game.html")
