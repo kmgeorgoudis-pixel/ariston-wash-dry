@@ -1232,14 +1232,14 @@ def change_email():
 def send_password_change_email(user):
     subject = "Η αλλαγή κωδικού ολοκληρώθηκε"
     content = f"""
-Γεια σου {user.fullname},
+Αγαπητέ/ή {user.fullname},
 
-Ο κωδικός πρόσβασής σου στο Ariston Wash & Dry άλλαξε με επιτυχία.
+Ο κωδικός πρόσβασής σου στο ARISTON Wash & Dry άλλαξε με επιτυχία.
 
 Αν δεν έκανες εσύ αυτή την αλλαγή, επικοινώνησε άμεσα μαζί μας.
 
 Με εκτίμηση,
-Ariston Wash & Dry
+Η ομάδα του ARISTON Wash & Dry
 
 <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
     <img src="https://aristonwashdry.gr/templates/images/1new.png"
@@ -1251,7 +1251,7 @@ Ariston Wash & Dry
     send_email(
         to=user.email,
         subject=subject,
-        content=content
+        body=content   # ⭐ ΕΔΩ Η ΔΙΟΡΘΩΣΗ
     )
 
 @app.route("/change-password", methods=["GET", "POST"])
