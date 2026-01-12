@@ -157,7 +157,7 @@ html, body {
   gap: 18px;
 }
 
-/* AI + USER MESSAGE (ΚΟΙΝΟ ΠΛΑΙΣΙΟ) */
+/* AI + USER MESSAGE */
 .ai-msg,
 .user-msg {
   display: flex;
@@ -172,35 +172,34 @@ html, body {
   border-radius: 50%;
 }
 
-/* ΚΟΙΝΟ PREMIUM FRAME */
+/* PREMIUM BUBBLE (UPDATED TO LIGHT COLORS) */
 .bubble {
   padding: 18px 20px;
   border-radius: 16px;
   line-height: 1.6;
   font-size: 14px;
 
-  /* premium frame */
-  border: 1px solid rgba(0,0,0,0.08);
+  border: 1px solid rgba(255,255,255,0.4);
   box-shadow:
     0 10px 25px rgba(0,0,0,0.12),
-    inset 0 0 0 1px rgba(255,255,255,0.6);
+    inset 0 0 0 1px rgba(255,255,255,0.7);
 }
 
-/* AI MESSAGE */
+/* AI MESSAGE – LIGHT FRAME */
 .ai-msg .bubble {
-  background: #ffffff;
+  background: rgba(255,255,255,0.85);
   color: #020617;
 }
 
-/* USER MESSAGE */
+/* USER MESSAGE – LIGHT BLUE FRAME */
 .user-msg {
   align-self: flex-end;
 }
 
 .user-msg .bubble {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
-  color: #ffffff;
-  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(173, 216, 255, 0.85);
+  color: #020617;
+  border: 1px solid rgba(255,255,255,0.5);
 }
 
 /* SCROLLBAR */
