@@ -165,9 +165,12 @@ def ai_image(filename):
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory('templates/images', 'logo3.png')
+from flask_login import login_required
+
 @app.route("/ai")
-def ai_page():
-    return render_template("ai/ai.html")
+@login_required
+def ai():
+    return render_template("ai.html")
 @app.route("/game")
 def game():
     return render_template("game.html")
