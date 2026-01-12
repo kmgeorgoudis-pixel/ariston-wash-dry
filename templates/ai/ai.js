@@ -83,16 +83,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 faqMessagesContainer.innerHTML += `
                     <div class="user-msg">
-                        <span>${item.question}</span>
+                        <div class="bubble">${item.question}</div>
                     </div>
                 `;
 
                 faqMessagesContainer.innerHTML += `
                     <div class="ai-msg">
                         <img class="ai-avatar" src="${avatarPath}">
-                        <span>${item.answer}</span>
+                         <div class="bubble">${item.answer}</div>
                     </div>
-                `;
+                `;  
 
                 faqMessagesContainer.scrollTop = faqMessagesContainer.scrollHeight;
             });
