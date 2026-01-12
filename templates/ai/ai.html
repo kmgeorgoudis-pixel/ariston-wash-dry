@@ -4,47 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARISTON AI Assistant</title>
-
     <link rel="icon" type="image/png" href="/favicon.ico">
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='ai/ai.css') }}">
 </head>
 <body>
 
 <div id="ariston-chat-wrapper">
 
-    <!-- SIDEBAR -->
-    <aside id="ariston-chat-sidebar">
-        <div class="sidebar-header">
-            <img src="/ai-image/logo3.png" class="sidebar-logo">
-            <h2>ARISTON AI</h2>
-            <span class="sub">Έξυπνος βοηθός πλυντηρίου</span>
+  <div id="ariston-chat-sidebar">
+    <h2>ARISTON AI ASSISTANT</h2>
+    <p class="sub">Επιλέξτε ερώτηση</p>
+    <a href="{{ url_for('index') }}" class="back-btn">← Επιστροφή στην αρχική</a>
+
+    <div id="ariston-chat-questions"></div>
+  </div>
+
+  <div id="ariston-chat-main">
+    <div id="ariston-chat-window">
+      <div id="ariston-chat-messages">
+        <div class="ai-msg">
+          <!-- ΕΔΩ περνάμε το avatar και το fullname -->
+          <img class="ai-avatar" src="/ai-image/logo3.png">
+          <span id="ai-greeting"
+                data-fullname="{{ current_user.fullname }}"
+                data-avatar="/ai-image/logo3.png"></span>
         </div>
-
-        <a href="{{ url_for('index') }}" class="back-btn">← Επιστροφή</a>
-
-        <div id="ariston-chat-questions"></div>
-    </aside>
-
-    <!-- MAIN CHAT -->
-    <main id="ariston-chat-main">
-        <div id="ariston-chat-window">
-            <div id="ariston-chat-messages">
-
-                <div class="ai-msg">
-                    <img class="ai-avatar" src="/ai-image/logo3.png">
-                    <div class="msg-bubble">
-                        <span id="ai-greeting"
-                              data-fullname="{{ current_user.fullname }}"
-                              data-avatar="/ai-image/logo3.png"></span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </main>
+      </div>
+    </div>
+  </div>
 
 </div>
 
+<!-- JS -->
 <script src="{{ url_for('static', filename='ai/ai.js') }}"></script>
 
 </body>
