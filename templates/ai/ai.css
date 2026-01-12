@@ -213,3 +213,24 @@ html, body {
   background: rgba(255,255,255,0.35);
   border-radius: 10px;
 }
+/* AI MESSAGE – VISIBLE LIGHT FRAME */
+.ai-msg .bubble {
+  background: rgba(255,255,255,0.92);
+  color: #020617;
+
+  border: 2px solid rgba(255,255,255,0.9);
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.18),
+    inset 0 0 8px rgba(255,255,255,0.9);
+}
+
+/* USER MESSAGE – VISIBLE LIGHT BLUE FRAME */
+.user-msg .bubble {
+  background: rgba(200, 225, 255, 0.92);
+  color: #020617;
+
+  border: 2px solid rgba(255,255,255,0.9);
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.18),
+    inset 0 0 8px rgba(255,255,255,0.9);
+}
