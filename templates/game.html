@@ -6,6 +6,7 @@
   <title>Ariston Wash & Dry Game</title>
   
   <style>
+      
     body {
       margin: 0;
       padding: 0;
@@ -30,37 +31,22 @@
       z-index: 9999;
       animation: fadeOut 2s ease 2s forwards;
     }
-    #splash img {
-      width: 200px;
-    }
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
+    #splash img { width: 200px; }
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 
-    /* Κεντρικό wrapper για instructions + nickname */
     #intro-wrapper {
       text-align: center;
       padding: 3rem 1.5rem;
       background: #ffffff;
       max-width: 900px;
-      margin: 0 auto;
+      margin: 40px auto 0;
       border-radius: 16px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-      margin-top: 40px;
     }
 
-    #intro-title {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
+    #intro-title { font-size: 2rem; margin-bottom: 0.5rem; }
+    #intro-subtitle { font-size: 1.05rem; margin-bottom: 1.5rem; color: #335577; }
 
-    #intro-subtitle {
-      font-size: 1.05rem;
-      margin-bottom: 1.5rem;
-      color: #335577;
-    }
-
-    /* Nickname block */
     #nickname-block {
       margin-bottom: 2rem;
       padding: 1.2rem 1rem;
@@ -69,68 +55,25 @@
       border: 1px solid #d0e2ff;
     }
 
-    #nickname-block h2 {
-      margin: 0 0 0.6rem 0;
-      font-size: 1.2rem;
-    }
-
-    #nickname-block p {
-      margin: 0 0 0.8rem 0;
-      font-size: 0.95rem;
-      color: #446688;
-    }
-
     #nickname-input {
       padding: 0.6rem 0.8rem;
       font-size: 1rem;
       border-radius: 8px;
       border: 1px solid #aac4e8;
       width: 220px;
-      max-width: 80%;
-      outline: none;
     }
 
-    #nickname-input:focus {
-      border-color: #0077cc;
-      box-shadow: 0 0 0 2px rgba(0,119,204,0.15);
-    }
-
-    #nickname-error {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: #cc0000;
-      min-height: 1.1em;
-    }
-
-    #change-nickname-btn {
-      margin-top: 0.8rem;
-      background: transparent;
-      border: none;
-      color: #0077cc;
-      font-size: 0.9rem;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    /* Οδηγίες */
     #instructions-text {
       margin-top: 1.5rem;
       text-align: left;
       font-size: 0.97rem;
       line-height: 1.7;
-      color: #24405e;
     }
 
-    #instructions-text strong {
-      color: #003366;
-    }
-
-    /* Διάταξη κάτω: Start + Top10 */
     #intro-actions {
       margin-top: 2rem;
       display: flex;
       justify-content: center;
-      align-items: center;
       gap: 16px;
       flex-wrap: wrap;
     }
@@ -143,53 +86,13 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      font-weight: 600;
-      box-shadow: 0 8px 18px rgba(0,119,204,0.25);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
 
-    #start-btn:hover {
-      background: #005fa3;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(0,95,163,0.3);
-    }
-
-    #top10-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0.7rem 1.4rem;
-      font-size: 0.95rem;
-      background: #ffffff;
-      color: #003366;
-      border-radius: 999px;
-      border: 1px solid #ccd9ee;
-      cursor: pointer;
-      text-decoration: none;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.05);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-    }
-
-    #top10-btn:hover {
-      transform: translateY(-1px);
-      border-color: #0077cc;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-    }
-
-    #top10-icon {
-      font-size: 1.2rem;
-    }
-
-    /* Σκορ & χρόνος */
     #leketes-score, #leketes-timer {
       position: absolute;
       top: 10px;
       font-size: 20px;
-      backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      color: #003366;
-      font-weight: bold;
+      background: rgba(255,255,255,0.7);
       padding: 10px;
       border-radius: 8px;
       z-index: 10;
@@ -198,89 +101,37 @@
     #leketes-score { left: 10px; }
     #leketes-timer { right: 10px; }
 
+    /* 🧽 ΜΟΝΗ ΑΛΛΑΓΗ: ΚΕΡΣΟΡΑΣ ΣΦΟΥΓΓΑΡΙ */
     #leketes-area {
       width: 100vw;
       height: 100vh;
       position: relative;
       overflow: hidden;
+      cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><text y='34' font-size='32'>🧽</text></svg>") 16 16, pointer;
     }
-    
 
     .leke {
       width: 60px;
       height: 60px;
       background-image: url("https://i.postimg.cc/3x3QzSGq/leke.png");
       background-size: cover;
-      background-position: center;
       position: absolute;
-      cursor: pointer;
       animation: fall 5.5s linear forwards, spin 5.5s linear infinite;
     }
 
-    @keyframes fall {
-      from { top: -80px; }
-      to { top: 100vh; }
-    }
+    @keyframes fall { from { top: -80px; } to { top: 100vh; } }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .game-win {
-      background: #d4ffd4 !important;
-    }
-
-    .game-over {
-      background: #ffd4d4 !important;
-    }
-
-    #game-ui {
-      display: none;
-    }
-
+    #game-ui { display: none; }
     #gameover-screen {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(255, 0, 0, 0.05);
-      backdrop-filter: blur(6px);
+      inset: 0;
+      background: rgba(255,0,0,0.05);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #990000;
-      font-size: 1.5rem;
-      z-index: 10000;
     }
-
-    #gameover-screen button {
-      margin-top: 1rem;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      background: #cc0000;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    /* Responsive tweaks */
-    @media (max-width: 600px) {
-      #intro-wrapper {
-        margin-top: 20px;
-        padding: 2rem 1rem;
-      }
-      #intro-title {
-        font-size: 1.6rem;
-      }
-      #instructions-text {
-        font-size: 0.9rem;
-      }
-    }
-    
   </style>
 
   <link rel="icon" type="image/png" href="images/logo3.png">

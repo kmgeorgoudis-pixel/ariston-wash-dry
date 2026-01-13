@@ -1275,11 +1275,18 @@ body, header, nav, .photo-block, .contact, footer {
     letter-spacing: 0.2px;
 }
 
-/* Στο κινητό να εξαφανίζεται για καθαρό UI */
+/* 🔥 MOBILE VERSION — πιο μικρό, πιο μαζεμένο, πάντα ορατό */
 @media (max-width: 768px) {
     .user-hint {
-        display: none;
+        font-size: 11px;
+        padding: 3px 6px;
+        border-radius: 6px;
+        background: #e2e8f0;
+        color: #334155;
+        transform: translateY(1px);
     }
 }
+
+
 
 
