@@ -172,6 +172,7 @@ from flask_login import login_required
 def ai():
     return render_template("ai/ai.html")
 @app.route("/game")
+@login_required
 def game():
     return render_template("game.html")
 @app.route("/timokatalogos")
