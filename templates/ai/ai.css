@@ -251,3 +251,16 @@ html, body {
     max-width: 100%;
   }
 }
+/* ΟΛΕΣ οι εικόνες του AI Assistant */
+.sidebar-header img,
+.chat-header img,
+.ai-msg img,
+.user-msg img {
+    width: 36px;
+    height: 36px;
+    max-width: 36px;
+    max-height: 36px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
