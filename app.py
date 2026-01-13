@@ -1280,8 +1280,79 @@ def change_password():
         return redirect("/change-password")
 
     return render_template("change-password.html")
+######APOSTOLHMAIL####
+import threading
+import time
 
+def send_bulk_email_background(users, subject, message):
+    count = 0
 
+    for user in users:
+        try:
+            if not user.email or user.email.strip() == "":
+                print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
+                continue
+
+            body = f"""
+Αγαπητέ/ή {user.fullname},
+
+{message}
+
+──────────────────────────────────
+Με εκτίμηση,
+ARISTON Wash & Dry
+https://aristonwashdry.gr/
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+<img src="https://aristonwashdry.gr/templates/images/1new.png"
+alt="ARISTON Wash & Dry"
+style="height:100px; width:auto; margin-top:12px;">
+</a>
+"""
+
+            send_email(user.email, subject, body)
+            count += 1
+
+            # 2 emails/sec
+            if count % 2 == 0:
+                time.sleep(1)
+
+        except Exception as e:
+            print(f"❌ ERROR sending to user {user.id}: {e}")
+            continue
+@app.route("/admin/bulk-email/send", methods=["POST"])
+@login_required
+def admin_send_bulk_email():
+    if not current_user.is_admin:
+        return redirect("/")
+
+    subject = request.form.get("subject")
+    message = request.form.get("message")
+    selected_ids = request.form.getlist("selected_users")
+
+    if not selected_ids:
+        flash("Δεν επιλέχθηκαν χρήστες.", "danger")
+        return redirect("/admin/bulk-email")
+
+    users = User.query.filter(User.id.in_(selected_ids)).all()
+
+    # 🔥 Background thread (όπως οι ανακοινώσεις)
+    threading.Thread(
+        target=send_bulk_email_background,
+        args=(users, subject, message),
+        daemon=True
+    ).start()
+
+    flash("Η αποστολή ξεκίνησε στο παρασκήνιο.", "success")
+    return redirect("/admin/bulk-email")
+@app.route("/admin/bulk-email")
+@login_required
+def admin_bulk_email():
+    if not current_user.is_admin:
+        return redirect("/")
+
+    users = User.query.all()
+    return render_template("admin/bulk-email.html", users=users)
 # ============================
 #       RUN APP
 # ============================
