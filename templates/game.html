@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="el">
 <head>
@@ -61,8 +62,91 @@
       border-radius: 8px;
       border: 1px solid #aac4e8;
       width: 220px;
+      outline: none;
     }
 
+    /* --- ΣΤΥΛ ΓΙΑ ΤΑ ΚΟΥΜΠΙΑ --- */
+    button, #start-btn, #top10-btn {
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Κουμπί Ξεκίνα / Start */
+    #start-btn {
+      padding: 0.9rem 2.5rem;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #0077cc 0%, #004494 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 119, 204, 0.3);
+    }
+
+    #start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 119, 204, 0.4);
+      filter: brightness(1.1);
+    }
+
+    /* Κουμπί Αλλαγή Ψευδωνύμου */
+    #change-nickname-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      background-color: transparent;
+      color: #0077cc;
+      border: 2px solid #0077cc;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    #change-nickname-btn:hover {
+      background-color: #0077cc;
+      color: white;
+    }
+
+    /* Κουμπί Top 10 */
+    #top10-btn {
+      padding: 0.9rem 2.1rem;
+      font-size: 1.1rem;
+      background-color: #ffffff;
+      color: #003366;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    #top10-btn:hover {
+      border-color: #0077cc;
+      color: #0077cc;
+      transform: translateY(-2px);
+      background-color: #f8fbff;
+    }
+
+    #top10-icon { margin-right: 8px; }
+
+    /* Κουμπί Play Again στο Game Over */
+    #gameover-screen button {
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    #gameover-screen button:hover {
+      background: #005fa3;
+      transform: scale(1.05);
+    }
+
+    /* --- ΥΠΟΛΟΙΠΟ ΣΤΥΛ --- */
     #instructions-text {
       margin-top: 1.5rem;
       text-align: left;
@@ -78,30 +162,22 @@
       flex-wrap: wrap;
     }
 
-    #start-btn {
-      padding: 0.9rem 2.1rem;
-      font-size: 1.1rem;
-      background: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
     #leketes-score, #leketes-timer {
       position: absolute;
       top: 10px;
       font-size: 20px;
-      background: rgba(255,255,255,0.7);
-      padding: 10px;
-      border-radius: 8px;
+      background: rgba(255,255,255,0.85);
+      padding: 10px 15px;
+      border-radius: 12px;
       z-index: 10;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      font-weight: bold;
+      border: 1px solid #d0e2ff;
     }
 
-    #leketes-score { left: 10px; }
-    #leketes-timer { right: 10px; }
+    #leketes-score { left: 10px; color: #0077cc; }
+    #leketes-timer { right: 10px; color: #cc0000; }
 
-    /* 🧽 ΜΟΝΗ ΑΛΛΑΓΗ: ΚΕΡΣΟΡΑΣ ΣΦΟΥΓΓΑΡΙ */
     #leketes-area {
       width: 100vw;
       height: 100vh;
@@ -111,12 +187,14 @@
     }
 
     .leke {
-      width: 60px;
-      height: 60px;
+      width: 65px;
+      height: 65px;
       background-image: url("https://i.postimg.cc/3x3QzSGq/leke.png");
-      background-size: cover;
+      background-size: contain;
+      background-repeat: no-repeat;
       position: absolute;
       animation: fall 5.5s linear forwards, spin 5.5s linear infinite;
+      filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
     }
 
     @keyframes fall { from { top: -80px; } to { top: 100vh; } }
@@ -126,11 +204,13 @@
     #gameover-screen {
       position: fixed;
       inset: 0;
-      background: rgba(255,0,0,0.05);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(5px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      z-index: 1000;
     }
   </style>
 
@@ -370,31 +450,34 @@ function spawnStar() {
   if (!gameRunning) return;
 
   const star = document.createElement("div");
+  // Χρησιμοποιούμε leke για το animation, αλλά καθαρίζουμε το background
   star.className = "leke";
-  star.style.backgroundImage = "none";
-  star.style.fontSize = "40px";
-  star.style.textAlign = "center";
-  star.style.lineHeight = "60px";
-  star.style.color = "#ffcc00";
-  star.style.fontWeight = "bold";
+  star.style.backgroundImage = "none"; 
+  star.style.backgroundColor = "transparent";
+  star.style.display = "flex";
+  star.style.alignItems = "center";
+  star.style.justifyContent = "center";
+  star.style.fontSize = "50px";
   star.innerHTML = "⭐";
 
   star.style.left = Math.random() * 90 + "%";
   star.style.top = "-80px";
 
-  star.onclick = () => {
+  // Χρήση mousedown αντί για onclick για πιο γρήγορη απόκριση
+  star.onmousedown = (e) => {
+    e.stopPropagation(); // Αποφυγή πολλαπλών κλικ
     score += 25;
-    star.remove();
     document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
     bonusAudio.currentTime = 0;
     bonusAudio.play();
+    star.remove();
   };
 
   document.getElementById("leketes-area").appendChild(star);
 
   setTimeout(() => {
     if (document.body.contains(star)) star.remove();
-  }, 5500);
+  }, 5400);
 }
 
 /* -----------------------------------------
@@ -406,29 +489,30 @@ function spawnDiamond() {
   const diamond = document.createElement("div");
   diamond.className = "leke";
   diamond.style.backgroundImage = "none";
-  diamond.style.fontSize = "40px";
-  diamond.style.textAlign = "center";
-  diamond.style.lineHeight = "60px";
-  diamond.style.color = "#00aaff";
-  diamond.style.fontWeight = "bold";
+  diamond.style.backgroundColor = "transparent";
+  diamond.style.display = "flex";
+  diamond.style.alignItems = "center";
+  diamond.style.justifyContent = "center";
+  diamond.style.fontSize = "50px";
   diamond.innerHTML = "💎";
 
   diamond.style.left = Math.random() * 90 + "%";
   diamond.style.top = "-80px";
 
-  diamond.onclick = () => {
+  diamond.onmousedown = (e) => {
+    e.stopPropagation();
     score += 50;
-    diamond.remove();
     document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
     bonusAudio.currentTime = 0;
     bonusAudio.play();
+    diamond.remove();
   };
 
   document.getElementById("leketes-area").appendChild(diamond);
 
   setTimeout(() => {
     if (document.body.contains(diamond)) diamond.remove();
-  }, 5500);
+  }, 5400);
 }
 
 /* -----------------------------------------

@@ -102,6 +102,11 @@ class User(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(120))
     coupons = db.relationship("Coupon", backref="user", lazy=True)
+    milestone_15_sent = db.Column(db.Boolean, default=False)
+    milestone_30_sent = db.Column(db.Boolean, default=False)
+    milestone_60_sent = db.Column(db.Boolean, default=False)
+    milestone_100_sent = db.Column(db.Boolean, default=False)
+    milestone_365_sent = db.Column(db.Boolean, default=False)
 
 
 def init_db(app):
