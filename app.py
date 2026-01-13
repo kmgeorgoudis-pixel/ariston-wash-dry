@@ -1352,7 +1352,7 @@ def admin_bulk_email():
         return redirect("/")
 
     users = User.query.all()
-    return render_template("admin/bulk-email.html", users=users)
+    return render_template("admin/bulk-email.html", users=users, active_page="bulk_email")
 # ============================
 #       RUN APP
 # ============================
