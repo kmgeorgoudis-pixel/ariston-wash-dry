@@ -11,10 +11,17 @@
         <textarea name="message" rows="6" required></textarea>
 
         <label>Επιλογή χρηστών:</label>
+
+        <!-- Κουμπιά επιλογής -->
+        <div class="select-buttons">
+            <button type="button" id="select-all">Επιλογή όλων</button>
+            <button type="button" id="clear-all">Καθαρισμός</button>
+        </div>
+
         <div class="user-list-box">
             {% for user in users %}
                 <div>
-                    <input type="checkbox" name="selected_users" value="{{ user.id }}">
+                    <input type="checkbox" class="user-checkbox" name="selected_users" value="{{ user.id }}">
                     {{ user.fullname }} — {{ user.email }}
                 </div>
             {% endfor %}
@@ -25,6 +32,16 @@
     </form>
 
 </div>
+
+<script>
+document.getElementById("select-all").addEventListener("click", function() {
+    document.querySelectorAll(".user-checkbox").forEach(cb => cb.checked = true);
+});
+
+document.getElementById("clear-all").addEventListener("click", function() {
+    document.querySelectorAll(".user-checkbox").forEach(cb => cb.checked = false);
+});
+</script>
 
 <style>
 .bulk-wrapper {
@@ -112,5 +129,26 @@
     background: #005fa3;
     transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(0,95,163,0.3);
+}
+.select-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.select-buttons button {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: #e2e8f0;
+    color: #003366;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.select-buttons button:hover {
+    background: #cbd5e1;
 }
 </style>
