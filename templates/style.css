@@ -1286,6 +1286,45 @@ body, header, nav, .photo-block, .contact, footer {
         transform: translateY(1px);
     }
 }
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #222;
+    color: #fff;
+    padding: 15px;
+    display: none;
+    z-index: 9999;
+    text-align: center;
+}
+
+.cookie-banner a {
+    color: #4da3ff;
+    text-decoration: underline;
+}
+
+.cookie-buttons {
+    margin-top: 10px;
+}
+
+.cookie-buttons button {
+    margin: 0 5px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#accept-cookies {
+    background: #4caf50;
+    color: white;
+}
+
+#reject-cookies {
+    background: #f44336;
+    color: white;
+}
 
 
 

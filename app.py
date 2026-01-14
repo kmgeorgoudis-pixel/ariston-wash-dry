@@ -58,7 +58,7 @@ def send_coupon_email(user, coupon):
 Ισχύει έως: {coupon.end_date.strftime('%d/%m/%Y')}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-Για να δείτε όλα τα κουπόνια σας, συνδεθείτε στον λογαριασμό σας:
+Για να δείτε όλα τα κουπόνια σας:
 https://aristonwashdry.gr/coupons
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -70,7 +70,15 @@ https://aristonwashdry.gr/coupons
        alt="ARISTON Wash & Dry"
        style="height:100px; width:auto; margin-top:12px;">
 </a>
-    """
+
+<hr>
+<p style='font-size: 12px; color: #666;'>
+Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
+<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
+και δεν κοινοποιούνται σε τρίτους.
+</p>
+"""
 
     send_email(user.email, "Νέο Κουπόνι από το ARISTON Wash & Dry", body)
 
@@ -403,23 +411,38 @@ def register():
 
     if result == "OK":
         # ===== EMAIL ΚΑΛΩΣΟΡΙΣΜΑΤΟΣ =====
-        body = (
-            f"Αγαπητέ/ή {fullname},\n\n"
-            "Καλωσόρισες στην οικογένεια του Ariston Wash & Dry!\n\n"
-            "Η εγγραφή σου ολοκληρώθηκε με επιτυχία και πλέον είσαι επίσημα μέλος της υπηρεσίας μας.\n"
-            "Από σήμερα θα λαμβάνεις αποκλειστικές προσφορές, κουπόνια, εκπτώσεις και ενημερώσεις "
-            "για νέες υπηρεσίες που ετοιμάζουμε για τα μέλη μας.\n\n"
-            "Στόχος μας είναι να κάνουμε το πλύσιμο και το στέγνωμα των ρούχων σου πιο εύκολα, "
-            "πιο γρήγορα και πιο οικονομικά από ποτέ.\n\n"
-            "Σε ευχαριστούμε που μας εμπιστεύτηκες.\n"
-            "Αν χρειαστείς οτιδήποτε, είμαστε πάντα δίπλα σου.\n\n"
-            "Με εκτίμηση,\n"
-            "Η ομάδα του Ariston Wash & Dry\n\n"
-            '<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">'
-            '<img src="https://aristonwashdry.gr/templates/images/1new.png" '
-            'alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">'
-            "</a>"
-        )
+        body = f"""
+Αγαπητέ/ή {fullname},
+
+Καλωσόρισες στην οικογένεια του Ariston Wash & Dry!
+
+Η εγγραφή σου ολοκληρώθηκε με επιτυχία και πλέον είσαι επίσημα μέλος της υπηρεσίας μας.
+Από σήμερα θα λαμβάνεις αποκλειστικές προσφορές, κουπόνια, εκπτώσεις και ενημερώσεις 
+για νέες υπηρεσίες που ετοιμάζουμε για τα μέλη μας.
+
+Στόχος μας είναι να κάνουμε το πλύσιμο και το στέγνωμα των ρούχων σου πιο εύκολα, 
+πιο γρήγορα και πιο οικονομικά από ποτέ.
+
+Σε ευχαριστούμε που μας εμπιστεύτηκες.
+Αν χρειαστείς οτιδήποτε, είμαστε πάντα δίπλα σου.
+
+Με εκτίμηση,
+Η ομάδα του Ariston Wash & Dry
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+<img src="https://aristonwashdry.gr/templates/images/1new.png"
+alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">
+</a>
+
+<hr>
+<p style='font-size: 12px; color: #666;'>
+Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
+<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
+και δεν κοινοποιούνται σε τρίτους.
+</p>
+"""
+        
 
         send_email(
             to=email,
@@ -832,7 +855,9 @@ def admin_announcement_submit(user_id):
 Περιγραφή:
 {description}
 ──────────────────────────────────
-Δες τις ανακοινώσεις σου απο εδώ: https://aristonwashdry.gr/updates 
+
+Δες τις ανακοινώσεις σου από εδώ:
+https://aristonwashdry.gr/updates
 
 Σε ευχαριστούμε που είσαι μέλος της οικογένειας ARISTON.
 
@@ -840,7 +865,18 @@ def admin_announcement_submit(user_id):
 ARISTON Wash & Dry
 https://aristonwashdry.gr/
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+<img src="https://aristonwashdry.gr/templates/images/1new.png"
+alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">
+</a>
+
+<hr>
+<p style='font-size: 12px; color: #666;'>
+Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
+<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
+και δεν κοινοποιούνται σε τρίτους.
+</p>
 """
 
     # Χρήση της send_email που ήδη δουλεύει
@@ -920,6 +956,13 @@ ARISTON Wash & Dry
 https://aristonwashdry.gr/
 
 <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+<hr>
+<p style="font-size: 12px; color: #666;">
+Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
+<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
+και δεν κοινοποιούνται σε τρίτους.
+</p>
 """
 
             send_email(user.email, subject, body)
@@ -1032,6 +1075,13 @@ def forgot_password():
          alt="ARISTON Wash & Dry"
          style="height:100px; width:auto; margin-top:12px;">
 </a>
+<hr>
+<p style="font-size: 12px; color: #666;">
+Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
+<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
+και δεν κοινοποιούνται σε τρίτους.
+</p>
 """
 
         send_email(
@@ -1173,22 +1223,36 @@ def delete_account():
         return redirect("/delete-account")
 
     # 3) Αποστολή επίσημου email διαγραφής με ΟΝΟΜΑ ΧΡΗΣΤΗ
+    body = f"""
+Αγαπητέ/ή {current_user.fullname},
+
+Ο λογαριασμός σας στο ARISTON Wash & Dry διαγράφηκε οριστικά.
+Όλα τα προσωπικά σας δεδομένα, οι ρυθμίσεις και το ιστορικό χρήσης 
+έχουν αφαιρεθεί από το σύστημά μας σύμφωνα με την πολιτική απορρήτου.
+
+Δεν είστε πλέον μέλος της υπηρεσίας.
+
+Ευχαριστούμε που χρησιμοποιήσατε το ARISTON Wash & Dry.
+https://aristonwashdry.gr/
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+<img src="https://aristonwashdry.gr/templates/images/1new.png"
+alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">
+</a>
+
+<hr>
+<p style='font-size: 12px; color: #666;'>
+Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
+<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
+και δεν κοινοποιούνται σε τρίτους.
+</p>
+"""
+
     send_email(
         to=current_user.email,
         subject="Επιβεβαίωση Διαγραφής Λογαριασμού - ARISTON Wash & Dry",
-        body=(
-            f"Αγαπητέ/ή {current_user.fullname},\n\n"
-            "Ο λογαριασμός σας στο ARISTON Wash & Dry διαγράφηκε οριστικά.\n"
-            "Όλα τα προσωπικά σας δεδομένα, οι ρυθμίσεις και το ιστορικό χρήσης "
-            "έχουν αφαιρεθεί από το σύστημά μας σύμφωνα με την πολιτική απορρήτου.\n\n"
-            "Δεν είστε πλέον μέλος της υπηρεσίας.\n\n"
-            "Ευχαριστούμε που χρησιμοποιήσατε το ARISTON Wash & Dry."
-            "https://aristonwashdry.gr/\n\n"
-            '<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">'
-            '<img src="https://aristonwashdry.gr/templates/images/1new.png" '
-            'alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">'
-            "</a>"
-        )
+        body=body
     )
 
     # 4) Αποθήκευση ID πριν το logout
@@ -1247,6 +1311,13 @@ def send_password_change_email(user):
          alt="ARISTON Wash & Dry"
          style="height:100px; width:auto; margin-top:12px;">
 </a>
+<hr>
+<p style="font-size: 12px; color: #666;">
+Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
+<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
+και δεν κοινοποιούνται σε τρίτους.
+</p>
 """
 
     send_email(
@@ -1309,6 +1380,13 @@ https://aristonwashdry.gr/
 alt="ARISTON Wash & Dry"
 style="height:100px; width:auto; margin-top:12px;">
 </a>
+<hr>
+<p style="font-size: 12px; color: #666;">
+Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
+<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
+και δεν κοινοποιούνται σε τρίτους.
+</p>
 """
 
             send_email(user.email, subject, body)

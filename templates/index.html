@@ -209,8 +209,12 @@ professional laundry Samos
     </section>
 
     <footer>
-        © 2025 Ariston Wash & Dry — All Rights Reserved
-    </footer>
+    © 2025 Ariston Wash & Dry — All Rights Reserved
+    <br><br>
+    <a href="/terms">Όροι Χρήσης</a> |
+    <a href="/privacy">Πολιτική Απορρήτου</a> |
+    <a href="/cookies">Πολιτική Cookies</a>
+</footer>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const avatar = document.querySelector(".user-avatar");
@@ -280,6 +284,55 @@ document.getElementById("hamburger-btn").onclick = function() {
     document.getElementById("nav-menu").classList.toggle("active");
 };
 </script>
+<div id="cookie-banner" class="cookie-banner">
+    <div class="cookie-content">
+        <p>
+            Χρησιμοποιούμε cookies για να διασφαλίσουμε την ορθή λειτουργία της ιστοσελίδας.
+            Μπορείτε να επιλέξετε αν τα αποδέχεστε.
+            <a href="/cookies">Μάθε περισσότερα</a>
+        </p>
 
+        <div class="cookie-buttons">
+            <button id="accept-cookies">Αποδοχή</button>
+            <button id="reject-cookies">Απόρριψη</button>
+        </div>
+    </div>
+</div>
+<script>
+    function setCookie(name, value, days) {
+        const d = new Date();
+        d.setTime(d.getTime() + (days*24*60*60*1000));
+        let expires = "expires="+ d.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name) {
+        let cname = name + "=";
+        let decoded = decodeURIComponent(document.cookie);
+        let ca = decoded.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i].trim();
+            if (c.indexOf(cname) === 0) return c.substring(cname.length, c.length);
+        }
+        return "";
+    }
+
+    window.onload = function() {
+        let consent = getCookie("cookie_consent");
+        if (!consent) {
+            document.getElementById("cookie-banner").style.display = "block";
+        }
+    };
+
+    document.getElementById("accept-cookies").onclick = function() {
+        setCookie("cookie_consent", "accepted", 365);
+        document.getElementById("cookie-banner").style.display = "none";
+    };
+
+    document.getElementById("reject-cookies").onclick = function() {
+        setCookie("cookie_consent", "rejected", 365);
+        document.getElementById("cookie-banner").style.display = "none";
+    };
+</script>
 </body>
 </html>
