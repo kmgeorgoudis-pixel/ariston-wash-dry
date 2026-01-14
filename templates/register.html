@@ -11,103 +11,168 @@
     <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-    <style>
-        body {
-            background: #f5f7fa;
-            font-family: Arial, sans-serif;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 
+<style>
+    :root {
+        --primary: #0d47a1;
+        --accent: #1976d2;
+        --bg-gradient: linear-gradient(135deg, #f8faff 0%, #e0e7ff 100%);
+        --glass: rgba(255, 255, 255, 0.92);
+        --input-bg: #f1f5f9;
+    }
+
+    body {
+        background: var(--bg-gradient);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px; /* Για κινητά */
+    }
+
+    /* Διακοσμητικά στοιχεία φόντου */
+    body::before {
+        content: "";
+        position: fixed;
+        width: 400px;
+        height: 400px;
+        top: -150px;
+        left: -100px;
+        background: radial-gradient(circle, rgba(13, 71, 161, 0.08) 0%, transparent 70%);
+        z-index: -1;
+    }
+
+    .register-container {
+        width: 100%;
+        max-width: 480px; /* Λίγο πιο πλατύ για τα πολλά πεδία */
+        background: var(--glass);
+        backdrop-filter: blur(25px);
+        padding: 45px 40px;
+        border-radius: 32px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        text-align: center;
+        animation: premiumReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes premiumReveal {
+        from { opacity: 0; transform: translateY(30px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .register-logo {
+        width: 90px;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 8px 12px rgba(13, 71, 161, 0.1));
+    }
+
+    .register-title {
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: var(--primary);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+
+    .register-subtitle {
+        font-size: 15px;
+        color: #64748b;
+        margin-bottom: 35px;
+    }
+
+    /* Grid για τα πεδία αν θες να τα βάλεις δίπλα-δίπλα, 
+       αλλά το single column είναι πιο premium/clean */
+    .form-field {
+        text-align: left;
+        margin-bottom: 18px;
+    }
+
+    .form-field label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 8px;
+        display: block;
+        margin-left: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+    }
+
+    .form-field input {
+        width: 100%;
+        padding: 14px 20px;
+        border: 2px solid transparent;
+        border-radius: 16px;
+        font-size: 15px;
+        background: var(--input-bg);
+        color: #1e293b;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .form-field input:focus {
+        outline: none;
+        background: #fff;
+        border-color: var(--accent);
+        box-shadow: 0 10px 25px -5px rgba(13, 71, 161, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 18px;
+        font-size: 17px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        margin-top: 15px;
+        box-shadow: 0 4px 6px rgba(13, 71, 161, 0.1);
+    }
+
+    .submit-btn:hover {
+        background: #093a85;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(13, 71, 161, 0.25);
+    }
+
+    .login-link {
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid rgba(0,0,0,0.05);
+        font-size: 15px;
+        color: #475569;
+    }
+
+    .login-cta {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 800;
+        margin-left: 5px;
+        padding: 6px 12px;
+        border-radius: 10px;
+        background: rgba(13, 71, 161, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .login-cta:hover {
+        background: var(--primary);
+        color: #fff;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
         .register-container {
-            max-width: 450px;
-            margin: 60px auto;
-            background: #ffffff;
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
-            text-align: center;
+            padding: 30px 20px;
         }
-
-        .register-logo {
-            width: 120px !important;
-            margin: 0 auto !important;
-            display: block !important;
-        }
-
-        .register-title {
-            font-size: 26px;
-            font-weight: 800;
-            color: #0d47a1;
-            margin-bottom: 5px;
-        }
-
-        .register-subtitle {
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 25px;
-        }
-
-        .form-field {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        .form-field label {
-            font-weight: 600;
-            color: #0d47a1;
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .form-field input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #cfd8dc;
-            border-radius: 12px;
-            font-size: 16px;
-            background: #fafbfc;
-            transition: 0.25s;
-        }
-
-        .form-field input:focus {
-            border-color: #0d47a1;
-            box-shadow: 0 0 8px rgba(13,71,161,0.25);
-            background: #ffffff;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #0d47a1, #1565c0);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.25s;
-            margin-top: 10px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(13,71,161,0.35);
-        }
-
-        .login-link {
-            margin-top: 20px;
-            font-size: 15px;
-        }
-
-        .login-link a {
-            color: #0d47a1;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 
