@@ -1464,7 +1464,7 @@ def site_review():
         db.session.add(review)
         db.session.commit()
 
-        return render_template("site_review_success.html")
+        return redirect("/site-review?success=1")
 
     return render_template("sitereview.html")
 @app.route("/admin/site-reviews")
