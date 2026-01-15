@@ -304,15 +304,12 @@
     }
 
     // Νέα συμπεριφορά υποβολής
-    document.getElementById('feedbackForm').onsubmit = function(e) {
-        e.preventDefault();
-
-        // Κρύβουμε τη φόρμα
+    document.getElementById('feedbackForm').addEventListener('submit', function() {
+    setTimeout(() => {
         document.getElementById('feedbackForm').style.display = "none";
-
-        // Εμφανίζουμε το success box
         document.getElementById('successBox').style.display = "block";
-    };
+    }, 300);
+});
 </script>
 
 </body>
