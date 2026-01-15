@@ -4,98 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Ariston Reviews</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --admin-bg: #f0f2f5;
-            --primary: #0056b3;
+            --admin-bg: #f8fafc;
+            --primary: #2563eb;
             --white: #ffffff;
-            --text: #333;
-            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --text: #1e293b;
+            --text-light: #64748b;
+            --shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--admin-bg);
             margin: 0;
-            padding: 40px;
+            padding: 40px 20px;
             color: var(--text);
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
         h1 {
-            border-left: 5px solid var(--primary);
-            padding-left: 15px;
-            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            color: #0f172a;
         }
 
         .reviews-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
         }
 
-        /* Η κάρτα τώρα είναι μέσα σε Link */
+        /* ΔΙΟΡΘΩΣΗ: Το link αγκαλιάζει όλη την κάρτα σωστά */
         .review-link {
             text-decoration: none;
             color: inherit;
             display: block;
+            transition: all 0.3s ease;
         }
 
         .review-card {
             background: var(--white);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            transition: transform 0.2s, border-color 0.2s;
-            border: 1px solid transparent;
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
             height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
         }
 
-        .review-card:hover {
-            transform: translateY(-5px);
+        .review-link:hover .review-card {
+            transform: translateY(-8px);
             border-color: var(--primary);
+            box-shadow: var(--shadow);
         }
 
         .review-card h3 {
-            margin: 0 0 10px 0;
-            color: var(--primary);
-            font-size: 1.1em;
+            margin: 0 0 12px 0;
+            color: #0f172a;
+            font-size: 1.2em;
+            font-weight: 700;
         }
 
-        .review-card p {
-            font-size: 0.9em;
-            color: #666;
-            margin: 5px 0;
+        .meta-info {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-bottom: 15px;
         }
+
+        .meta-info span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .recommend-tag {
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .tag-yes { background: #dcfce7; color: #166534; }
+        .tag-no { background: #fee2e2; color: #991b1b; }
+        .tag-maybe { background: #fef3c7; color: #92400e; }
 
         .status-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            background: #e1f5fe;
-            color: #01579b;
-            margin-top: 10px;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f1f5f9;
+            color: var(--primary);
+            text-align: center;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .review-link:hover .status-badge {
+            background: var(--primary);
+            color: white;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Διαχείριση Κριτικών</h1>
+    <header>
+        <h1>Διαχείριση Κριτικών Site</h1>
+        <a href="/admin" style="text-decoration: none; color: var(--text-light);">← Πίσω στο Admin</a>
+    </header>
 
     <div class="reviews-grid">
         {% for r in reviews %}
         <a href="{{ url_for('admin_site_review_detail', id=r.id) }}" class="review-link">
             <div class="review-card">
-                <h3>{{ r.fullname or "Ανώνυμη Κριτική" }}</h3>
-                <p><strong>Ημερομηνία:</strong> {{ r.created_at.strftime("%d/%m/%Y") }}</p>
-                <p><strong>Πρόταση:</strong> {{ r.recommend }}</p>
-                <span class="status-badge">Προβολή Λεπτομερειών</span>
+                <div>
+                    <h3>{{ r.fullname or "Ανώνυμη Κριτική" }}</h3>
+                    <div class="meta-info">
+                        <span>📅 {{ r.created_at.strftime("%d/%m/%Y %H:%M") }}</span>
+                        <span>✉️ {{ r.contact_info or "Δεν δόθηκε" }}</span>
+                    </div>
+                    
+                    {% if r.recommend == 'yes' or r.recommend == 'Ναι' %}
+                        <span class="recommend-tag tag-yes">Προτείνει</span>
+                    {% elif r.recommend == 'no' or r.recommend == 'Όχι' %}
+                        <span class="recommend-tag tag-no">Δεν προτείνει</span>
+                    {% else %}
+                        <span class="recommend-tag tag-maybe">Ίσως</span>
+                    {% endif %}
+                </div>
+
+                <div class="status-badge">Προβολή Λεπτομερειών</div>
             </div>
         </a>
         {% endfor %}

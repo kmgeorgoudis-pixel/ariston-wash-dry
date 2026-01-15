@@ -1478,12 +1478,12 @@ def admin_site_reviews():
     return render_template("admin/admin_reviews.html", reviews=reviews)
 @app.route("/admin/site-review/<int:id>")
 @login_required
-def admin_site_review_detai_site(id):
+def admin_site_review_detail(id): # <--- Το διόρθωσα σε detail
     if not current_user.is_admin:
         return redirect("/")
     
     review = SiteReview.query.get_or_404(id)
-    # Εδώ καλούμε το νέο template που θα φτιάξουμε
+    # Προσοχή: Το αρχείο πρέπει να λέγεται admin/review_detail_site.html
     return render_template("admin/review_detail_site.html", r=review)
 
 # ============================
