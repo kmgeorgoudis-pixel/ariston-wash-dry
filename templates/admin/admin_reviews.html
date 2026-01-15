@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Ariston Reviews</title>
+    <style>
+        :root {
+            --admin-bg: #f0f2f5;
+            --primary: #0056b3;
+            --white: #ffffff;
+            --text: #333;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--admin-bg);
+            margin: 0;
+            padding: 40px;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Grid για τις κάρτες */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Style για κάθε κάρτα κριτικής */
+        .review-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.2s, hover 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .review-card h3 {
+            margin: 0 0 10px 0;
+            color: var(--primary);
+            font-size: 1.1em;
+        }
+
+        .review-card p {
+            font-size: 0.9em;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            background: #e1f5fe;
+            color: #01579b;
+            margin-top: 10px;
+        }
+
+        /* MODAL STYLES (Το παράθυρο που ανοίγει) */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        /* Εμφάνιση Ερώτησης-Απάντησης μέσα στο Modal */
+        .qa-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .qa-question {
+            font-weight: bold;
+            display: block;
+            color: #555;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+        }
+
+        .qa-answer {
+            display: block;
+            color: var(--primary);
+            font-size: 1.1em;
+        }
+
+        .qa-empty {
+            color: #bbb;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Διαχείριση Κριτικών</h1>
+
+    <div class="reviews-grid">
+        <div class="review-card" onclick="openReview(1)">
+            <h3>Γιώργος Παπαδόπουλος</h3>
+            <p><strong>Ημερομηνία:</strong> 14/01/2026</p>
+            <p><strong>Πρόταση:</strong> Ναι</p>
+            <span class="status-badge">Κλικ για λεπτομέρειες</span>
+        </div>
+
+        <div class="review-card" onclick="openReview(2)">
+            <h3>Ανώνυμη Κριτική</h3>
+            <p><strong>Ημερομηνία:</strong> 12/01/2026</p>
+            <p><strong>Πρόταση:</strong> Ίσως</p>
+            <span class="status-badge">Κλικ για λεπτομέρειες</span>
+        </div>
+    </div>
+</div>
+
+<div id="reviewModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle" style="color:var(--primary)">Λεπτομέρειες Κριτικής</h2>
+        <div id="modalBody">
+            </div>
+    </div>
+</div>
+
+<script>
+    // Δείγμα δεδομένων (Στην πραγματικότητα αυτά θα έρχονται από μια βάση δεδομένων)
+    const reviewsData = {
+        1: {
+            name: "Γιώργος Παπαδόπουλος",
+            contact: "george@email.com",
+            appearance: "Εξαιρετική",
+            navigation: "Πολύ εύκολη",
+            speed: "Γρήγορο",
+            utility: "Πολύ χρήσιμες",
+            recommend: "Ναι",
+            improve: "Θα ήθελα περισσότερες προσφορές.",
+            best_feature: "Το σύστημα κρατήσεων",
+            hard_feature: "Τίποτα ιδιαίτερο",
+            contact_back: "Ναι (george@email.com)"
+        },
+        2: {
+            name: "Ανώνυμη Κριτική",
+            contact: "-",
+            appearance: "Καλή",
+            navigation: "Ουδέτερη",
+            speed: "Αργό",
+            utility: "Χρήσιμες",
+            recommend: "Ίσως",
+            improve: "Να φορτώνει πιο γρήγορα το κινητό.",
+            best_feature: "Τα κουπόνια",
+            hard_feature: "Η πλοήγηση στο μενού",
+            contact_back: "Όχι"
+        }
+    };
+
+    function openReview(id) {
+        const review = reviewsData[id];
+        const modal = document.getElementById('reviewModal');
+        const body = document.getElementById('modalBody');
+        
+        document.getElementById('modalTitle').innerText = "Κριτική: " + review.name;
+
+        // Δημιουργία της λίστας ερωτήσεων-απαντήσεων
+        body.innerHTML = `
+            <div class="qa-item"><span class="qa-question">Ονοματεπώνυμο</span><span class="qa-answer">${review.name}</span></div>
+            <div class="qa-item"><span class="qa-question">Στοιχεία Επικοινωνίας</span><span class="qa-answer">${review.contact}</span></div>
+            <div class="qa-item"><span class="qa-question">Εμφάνιση Site</span><span class="qa-answer">${review.appearance}</span></div>
+            <div class="qa-item"><span class="qa-question">Πλοήγηση</span><span class="qa-answer">${review.navigation}</span></div>
+            <div class="qa-item"><span class="qa-question">Ταχύτητα</span><span class="qa-answer">${review.speed}</span></div>
+            <div class="qa-item"><span class="qa-question">Χρησιμότητα</span><span class="qa-answer">${review.utility}</span></div>
+            <div class="qa-item"><span class="qa-question">Θα το πρότεινε;</span><span class="qa-answer">${review.recommend}</span></div>
+            <div class="qa-item"><span class="qa-question">Προς βελτίωση</span><span class="qa-answer">${review.improve || '<span class="qa-empty">Καμία απάντηση</span>'}</span></div>
+            <div class="qa-item"><span class="qa-question">Τι άρεσε περισσότερο</span><span class="qa-answer">${review.best_feature || '<span class="qa-empty">Καμία απάντηση</span>'}</span></div>
+            <div class="qa-item"><span class="qa-question">Τι δυσκόλεψε</span><span class="qa-answer">${review.hard_feature || '<span class="qa-empty">Καμία απάντηση</span>'}</span></div>
+            <div class="qa-item"><span class="qa-question">Επιθυμία επικοινωνίας;</span><span class="qa-answer">${review.contact_back}</span></div>
+        `;
+
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById('reviewModal').style.display = "none";
+    }
+
+    // Κλείσιμο αν πατήσει έξω από το παράθυρο
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('reviewModal')) {
+            closeModal();
+        }
+    }
+</script>
+
+</body>
+</html>

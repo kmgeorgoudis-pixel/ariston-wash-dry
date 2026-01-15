@@ -8,6 +8,31 @@
 {% endblock %}
 
 {% block content %}
+<!-- Κουμπί Προβολής Κριτικών Ιστοσελίδας -->
+<div style="margin-bottom:20px;">
+    <a href="/admin/reviews" class="admin-btn-site">
+        📄 Προβολή Κριτικών Ιστοσελίδας
+    </a>
+</div>
+
+<style>
+.admin-btn-site {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: 0.2s ease;
+}
+.admin-btn-site:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+</style>
 
 <!-- Φίλτρο -->
 <div class="admin-card" style="margin-bottom:20px;">

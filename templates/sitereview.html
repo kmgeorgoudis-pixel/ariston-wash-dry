@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Κριτική Ariston Wash & Dry</title>
+    <style>
+        /* CSS STYLING */
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #f8f9fa;
+            --accent-color: #28a745;
+            --text-color: #333;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .anonymous-note {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid #ffeeba;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box; /* Πολύ σημαντικό για το layout */
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0,86,179,0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            background: var(--secondary-color);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .radio-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #004494;
+        }
+
+        .gdpr {
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #contactField {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Κριτική για την ιστοσελίδα του Ariston Wash & Dry</h2>
+    <p class="subtitle">Η γνώμη σας μας βοηθά να γίνουμε καλύτεροι.</p>
+    
+    <p class="anonymous-note">
+        Αν δεν συμπληρώσετε ονοματεπώνυμο ή στοιχεία επικοινωνίας, η κριτική σας θα εμφανιστεί ως ανώνυμη.
+    </p>
+
+    <form id="feedbackForm">
+
+        <div class="form-group">
+            <label>Ονοματεπώνυμο (προαιρετικό)</label>
+            <input type="text" name="fullname" placeholder="Πληκτρολογήστε το όνομά σας">
+        </div>
+
+        <div class="form-group">
+            <label>Email ή κινητό τηλέφωνο (προαιρετικό)</label>
+            <input type="text" name="contact_info" placeholder="Πληκτρολογήστε τα στοιχεία σας">
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            <label>Πώς σας φαίνεται η εμφάνιση του site; *</label>
+            <select required>
+                <option value="">Επιλέξτε...</option>
+                <option>Εξαιρετική</option>
+                <option>Καλή</option>
+                <option>Μέτρια</option>
+                <option>Κακή</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Πόσο εύκολη ήταν η πλοήγηση; *</label>
+            <select required>
+                <option value="">Επιλέξτε...</option>
+                <option>Πολύ εύκολη</option>
+                <option>Εύκολη</option>
+                <option>Ουδέτερη</option>
+                <option>Δύσκολη</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Πόσο γρήγορο σας φάνηκε το site; *</label>
+            <select required>
+                <option value="">Επιλέξτε...</option>
+                <option>Πολύ γρήγορο</option>
+                <option>Γρήγορο</option>
+                <option>Μέτριο</option>
+                <option>Αργό</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Πόσο χρήσιμες βρήκατε τις λειτουργίες; *</label>
+            <select required>
+                <option value="">Επιλέξτε...</option>
+                <option>Πολύ χρήσιμες</option>
+                <option>Χρήσιμες</option>
+                <option>Ουδέτερες</option>
+                <option>Όχι ιδιαίτερα χρήσιμες</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Θα προτείνατε το site σε άλλους; *</label>
+            <div class="radio-group">
+                <label><input type="radio" name="recommend" value="yes" required> Ναι</label>
+                <label><input type="radio" name="recommend" value="maybe"> Ίσως</label>
+                <label><input type="radio" name="recommend" value="no"> Όχι</label>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            <label>Τι θα θέλατε να βελτιώσουμε; (προαιρετικό)</label>
+            <textarea rows="3" placeholder="Γράψτε την άποψή σας..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Ποια λειτουργία σας άρεσε περισσότερο;</label>
+            <input type="text" placeholder="Π.χ. το παιχνίδι, τα κουπόνια, η AI βοήθεια...">
+        </div>
+
+        <div class="form-group">
+            <label>Ποια λειτουργία σας δυσκόλεψε;</label>
+            <input type="text" placeholder="Π.χ. η εγγραφή, η πλοήγηση...">
+        </div>
+
+        <div class="form-group">
+            <label>Θέλετε να επικοινωνήσουμε μαζί σας; *</label>
+            <div class="radio-group">
+                <label><input type="radio" name="contact_back" value="yes" required onclick="toggleContact(true)"> Ναι</label>
+                <label><input type="radio" name="contact_back" value="no" onclick="toggleContact(false)"> Όχι</label>
+            </div>
+        </div>
+
+        <div id="contactField" class="hidden">
+            <div class="form-group">
+                <label>Πού προτιμάτε να σας βρούμε;</label>
+                <input type="text" placeholder="Email ή αριθμός κινητού">
+            </div>
+        </div>
+
+        <p class="gdpr">
+            Με την υποβολή της φόρμας, αποδέχεστε την Πολιτική Απορρήτου και συμφωνείτε με την επεξεργασία των δεδομένων σας σύμφωνα με τον GDPR.
+        </p>
+
+        <button type="submit" class="submit-btn">Υποβολή Κριτικής</button>
+    </form>
+</div>
+
+<script>
+    function toggleContact(show) {
+        const contactField = document.getElementById('contactField');
+        if (show) {
+            contactField.classList.remove('hidden');
+        } else {
+            contactField.classList.add('hidden');
+        }
+    }
+
+    // Προαιρετικό: Ένα απλό alert για την υποβολή
+    document.getElementById('feedbackForm').onsubmit = function(e) {
+        e.preventDefault();
+        alert('Ευχαριστούμε για την κριτική σας!');
+    };
+</script>
+
+</body>
+</html>

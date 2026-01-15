@@ -1445,6 +1445,12 @@ def admin_bulk_email():
 
     users = User.query.all()
     return render_template("admin/bulk-email.html", users=users, active_page="bulk_email")
+@app.route("/site-review")
+def site_review():
+    return render_template("sitereview.html")
+@app.route("/admin/reviews")
+def admin_reviews():
+    return render_template("admin_reviews.html")
 # ============================
 #       RUN APP
 # ============================
