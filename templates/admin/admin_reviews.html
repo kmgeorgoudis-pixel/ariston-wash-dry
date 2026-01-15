@@ -162,7 +162,11 @@
 
 <script>
 function openReview(id) {
-    fetch(`/admin/site-review/${id}`)
+    console.log("CLICK:", id);
+
+    fetch(`/admin/site-review/${id}`, {
+        credentials: "include"
+    })
         .then(res => res.json())
         .then(review => {
             document.getElementById('modalTitle').innerText = "Κριτική: " + review.fullname;
