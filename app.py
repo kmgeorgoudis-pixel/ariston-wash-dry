@@ -1448,9 +1448,14 @@ def admin_bulk_email():
 @app.route("/site-review")
 def site_review():
     return render_template("sitereview.html")
-@app.route("/admin/reviews")
-def admin_reviews():
+@app.route("/admin/site-reviews")
+@login_required
+def admin_site_reviews():
+    if not current_user.is_admin:
+        return redirect("/")
+
     return render_template("admin_reviews.html")
+
 # ============================
 #       RUN APP
 # ============================
