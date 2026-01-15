@@ -1454,7 +1454,7 @@ def admin_site_reviews():
     if not current_user.is_admin:
         return redirect("/")
 
-    return render_template("admin_reviews.html")
+    return render_template("admin/admin_reviews.html")
 
 # ============================
 #       RUN APP
