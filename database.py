@@ -93,23 +93,19 @@ class Announcement(db.Model):
 
 class SiteReview(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-
     fullname = db.Column(db.String(120))
     contact_info = db.Column(db.String(120))
-
     appearance = db.Column(db.String(50))
     navigation = db.Column(db.String(50))
     speed = db.Column(db.String(50))
     utility = db.Column(db.String(50))
     recommend = db.Column(db.String(20))
-
     improve = db.Column(db.Text)
     best_feature = db.Column(db.Text)
     hard_feature = db.Column(db.Text)
-
     contact_back = db.Column(db.String(20))
-
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    contact_method = db.Column(db.String(200)) # Η νέα στήλη
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     fullname = db.Column(db.String(120), nullable=False)

@@ -115,14 +115,19 @@
     </div>
 
     <div class="qa-group">
-        <span class="question">Δυσκολίες</span>
-        <div class="answer">{{ r.hard_feature or "Δεν συμπληρώθηκε" }}</div>
-    </div>
-
-    <div class="qa-group">
         <span class="question">Επιθυμεί επικοινωνία;</span>
         <div class="answer">{{ r.contact_back }}</div>
     </div>
+
+    {% if r.contact_back == 'yes' %}
+    <div class="qa-group" style="border-left-color: #10b981; background: #ecfdf5;">
+        <span class="question" style="color: #059669;">Προτιμώμενος τρόπος επικοινωνίας</span>
+        <div class="answer">{{ r.contact_method or "Δεν διευκρινίστηκε" }}</div>
+    </div>
+    {% endif %}
+</div>
+
+    
 </div>
 
 </body>

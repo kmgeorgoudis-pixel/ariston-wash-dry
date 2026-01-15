@@ -6,6 +6,7 @@
     <title>Κριτική Ariston Wash & Dry</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+    
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
@@ -220,6 +221,12 @@
             .radio-option { flex: 1 1 100%; }
         }
     </style>
+    {% if request.args.get('success') %}
+<style>
+    #formContent { display: none !important; }
+    #successBox { display: block !important; }
+</style>
+{% endif %}
 </head>
 <body>
 
@@ -374,13 +381,14 @@
     function toggleContact(show) {
         const contactField = document.getElementById('contactField');
         contactField.classList.toggle('hidden', !show);
+        
+        // Προαιρετικά: κάνει το πεδίο required αν εμφανιστεί
+        const input = contactField.querySelector('input');
+        if(show) input.setAttribute('required', 'true');
+        else input.removeAttribute('required');
     }
 
-    document.getElementById('feedbackForm').onsubmit = function(e) {
-        e.preventDefault();
-        document.getElementById('formContent').style.display = "none";
-        document.getElementById('successBox').style.display = "block";
-    };
+    // ΑΦΑΙΡΕΣΑΜΕ το e.preventDefault() για να φτάνουν τα δεδομένα στην Python
 </script>
 
 </body>
