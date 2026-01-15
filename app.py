@@ -1445,51 +1445,7 @@ def admin_bulk_email():
 
     users = User.query.all()
     return render_template("admin/bulk-email.html", users=users, active_page="bulk_email")
-@app.route("/site-review", methods=["GET", "POST"])
-def site_review():
-    if request.method == "POST":
-        try:
-            review = SiteReview(
-                fullname=request.form.get("fullname"),
-                contact_info=request.form.get("contact_info"),
-                appearance=request.form.get("design"),         
-                navigation=request.form.get("navigation"),     
-                speed=request.form.get("speed"),
-                utility=request.form.get("utility"),
-                recommend=request.form.get("recommend"),
-                improve=request.form.get("improvements"),      
-                best_feature=request.form.get("favorite_feature"),
-                hard_feature=request.form.get("difficult_feature"),
-                contact_back=request.form.get("contact_back"),
-                contact_method=request.form.get("contact_method")
-            )
-            db.session.add(review)
-            db.session.commit()
-            return redirect(url_for('site_review', success=1))
-        except Exception as e:
-            db.session.rollback()
-            print(f"Error: {e}")
-            return "Υπήρξε ένα σφάλμα κατά την αποθήκευση.", 500
 
-    return render_template("sitereview.html")
-@app.route("/admin/site-reviews")
-@login_required
-def admin_site_reviews():
-    if not current_user.is_admin:
-        return redirect("/")
-
-    reviews = SiteReview.query.order_by(SiteReview.created_at.desc()).all()
-
-    return render_template("admin/admin_reviews.html", reviews=reviews)
-@app.route("/admin/site-review/<int:id>")
-@login_required
-def admin_site_review_detail(id): # <--- Το διόρθωσα σε detail
-    if not current_user.is_admin:
-        return redirect("/")
-    
-    review = SiteReview.query.get_or_404(id)
-    # Προσοχή: Το αρχείο πρέπει να λέγεται admin/review_detail_site.html
-    return render_template("admin/review_detail_site.html", r=review)
 
 # ============================
 #       RUN APP
