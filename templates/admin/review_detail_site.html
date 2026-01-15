@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Λεπτομέρειες Κριτικής #{{ r.id }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .detail-container {
+            background: white;
+            max-width: 700px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 2px solid #0056b3;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .back-btn {
+            text-decoration: none;
+            background: #0056b3;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .qa-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #0056b3;
+        }
+        .question {
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+        .answer {
+            font-size: 1.15em;
+            color: #000;
+        }
+        .empty-ans {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="detail-container">
+    <div class="header">
+        <h2 style="margin:0;">Λεπτομέρειες Κριτικής</h2>
+        <a href="{{ url_for('admin_site_reviews') }}" class="back-btn">← Πίσω στη Λίστα</a>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Ονοματεπώνυμο</span>
+        <div class="answer">{{ r.fullname or "Ανώνυμη" }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Στοιχεία Επικοινωνίας</span>
+        <div class="answer">{{ r.contact_info or "-" }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Εμφάνιση Ιστοσελίδας</span>
+        <div class="answer">{{ r.appearance }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Ευκολία Πλοήγησης</span>
+        <div class="answer">{{ r.navigation }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Ταχύτητα</span>
+        <div class="answer">{{ r.speed }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Χρησιμότητα</span>
+        <div class="answer">{{ r.utility }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Θα το πρότεινε;</span>
+        <div class="answer">{{ r.recommend }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Τι πρέπει να βελτιώσουμε;</span>
+        <div class="answer">{{ r.improve or "Δεν συμπληρώθηκε" }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Αγαπημένη λειτουργία</span>
+        <div class="answer">{{ r.best_feature or "Δεν συμπληρώθηκε" }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Δυσκολίες</span>
+        <div class="answer">{{ r.hard_feature or "Δεν συμπληρώθηκε" }}</div>
+    </div>
+
+    <div class="qa-group">
+        <span class="question">Επιθυμεί επικοινωνία;</span>
+        <div class="answer">{{ r.contact_back }}</div>
+    </div>
+</div>
+
+</body>
+</html>

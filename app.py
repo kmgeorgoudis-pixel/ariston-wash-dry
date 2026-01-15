@@ -1478,21 +1478,13 @@ def admin_site_reviews():
     return render_template("admin/admin_reviews.html", reviews=reviews)
 @app.route("/admin/site-review/<int:id>")
 @login_required
-def admin_site_review_detail(id):
-    r = SiteReview.query.get(id)
-    return jsonify({
-        "fullname": r.fullname or "Ανώνυμη Κριτική",
-        "contact_info": r.contact_info or "-",
-        "appearance": r.appearance,
-        "navigation": r.navigation,
-        "speed": r.speed,
-        "utility": r.utility,
-        "recommend": r.recommend,
-        "improve": r.improve or "",
-        "best_feature": r.best_feature or "",
-        "hard_feature": r.hard_feature or "",
-        "contact_back": r.contact_back,
-    })
+def admin_site_review_detai_site(id):
+    if not current_user.is_admin:
+        return redirect("/")
+    
+    review = SiteReview.query.get_or_404(id)
+    # Εδώ καλούμε το νέο template που θα φτιάξουμε
+    return render_template("admin/review_detail_site.html", r=review)
 
 # ============================
 #       RUN APP

@@ -4,312 +4,383 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Κριτική Ariston Wash & Dry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* CSS STYLING */
         :root {
-            --primary-color: #0056b3;
-            --secondary-color: #f8f9fa;
-            --accent-color: #28a745;
-            --text-color: #333;
-            --border-radius: 12px;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent: #10b981;
+            --bg-gradient: radial-gradient(at 0% 0%, rgba(219, 234, 254, 1) 0, transparent 50%), 
+                           radial-gradient(at 100% 0%, rgba(224, 231, 255, 1) 0, transparent 50%),
+                           radial-gradient(at 100% 100%, rgba(219, 234, 254, 1) 0, transparent 50%),
+                           radial-gradient(at 0% 100%, rgba(238, 242, 255, 1) 0, transparent 50%);
+            --glass: rgba(255, 255, 255, 0.9);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            background-color: #f8fafc;
+            background-image: var(--bg-gradient);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .form-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 600px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 50px 40px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            max-width: 650px;
             width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            animation: fadeInUp 0.6s ease-out;
         }
 
         h2 {
-            color: var(--primary-color);
-            margin-top: 0;
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 28px;
             text-align: center;
-            font-size: 24px;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
         .subtitle {
             text-align: center;
-            color: #666;
-            margin-bottom: 10px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 16px;
         }
 
         .anonymous-note {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9em;
+            background: rgba(255, 251, 235, 0.8);
+            color: #92400e;
+            padding: 14px 20px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            border: 1px solid #fef3c7;
+            margin-bottom: 35px;
             text-align: center;
-            margin-bottom: 25px;
-            border: 1px solid #ffeeba;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 24px; }
 
         label {
             display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            font-size: 14px;
         }
 
-        input[type="text"],
-        input[type="email"],
-        select,
-        textarea {
+        input[type="text"], select, textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
             font-size: 16px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--text-main);
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0,86,179,0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
         }
 
+        /* Modern Radio Group Style */
         .radio-group {
             display: flex;
-            gap: 20px;
-            background: var(--secondary-color);
-            padding: 12px;
-            border-radius: 8px;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 5px;
         }
 
-        .radio-group label {
-            margin-bottom: 0;
+        .radio-option {
+            flex: 1;
+            min-width: 100px;
+            position: relative;
+        }
+
+        .radio-option input {
+            position: absolute;
+            opacity: 0;
             cursor: pointer;
-            font-weight: normal;
+        }
+
+        .radio-label {
+            display: block;
+            padding: 12px;
+            text-align: center;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .radio-option input:checked + .radio-label {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .radio-label:hover {
+            border-color: var(--primary);
         }
 
         .submit-btn {
-            background-color: var(--primary-color);
+            background: var(--primary);
             color: white;
-            padding: 15px 30px;
+            padding: 18px 30px;
             border: none;
-            border-radius: 8px;
+            border-radius: 16px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 700;
             width: 100%;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 20px;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
         }
 
         .submit-btn:hover {
-            background-color: #004494;
-        }
-
-        .gdpr {
-            font-size: 12px;
-            color: #888;
-            margin-top: 20px;
-            text-align: center;
-            line-height: 1.4;
-        }
-
-        .hidden {
-            display: none;
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.3);
         }
 
         #contactField {
-            background: #f0f7ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary-color);
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 18px;
+            margin-top: -10px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary);
+            animation: fadeInUp 0.3s ease-out;
         }
 
         hr {
             border: 0;
-            border-top: 1px solid #eee;
-            margin: 30px 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 40px 0;
         }
 
-        /* Success Box */
+        .gdpr {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 25px;
+            line-height: 1.6;
+        }
+
+        /* Success State Design */
         #successBox {
-            background: #e6ffed;
-            border: 1px solid #a7f3d0;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-            color: #065f46;
-            font-size: 16px;
             display: none;
+            text-align: center;
+            padding: 20px 0;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .hidden { display: none; }
+
+        @media (max-width: 480px) {
+            .form-container { padding: 30px 20px; }
+            .radio-option { flex: 1 1 100%; }
         }
     </style>
 </head>
 <body>
 
 <div class="form-container">
-    <h2>Κριτική για την ιστοσελίδα του Ariston Wash & Dry</h2>
-    <p class="subtitle">Η γνώμη σας μας βοηθά να γίνουμε καλύτεροι.</p>
-    
-    <p class="anonymous-note">
-        Αν δεν συμπληρώσετε ονοματεπώνυμο ή στοιχεία επικοινωνίας, η κριτική σας θα εμφανιστεί ως ανώνυμη.
-    </p>
-
-    <!-- ΣΩΣΤΟ FORM -->
-    <form id="feedbackForm" method="POST" action="/site-review">
-
-        <div class="form-group">
-            <label>Ονοματεπώνυμο (προαιρετικό)</label>
-            <input type="text" name="fullname" placeholder="Πληκτρολογήστε το όνομά σας">
-        </div>
-
-        <div class="form-group">
-            <label>Email ή κινητό τηλέφωνο (προαιρετικό)</label>
-            <input type="text" name="contact_info" placeholder="Πληκτρολογήστε τα στοιχεία σας">
-        </div>
-
-        <hr>
-
-        <div class="form-group">
-            <label>Πώς σας φαίνεται η εμφάνιση του site; *</label>
-            <select name="appearance" required>
-                <option value="">Επιλέξτε...</option>
-                <option>Εξαιρετική</option>
-                <option>Καλή</option>
-                <option>Μέτρια</option>
-                <option>Κακή</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Πόσο εύκολη ήταν η πλοήγηση; *</label>
-            <select name="navigation" required>
-                <option value="">Επιλέξτε...</option>
-                <option>Πολύ εύκολη</option>
-                <option>Εύκολη</option>
-                <option>Ουδέτερη</option>
-                <option>Δύσκολη</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Πόσο γρήγορο σας φάνηκε το site; *</label>
-            <select name="speed" required>
-                <option value="">Επιλέξτε...</option>
-                <option>Πολύ γρήγορο</option>
-                <option>Γρήγορο</option>
-                <option>Μέτριο</option>
-                <option>Αργό</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Πόσο χρήσιμες βρήκατε τις λειτουργίες; *</label>
-            <select name="utility" required>
-                <option value="">Επιλέξτε...</option>
-                <option>Πολύ χρήσιμες</option>
-                <option>Χρήσιμες</option>
-                <option>Ουδέτερες</option>
-                <option>Όχι ιδιαίτερα χρήσιμες</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Θα προτείνατε το site σε άλλους; *</label>
-            <div class="radio-group">
-                <label><input type="radio" name="recommend" value="Ναι" required> Ναι</label>
-                <label><input type="radio" name="recommend" value="Ίσως"> Ίσως</label>
-                <label><input type="radio" name="recommend" value="Όχι"> Όχι</label>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="form-group">
-            <label>Τι θα θέλατε να βελτιώσουμε; (προαιρετικό)</label>
-            <textarea name="improve" rows="3" placeholder="Γράψτε την άποψή σας..."></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>Ποια λειτουργία σας άρεσε περισσότερο;</label>
-            <input type="text" name="best_feature" placeholder="Π.χ. το παιχνίδι, τα κουπόνια, η AI βοήθεια...">
-        </div>
-
-        <div class="form-group">
-            <label>Ποια λειτουργία σας δυσκόλεψε;</label>
-            <input type="text" name="hard_feature" placeholder="Π.χ. η εγγραφή, η πλοήγηση...">
-        </div>
-
-        <div class="form-group">
-            <label>Θέλετε να επικοινωνήσουμε μαζί σας; *</label>
-            <div class="radio-group">
-                <label><input type="radio" name="contact_back" value="Ναι" required onclick="toggleContact(true)"> Ναι</label>
-                <label><input type="radio" name="contact_back" value="Όχι" onclick="toggleContact(false)"> Όχι</label>
-            </div>
-        </div>
-
-        <div id="contactField" class="hidden">
-            <div class="form-group">
-                <label>Πού προτιμάτε να σας βρούμε;</label>
-                <input type="text" name="contact_method" placeholder="Email ή αριθμός κινητού">
-            </div>
-        </div>
-
-        <p class="gdpr">
-            Με την υποβολή της φόρμας, αποδέχεστε την Πολιτική Απορρήτου και συμφωνείτε με την επεξεργασία των δεδομένων σας σύμφωνα με τον GDPR.
+    <div id="formContent">
+        <h2>Αξιολόγηση Ιστοσελίδας</h2>
+        <p class="subtitle">Ariston Wash & Dry</p>
+        
+        <p class="anonymous-note">
+            💡 Αν δεν συμπληρώσετε ονοματεπώνυμο ή στοιχεία επικοινωνίας, η κριτική σας θα εμφανιστεί ως ανώνυμη.
         </p>
 
-        <button type="submit" class="submit-btn">Υποβολή Κριτικής</button>
+        <form id="feedbackForm" method="POST" action="/site-review">
+            <div class="form-group">
+                <label>Ονοματεπώνυμο (προαιρετικό)</label>
+                <input type="text" name="fullname" placeholder="Π.χ. Ιωάννης Παπαδόπουλος">
+            </div>
 
-    </form>
+            <div class="form-group">
+                <label>Email ή κινητό τηλέφωνο (προαιρετικό)</label>
+                <input type="text" name="contact_info" placeholder="Για να σας αναγνωρίσουμε">
+            </div>
 
-    <!-- Success Box -->
+            <hr>
+
+            <div class="form-group">
+                <label>Πώς σας φαίνεται η εμφάνιση του site; *</label>
+                <select required name="design">
+                    <option value="">Επιλέξτε...</option>
+                    <option>Εξαιρετική</option>
+                    <option>Καλή</option>
+                    <option>Μέτρια</option>
+                    <option>Κακή</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Πόσο εύκολη ήταν η πλοήγηση; *</label>
+                <select required name="navigation">
+                    <option value="">Επιλέξτε...</option>
+                    <option>Πολύ εύκολη</option>
+                    <option>Εύκολη</option>
+                    <option>Ουδέτερη</option>
+                    <option>Δύσκολη</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Πόσο γρήγορο σας φάνηκε το site; *</label>
+                <select required name="speed">
+                    <option value="">Επιλέξτε...</option>
+                    <option>Πολύ γρήγορο</option>
+                    <option>Γρήγορο</option>
+                    <option>Μέτριο</option>
+                    <option>Αργό</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Πόσο χρήσιμες βρήκατε τις λειτουργίες; *</label>
+                <select required name="utility">
+                    <option value="">Επιλέξτε...</option>
+                    <option>Πολύ χρήσιμες</option>
+                    <option>Χρήσιμες</option>
+                    <option>Ουδέτερες</option>
+                    <option>Όχι ιδιαίτερα χρήσιμες</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Θα προτείνατε το site σε άλλους; *</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="recommend" value="yes" id="rec-yes" required>
+                        <label for="rec-yes" class="radio-label">Ναι</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="recommend" value="maybe" id="rec-maybe">
+                        <label for="rec-maybe" class="radio-label">Ίσως</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="recommend" value="no" id="rec-no">
+                        <label for="rec-no" class="radio-label">Όχι</label>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label>Τι θα θέλατε να βελτιώσουμε; (προαιρετικό)</label>
+                <textarea name="improvements" rows="3" placeholder="Η γνώμη σας μετράει..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Ποια λειτουργία σας άρεσε περισσότερο;</label>
+                <input type="text" name="favorite_feature" placeholder="Π.χ. το παιχνίδι, τα κουπόνια...">
+            </div>
+
+            <div class="form-group">
+                <label>Ποια λειτουργία σας δυσκόλεψε;</label>
+                <input type="text" name="difficult_feature" placeholder="Π.χ. η εγγραφή, η πλοήγηση...">
+            </div>
+
+            <div class="form-group">
+                <label>Θέλετε να επικοινωνήσουμε μαζί σας; *</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="contact_back" value="yes" id="cb-yes" required onclick="toggleContact(true)">
+                        <label for="cb-yes" class="radio-label">Ναι</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="contact_back" value="no" id="cb-no" onclick="toggleContact(false)">
+                        <label for="cb-no" class="radio-label">Όχι</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contactField" class="hidden">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Πού προτιμάτε να σας βρούμε;</label>
+                    <input type="text" name="contact_method" placeholder="Email ή αριθμός κινητού">
+                </div>
+            </div>
+
+            <p class="gdpr">
+                Με την υποβολή, αποδέχεστε την Πολιτική Απορρήτου και τη συμμόρφωση με τον GDPR.
+            </p>
+
+            <button type="submit" class="submit-btn">Υποβολή Κριτικής</button>
+        </form>
+    </div>
+
     <div id="successBox">
-        <h3 style="margin-top:0; color:#047857;">Η κριτική σας στάλθηκε!</h3>
-        <p>Σας ευχαριστούμε που αφιερώσατε χρόνο να μας βοηθήσετε να βελτιωθούμε.</p>
+        <div class="success-icon">✓</div>
+        <h3 style="margin-top:0; color: var(--text-main); font-weight: 800;">Η κριτική σας στάλθηκε!</h3>
+        <p style="color: var(--text-muted);">Σας ευχαριστούμε που μας βοηθάτε να γίνουμε καλύτεροι.</p>
 
-        <p style="margin-top:15px;">
+        <hr>
+        <p>
             Θέλετε να αφήσετε και μια κριτική για το κατάστημα;
-            <br>
+            <br><br>
             <a href="https://aristonwashdry.gr/kritikes" 
-               style="color:#0056b3; font-weight:600; text-decoration:underline;">
-               Πατήστε εδώ
+               style="display: inline-block; color: white; background: var(--text-main); padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; transition: 0.3s;">
+               Κριτική Καταστήματος
             </a>
         </p>
     </div>
-
 </div>
 
 <script>
     function toggleContact(show) {
         const contactField = document.getElementById('contactField');
-        if (show) {
-            contactField.classList.remove('hidden');
-        } else {
-            contactField.classList.add('hidden');
-        }
+        contactField.classList.toggle('hidden', !show);
     }
 
-    // Νέα συμπεριφορά υποβολής
-    document.getElementById('feedbackForm').addEventListener('submit', function() {
-    setTimeout(() => {
-        document.getElementById('feedbackForm').style.display = "none";
+    document.getElementById('feedbackForm').onsubmit = function(e) {
+        e.preventDefault();
+        document.getElementById('formContent').style.display = "none";
         document.getElementById('successBox').style.display = "block";
-    }, 300);
-});
+    };
 </script>
 
 </body>

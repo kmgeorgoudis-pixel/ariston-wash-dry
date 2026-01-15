@@ -38,14 +38,21 @@
             gap: 20px;
         }
 
+        /* Η κάρτα τώρα είναι μέσα σε Link */
+        .review-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
         .review-card {
             background: var(--white);
             padding: 20px;
             border-radius: 12px;
             box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, border-color 0.2s;
             border: 1px solid transparent;
+            height: 100%;
         }
 
         .review-card:hover {
@@ -74,65 +81,6 @@
             color: #01579b;
             margin-top: 10px;
         }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background-color: var(--white);
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .close-btn {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #888;
-        }
-
-        .qa-item {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .qa-question {
-            font-weight: bold;
-            display: block;
-            color: #555;
-            font-size: 0.9em;
-            margin-bottom: 4px;
-        }
-
-        .qa-answer {
-            display: block;
-            color: var(--primary);
-            font-size: 1.1em;
-        }
-
-        .qa-empty {
-            color: #bbb;
-            font-style: italic;
-        }
     </style>
 </head>
 <body>
@@ -142,63 +90,17 @@
 
     <div class="reviews-grid">
         {% for r in reviews %}
-        <div class="review-card" data-id="{{ r.id }}" onclick="openReview(this.dataset.id)">
-            <h3>{{ r.fullname or "Ανώνυμη Κριτική" }}</h3>
-            <p><strong>Ημερομηνία:</strong> {{ r.created_at.strftime("%d/%m/%Y") }}</p>
-            <p><strong>Πρόταση:</strong> {{ r.recommend }}</p>
-            <span class="status-badge">Κλικ για λεπτομέρειες</span>
-        </div>
+        <a href="{{ url_for('admin_site_review_detail', id=r.id) }}" class="review-link">
+            <div class="review-card">
+                <h3>{{ r.fullname or "Ανώνυμη Κριτική" }}</h3>
+                <p><strong>Ημερομηνία:</strong> {{ r.created_at.strftime("%d/%m/%Y") }}</p>
+                <p><strong>Πρόταση:</strong> {{ r.recommend }}</p>
+                <span class="status-badge">Προβολή Λεπτομερειών</span>
+            </div>
+        </a>
         {% endfor %}
     </div>
 </div>
-
-<div id="reviewModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle" style="color:var(--primary)">Λεπτομέρειες Κριτικής</h2>
-        <div id="modalBody"></div>
-    </div>
-</div>
-
-<script>
-function openReview(id) {
-    console.log("CLICK:", id);
-
-    fetch(`/admin/site-review/${id}`, {
-        credentials: "include"
-    })
-        .then(res => res.json())
-        .then(review => {
-            document.getElementById('modalTitle').innerText = "Κριτική: " + review.fullname;
-
-            document.getElementById('modalBody').innerHTML = `
-                <div class="qa-item"><span class="qa-question">Ονοματεπώνυμο</span><span class="qa-answer">${review.fullname}</span></div>
-                <div class="qa-item"><span class="qa-question">Στοιχεία Επικοινωνίας</span><span class="qa-answer">${review.contact_info}</span></div>
-                <div class="qa-item"><span class="qa-question">Εμφάνιση Site</span><span class="qa-answer">${review.appearance}</span></div>
-                <div class="qa-item"><span class="qa-question">Πλοήγηση</span><span class="qa-answer">${review.navigation}</span></div>
-                <div class="qa-item"><span class="qa-question">Ταχύτητα</span><span class="qa-answer">${review.speed}</span></div>
-                <div class="qa-item"><span class="qa-question">Χρησιμότητα</span><span class="qa-answer">${review.utility}</span></div>
-                <div class="qa-item"><span class="qa-question">Θα το πρότεινε;</span><span class="qa-answer">${review.recommend}</span></div>
-                <div class="qa-item"><span class="qa-question">Προς βελτίωση</span><span class="qa-answer">${review.improve || '<span class="qa-empty">Καμία απάντηση</span>'}</span></div>
-                <div class="qa-item"><span class="qa-question">Τι άρεσε περισσότερο</span><span class="qa-answer">${review.best_feature || '<span class="qa-empty">Καμία απάντηση</span>'}</span></div>
-                <div class="qa-item"><span class="qa-question">Τι δυσκόλεψε</span><span class="qa-answer">${review.hard_feature || '<span class="qa-empty">Καμία απάντηση</span>'}</span></div>
-                <div class="qa-item"><span class="qa-question">Επιθυμία επικοινωνίας;</span><span class="qa-answer">${review.contact_back}</span></div>
-            `;
-
-            document.getElementById('reviewModal').style.display = "block";
-        });
-}
-
-function closeModal() {
-    document.getElementById('reviewModal').style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == document.getElementById('reviewModal')) {
-        closeModal();
-    }
-}
-</script>
 
 </body>
 </html>
