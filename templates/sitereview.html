@@ -78,7 +78,7 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
-            box-sizing: border-box; /* Πολύ σημαντικό για το layout */
+            box-sizing: border-box;
             transition: border-color 0.3s;
         }
 
@@ -144,6 +144,18 @@
             border-top: 1px solid #eee;
             margin: 30px 0;
         }
+
+        /* Success Box */
+        #successBox {
+            background: #e6ffed;
+            border: 1px solid #a7f3d0;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            color: #065f46;
+            font-size: 16px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -156,7 +168,8 @@
         Αν δεν συμπληρώσετε ονοματεπώνυμο ή στοιχεία επικοινωνίας, η κριτική σας θα εμφανιστεί ως ανώνυμη.
     </p>
 
-    <form id="feedbackForm">
+    <!-- ΣΩΣΤΟ FORM -->
+    <form id="feedbackForm" method="POST" action="/site-review">
 
         <div class="form-group">
             <label>Ονοματεπώνυμο (προαιρετικό)</label>
@@ -172,7 +185,7 @@
 
         <div class="form-group">
             <label>Πώς σας φαίνεται η εμφάνιση του site; *</label>
-            <select required>
+            <select name="appearance" required>
                 <option value="">Επιλέξτε...</option>
                 <option>Εξαιρετική</option>
                 <option>Καλή</option>
@@ -183,7 +196,7 @@
 
         <div class="form-group">
             <label>Πόσο εύκολη ήταν η πλοήγηση; *</label>
-            <select required>
+            <select name="navigation" required>
                 <option value="">Επιλέξτε...</option>
                 <option>Πολύ εύκολη</option>
                 <option>Εύκολη</option>
@@ -194,7 +207,7 @@
 
         <div class="form-group">
             <label>Πόσο γρήγορο σας φάνηκε το site; *</label>
-            <select required>
+            <select name="speed" required>
                 <option value="">Επιλέξτε...</option>
                 <option>Πολύ γρήγορο</option>
                 <option>Γρήγορο</option>
@@ -205,7 +218,7 @@
 
         <div class="form-group">
             <label>Πόσο χρήσιμες βρήκατε τις λειτουργίες; *</label>
-            <select required>
+            <select name="utility" required>
                 <option value="">Επιλέξτε...</option>
                 <option>Πολύ χρήσιμες</option>
                 <option>Χρήσιμες</option>
@@ -217,9 +230,9 @@
         <div class="form-group">
             <label>Θα προτείνατε το site σε άλλους; *</label>
             <div class="radio-group">
-                <label><input type="radio" name="recommend" value="yes" required> Ναι</label>
-                <label><input type="radio" name="recommend" value="maybe"> Ίσως</label>
-                <label><input type="radio" name="recommend" value="no"> Όχι</label>
+                <label><input type="radio" name="recommend" value="Ναι" required> Ναι</label>
+                <label><input type="radio" name="recommend" value="Ίσως"> Ίσως</label>
+                <label><input type="radio" name="recommend" value="Όχι"> Όχι</label>
             </div>
         </div>
 
@@ -227,31 +240,31 @@
 
         <div class="form-group">
             <label>Τι θα θέλατε να βελτιώσουμε; (προαιρετικό)</label>
-            <textarea rows="3" placeholder="Γράψτε την άποψή σας..."></textarea>
+            <textarea name="improve" rows="3" placeholder="Γράψτε την άποψή σας..."></textarea>
         </div>
 
         <div class="form-group">
             <label>Ποια λειτουργία σας άρεσε περισσότερο;</label>
-            <input type="text" placeholder="Π.χ. το παιχνίδι, τα κουπόνια, η AI βοήθεια...">
+            <input type="text" name="best_feature" placeholder="Π.χ. το παιχνίδι, τα κουπόνια, η AI βοήθεια...">
         </div>
 
         <div class="form-group">
             <label>Ποια λειτουργία σας δυσκόλεψε;</label>
-            <input type="text" placeholder="Π.χ. η εγγραφή, η πλοήγηση...">
+            <input type="text" name="hard_feature" placeholder="Π.χ. η εγγραφή, η πλοήγηση...">
         </div>
 
         <div class="form-group">
             <label>Θέλετε να επικοινωνήσουμε μαζί σας; *</label>
             <div class="radio-group">
-                <label><input type="radio" name="contact_back" value="yes" required onclick="toggleContact(true)"> Ναι</label>
-                <label><input type="radio" name="contact_back" value="no" onclick="toggleContact(false)"> Όχι</label>
+                <label><input type="radio" name="contact_back" value="Ναι" required onclick="toggleContact(true)"> Ναι</label>
+                <label><input type="radio" name="contact_back" value="Όχι" onclick="toggleContact(false)"> Όχι</label>
             </div>
         </div>
 
         <div id="contactField" class="hidden">
             <div class="form-group">
                 <label>Πού προτιμάτε να σας βρούμε;</label>
-                <input type="text" placeholder="Email ή αριθμός κινητού">
+                <input type="text" name="contact_method" placeholder="Email ή αριθμός κινητού">
             </div>
         </div>
 
@@ -260,7 +273,24 @@
         </p>
 
         <button type="submit" class="submit-btn">Υποβολή Κριτικής</button>
+
     </form>
+
+    <!-- Success Box -->
+    <div id="successBox">
+        <h3 style="margin-top:0; color:#047857;">Η κριτική σας στάλθηκε!</h3>
+        <p>Σας ευχαριστούμε που αφιερώσατε χρόνο να μας βοηθήσετε να βελτιωθούμε.</p>
+
+        <p style="margin-top:15px;">
+            Θέλετε να αφήσετε και μια κριτική για το κατάστημα;
+            <br>
+            <a href="https://aristonwashdry.gr/kritikes" 
+               style="color:#0056b3; font-weight:600; text-decoration:underline;">
+               Πατήστε εδώ
+            </a>
+        </p>
+    </div>
+
 </div>
 
 <script>
@@ -273,10 +303,15 @@
         }
     }
 
-    // Προαιρετικό: Ένα απλό alert για την υποβολή
+    // Νέα συμπεριφορά υποβολής
     document.getElementById('feedbackForm').onsubmit = function(e) {
         e.preventDefault();
-        alert('Ευχαριστούμε για την κριτική σας!');
+
+        // Κρύβουμε τη φόρμα
+        document.getElementById('feedbackForm').style.display = "none";
+
+        // Εμφανίζουμε το success box
+        document.getElementById('successBox').style.display = "block";
     };
 </script>
 

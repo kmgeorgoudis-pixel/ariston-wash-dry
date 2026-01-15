@@ -1445,8 +1445,27 @@ def admin_bulk_email():
 
     users = User.query.all()
     return render_template("admin/bulk-email.html", users=users, active_page="bulk_email")
-@app.route("/site-review")
+@app.route("/site-review", methods=["GET", "POST"])
 def site_review():
+    if request.method == "POST":
+        review = SiteReview(
+            fullname=request.form.get("fullname"),
+            contact_info=request.form.get("contact_info"),
+            appearance=request.form.get("appearance"),
+            navigation=request.form.get("navigation"),
+            speed=request.form.get("speed"),
+            utility=request.form.get("utility"),
+            recommend=request.form.get("recommend"),
+            improve=request.form.get("improve"),
+            best_feature=request.form.get("best_feature"),
+            hard_feature=request.form.get("hard_feature"),
+            contact_back=request.form.get("contact_back"),
+        )
+        db.session.add(review)
+        db.session.commit()
+
+        return render_template("site_review_success.html")
+
     return render_template("sitereview.html")
 @app.route("/admin/site-reviews")
 @login_required
@@ -1454,7 +1473,26 @@ def admin_site_reviews():
     if not current_user.is_admin:
         return redirect("/")
 
-    return render_template("admin/admin_reviews.html")
+    reviews = SiteReview.query.order_by(SiteReview.created_at.desc()).all()
+
+    return render_template("admin/admin_reviews.html", reviews=reviews)
+@app.route("/admin/site-review/<int:id>")
+@login_required
+def admin_site_review_detail(id):
+    r = SiteReview.query.get(id)
+    return jsonify({
+        "fullname": r.fullname or "Ανώνυμη Κριτική",
+        "contact_info": r.contact_info or "-",
+        "appearance": r.appearance,
+        "navigation": r.navigation,
+        "speed": r.speed,
+        "utility": r.utility,
+        "recommend": r.recommend,
+        "improve": r.improve or "",
+        "best_feature": r.best_feature or "",
+        "hard_feature": r.hard_feature or "",
+        "contact_back": r.contact_back,
+    })
 
 # ============================
 #       RUN APP
