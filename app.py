@@ -1448,18 +1448,20 @@ def admin_bulk_email():
 @app.route("/site-review", methods=["GET", "POST"])
 def site_review():
     if request.method == "POST":
+        # Δημιουργία της κριτικής με τα σωστά ονόματα από την HTML φόρμα
         review = SiteReview(
             fullname=request.form.get("fullname"),
             contact_info=request.form.get("contact_info"),
-            appearance=request.form.get("appearance"),
-            navigation=request.form.get("navigation"),
-            speed=request.form.get("speed"),
-            utility=request.form.get("utility"),
-            recommend=request.form.get("recommend"),
-            improve=request.form.get("improve"),
-            best_feature=request.form.get("best_feature"),
-            hard_feature=request.form.get("hard_feature"),
-            contact_back=request.form.get("contact_back"),
+            appearance=request.form.get("design"),        # Από name="design"
+            navigation=request.form.get("navigation"),    # Από name="navigation"
+            speed=request.form.get("speed"),              # Από name="speed"
+            utility=request.form.get("utility"),          # Από name="utility"
+            recommend=request.form.get("recommend"),      # Από name="recommend"
+            improve=request.form.get("improvements"),     # Από name="improvements"
+            best_feature=request.form.get("favorite_feature"), # Από name="favorite_feature"
+            hard_feature=request.form.get("difficult_feature"),# Από name="difficult_feature"
+            contact_back=request.form.get("contact_back"),# Από name="contact_back"
+            contact_method=request.form.get("contact_method") # ΤΟ ΝΕΟ ΠΕΔΙΟ
         )
         db.session.add(review)
         db.session.commit()
