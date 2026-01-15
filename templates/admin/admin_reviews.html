@@ -142,7 +142,7 @@
 
     <div class="reviews-grid">
         {% for r in reviews %}
-        <div class="review-card" onclick="openReview({{ r.id }})">
+        <div class="review-card" data-id="{{ r.id }}" onclick="openReview(this.dataset.id)">
             <h3>{{ r.fullname or "Ανώνυμη Κριτική" }}</h3>
             <p><strong>Ημερομηνία:</strong> {{ r.created_at.strftime("%d/%m/%Y") }}</p>
             <p><strong>Πρόταση:</strong> {{ r.recommend }}</p>
