@@ -1344,8 +1344,8 @@ body, header, nav, .photo-block, .contact, footer {
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-left: auto;       /* αυτό σπρώχνει τα flags δεξιά */
-  padding-right: 20px;     /* λίγο κενό από δεξιά */
+  margin-left: auto;       /* σπρώχνει τα flags δεξιά */
+  padding-right: 20px;
 }
 
 .lang-flag {
@@ -1361,20 +1361,20 @@ body, header, nav, .photo-block, .contact, footer {
   transform: scale(1.1);
 }
 
-/* Κρύβει το Google Translate banner */
+/* Κρύβει εντελώς το Google Translate banner */
 .goog-te-banner-frame.skiptranslate,
 .goog-te-gadget {
   display: none !important;
 }
 
 body {
-  top: 0px !important;
+  top: 0 !important;
 }
 
-/* Extra για να κρύψει τελείως τυχόν banner */
 html body > div.goog-te-banner-frame.skiptranslate {
   display: none !important;
 }
+
 
 
 
