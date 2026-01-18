@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photos – ARISTON Wash & Dry</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* PHOTO GRID */
+        .photo-blocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            padding: 20px 40px;
+        }
+
+        .photo-block {
+            display: flex;
+            gap: 20px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            align-items: center;
+        }
+
+        .photo-block img {
+            width: 160px;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .photo-block-text h3 {
+            margin-bottom: 6px;
+            color: #0d47a1;
+        }
+
+        .photo-block-text p {
+            margin: 0;
+            color: #444;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 600px) {
+            .photo-block {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .photo-block img {
+                width: 100%;
+                max-width: 260px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+
+    <!-- LOGO -->
+    <div class="header-top">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+            ARISTON <span>Wash & Dry</span>
+        </div>
+
+        <!-- STORE NOTICE -->
+        <div class="store-notice">
+            OUR STORE IS NOT OPEN YET — OPENING IN A FEW WEEKS!
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+        <div class="hamburger" id="hamburger-btn">☰</div>
+
+        <div class="nav-links" id="nav-menu">
+            <a href="/en">Home</a>
+            <a href="/en/pricing">Pricing</a>
+            <a href="/en/photos">Photos</a>
+            <a href="/en/special-services">Special Services</a>
+            <a href="/en/reviews">Reviews</a>
+            <a href="/en/contact">Contact</a>
+
+            {% if current_user.is_authenticated %}
+            <div class="user-menu">
+                <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+                <span class="user-hint">Member Options</span>
+
+                <div class="user-dropdown">
+                    <a href="/settings-menu">Settings</a>
+                    <a href="/updates-menu">Updates</a>
+                    <a href="{{ url_for('ai') }}" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="/game">ARISTON Game</a>
+                    <a href="/logout" class="logout">Logout</a>
+                    <div id="google_translate_element"></div>
+                </div>
+            </div>
+            {% else %}
+            <a href="/login" class="nav-btn">Sign Up / Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+</header>
+
+<!-- Page Title -->
+<section class="page-title">
+    <h1>Photos</h1>
+    <p>Each photo shows what we truly are: cleanliness, simplicity, and care.</p>
+    <p>At Ariston Wash & Dry, we ensure the space is always clean, bright, and ready to serve you.</p>
+</section>
+
+<!-- PHOTO BLOCKS -->
+<section class="photo-blocks">
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/1new.png') }}" alt="Logo">
+        <div class="photo-block-text">
+            <h3>Our Logo</h3>
+            <p>Ariston Wash & Dry stands out for cleanliness, simplicity, and immediate service.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/2.png') }}" alt="Washing Machine">
+        <div class="photo-block-text">
+            <h3>Modern Washing Machines</h3>
+            <p>Clean, fast, and efficient machines for every need.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/3.png') }}" alt="Washing Machine">
+        <div class="photo-block-text">
+            <h3>Wash Without Waiting</h3>
+            <p>The space is always available and ready for use.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/4.png') }}" alt="Washing Machine">
+        <div class="photo-block-text">
+            <h3>Cleanliness & Comfort</h3>
+            <p>
+Our machines are regularly maintained for optimal performance. After several washes, an automatic drum cleaning activates for maximum hygiene and fabric care. For extra thorough cleaning, a special drum cleaning program is available for just €0.50, selectable before each wash.
+            </p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/5.png') }}" alt="Dryer">
+        <div class="photo-block-text">
+            <h3>Fast Drying</h3>
+            <p>High-performance dryers for immediate results.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/6.png') }}" alt="Dryer">
+        <div class="photo-block-text">
+            <h3>Ideal for Quilts</h3>
+            <p>Large drums for bulky items and quilts.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/7.png') }}" alt="Dryer">
+        <div class="photo-block-text">
+            <h3>Soft & Dry Clothes</h3>
+            <p>Drying is fast and damage-free.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/8.png') }}" alt="Vending Machine">
+        <div class="photo-block-text">
+            <h3>Vending Machine</h3>
+            <p>Juices, water, soft drinks, snacks, etc., while you wait.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/9.png') }}" alt="Coffee Machine">
+        <div class="photo-block-text">
+            <h3>Coffee Vending Machine</h3>
+            <p>Hot or cold coffee anytime while you wait for your laundry.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/10.png') }}" alt="Exterior">
+        <div class="photo-block-text">
+            <h3>Exterior View</h3>
+            <p>The store is in the center of Samos town, easily accessible.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/11.png') }}" alt="Interior">
+        <div class="photo-block-text">
+            <h3>Clean Interior</h3>
+            <p>Bright and comfortable environment for everyone.</p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/12.png') }}" alt="Interior">
+        <div class="photo-block-text">
+            <h3>Comfort & Functionality</h3>
+            <p>The space is designed for maximum comfort.</p>
+        </div>
+    </div>
+
+</section>
+
+<!-- Contact -->
+<section class="contact">
+    <h3>Contact</h3>
+    <p>📍 Address: Dervenakion 10, Vathy, Samos 83100</p>
+    <p>📞 Phone: +30 698 759 8416</p>
+    <p>📧 Email: aristonwashing@gmail.com</p>
+</section>
+
+<footer>
+    © 2025 Ariston Wash & Dry — All Rights Reserved<br>
+    Website designed & developed by Konstantinos Georgoudis
+    <br><br>
+    <a href="/en/terms">Terms & Conditions</a> |
+    <a href="/en/privacy">Privacy Policy</a> |
+    <a href="/en/cookies">Cookies Policy</a>
+</footer>
+
+<script>
+document.getElementById("hamburger-btn").onclick = function() {
+    document.getElementById("nav-menu").classList.toggle("active");
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    const avatar = document.querySelector(".user-avatar");
+    const dropdown = document.querySelector(".user-dropdown");
+
+    if (avatar && dropdown) {
+        avatar.addEventListener("click", () => {
+            dropdown.classList.toggle("open");
+        });
+    }
+});
+</script>
+
+</body>
+</html>

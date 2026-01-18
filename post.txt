@@ -1,3 +1,3 @@
 git add .
-git commit -m "try english remove frn "
+git commit -m "try english new hrmls "
 git push

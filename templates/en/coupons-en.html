@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Coupons – ARISTON Wash & Dry</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body { background: #f5f7fa; font-family: Arial, sans-serif; }
+        .coupons-container { max-width: 650px; margin: 60px auto; background: #fff; padding: 35px; border-radius: 18px; box-shadow: 0 6px 25px rgba(0,0,0,0.08); }
+        .coupons-title { text-align: center; font-size: 28px; font-weight: 800; color: #0d47a1; margin-bottom: 10px; }
+        .coupons-subtitle { text-align: center; color: #555; margin-bottom: 25px; }
+        .coupon-box.active { background: #e8f5e9; padding: 18px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #2e7d32; position: relative; }
+        .coupon-box.used { background: #f0f0f0; padding: 18px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #9e9e9e; opacity: 0.7; position: relative; }
+        .coupon-box.expired { background: #fff4e5; padding: 18px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #f59e0b; position: relative; }
+        .coupon-status { position: absolute; top: 10px; right: 10px; background: #b91c1c; color: white; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; }
+        .coupon-status.expired { background: #f59e0b; }
+        .no-coupons { text-align: center; padding: 25px; background: #fafafa; border-radius: 12px; color: #777; font-size: 17px; border: 1px solid #e0e0e0; }
+        .back-btn { display: block; width: 100%; text-align: center; margin-top: 30px; padding: 12px; background: #0d47a1; color: white; font-weight: bold; border-radius: 10px; text-decoration: none; transition: 0.2s; }
+        .back-btn:hover { background: #08306b; }
+    </style>
+</head>
+<body>
+
+<div class="coupons-container">
+
+    <div class="coupons-title">Member Coupons</div>
+    <div class="coupons-subtitle">Benefits & special offers</div>
+
+    {% if coupons and coupons|length > 0 %}
+        {% for c in coupons %}
+            <a href="/en/coupon/{{ c.id }}" style="text-decoration:none; color:inherit;">
+                {% if c.used %}
+                    <div class="coupon-box used">
+                        <div class="coupon-status">Used</div>
+                        <h3>{{ c.title }}</h3>
+                        <p>{{ c.description }}</p>
+                        <small>Used on: {{ c.used_at.strftime('%d/%m/%Y') }}</small>
+                    </div>
+                {% elif c.end_date < today %}
+                    <div class="coupon-box expired">
+                        <div class="coupon-status expired">Expired</div>
+                        <h3>{{ c.title }}</h3>
+                        <p>{{ c.description }}</p>
+                        <small>Expired on: {{ c.end_date.strftime('%d/%m/%Y') }}</small>
+                    </div>
+                {% else %}
+                    <div class="coupon-box active">
+                        <h3>{{ c.title }}</h3>
+                        <p>{{ c.description }}</p>
+                        <small>Expires on: {{ c.end_date.strftime('%d/%m/%Y') }}</small>
+                    </div>
+                {% endif %}
+            </a>
+        {% endfor %}
+    {% else %}
+        <div class="no-coupons">
+            No coupons available at the moment.
+        </div>
+    {% endif %}
+
+    <a href="/en/updates-menu" class="back-btn">← Back to Updates Menu</a>
+
+</div>
+
+</body>
+</html>

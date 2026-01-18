@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews – ARISTON Wash & Dry</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Navigation -->
+<header>
+
+<div class="header-top">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+        ARISTON <span>Wash & Dry</span>
+    </div>
+
+    <div class="store-notice">
+        OUR STORE IS NOT OPEN YET — OPENING SOON!
+    </div>
+</div>
+
+<nav class="main-nav">
+    <div class="hamburger" id="hamburger-btn">☰</div>
+
+    <div class="nav-links" id="nav-menu">
+        <a href="/en">Home</a>
+        <a href="/en/pricing">Pricing</a>
+        <a href="/en/photos">Photos</a>
+        <a href="/en/special-services">Special Services</a>
+        <a href="/en/reviews">Reviews</a>
+        <a href="/en/contact">Contact</a>
+
+        {% if current_user.is_authenticated %}
+        <div class="user-menu">
+            <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+            <span class="user-hint">Member Options</span>
+            <div class="user-dropdown">
+                <a href="/settings-menu">Settings</a>
+                <a href="/updates-menu">Updates</a>
+                <a href="{{ url_for('ai') }}" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                <a href="/game">ARISTON Game</a>
+                <a href="/logout" class="logout">Logout</a>
+                <div id="google_translate_element"></div>
+            </div>
+        </div>
+        {% else %}
+        <a href="/login" class="nav-btn">Sign Up / Login</a>
+        {% endif %}
+    </div>
+</nav>
+
+</header>
+
+<section class="page-title">
+    <h1>Reviews</h1>
+    <p>We want to know your opinion!</p>
+</section>
+
+<section class="photo-blocks">
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/15.png') }}" alt="Reviews">
+        <div class="photo-block-text">
+            <h3>Your Opinion Matters</h3>
+            <p>At Ariston Wash & Dry we believe every customer deserves the best experience.</p>
+            <p>Share your impressions with us!</p>
+        </div>
+    </div>
+</section>
+
+<section class="google-form">
+
+    <h2>Experience Rating – Ariston Wash & Dry Samos</h2>
+    <p class="anonymous">The form is 100% anonymous — we do not collect personal data.</p>
+    <p>Fill out the form — it takes less than 2 minutes 🧺</p>
+
+    <form id="reviewForm" action="/submit_review" method="POST">
+
+        <!-- Question 1 – Stars -->
+        <div class="form-field">
+            <label>How satisfied are you with your experience? *</label>
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" required><label for="star5">★</label>
+                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="form-field">
+            <label>How easy was it to use the washers and dryers? *</label>
+            <div class="horizontal-options">
+                <label><span class="option-number">1</span><input type="radio" name="q2" value="1" required></label>
+                <label><span class="option-number">2</span><input type="radio" name="q2" value="2"></label>
+                <label><span class="option-number">3</span><input type="radio" name="q2" value="3"></label>
+                <label><span class="option-number">4</span><input type="radio" name="q2" value="4"></label>
+                <label><span class="option-number">5</span><input type="radio" name="q2" value="5"></label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="form-field">
+            <label>How clean and comfortable did you find the space? *</label>
+            <div class="horizontal-options">
+                <label><span class="option-number">1</span><input type="radio" name="q3" value="1" required></label>
+                <label><span class="option-number">2</span><input type="radio" name="q3" value="2"></label>
+                <label><span class="option-number">3</span><input type="radio" name="q3" value="3"></label>
+                <label><span class="option-number">4</span><input type="radio" name="q3" value="4"></label>
+                <label><span class="option-number">5</span><input type="radio" name="q3" value="5"></label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="form-field">
+            <label>How satisfied are you with our prices? *</label>
+            <div class="horizontal-options">
+                <label><span class="option-number">1</span><input type="radio" name="q4" value="1" required></label>
+                <label><span class="option-number">2</span><input type="radio" name="q4" value="2"></label>
+                <label><span class="option-number">3</span><input type="radio" name="q4" value="3"></label>
+                <label><span class="option-number">4</span><input type="radio" name="q4" value="4"></label>
+                <label><span class="option-number">5</span><input type="radio" name="q4" value="5"></label>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="form-field">
+            <label>Would you recommend Ariston Wash & Dry? *</label>
+            <select id="recommend" name="recommend" required>
+                <option value="">Select</option>
+                <option value="yes">Yes, definitely</option>
+                <option value="maybe">Maybe</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="form-field">
+            <label>What did you like the most?</label>
+            <textarea name="comment_like"></textarea>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="form-field">
+            <label>Is there anything we could improve?</label>
+            <textarea name="comment_improve"></textarea>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="form-field">
+            <label>Name (optional):</label>
+            <input type="text" name="name">
+        </div>
+
+        <!-- Question 9 -->
+        <div class="form-field">
+            <label>Would you like us to contact you? *</label>
+            <select id="wantContact" name="wantContact" required>
+                <option value="">Select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <!-- Question 10 -->
+        <div id="contactInfoBlock" class="form-field" style="display:none;">
+            <label>Email or Phone *</label>
+            <input type="text" id="contactInfo" name="contactInfo">
+        </div>
+
+        <button class="submit-btn" type="submit">Submit</button>
+        <p style="font-size: 12px; color: #666; margin-top: 10px;">
+By submitting this form, you accept our 
+<a href="/en/privacy" target="_blank">Privacy Policy</a> and agree 
+to the processing of your data according to GDPR.
+        </p>
+
+    </form>
+
+    <div id="thankYouMessage" class="thankyou" style="display:none; text-align:center; margin-top:30px;">
+        <h2>Experience Rating – Ariston Wash & Dry Samos</h2>
+        <p>✅ Thank you very much for your participation!</p>
+        <p>Your feedback is valuable and helps us provide the best washing experience.</p>
+        <p>— Ariston Wash & Dry, Samos 🧺</p>
+        <button onclick="location.reload()" class="submit-btn">Submit another response</button>
+    </div>
+
+</section>
+
+<section class="contact">
+    <h3>Contact</h3>
+    <p>📍 Address: Dervenakion 10, Vathy, Samos 83100</p>
+    <p>📞 Phone: +30 698 759 8416</p>
+    <p>📧 Email: aristonwashing@gmail.com</p>
+</section>
+
+<footer>
+    © 2025 Ariston Wash & Dry — All Rights Reserved<br>
+    Website designed & developed by Konstantinos Georgoudis
+    <br><br>
+    <a href="/en/terms">Terms of Use</a> |
+    <a href="/en/privacy">Privacy Policy</a> |
+    <a href="/en/cookies">Cookies Policy</a>
+</footer>
+
+<script>
+const wantContact = document.getElementById("wantContact");
+const contactInfoBlock = document.getElementById("contactInfoBlock");
+const contactInfoInput = document.getElementById("contactInfo");
+const form = document.getElementById("reviewForm");
+const thankYou = document.getElementById("thankYouMessage");
+
+wantContact.addEventListener("change", () => {
+    if (wantContact.value === "yes") {
+        contactInfoBlock.style.display = "block";
+        contactInfoInput.required = true;
+    } else if (wantContact.value === "no") {
+        contactInfoBlock.style.display = "none";
+        contactInfoInput.required = false;
+        form.requestSubmit();
+    }
+});
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    fetch("/submit_review", {
+        method: "POST",
+        body: new FormData(form)
+    }).then(() => {
+        form.style.display = "none";
+        thankYou.style.display = "block";
+    });
+});
+
+function toggleMenu() {
+    const menu = document.getElementById("dropdownMenu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+document.getElementById("hamburger-btn").onclick = function() {
+    document.getElementById("nav-menu").classList.toggle("active");
+};
+document.addEventListener("DOMContentLoaded", () => {
+    const avatar = document.querySelector(".user-avatar");
+    const dropdown = document.querySelector(".user-dropdown");
+    if (avatar && dropdown) {
+        avatar.addEventListener("click", () => {
+            dropdown.classList.toggle("open");
+        });
+    }
+});
+</script>
+
+</body>
+</html>

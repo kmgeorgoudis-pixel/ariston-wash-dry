@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact – ARISTON Wash & Dry</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Navigation -->
+<header>
+<div class="header-top">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+        ARISTON <span>Wash & Dry</span>
+    </div>
+    <div class="store-notice">
+        OUR STORE IS NOT OPEN YET — COMING SOON!
+    </div>
+</div>
+
+<nav class="main-nav">
+    <div class="hamburger" id="hamburger-btn">☰</div>
+    <div class="nav-links" id="nav-menu">
+        <a href="/en/">Home</a>
+        <a href="/en/price-list">Price List</a>
+        <a href="/en/photos">Photos</a>
+        <a href="/en/special-services">Special Services</a>
+        <a href="/en/reviews">Reviews</a>
+        <a href="/en/contact">Contact</a>
+
+        {% if current_user.is_authenticated %}
+        <div class="user-menu">
+            <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+            <span class="user-hint">Member Options</span>
+            <div class="user-dropdown">
+                <a href="/settings-menu">Settings</a>
+                <a href="/updates-menu">Updates</a>
+                <a href="{{ url_for('ai') }}" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                <a href="/game">ARISTON Game</a>
+                <a href="/logout" class="logout">Logout</a>
+            </div>
+        </div>
+        {% else %}
+        <a href="/login" class="nav-btn">Sign Up / Login</a>
+        {% endif %}
+    </div>
+</nav>
+</header>
+
+<section class="page-title">
+    <h1>💙 Contact Us</h1>
+    <p>We are always happy to assist you! If you have any questions about our services, machines, or pricing, please reach out to us.</p>
+</section>
+
+<div class="contact-box">
+    <h2>📍 Contact Information</h2>
+    <p><strong>Address:</strong><br> 10 Dervenakion, Vathy, Samos 83100</p>
+    <p><strong>Phone:</strong><br> +30 698 759 8416</p>
+    <p><strong>Email:</strong><br> aristonwashing@gmail.com</p>
+    <p><strong>Opening Hours:</strong><br> Daily 07:00 – 23:00</p>
+    <p><strong>Location:</strong><br> Ariston Wash & Dry is in the center of Vathy. Easy access on foot or by car, parking available nearby.</p>
+</div>
+
+<div id="form-container">
+    <div class="contact-form" id="contact-form">
+        <h2>📩 Contact Form</h2>
+        <p>Fill out the form and our team will get back to you promptly.</p>
+
+        <form id="contactForm">
+            {% if current_user.is_authenticated %}
+            <p style="margin-bottom:20px; font-size:14px; color:#444;">
+                You are logged in as <strong>{{ current_user.fullname }}</strong> ({{ current_user.email }}).  
+                Your message will be sent with these details.
+            </p>
+            {% else %}
+            <div class="form-field">
+                <label>Full Name *</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="form-field">
+                <label>Email or Phone *</label>
+                <input type="text" name="email" required>
+            </div>
+            {% endif %}
+
+            <div class="form-field">
+                <label>Subject / Reason *</label>
+                <input type="text" name="subject" required>
+            </div>
+            <div class="form-field">
+                <label>Message *</label>
+                <textarea name="message" rows="5" required></textarea>
+            </div>
+
+            <button class="submit-btn" type="submit">Send</button>
+            <p style="font-size:12px; color:#666; margin-top:10px;">
+                By submitting the form, you accept the <a href="/en/privacy" target="_blank">Privacy Policy</a> and consent to the processing of your data under GDPR.
+            </p>
+        </form>
+    </div>
+
+    <div class="success-box" id="success-box" style="display:none;">
+        <h2>✔ Your message has been sent successfully</h2>
+        <p>The ARISTON Wash & Dry team received your request and will contact you as soon as possible.</p>
+        <button onclick="resetForm()" class="submit-btn" style="margin-top:25px; width:250px;">
+            New Form
+        </button>
+    </div>
+</div>
+
+<footer>
+    © 2025 Ariston Wash & Dry — All Rights Reserved<br>
+    Website designed & developed by Konstantinos Georgoudis
+    <br><br>
+    <a href="/en/terms">Terms of Use</a> |
+    <a href="/en/privacy">Privacy Policy</a> |
+    <a href="/en/cookies">Cookies Policy</a>
+</footer>
+
+<script>
+document.getElementById("contactForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    await fetch("/en/contact", {
+        method: "POST",
+        body: formData
+    });
+
+    document.getElementById("contact-form").style.display = "none";
+    document.getElementById("success-box").style.display = "block";
+});
+
+function resetForm() {
+    document.getElementById("success-box").style.display = "none";
+    document.getElementById("contact-form").style.display = "block";
+    document.getElementById("contactForm").reset();
+}
+
+document.getElementById("hamburger-btn").onclick = function() {
+    document.getElementById("nav-menu").classList.toggle("active");
+};
+</script>
+
+</body>
+</html>

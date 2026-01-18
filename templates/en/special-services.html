@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Services – ARISTON Wash & Dry</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+
+    <!-- LOGO -->
+    <div class="header-top">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+            ARISTON <span>Wash & Dry</span>
+        </div>
+
+        <!-- STORE NOTICE -->
+        <div class="store-notice">
+            OUR STORE IS NOT OPEN YET — COMING SOON NEAR YOU!
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+        <div class="hamburger" id="hamburger-btn">☰</div>
+
+        <div class="nav-links" id="nav-menu">
+
+            <a href="/en">Home</a>
+            <a href="/en/pricing">Pricing</a>
+            <a href="/en/photos">Photos</a>
+            <a href="/en/special-services">Special Services</a>
+            <a href="/en/reviews">Reviews</a>
+            <a href="/en/contact">Contact</a>
+
+            {% if current_user.is_authenticated %}
+            <div class="user-menu">
+                <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+                <span class="user-hint">Member Options</span>
+
+                <div class="user-dropdown">
+                    <a href="/settings-menu">Settings</a>
+                    <a href="/updates-menu">Updates</a>
+                    <a href="{{ url_for('ai') }}" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="/game">ARISTON Game</a>
+                    <a href="/logout" class="logout">Logout</a>
+                    <div id="google_translate_element"></div>
+                </div>
+            </div>
+            {% else %}
+            <a href="/login" class="nav-btn">Sign Up / Login</a>
+            {% endif %}
+
+        </div>
+    </nav>
+
+</header>
+
+<!-- Page Title -->
+<section class="page-title">
+    <h1>Special Services</h1>
+    <p>Professional cleaning solutions for businesses, Airbnb, and accommodations.</p>
+</section>
+
+<!-- MAIN BLOCK -->
+<section class="photo-blocks">
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/13.png') }}" alt="Ironing Machine">
+        <div class="photo-block-text">
+            <h3>Professional Ironing & Cleaning Services</h3>
+            <p>
+                Ariston Wash & Dry provides specialized cleaning and ironing services 
+                for professionals who require consistent quality, reliability, and perfect results.
+            </p>
+            <p>
+                We collaborate with <strong>Airbnb, hotels, rental apartments, restaurants, cafés, 
+                small businesses, and professional spaces</strong> that need clean linens, sheets, towels, 
+                tablecloths, and staff uniforms.
+            </p>
+            <p>
+                Using modern ironing machines and professional equipment, 
+                we deliver fabrics <strong>clean, sanitized, perfectly ironed, and ready to use</strong>.
+            </p>
+            <p>
+                We also provide <strong>service invoices</strong> for all professional collaborations, 
+                with options for weekly or monthly regular service agreements.
+            </p>
+        </div>
+    </div>
+
+    <div class="photo-block">
+        <img src="{{ url_for('static', filename='images/14.png') }}" alt="Professional Cleaning">
+        <div class="photo-block-text">
+            <h3>Why Choose Us</h3>
+            <p>
+                ✔ Consistent quality in every wash<br>
+                ✔ Professional ironing with specialized machines<br>
+                ✔ Fast delivery – ideal for Airbnb with continuous check-ins<br>
+                ✔ Cleanliness, hygiene, and fabric care<br>
+                ✔ Trust, reliability, and professionalism
+            </p>
+            <p>
+                Whether you run a small business or a large accommodation, 
+                we can fully manage your linens so you can focus on what truly matters: 
+                serving your customers.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+<!-- Contact -->
+<section class="contact">
+    <h3>Contact</h3>
+    <p>📍 Address: Dervenakion 10, Vathy, Samos 83100</p>
+    <p>📞 Phone: +30 698 759 8416</p>
+    <p>📧 Email: aristonwashing@gmail.com</p>
+</section>
+
+<footer>
+    © 2025 Ariston Wash & Dry — All Rights Reserved<br>
+    Website designed & developed by Konstantinos Georgoudis
+    <br><br>
+    <a href="/en/terms">Terms & Conditions</a> |
+    <a href="/en/privacy">Privacy Policy</a> |
+    <a href="/en/cookies">Cookies Policy</a>
+</footer>
+
+<script>
+document.getElementById("hamburger-btn").onclick = function() {
+    document.getElementById("nav-menu").classList.toggle("active");
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    const avatar = document.querySelector(".user-avatar");
+    const dropdown = document.querySelector(".user-dropdown");
+
+    if (avatar && dropdown) {
+        avatar.addEventListener("click", () => {
+            dropdown.classList.toggle("open");
+        });
+    }
+});
+</script>
+
+</body>
+</html>

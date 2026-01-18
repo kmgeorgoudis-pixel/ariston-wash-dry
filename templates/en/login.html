@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Σύνδεση – ARISTON Wash & Dry</title>
+    <title>Login – ARISTON Wash & Dry</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
 
     <!-- CSS -->
-     
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
     :root {
@@ -24,7 +23,7 @@
 
     body {
         background: var(--bg-gradient);
-        font-family: 'Plus Jakarta Sans', sans-serif; /* Πιο μοντέρνα γραμματοσειρά */
+        font-family: 'Plus Jakarta Sans', sans-serif;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -33,7 +32,6 @@
         overflow: auto;
     }
 
-    /* Διακοσμητικοί κύκλοι στο background για το "WOW" εφέ */
     body::before, body::after {
         content: "";
         position: absolute;
@@ -193,7 +191,6 @@
         border-bottom-color: var(--primary);
     }
 
-    /* Flash Messages */
     .flash-container {
         position: absolute;
         top: 20px;
@@ -205,35 +202,32 @@
 <body>
     
 
-    <!-- LOGIN BOX -->
     <div class="login-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div style="
-          background: {% if category == 'success' %}#e3f2fd{% else %}#ffebee{% endif %};
-          color: {% if category == 'success' %}#0d47a1{% else %}#c62828{% endif %};
-          border-left: 6px solid {% if category == 'success' %}#0d47a1{% else %}#c62828{% endif %};
-          padding: 14px 18px;
-          border-radius: 10px;
-          font-size: 15px;
-          font-weight: 600;
-          text-align: left;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-          margin-bottom: 20px;
-      ">
-        {{ message }}
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="
+                  background: {% if category == 'success' %}#e3f2fd{% else %}#ffebee{% endif %};
+                  color: {% if category == 'success' %}#0d47a1{% else %}#c62828{% endif %};
+                  border-left: 6px solid {% if category == 'success' %}#0d47a1{% else %}#c62828{% endif %};
+                  padding: 14px 18px;
+                  border-radius: 10px;
+                  font-size: 15px;
+                  font-weight: 600;
+                  text-align: left;
+                  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                  margin-bottom: 20px;
+              ">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 
-        <!-- Logo -->
         <img src="{{ url_for('static', filename='images/1new.png') }}" class="login-logo" alt="Logo">
 
-        <!-- Title -->
         <div class="login-title">ARISTON WASH & DRY</div>
-        <div class="login-subtitle">Σύνδεση στον λογαριασμό σας</div>
+        <div class="login-subtitle">Login to your account</div>
         <div class="language-switcher">
         <a href="{{ url_for('login') if request.path.startswith('/login') else url_for('index') }}">
             <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
@@ -243,41 +237,27 @@
         </a>
     </div>
 
-        <!-- Login Form -->
-        <form action="/login" method="POST">
-
+        <form action="/en/login" method="POST">
             <div class="form-field">
                 <label>Email</label>
                 <input type="email" name="email" required>
             </div>
 
             <div class="form-field">
-                <label>Κωδικός</label>
+                <label>Password</label>
                 <input type="password" name="password" required>
             </div>
 
-            <button class="submit-btn" type="submit">Σύνδεση</button>
+            <button class="submit-btn" type="submit">Login</button>
         </form>
-        <a href="/forgot-password" class="forgot-link">Ξέχασα τον κωδικό μου</a>
+
+        <a href="/forgot-password" class="forgot-link">Forgot your password?</a>
+
         <div class="register-link">
-        <div class="register-link" style="margin-top: 25px; font-size: 17px; font-weight: 600;">
-    Δεν έχετε λογαριασμό;
-    <a href="/register" style="
-        display: inline-block;
-        padding: 10px 18px;
-        margin-left: 6px;
-        background: linear-gradient(135deg, #0d47a1, #1565c0);
-        color: #fff;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 700;
-        text-decoration: none;
-        transition: 0.25s;
-    ">Εγγραφή εδώ</a>
-    <a href="/" class="cancel-btn">Ακύρωση & Επιστροφή</a>
-</div>
-
+            <span>Don't have an account?</span>
+            <a href="/register" class="register-cta">Register here</a>
+            <a href="/" class="cancel-btn">Cancel & Return</a>
+        </div>
     </div>
-
 </body>
 </html>

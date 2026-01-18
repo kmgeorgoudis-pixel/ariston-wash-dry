@@ -122,6 +122,16 @@ professional laundry Samos
     <div class="logo">
         <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
         ARISTON <span>Wash & Dry</span>
+        <!-- Language Switcher -->
+    <div class="language-switcher">
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
+        </a>
+        <a href="{{ url_for('en_index') }}">
+            <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+        </a>
+    </div>
+</div>
         
 </div>
 

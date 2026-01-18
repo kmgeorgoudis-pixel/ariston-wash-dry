@@ -1340,6 +1340,32 @@ body, header, nav, .photo-block, .contact, footer {
 .cancel-btn:hover {
     background: #ccc;
 }
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #ffffff;
+}
+
+.language-switcher {
+    display: flex;
+    gap: 10px;
+}
+
+.flag-icon {
+    width: 28px;
+    height: 20px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.flag-icon:hover {
+    transform: scale(1.1);
+}
+
 
 
 

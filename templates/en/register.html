@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register – ARISTON Wash & Dry</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0d47a1;
+            --accent: #1976d2;
+            --bg-gradient: linear-gradient(135deg, #f8faff 0%, #e0e7ff 100%);
+            --glass: rgba(255, 255, 255, 0.92);
+            --input-bg: #f1f5f9;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            left: -100px;
+            background: radial-gradient(circle, rgba(13, 71, 161, 0.08) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            padding: 45px 40px;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            text-align: center;
+            animation: premiumReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes premiumReveal {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .register-logo {
+            width: 150px;
+            margin-bottom: 60px;
+            filter: drop-shadow(0 8px 12px rgba(13, 71, 161, 0.1));
+        }
+
+        .register-title {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--primary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .register-subtitle {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 35px;
+        }
+
+        .form-field {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .form-field label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+            margin-left: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            font-size: 15px;
+            background: var(--input-bg);
+            color: #1e293b;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-field input:focus {
+            outline: none;
+            background: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px -5px rgba(13, 71, 161, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px rgba(13, 71, 161, 0.1);
+        }
+
+        .submit-btn:hover {
+            background: #093a85;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(13, 71, 161, 0.25);
+        }
+
+        .login-link {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            font-size: 15px;
+            color: #475569;
+        }
+
+        .login-cta {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 800;
+            margin-left: 5px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background: rgba(13, 71, 161, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .login-cta:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+
+        <img src="{{ url_for('static', filename='images/1new.png') }}" class="register-logo" alt="Logo">
+
+        <div class="register-title">ARISTON WASH & DRY</div>
+        <div class="register-subtitle">Create a new account</div>
+        <div class="language-switcher">
+        <a href="{{ url_for('login') if request.path.startswith('/login') else url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
+        </a>
+        <a href="{{ url_for('en_login') if request.path.startswith('/login') else url_for('en_index') }}">
+            <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+        </a>
+    </div>
+
+        <form action="/en/register" method="POST">
+
+            <div class="form-field">
+                <label>Full Name</label>
+                <input type="text" name="fullname" required>
+            </div>
+
+            <div class="form-field">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+
+            <div class="form-field">
+                <label>Password</label>
+                <input type="password" name="password" required>
+            </div>
+
+            <div class="form-field">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm_password" required>
+            </div>
+
+            <button class="submit-btn" type="submit">Register</button>
+        </form>
+
+        <p style="font-size: 12px; color: #666; margin-top: 10px;">
+            By submitting this form, you accept our 
+            <a href="/en/privacy" target="_blank">Privacy Policy</a> and agree 
+            to the processing of your data according to GDPR.
+        </p>
+
+        <div class="login-link" style="margin-top: 25px; font-size: 17px; font-weight: 600;">
+            Already have an account?
+            <a href="/en/login" class="login-cta">Login here</a>
+            <a href="/" class="cancel-btn">Cancel & Return</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

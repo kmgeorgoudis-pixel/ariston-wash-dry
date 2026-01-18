@@ -1445,6 +1445,459 @@ def admin_bulk_email():
 
     users = User.query.all()
     return render_template("admin/bulk-email.html", users=users, active_page="bulk_email")
+#####AGGLIKA####
+# Αγγλική έκδοση αρχικής
+@app.route("/en")
+def en_index():
+    return render_template("en/index.html")
+
+# Αγγλική έκδοση Terms / Όροι Χρήσης
+@app.route("/en/terms")
+def en_terms():
+    return render_template("en/terms.html")
+
+# Αγγλική έκδοση Privacy / Πολιτική Απορρήτου
+@app.route("/en/privacy")
+def en_privacy():
+    return render_template("en/privacy.html")
+
+# Αγγλική έκδοση Cookies / Πολιτική Cookies
+@app.route("/en/cookies")
+def en_cookies():
+    return render_template("en/cookies.html")
+@app.route("/en/pricing")
+def en_pricing():
+    return render_template("en/pricing.html")
+@app.route("/en/special-services")
+def en_special_services():
+    return render_template("en/special-services.html")
+# Αγγλική σελίδα κριτικών
+@app.route("/en/reviews")
+def reviews_en():
+    return render_template("en/reviews.html")
+
+# Υποβολή φόρμας (χρησιμοποιεί το ίδιο POST route, αν θέλεις να ξεχωρίζεις μπορεί να φτιάξεις /en/submit_review)
+@app.route("/en/submit_review", methods=["POST"])
+def submit_review_en():
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        name = current_user.fullname
+    else:
+        user_id = None
+        name = "Guest"
+
+    new_review = Review(
+        user_id=user_id,
+        rating=request.form.get("rating"),
+        q2=request.form.get("q2"),
+        q3=request.form.get("q3"),
+        q4=request.form.get("q4"),
+        recommend=request.form.get("recommend"),
+        comment_like=request.form.get("comment_like"),
+        comment_improve=request.form.get("comment_improve"),
+        name=name,
+        want_contact=request.form.get("wantContact"),
+        contact_info=request.form.get("contactInfo")
+    )
+
+    db.session.add(new_review)
+    db.session.commit()
+
+    return jsonify({"success": True})
+
+@app.route("/en/contact", methods=["GET", "POST"])
+def contact_en():
+    if request.method == "POST":
+        name = current_user.fullname if current_user.is_authenticated else request.form.get("name")
+        email = current_user.email if current_user.is_authenticated else request.form.get("email")
+        subject = request.form.get("subject")
+        message = request.form.get("message")
+
+        user_id = current_user.id if current_user.is_authenticated else None
+
+        msg = ContactMessage(
+            user_id=user_id,
+            name=name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+
+        db.session.add(msg)
+        db.session.commit()
+        return "OK", 200
+
+    return render_template("en/contact.html")
+
+@app.route("/en/login", methods=["GET", "POST"])
+def login_en():
+    if request.method == "GET":
+        return render_template("en/login.html")
+
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user or not check_password_hash(user.password, password):
+        flash("Wrong email or password.", "danger")
+        return redirect("/en/login")
+
+    # Αν ο χρήστης υπάρχει και ο κωδικός είναι σωστός
+    login_user(user)
+
+    # ===== ADMIN REDIRECT =====
+    if user.is_admin:
+        return redirect("/admin")
+    # ==========================
+
+    # Regular user
+    return redirect("/en/index")
+@app.route("/en/register", methods=["GET", "POST"])
+def register_en():
+    if request.method == "GET":
+        return render_template("en/register.html")
+
+    fullname = request.form["fullname"]
+    email = request.form["email"]
+    password = request.form["password"]
+    confirm = request.form["confirm_password"]
+
+    result = register_user(fullname, email, password, confirm)
+
+    if result == "OK":
+        # Welcome email in English
+        body = f"""
+Dear {fullname},
+
+Welcome to the Ariston Wash & Dry family!
+
+Your registration has been successfully completed and you are now officially a member of our service.
+From today, you will receive exclusive offers, coupons, discounts, and updates 
+about new services we are preparing for our members.
+
+Our goal is to make your laundry experience easier, faster, and more affordable than ever.
+
+Thank you for trusting us.
+If you need anything, we are always here for you.
+
+Best regards,
+The ARISTON Wash & Dry Team
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+<img src="https://aristonwashdry.gr/templates/images/1new.png"
+alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">
+</a>
+
+<hr>
+<p style='font-size: 12px; color: #666;'>
+This email was sent by ARISTON Wash & Dry in accordance with our 
+<a href="https://aristonwashdry.gr/en/privacy">Privacy Policy</a>. 
+Your data is used exclusively for service purposes and is not shared with third parties.
+</p>
+"""
+        
+        send_email(
+            to=email,
+            subject="Welcome to Ariston Wash & Dry",
+            body=body
+        )
+
+        flash("Your account has been successfully created! You can now log in.", "success")
+        return redirect("/en/login")
+
+    else:
+        return result
+@app.route("/en/forgot-password", methods=["GET", "POST"])
+def forgot_password_en():
+    if request.method == "POST":
+        email = request.form["email"]
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            flash("No account found with this email.", "danger")
+            return redirect("/en/forgot-password")
+
+        code = random.randint(100000, 999999)
+        user.reset_code = str(code)
+        db.session.commit()
+
+        body = f"""
+Dear {user.fullname},
+
+We received a request to reset your password for ARISTON Wash & Dry.
+
+To continue, please use the 6-digit verification code below:
+
+{code}
+
+The code is valid for a limited time.
+
+If you did not request a password reset, you can safely ignore this email.
+
+Best regards,
+The ARISTON Wash & Dry Team
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+    <img src="https://aristonwashdry.gr/templates/images/1new.png"
+         alt="ARISTON Wash & Dry"
+         style="height:100px; width:auto; margin-top:12px;">
+</a>
+<hr>
+<p style="font-size: 12px; color: #666;">
+This email was sent by ARISTON Wash & Dry in accordance with our 
+<a href="https://aristonwashdry.gr/en/privacy">Privacy Policy</a>. 
+Your data is used exclusively for service purposes and is not shared with third parties.
+</p>
+"""
+
+        send_email(
+            to=email,
+            subject="Verification Code - ARISTON Wash & Dry",
+            body=body
+        )
+
+        return redirect("/en/verify-code")
+
+    return render_template("en/forgot-password.html")
+
+@app.route("/en/verify-code", methods=["GET", "POST"])
+def verify_code_en():
+    if request.method == "POST":
+        code = request.form["code"]
+        user = User.query.filter_by(reset_code=code).first()
+
+        if not user:
+            flash("Wrong code.", "danger")
+            return redirect("/en/verify-code")
+
+        session["reset_user_id"] = user.id
+        return redirect("/en/reset-password")
+
+    return render_template("en/verify-code.html")
+
+@app.route("/en/reset-password", methods=["GET", "POST"])
+def reset_password_en():
+    if request.method == "POST":
+        password = request.form["password"]
+        confirm = request.form["confirm"]
+
+        if password != confirm:
+            flash("Passwords do not match.", "danger")
+            return redirect("/en/reset-password")
+
+        user = User.query.get(session["reset_user_id"])
+        user.password = generate_password_hash(password)
+        user.reset_code = None
+        db.session.commit()
+
+        flash("Password changed successfully!")
+        return redirect("/en/login")
+
+    return render_template("en/reset-password.html")
+@app.route("/en/member-info")
+@login_required
+def member_info_en():
+    from datetime import datetime
+    days_member = (datetime.now() - current_user.created_at).days
+    return render_template("en/member-info.html", days_member=days_member)
+@app.route("/en/account-settings")
+@login_required
+def account_settings_en():
+    return render_template("en/account-settings.html")
+@app.route("/en/change-name", methods=["GET", "POST"])
+@login_required
+def change_name_en():
+    if request.method == "POST":
+        new_name = request.form.get("fullname")
+
+        if not new_name or new_name.strip() == "":
+            flash("Name cannot be empty.", "error")
+            return redirect("/en/change-name")
+
+        current_user.fullname = new_name.strip()
+        db.session.commit()
+
+        flash("Name updated successfully!", "success")
+        return redirect("/en/account-settings")
+
+    return render_template("en/change-name.html")
+@app.route("/en/change-email", methods=["GET", "POST"])
+@login_required
+def change_email_en():
+    if request.method == "POST":
+        new_email = request.form.get("new_email")
+        password_confirm = request.form.get("password_confirm")
+
+        if not check_password_hash(current_user.password, password_confirm):
+            flash("Password is incorrect.", "danger")
+            return redirect("/en/change-email")
+
+        current_user.email = new_email
+        db.session.commit()
+
+        flash("Email updated successfully.", "success")
+        return redirect("/en/account-settings")
+
+    return render_template("en/change-email.html")
+
+def send_password_change_email_en(user):
+    subject = "Password Change Completed"
+    content = f"""
+Dear {user.fullname},
+
+Your password at ARISTON Wash & Dry has been changed successfully.
+
+If you did not make this change, please contact us immediately.
+
+Best regards,
+The ARISTON Wash & Dry Team
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+    <img src="https://aristonwashdry.gr/templates/images/1new.png"
+         alt="ARISTON Wash & Dry"
+         style="height:100px; width:auto; margin-top:12px;">
+</a>
+<hr>
+<p style="font-size: 12px; color: #666;">
+This email was sent by ARISTON Wash & Dry according to our 
+<a href="https://aristonwashdry.gr/en/privacy">Privacy Policy</a>. 
+Your data is used solely for service purposes and is not shared with third parties.
+</p>
+"""
+    send_email(
+        to=user.email,
+        subject=subject,
+        body=content
+    )
+
+@app.route("/en/change-password", methods=["GET", "POST"])
+@login_required
+def change_password_en():
+    if request.method == "POST":
+        old_password = request.form.get("old_password")
+        new_password = request.form.get("new_password")
+        confirm_new_password = request.form.get("confirm_new_password")
+
+        if not check_password_hash(current_user.password, old_password):
+            flash("Old password is incorrect.", "danger")
+            return redirect("/en/change-password")
+
+        if new_password != confirm_new_password:
+            flash("New passwords do not match.", "danger")
+            return redirect("/en/change-password")
+
+        current_user.password = generate_password_hash(new_password)
+        db.session.commit()
+
+        # Send confirmation email
+        send_password_change_email_en(current_user)
+
+        flash("Password updated successfully.", "success")
+        return redirect("/en/account-settings")
+
+    return render_template("en/change-password.html")
+@app.route("/en/delete-account", methods=["GET", "POST"])
+@login_required
+def delete_account_en():
+    if request.method == "GET":
+        return render_template("delete-account-en.html")
+
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    # 1) Email check
+    if email != current_user.email:
+        flash("Email does not match your account.", "danger")
+        return redirect("/en/delete-account")
+
+    # 2) Password check
+    if not check_password_hash(current_user.password, password):
+        flash("Password is incorrect.", "danger")
+        return redirect("/en/delete-account")
+
+    # 3) Send confirmation email
+    body = f"""
+Dear {current_user.fullname},
+
+Your account on ARISTON Wash & Dry has been permanently deleted.
+All your personal data, settings, and usage history have been removed
+from our system according to our privacy policy.
+
+You are no longer a member of the service.
+
+Thank you for using ARISTON Wash & Dry.
+https://aristonwashdry.gr/
+
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+<img src="https://aristonwashdry.gr/templates/images/1new.png"
+alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">
+</a>
+
+<hr>
+<p style='font-size: 12px; color: #666;'>
+This email was sent by ARISTON Wash & Dry in accordance with the 
+<a href="https://aristonwashdry.gr/privacy">Privacy Policy</a>. 
+Your data is used solely for the operation of the service and is not shared with third parties.
+</p>
+"""
+    send_email(
+        to=current_user.email,
+        subject="Account Deletion Confirmation - ARISTON Wash & Dry",
+        body=body
+    )
+
+    # 4) Save ID & logout
+    user_id = current_user.id
+    logout_user()
+
+    # 5) Delete user data
+    Coupon.query.filter_by(user_id=user_id).delete()
+    Announcement.query.filter_by(user_id=user_id).delete()
+    user = User.query.get(user_id)
+    db.session.delete(user)
+    db.session.commit()
+
+    flash("Your account has been permanently deleted.", "success")
+    return redirect("/en/goodbye")
+
+
+@app.route("/en/goodbye")
+def goodbye_en():
+    return render_template("goodbye-en.html")
+
+@app.route("/en/updates-menu")
+@login_required
+def updates_menu_en():
+    return render_template("updates-menu-en.html")
+@app.route("/en/updates")
+@login_required
+def updates_en():
+    announcements = Announcement.query.filter(
+        (Announcement.user_id == None) |
+        (Announcement.user_id == current_user.id)
+    ).order_by(Announcement.id.desc()).all()
+    return render_template("updates-en.html", announcements=announcements)
+
+
+@app.route("/en/coupons")
+@login_required
+def user_coupons_en():
+    coupons = Coupon.query.filter_by(user_id=current_user.id).order_by(Coupon.id.desc()).all()
+    limit = datetime.utcnow() - timedelta(days=15)
+    old_used = Coupon.query.filter(
+        Coupon.user_id == current_user.id,
+        Coupon.used == True,
+        Coupon.used_at < limit
+    ).all()
+    for c in old_used:
+        db.session.delete(c)
+    db.session.commit()
+    return render_template("coupons-en.html", coupons=coupons, today=date.today())
+@app.route("/en/ai")
+@login_required
+def ai_en():
+    return render_template("en/ai/ai.html")
 
 
 # ============================

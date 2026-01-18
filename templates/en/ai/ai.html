@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARISTON AI Concierge</title>
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="{{ url_for('static', filename='ai/ai.css') }}">
+</head>
+<body>
+
+<div id="ariston-app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-header">
+      <div class="logo-glass">
+        <img src="/ai-image/logo3.png" alt="ARISTON AI">
+      </div>
+      <h1>ARISTON AI</h1>
+      <p>Premium Laundry Concierge</p>
+    </div>
+
+    <div class="sidebar-content" id="ariston-chat-questions"></div>
+
+    <div class="sidebar-footer">
+      <a href="{{ url_for('index') }}" class="exit-btn">← Home</a>
+    </div>
+
+  </aside>
+
+  <!-- CHAT -->
+  <main class="chat">
+
+    <header class="chat-header">
+      <div class="chat-ai">
+        <img src="/ai-image/logo3.png" alt="AI Avatar">
+        <div>
+          <strong>ARISTON AI</strong>
+          <span>Online now 🟢</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="chat-body" id="ariston-chat-window">
+      <div class="chat-messages" id="ariston-chat-messages">
+
+        <div class="ai-msg">
+          <img src="/ai-image/logo3.png" alt="AI Avatar">
+          <div class="bubble">
+            <span id="ai-greeting"
+                  data-fullname="{{ current_user.fullname }}"
+                  data-avatar="/ai-image/logo3.png"></span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</div>
+
+<script src="{{ url_for('static', filename='ai/ai.js') }}"></script>
+</body>
+</html>

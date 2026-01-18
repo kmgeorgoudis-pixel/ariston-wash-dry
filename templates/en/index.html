@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ARISTON Wash & Dry | Self Service Laundry in Samos</title>
+
+    <!-- English SEO -->
+    <meta name="description" content="Ariston Wash & Dry in Samos – modern self-service laundry. Fast, affordable washing & drying. Ideal for locals, tourists and Airbnb hosts.">
+    <meta name="keywords" content="laundry Samos, self service laundry Samos, laundromat Samos, washing machines Samos, dryers Samos, coin laundry Samos, Ariston Wash & Dry">
+    <meta name="author" content="Konstantinos Georgoudis">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+
+<div class="header-top">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+        ARISTON <span>Wash & Dry</span>
+        <!-- Language Switcher -->
+    <div class="language-switcher">
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
+        </a>
+        <a href="{{ url_for('en_index') }}">
+            <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+        </a>
+    </div>
+</div>
+    </div>
+</div>
+
+<div class="store-notice">
+    OUR STORE IS NOT OPEN YET — COMING SOON!
+</div>
+
+<nav class="main-nav">
+
+    <div class="hamburger" id="hamburger-btn">☰</div>
+
+    <div class="nav-links" id="nav-menu">
+        <a href="/en">Home</a>
+        <a href="/en/pricing">Pricing</a>
+        <a href="/en/photos">Photos</a>
+        <a href="/en/services">Special Services</a>
+        <a href="/en/reviews">Reviews</a>
+        <a href="/en/contact">Contact</a>
+
+        {% if current_user.is_authenticated %}
+        <div class="user-menu">
+            <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+            <span class="user-hint">Member options</span>
+
+            <div class="user-dropdown">
+                <a href="/settings-menu">Settings</a>
+                <a href="/updates-menu">Updates</a>
+                <a href="{{ url_for('ai') }}" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                <a href="/game">ARISTON Game</a>
+                <a href="/logout" class="logout">Logout</a>
+            </div>
+        </div>
+        {% else %}
+        <a href="/login" class="nav-btn">Register / Login</a>
+        {% endif %}
+    </div>
+</nav>
+
+</header>
+
+<section class="hero">
+    <h1>ARISTON Wash & Dry</h1>
+    <h2>Easy, Fast, Affordable & Effective</h2>
+    <p>The new self-service laundry in Samos is here!</p>
+    <p>Wash and dry your clothes easily, quickly and affordably.</p>
+    <p>Open daily and ready whenever you need us.</p>
+</section>
+
+<section class="info-section">
+    <div class="info-text">
+        <h3>Welcome to Ariston Wash & Dry!</h3>
+        <p>At Ariston Wash & Dry you can wash and dry your clothes quickly and easily in less than one hour.</p>
+        <p>Enjoy a clean, modern space with high-performance machines and simple operation.</p>
+        <p>Payment available by card or cash.</p>
+        <p>Perfect for locals, students, travelers and Airbnb guests.</p>
+        <p>No appointment needed — just bring your clothes, press start and relax.</p>
+        <p>Free Wi-Fi and vending machines with coffee, drinks and snacks available.</p>
+        <p><strong>Clean clothes, simple life.</strong></p>
+        <p><strong>Ariston Wash & Dry – Clean clothes, clear mind.</strong></p>
+    </div>
+
+    <div class="info-image">
+        <img src="{{ url_for('static', filename='images/1new.png') }}" alt="Ariston Wash & Dry">
+    </div>
+</section>
+
+<section class="contact">
+    <h3>Contact</h3>
+    <p>📍 Address: Dervenakion 10, Vathy, Samos 83100</p>
+    <p>📞 Phone: +30 698 759 8416</p>
+    <p>📧 Email: aristonwashing@gmail.com</p>
+</section>
+
+<footer>
+    © 2025 Ariston Wash & Dry — All Rights Reserved<br>
+    Website designed & developed by Konstantinos Georgoudis
+    <br><br>
+    <a href="/en/terms">Terms of Use</a> |
+    <a href="/en/privacy">Privacy Policy</a> |
+    <a href="/en/cookies">Cookie Policy</a>
+</footer>
+
+<script>
+document.getElementById("hamburger-btn").onclick = function() {
+    document.getElementById("nav-menu").classList.toggle("active");
+};
+</script>
+
+</body>
+</html>
