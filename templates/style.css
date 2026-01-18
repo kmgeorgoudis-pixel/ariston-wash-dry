@@ -1342,7 +1342,8 @@ body, header, nav, .photo-block, .contact, footer {
 }
 .header-top {
     display: flex;
-    justify-content: space-between;
+    /* Διατηρεί την απόσταση μεταξύ των στοιχείων */
+    justify-content: space-between; 
     align-items: center;
     padding: 10px 20px;
     background: #ffffff;
@@ -1351,6 +1352,8 @@ body, header, nav, .photo-block, .contact, footer {
 .language-switcher {
     display: flex;
     gap: 10px;
+    /* Αυτή η γραμμή σπρώχνει το switcher τέρμα δεξιά */
+    margin-left: auto; 
 }
 
 .flag-icon {
@@ -1365,6 +1368,7 @@ body, header, nav, .photo-block, .contact, footer {
 .flag-icon:hover {
     transform: scale(1.1);
 }
+
 
 
 
