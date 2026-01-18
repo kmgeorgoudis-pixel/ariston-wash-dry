@@ -235,13 +235,17 @@
         <div class="login-title">ARISTON WASH & DRY</div>
         <div class="login-subtitle">Σύνδεση στον λογαριασμό σας</div>
         <div class="language-switcher">
-        <a href="{{ url_for('login') if request.path.startswith('/login') else url_for('index') }}">
-            <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
-        </a>
-        <a href="{{ url_for('en_login') if request.path.startswith('/login') else url_for('en_index') }}">
-            <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
-        </a>
-    </div>
+    <!-- Ελληνικά -->
+    <a href="{{ url_for('login') }}">
+        <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
+    </a>
+
+    <!-- English -->
+    <a href="{{ url_for('login_en') }}">
+        <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+    </a>
+</div>
+
 
         <!-- Login Form -->
         <form action="/login" method="POST">
