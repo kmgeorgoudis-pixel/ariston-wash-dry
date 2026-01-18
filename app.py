@@ -1912,7 +1912,11 @@ def user_coupons_en():
 def ai_en():
     return render_template("en/ai/ai.html")
 
+from flask import send_from_directory
 
+@app.route('/templates/en/ai/<path:filename>')
+def custom_static(filename):
+    return send_from_directory('templates/en/ai', filename)
 
 
 
