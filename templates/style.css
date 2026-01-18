@@ -1342,18 +1342,21 @@ body, header, nav, .photo-block, .contact, footer {
 }
 .header-top {
     display: flex;
-    /* Διατηρεί την απόσταση μεταξύ των στοιχείων */
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
     background: #ffffff;
+    /* Σιγουρευόμαστε ότι ολόκληρο το header πιάνει όλο το πλάτος */
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
 .language-switcher {
     display: flex;
     gap: 10px;
-    /* Αυτή η γραμμή σπρώχνει το switcher τέρμα δεξιά */
+    /* Το margin-left: auto σπρώχνει το στοιχείο δεξιά στο flexbox */
     margin-left: auto; 
+    /* Αν θέλεις να κολλήσει ακόμα πιο πολύ, μπορείς να μηδενίσεις το δεξί padding αν υπάρχει */
 }
 
 .flag-icon {
