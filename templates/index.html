@@ -123,6 +123,13 @@ professional laundry Samos
         <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
         ARISTON <span>Wash & Dry</span>
     </div>
+    <div class="language-switcher">
+  <img src="/templates/images/gr-flag.png" alt="Ελληνικά" onclick="setLanguage('el')" class="lang-flag">
+  <img src="/templates/images/en-flag.png" alt="English" onclick="setLanguage('en')" class="lang-flag">
+</div>
+
+<div id="google_translate_element" style="display: none;"></div>
+
 
     <!-- 🔥 ΕΝΗΜΕΡΩΤΙΚΟ ΜΗΝΥΜΑ -->
     <div class="store-notice">
@@ -335,5 +342,31 @@ document.getElementById("hamburger-btn").onclick = function() {
         document.getElementById("cookie-banner").style.display = "none";
     };
 </script>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'el',      // Η κύρια γλώσσα της σελίδας
+    includedLanguages: 'el,en',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+
+function setLanguage(lang) {
+  if(lang === 'en') {
+    // Μετάφραση σε Αγγλικά
+    const select = document.querySelector('.goog-te-combo');
+    if (select) {
+      select.value = 'en';
+      select.dispatchEvent(new Event('change'));
+    }
+  } else if(lang === 'el') {
+    // Επαναφορά στην Ελληνική έκδοση
+    window.location.reload(); // Αν θέλεις, μπορείς να βάλεις συγκεκριμένη σελίδα: window.location.href = '/';
+  }
+}
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>
