@@ -1877,6 +1877,7 @@ Your data is used solely for the operation of the service and is not shared with
 def goodbye_en():
     return render_template("goodbye-en.html")
 
+
 @app.route("/en/updates-menu-en")
 @login_required
 def updates_menu_en():
