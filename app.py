@@ -1662,6 +1662,10 @@ Your data is used exclusively for service purposes and is not shared with third 
         return redirect("/en/verify-code")
 
     return render_template("en/forgot-password.html")
+@app.route("/en/settings-menu")
+@login_required
+def en_settings_menu():
+    return render_template("en/settings-menu.html")
 
 @app.route("/en/verify-code", methods=["GET", "POST"])
 def verify_code_en():
@@ -1900,6 +1904,11 @@ def user_coupons_en():
 @login_required
 def ai_en():
     return render_template("en/ai/ai.html")
+@app.route("/en/ai")
+@login_required
+def en_ai():
+    return render_template("en/ai/ai.html")
+
 
 
 # ============================
