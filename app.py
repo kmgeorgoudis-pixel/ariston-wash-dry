@@ -1449,10 +1449,10 @@ def admin_bulk_email():
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
 def en_index():
-    return render_template("/en")
+    return render_template("en/index.html")
 @app.route("/en/index")
 @login_required
-def en_index():
+def home_en_index():
     return render_template("en/index.html")
 
 
@@ -1909,10 +1909,8 @@ def user_coupons_en():
 @login_required
 def ai_en():
     return render_template("en/ai/ai.html")
-@app.route("/en/ai")
-@login_required
-def en_ai():
-    return render_template("en/ai/ai.html")
+
+
 
 
 
