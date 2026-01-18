@@ -1344,8 +1344,8 @@ body, header, nav, .photo-block, .contact, footer {
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-left: auto;
-  padding-right: 20px;
+  /* margin-left: auto; */ /* αφαιρούμε για να μένουν αριστερά */
+  padding-left: 20px; /* αν θέλεις λίγο κενό από αριστερά */
 }
 
 .lang-flag {
@@ -1369,6 +1369,15 @@ body, header, nav, .photo-block, .contact, footer {
 body {
   top: 0px !important;
 }
+body {
+  top: 0px !important;
+}
+
+html body > div.goog-te-banner-frame.skiptranslate {
+  display: none !important;  /* κρύβει εντελώς το banner */
+}
+
+
 
 
 
