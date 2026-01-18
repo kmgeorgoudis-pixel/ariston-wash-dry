@@ -1883,7 +1883,7 @@ def updates_en():
         (Announcement.user_id == None) |
         (Announcement.user_id == current_user.id)
     ).order_by(Announcement.id.desc()).all()
-    return render_template("updates-en.html", announcements=announcements)
+    return render_template("en/updates-en.html", announcements=announcements)
 
 
 @app.route("/en/coupons")
@@ -1899,7 +1899,7 @@ def user_coupons_en():
     for c in old_used:
         db.session.delete(c)
     db.session.commit()
-    return render_template("coupons-en.html", coupons=coupons, today=date.today())
+    return render_template("en/coupons-en.html", coupons=coupons, today=date.today())
 @app.route("/en/ai")
 @login_required
 def ai_en():
