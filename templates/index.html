@@ -125,15 +125,16 @@ professional laundry Samos
         <!-- Language Switcher -->
 <div class="language-switcher">
     <!-- Πατάς Ελληνικά -->
-    <a href="{% if request.path.startswith('/en') %}{{ url_for('index') }}{% else %}{{ request.path }}{% endif %}">
+    <a href="{{ url_for('index') }}">
         <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
     </a>
 
     <!-- Πατάς Αγγλικά -->
-    <a href="{% if not request.path.startswith('/en') %}{{ url_for('en_index') }}{% else %}{{ request.path }}{% endif %}">
+    <a href="{{ url_for('en_index') }}">
         <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
     </a>
 </div>
+
 
         
 </div>
