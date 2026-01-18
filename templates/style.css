@@ -1340,36 +1340,7 @@ body, header, nav, .photo-block, .contact, footer {
 .cancel-btn:hover {
     background: #ccc;
 }
-.language-switcher {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-left: auto;       /* σπρώχνει τα flags δεξιά */
-  padding-right: 20px;
-}
 
-.lang-flag {
-  width: 28px;
-  height: 20px;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: transform 0.2s ease;
-}
-
-.lang-flag:hover {
-  transform: scale(1.1);
-}
-
-/* Κρύβει Google Translate banner αν υπάρχει */
-.goog-te-banner-frame.skiptranslate,
-.goog-te-gadget {
-  display: none !important;
-}
-
-body {
-  top: 0 !important;
-}
 
 
 

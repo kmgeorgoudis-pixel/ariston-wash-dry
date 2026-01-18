@@ -122,11 +122,7 @@ professional laundry Samos
     <div class="logo">
         <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
         ARISTON <span>Wash & Dry</span>
-        <!-- Language switcher -->
-    <div class="language-switcher">
-        <img src="/templates/images/gr-flag.png" alt="Ελληνικά" onclick="setLanguage('el')" class="lang-flag">
-        <img src="/templates/images/en-flag.png" alt="English" onclick="setLanguage('en')" class="lang-flag">
-    </div>
+        
 </div>
 
     <!-- Google Translate element (κρυφό) -->
@@ -349,44 +345,8 @@ document.getElementById("hamburger-btn").onclick = function() {
         document.getElementById("cookie-banner").style.display = "none";
     };
 </script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    pageLanguage: 'el',
-    includedLanguages: 'el,en',
-    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-    autoDisplay: false
-  }, 'google_translate_element');
-}
-</script>
-<<script type="text/javascript">
-function setLanguage(lang) {
-  if(lang === 'en') {
-    localStorage.setItem("lang", "en"); // θυμάται τη γλώσσα
-    window.location.reload();            // reload
-  } else if(lang === 'el') {
-    localStorage.setItem("lang", "el"); // θυμάται τη γλώσσα
-    window.location.reload();
-  }
-}
 
-// όταν φορτώνει η σελίδα, βλέπουμε τι γλώσσα θέλουμε
-window.addEventListener("load", () => {
-  const lang = localStorage.getItem("lang");
-  if(lang === "en") {
-    // περιμένουμε μέχρι να φορτωθεί το Google Translate combo
-    const waitForCombo = setInterval(() => {
-      const select = document.querySelector('.goog-te-combo');
-      if(select){
-        select.value = 'en';
-        select.dispatchEvent(new Event('change'));
-        clearInterval(waitForCombo); // σταματάμε το loop μόλις βρούμε το combo
-      }
-    }, 200); // ελέγχει κάθε 0.2 δευτ.
-  }
-});
-</script>
+
 
 
 
