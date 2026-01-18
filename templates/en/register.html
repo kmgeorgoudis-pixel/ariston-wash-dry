@@ -182,11 +182,13 @@
         <img src="{{ url_for('static', filename='images/gr-flag.png') }}"
              alt="Ελληνικά" class="flag-icon">
     </a>
-    <a href="{{ url_for('en_register') }}">
+
+    <a href="{{ url_for('register_en') }}">
         <img src="{{ url_for('static', filename='images/en-flag.png') }}"
              alt="English" class="flag-icon">
     </a>
 </div>
+
 
 
         <form action="/en/register" method="POST">
