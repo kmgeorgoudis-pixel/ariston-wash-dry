@@ -1449,7 +1449,8 @@ def admin_bulk_email():
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
 def en_index():
-    return render_template("en/")
+    return render_template("en/index.html")
+
 
 # Αγγλική έκδοση Terms / Όροι Χρήσης
 @app.route("/en/terms")
