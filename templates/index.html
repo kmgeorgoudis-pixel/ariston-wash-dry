@@ -360,7 +360,7 @@ function googleTranslateElementInit() {
   }, 'google_translate_element');
 }
 </script>
-<script type="text/javascript">
+<<script type="text/javascript">
 function setLanguage(lang) {
   if(lang === 'en') {
     localStorage.setItem("lang", "en"); // θυμάται τη γλώσσα
@@ -375,19 +375,19 @@ function setLanguage(lang) {
 window.addEventListener("load", () => {
   const lang = localStorage.getItem("lang");
   if(lang === "en") {
-    // περιμένουμε μέχρι να φορτωθεί το combo
+    // περιμένουμε μέχρι να φορτωθεί το Google Translate combo
     const waitForCombo = setInterval(() => {
       const select = document.querySelector('.goog-te-combo');
       if(select){
         select.value = 'en';
         select.dispatchEvent(new Event('change'));
-        clearInterval(waitForCombo); // σταματάμε το loop
+        clearInterval(waitForCombo); // σταματάμε το loop μόλις βρούμε το combo
       }
-    }, 200); // έλεγχος κάθε 0.2 δευτ.
+    }, 200); // ελέγχει κάθε 0.2 δευτ.
   }
 });
-
 </script>
+
 
 
 
