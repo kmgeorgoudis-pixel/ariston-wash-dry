@@ -1361,7 +1361,7 @@ body, header, nav, .photo-block, .contact, footer {
   transform: scale(1.1);
 }
 
-/* Κρύβει εντελώς το Google Translate banner */
+/* Κρύβει Google Translate banner αν υπάρχει */
 .goog-te-banner-frame.skiptranslate,
 .goog-te-gadget {
   display: none !important;
@@ -1371,9 +1371,6 @@ body {
   top: 0 !important;
 }
 
-html body > div.goog-te-banner-frame.skiptranslate {
-  display: none !important;
-}
 
 
 
