@@ -1875,7 +1875,7 @@ def goodbye_en():
 @app.route("/en/updates-menu")
 @login_required
 def updates_menu_en():
-    return render_template("updates-menu-en.html")
+    return render_template("updates-menu.html")
 @app.route("/en/updates")
 @login_required
 def updates_en():
