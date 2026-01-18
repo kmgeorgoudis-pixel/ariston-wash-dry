@@ -1812,7 +1812,7 @@ def change_password_en():
 @login_required
 def delete_account_en():
     if request.method == "GET":
-        return render_template("delete-account-en.html")
+        return render_template("en/delete-account-en.html")
 
     email = request.form.get("email")
     password = request.form.get("password")
@@ -1875,7 +1875,8 @@ Your data is used solely for the operation of the service and is not shared with
 
 @app.route("/en/goodbye")
 def goodbye_en():
-    return render_template("goodbye-en.html")
+    return render_template("en/goodbye-en.html")
+
 
 
 @app.route("/en/updates-menu-en")
