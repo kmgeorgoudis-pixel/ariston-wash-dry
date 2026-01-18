@@ -1555,7 +1555,7 @@ def login_en():
     # ==========================
 
     # Regular user
-    return redirect("/en/index")
+    return redirect("/en")
 @app.route("/en/register", methods=["GET", "POST"])
 def register_en():
     if request.method == "GET":
