@@ -1450,6 +1450,10 @@ def admin_bulk_email():
 @app.route("/en")
 def en_index():
     return render_template("/en")
+@app.route("/en/index")
+@login_required
+def en_index():
+    return render_template("en/index.html")
 
 
 # Αγγλική έκδοση Terms / Όροι Χρήσης
@@ -1555,7 +1559,7 @@ def login_en():
     # ==========================
 
     # Regular user
-    return redirect("/en")
+    return redirect("/en/index")
 @app.route("/en/register", methods=["GET", "POST"])
 def register_en():
     if request.method == "GET":
