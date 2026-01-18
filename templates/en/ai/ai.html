@@ -6,7 +6,7 @@
   <title>ARISTON AI Concierge</title>
 
   <link rel="icon" href="/favicon.ico">
-  <!-- Σωστή φόρτωση CSS για αγγλικά -->
+  <!-- CSS φορτώνει από τον ίδιο φάκελο -->
   <link rel="stylesheet" href="ai.css">
 </head>
 <body>
@@ -28,7 +28,7 @@
 
     <div class="sidebar-footer">
       <!-- Home button πηγαίνει στην αγγλική αρχική -->
-      <a href="/en" class="exit-btn">← Home</a>
+      <a href="{{ url_for('en_index') }}" class="exit-btn">← Home</a>
     </div>
 
   </aside>
@@ -65,7 +65,7 @@
 
 </div>
 
-<!-- Σωστή φόρτωση JS για αγγλικά -->
+<!-- JS φορτώνει από τον ίδιο φάκελο -->
 <script src="ai.js"></script>
 
 </body>
