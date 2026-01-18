@@ -1455,7 +1455,9 @@ def en_index():
 @app.route("/en/terms")
 def en_terms():
     return render_template("en/terms.html")
-
+@app.route("/en/photos")
+def en_photos():
+    return render_template("en/photos.html")
 # Αγγλική έκδοση Privacy / Πολιτική Απορρήτου
 @app.route("/en/privacy")
 def en_privacy():
