@@ -1004,19 +1004,21 @@ def admin_send_announcements():
         flash("Δεν επιλέχθηκαν χρήστες.", "danger")
         return redirect("/admin/announcements2")
 
-for user in users:
-    announcement = Announcement(
-        user_id=user.id,
-        title=title,
-        description=description
-    )
-    db.session.add(announcement)
-
-db.session.commit()
-
+    # Φέρνουμε τους επιλεγμένους χρήστες
     users = User.query.filter(User.id.in_(selected_ids)).all()
 
-    # 🔥 Background thread
+    # Δημιουργούμε ΜΙΑ ανακοίνωση για κάθε χρήστη
+    for user in users:
+        announcement = Announcement(
+            user_id=user.id,
+            title=title,
+            description=description
+        )
+        db.session.add(announcement)
+
+    db.session.commit()
+
+    # 🔥 Background thread για αποστολή email
     threading.Thread(
         target=send_announcements_background,
         args=(users, title, description),
