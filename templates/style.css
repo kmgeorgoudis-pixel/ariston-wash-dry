@@ -1342,34 +1342,33 @@ body, header, nav, .photo-block, .contact, footer {
 }
 .header-top {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-between; /* Σπρώχνει το Logo αριστερά και τις Σημαίες δεξιά */
+    align-items: center;            /* Τις κρατάει στην ίδια ευθεία (οριζόντια) */
     padding: 10px 20px;
     background: #ffffff;
-    /* Σιγουρευόμαστε ότι ολόκληρο το header πιάνει όλο το πλάτος */
-    width: 100%; 
-    box-sizing: border-box; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.logo {
+    display: flex;
+    align-items: center; /* Ευθυγραμμίζει το εικονίδιο του logo με το κείμενο Ariston */
+    gap: 10px;
 }
 
 .language-switcher {
     display: flex;
     gap: 10px;
-    /* Το margin-left: auto σπρώχνει το στοιχείο δεξιά στο flexbox */
-    margin-left: auto; 
-    /* Αν θέλεις να κολλήσει ακόμα πιο πολύ, μπορείς να μηδενίσεις το δεξί padding αν υπάρχει */
+    margin-left: auto; /* Διπλή ασφάλεια για να μείνουν τέρμα δεξιά */
 }
 
 .flag-icon {
     width: 28px;
     height: 20px;
-    cursor: pointer;
+    display: block; /* Αφαιρεί κενά κάτω από την εικόνα */
     border: 1px solid #ccc;
     border-radius: 4px;
     transition: transform 0.2s;
-}
-
-.flag-icon:hover {
-    transform: scale(1.1);
 }
 
 
