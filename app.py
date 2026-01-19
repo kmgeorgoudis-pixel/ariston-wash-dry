@@ -1004,13 +1004,15 @@ def admin_send_announcements():
         flash("Δεν επιλέχθηκαν χρήστες.", "danger")
         return redirect("/admin/announcements2")
 
+for user in users:
     announcement = Announcement(
-        user_id=None,
+        user_id=user.id,
         title=title,
         description=description
     )
     db.session.add(announcement)
-    db.session.commit()
+
+db.session.commit()
 
     users = User.query.filter(User.id.in_(selected_ids)).all()
 
