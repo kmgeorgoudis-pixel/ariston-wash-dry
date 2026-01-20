@@ -559,6 +559,22 @@ function endGame(won) {
     document.getElementById("game-ui").style.display = "none";
     document.getElementById("gameover-screen").style.display = "flex";
   }
+  // --- SEND SCORE TO BACKEND ---
+const nickname = getNickname();
+
+fetch("/submit_score", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    nickname: nickname,
+    score: score
+  })
+})
+.then(res => res.json())
+.then(data => {
+  console.log("Score saved:", data);
+})
+.catch(err => console.error("Error saving score:", err));
 }
 
 /* -----------------------------------------
