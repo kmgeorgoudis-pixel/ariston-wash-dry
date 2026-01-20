@@ -122,19 +122,37 @@ def load_user(user_id):
 @app.context_processor
 def inject_coming_soon_flag():
     return dict(show_coming_soon=True)
+@app.route("/choose_nickname")
+@login_required
+def choose_nickname():
+    if current_user.nickname:
+        return redirect("/game")
+    return render_template("game.html")
 @app.route("/")
 def home():
     return render_template("index.html")
-@app.route("/check_nickname", methods=["POST"])
-def check_nickname():
+@app.route("/set_nickname", methods=["POST"])
+@login_required
+def set_nickname():
     data = request.get_json()
     nickname = data.get("nickname", "").strip()
 
     if not nickname:
         return {"ok": False, "error": "Empty nickname"}
 
-    exists = Score.query.filter_by(nickname=nickname).first()
-    return {"exists": bool(exists)}
+    # Έλεγχος αν υπάρχει ήδη
+    exists = User.query.filter_by(nickname=nickname).first()
+    if exists:
+        return {"ok": False, "error": "Nickname already taken"}
+
+    # Αν ο χρήστης έχει ήδη nickname → δεν αλλάζει
+    if current_user.nickname:
+        return {"ok": False, "error": "Nickname cannot be changed"}
+
+    current_user.nickname = nickname
+    db.session.commit()
+
+    return {"ok": True}
 @app.route("/submit_score", methods=["POST"])
 def submit_score():
     data = request.get_json()

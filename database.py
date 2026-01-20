@@ -101,6 +101,7 @@ class User(db.Model, UserMixin):
     reset_code = db.Column(db.String(6), nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(120))
+    nickname = db.Column(db.String(50), unique=True)
     
 
 

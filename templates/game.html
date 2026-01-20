@@ -311,7 +311,9 @@
     <p>Προσπάθησε ξανά! / Try again!</p>
     <button onclick="restartGame()">Παίξε Ξανά / Play Again</button>
   </div>
-
+<script>
+    const USER_NICKNAME = "{{ current_user.nickname }}";
+</script>
 <script>
 /* -----------------------------------------
    ΒΑΣΙΚΕΣ ΜΕΤΑΒΛΗΤΕΣ ΠΑΙΧΝΙΔΙΟΥ
@@ -351,7 +353,7 @@ bgAudio.addEventListener("ended", () => {
    NICKNAME SYSTEM
 ----------------------------------------- */
 function getNickname() {
-  return localStorage.getItem("ariston_nickname") || "";
+    return USER_NICKNAME;
 }
 
 function setNickname(nick) {
