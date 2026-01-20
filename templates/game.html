@@ -212,6 +212,25 @@
       justify-content: center;
       z-index: 1000;
     }
+    .home-btn {
+    display: inline-block;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #0055aa, #003d7a);
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-radius: 14px;
+    text-decoration: none;
+    box-shadow: 0 10px 25px rgba(0, 60, 120, 0.35);
+    transition: all 0.25s ease;
+    letter-spacing: 0.5px;
+}
+
+.home-btn:hover {
+    background: linear-gradient(135deg, #0077dd, #0055aa);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 30px rgba(0, 80, 160, 0.45);
+}
   </style>
 
   <link rel="icon" type="image/png" href="images/logo3.png">
@@ -274,6 +293,7 @@
           <span id="top10-icon">🏆</span>
           <span>Top 10 παίκτες</span>
         </a>
+        <a href="/" class="home-btn">🏠 Επιστροφή στην Αρχική/back to home</a>
       </div>
     </div>
   </div>
