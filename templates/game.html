@@ -353,7 +353,7 @@ bgAudio.addEventListener("ended", () => {
    NICKNAME SYSTEM
 ----------------------------------------- */
 function getNickname() {
-    return USER_NICKNAME;
+  return localStorage.getItem("ariston_nickname") || "";
 }
 
 function setNickname(nick) {

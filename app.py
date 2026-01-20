@@ -122,12 +122,7 @@ def load_user(user_id):
 @app.context_processor
 def inject_coming_soon_flag():
     return dict(show_coming_soon=True)
-@app.route("/choose_nickname")
-@login_required
-def choose_nickname():
-    if current_user.nickname:
-        return redirect("/game")
-    return render_template("game.html")
+
 @app.route("/")
 def home():
     return render_template("index.html")
