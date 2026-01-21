@@ -153,6 +153,7 @@ def submit_score():
     data = request.get_json()
     nickname = data.get("nickname", "").strip()
     score = int(data.get("score", 0))
+    time_played = int(data.get("time_played", 0))  # 🔥 ΠΑΙΡΝΟΥΜΕ ΤΟΝ ΧΡΟΝΟ
 
     if not nickname:
         return {"ok": False, "error": "No nickname"}
@@ -160,14 +161,17 @@ def submit_score():
     entry = Score.query.filter_by(nickname=nickname).first()
 
     if entry:
+        # Αν έχει καλύτερο σκορ, ενημερώνουμε και τον χρόνο
         if score > entry.best_score:
             entry.best_score = score
+            entry.time_played = time_played   # 🔥 ΑΠΟΘΗΚΕΥΟΥΜΕ ΤΟΝ ΧΡΟΝΟ
             entry.last_played = datetime.utcnow()
             db.session.commit()
     else:
         new_entry = Score(
             nickname=nickname,
             best_score=score,
+            time_played=time_played,          # 🔥 ΑΠΟΘΗΚΕΥΟΥΜΕ ΤΟΝ ΧΡΟΝΟ
             last_played=datetime.utcnow()
         )
         db.session.add(new_entry)
