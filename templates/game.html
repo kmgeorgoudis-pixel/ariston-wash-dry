@@ -21,18 +21,23 @@
     }
 
     #splash {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      animation: fadeOut 2s ease 2s forwards;
-    }
-    #splash img { width: 200px; }
-    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.8s ease, visibility 0.8s;
+}
+
+.splash-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
 
     #intro-wrapper {
       text-align: center;
@@ -234,9 +239,16 @@
     <link rel="icon" href="/favicon.ico">
   </head>
   <body>
-    <div id="splash"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ariston_logo.svg/512px-Ariston_logo.svg.png"
-
-        alt="Ariston Wash &amp; Dry"> </div>
+    <div id="splash">
+  <div style="text-align: center;">
+    <h1 style="color: #003366; font-family: 'Segoe UI', sans-serif;">ARISTON Wash & Dry Game</h1>
+    <p style="color: #0077cc; font-weight: bold;">(Catch the Stain!)</p>
+    <div id="loading-container" style="width: 300px; height: 20px; background: #e0e0e0; border-radius: 10px; margin: 20px auto; overflow: hidden; border: 1px solid #ccc;">
+      <div id="loading-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0077cc, #004494); transition: width 0.1s linear;"></div>
+    </div>
+    <p id="loading-text" style="font-size: 0.9rem; color: #555;">Loading... 0%</p>
+  </div>
+</div>
     <!-- Εισαγωγή + Ψευδώνυμο + Οδηγίες -->
     <div id="instructions">
       <div id="intro-wrapper">
@@ -692,6 +704,34 @@ window.startGame = startGame;
 window.restartGame = restartGame;
 
 document.addEventListener("DOMContentLoaded", initNickname);
+function startLoading() {
+  const bar = document.getElementById('loading-bar');
+  const text = document.getElementById('loading-text');
+  const splash = document.getElementById('splash');
+  let width = 0;
+  const duration = 5000; // 5 δευτερόλεπτα
+  const intervalTime = 50; // ανανέωση κάθε 50ms
+  const step = 100 / (duration / intervalTime);
+
+  const interval = setInterval(() => {
+    width += step;
+    if (width >= 100) {
+      width = 100;
+      clearInterval(interval);
+      text.innerText = "Ready!";
+      
+      // Κλείσιμο splash screen
+      setTimeout(() => {
+        splash.classList.add('splash-hidden');
+      }, 500);
+    }
+    bar.style.width = width + '%';
+    text.innerText = `Loading... ${Math.round(width)}%`;
+  }, intervalTime);
+}
+
+// Εκκίνηση του loading μόλις φορτώσει η σελίδα
+window.addEventListener('load', startLoading);
 
 </script>
 
