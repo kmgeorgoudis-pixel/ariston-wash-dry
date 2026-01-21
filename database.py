@@ -8,6 +8,7 @@ class Score(db.Model):
     nickname = db.Column(db.String(50), unique=True, nullable=False)
     best_score = db.Column(db.Integer, default=0)
     last_played = db.Column(db.DateTime, default=datetime.utcnow)
+    time_played = db.Column(db.Integer, default=0)
     def __repr__(self):
         return f"<Score {self.nickname} - {self.best_score}>"
 class ContactMessage(db.Model):

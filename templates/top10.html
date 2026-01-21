@@ -125,6 +125,11 @@
                 font-size: 1.1rem;
             }
         }
+        .time {
+    font-weight: 600;
+    color: #005599;
+    margin-left: 15px;
+         }
     </style>
 </head>
 <body>
@@ -136,14 +141,15 @@
     <ul class="leaderboard">
         {% for p in players %}
         <li>
-            <span class="rank">#{{ loop.index }}</span>
-            <span class="nickname">{{ p.nickname }}</span>
-            <span class="score">{{ p.best_score }} πόντοι</span>
-        </li>
+             <span class="rank">#{{ loop.index }}</span>
+             <span class="nickname">{{ p.nickname }}</span>
+             <span class="score">{{ p.best_score }} πόντοι</span>
+             <span class="time">{{ p.time_played }} δευτ.</span>
+    </li>
         {% endfor %}
     </ul>
 
-    <a href="/game" class="back-btn">⬅ Επιστροφή στο Παιχνίδι</a>
+    <a href="/game" class="back-btn">⬅ Επιστροφή στο Παιχνίδι/back to game</a>
 </div>
 
 </body>

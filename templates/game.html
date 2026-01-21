@@ -1,12 +1,11 @@
 
 <!DOCTYPE html>
 <html lang="el">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ariston Wash & Dry Game</title>
-  
-  <style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ariston Wash &amp; Dry Game</title>
+    <style>
       
     body {
       margin: 0;
@@ -232,103 +231,97 @@
     box-shadow: 0 14px 30px rgba(0, 80, 160, 0.45);
 }
   </style>
+    <link rel="icon" type="image/png" href="images/logo3.png">
+  </head>
+  <body>
+    <div id="splash"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ariston_logo.svg/512px-Ariston_logo.svg.png"
 
-  <link rel="icon" type="image/png" href="images/logo3.png">
-</head>
-<body>
+        alt="Ariston Wash &amp; Dry"> </div>
+    <!-- Εισαγωγή + Ψευδώνυμο + Οδηγίες -->
+    <div id="instructions">
+      <div id="intro-wrapper">
+        <h1 id="intro-title">🧼 Ariston Wash &amp; Dry: Πιάσε τον Λεκέ / Catch
+          the Stain!</h1>
+        <p id="intro-subtitle"> Καθάρισε  όσους
+          περισσότερους λεκέδες μπορείς. Clean as many
+          stains as you can. </p>
+        <!-- Ψευδώνυμο -->
+        <div id="nickname-block">
+          <h2>Ψευδώνυμο παίκτη / Player nickname</h2>
+          <p> Πριν ξεκινήσεις, επίλεξε ένα ψευδώνυμο που θα εμφανίζεται στον
+            πίνακα κατάταξης Top 10. Each score is saved with your nickname in
+            the Top 10 leaderboard. </p>
+          <input id="nickname-input" placeholder="Πληκτρολόγησε το ψευδώνυμο σου"
 
-  <div id="splash">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Ariston_logo.svg/512px-Ariston_logo.svg.png" alt="Ariston Wash & Dry" />
-  </div>
-
-  <!-- Εισαγωγή + Ψευδώνυμο + Οδηγίες -->
-  <div id="instructions">
-    <div id="intro-wrapper">
-      <h1 id="intro-title">🧼 Ariston Wash & Dry: Πιάσε τον Λεκέ / Catch the Stain!</h1>
-      <p id="intro-subtitle">
-        Έχεις 2 λεπτά για να καθαρίσεις όσους περισσότερους λεκέδες μπορείς.  
-        You have 2 minutes to clean as many stains as you can.
-      </p>
-
-      <!-- Ψευδώνυμο -->
-      <div id="nickname-block">
-        <h2>Ψευδώνυμο παίκτη / Player nickname</h2>
-        <p>
-          Πριν ξεκινήσεις, επίλεξε ένα ψευδώνυμο που θα εμφανίζεται στον πίνακα κατάταξης Top 10.  
-          Each score is saved with your nickname in the Top 10 leaderboard.
-        </p>
-        <input type="text" id="nickname-input" placeholder="Πληκτρολόγησε το ψευδώνυμο σου" maxlength="20">
-        <div id="nickname-error"></div>
-        <button id="change-nickname-btn" type="button" style="display:none;">
-          Αλλαγή ψευδωνύμου
-        </button>
-      </div>
-
-      <!-- Οδηγίες παιχνιδιού -->
-      <div id="instructions-text">
-        <p>
-          <strong>Πώς παίζεται:</strong><br>
-          Κάθε 5 δευτερόλεπτα εμφανίζονται 6 λεκέδες. Αν ένας λεκές μείνει στην οθόνη για πολλή ώρα χωρίς να τον πατήσεις, το παιχνίδι τελειώνει.
-        </p>
-        <p>
-          <strong>Στόχος:</strong><br>
-          Πάτησε όσο περισσότερους λεκέδες μπορείς μέσα σε 2 λεπτά για να συγκεντρώσεις το υψηλότερο σκορ.
-        </p>
-        <p>
-          <strong>Extra πόντοι:</strong><br>
-          Κατά τη διάρκεια του παιχνιδιού, εμφανίζονται κατά διαστήματα ειδικά bonus αντικείμενα που δίνουν επιπλέον πόντους όταν τα πετυχαίνεις.
-          Μην τα αφήνεις να σου ξεφύγουν!
-        </p>
-        <p>
-          <strong>Leaderboard:</strong><br>
-          Τα καλύτερα σκορ εμφανίζονται στον πίνακα Top 10 μόνο με τα ψευδώνυμα των παικτών.
-        </p>
-      </div>
-
-      <!-- Κουμπιά: Start + Top10 -->
-      <div id="intro-actions">
-        <button id="start-btn" onclick="startGame()">Ξεκίνα / Start</button>
-
-        <a id="top10-btn" href="/top10">
-          <span id="top10-icon">🏆</span>
-          <span>Top 10 παίκτες</span>
-        </a>
-        <a href="/" class="home-btn">🏠 Επιστροφή στην Αρχική/back to home</a>
+            maxlength="20" type="text">
+          <div id="nickname-error"></div>
+          <button id="change-nickname-btn" type="button" style="display:none;">
+            Αλλαγή ψευδωνύμου/change nickname </button> </div>
+        <!-- Οδηγίες παιχνιδιού -->
+        <div id="instructions-text">
+          <p> <strong>Πώς παίζεται/how to play:</strong><br>
+            Κάθε 5 δευτερόλεπτα εμφανίζονται 6 λεκέδες. Αν ένας λεκές μείνει
+            στην οθόνη για πολλή ώρα χωρίς να τον πατήσεις, το παιχνίδι
+            τελειώνει.Six stains appear every 5 seconds. If a stain stays on the screen for too long without being clicked, the game is over. </p>
+          <p> <strong>Στόχος/Goal:</strong><br>
+            Πάτησε όσο περισσότερους λεκέδες μπορείς  για να
+            συγκεντρώσεις το υψηλότερο σκορ.Tap as many stains as possible to get the highest score! </p>
+          <p> <strong>Extra πόντοι/Extra points:</strong><br>
+            Κατά τη διάρκεια του παιχνιδιού, εμφανίζονται κατά διαστήματα ειδικά
+            bonus αντικείμενα που δίνουν επιπλέον πόντους όταν τα πετυχαίνεις.
+            Μην τα αφήνεις να σου ξεφύγουν!Αλλά υπάρχουν και παγίδες!
+            During the game, special bonus items appear periodically, giving you extra points when hit. Don't let them slip away! But watch out there are traps too! </p>
+          <p> <strong>Leaderboard:</strong><br>
+            Τα καλύτερα σκορ εμφανίζονται στον πίνακα Top 10 μόνο με τα
+            ψευδώνυμα των παικτών.The best scores are displayed on the Top 10 leaderboard using only player nicknames. </p>
+        </div>
+        <!-- Κουμπιά: Start + Top10 -->
+        <div id="intro-actions"> <button id="start-btn" onclick="startGame()">Ξεκίνα
+            / Start</button> <a id="top10-btn" href="/top10"> <span id="top10-icon">🏆</span>
+            <span>Top 10 παίκτες/top 10 players</span> </a> <a href="/" class="home-btn">🏠
+            Επιστροφή στην Αρχική/back to home</a> </div>
       </div>
     </div>
-  </div>
-
-  <!-- Game UI -->
-  <div id="game-ui" style="display:none;">
-    <div id="leketes-score">🏆 Score: 0</div>
-    <div id="leketes-timer">⏱️ 2:00</div>
-    <div id="leketes-area"></div>
-  </div>
-
-  <!-- Game Over -->
-  <div id="gameover-screen" style="display:none;">
+    <!-- Game UI -->
+    <div id="game-ui" style="display:none;">
+      <div id="leketes-score">🏆 Score: 0</div>
+      <div id="leketes-timer">⏱️ 2:00</div>
+      <div id="leketes-area"></div>
+    </div>
+    <!-- Game Over -->
+    <div id="gameover-screen" style="display:none;">
     <h2>❌ Game Over / Τέλος Παιχνιδιού</h2>
+    <p id="gameover-score" style="font-size:1.3rem; font-weight:700; margin-bottom:10px;"></p>
+    <p id="gameover-time" style="font-size:1.1rem; font-weight:600; margin-bottom:10px;"></p>
     <p>Προσπάθησε ξανά! / Try again!</p>
     <button onclick="restartGame()">Παίξε Ξανά / Play Again</button>
-  </div>
-<script>
-    const USER_NICKNAME = "{{ current_user.nickname }}";
+</div>
+    <script>
+    const USER_NICKNAME = "";
 </script>
-<script>
+   <script>
+
 /* -----------------------------------------
    ΒΑΣΙΚΕΣ ΜΕΤΑΒΛΗΤΕΣ ΠΑΙΧΝΙΔΙΟΥ
 ----------------------------------------- */
+
 let score = 0;
-let timeLeft = 120;
+
+let timeCount = 0; // 🔥 ΝΕΟ – μετράει προς τα πάνω
+
 let gameInterval;
 let timerInterval;
 let bonusStarInterval;
 let bonusDiamondInterval;
+let xInterval; // 🔥 ΝΕΟ – για το ❌
 let gameRunning = false;
+
+
 
 /* -----------------------------------------
    ΗΧΟΙ
 ----------------------------------------- */
+
 const bgAudio = new Audio("https://media.vocaroo.com/mp3/1e82R0rWcA2w");
 const popAudio = new Audio("https://media.vocaroo.com/mp3/1b3h6zXAKhdo");
 const winAudio = new Audio("https://media.vocaroo.com/mp3/1dmGGEdj376Y");
@@ -349,9 +342,12 @@ bgAudio.addEventListener("ended", () => {
   }
 });
 
+
+
 /* -----------------------------------------
    NICKNAME SYSTEM
 ----------------------------------------- */
+
 function getNickname() {
   return localStorage.getItem("ariston_nickname") || "";
 }
@@ -396,9 +392,12 @@ function validateNickname() {
   return true;
 }
 
+
+
 /* -----------------------------------------
    ΕΝΑΡΞΗ ΠΑΙΧΝΙΔΙΟΥ
 ----------------------------------------- */
+
 function startGame() {
   if (!validateNickname()) return;
 
@@ -407,12 +406,11 @@ function startGame() {
   document.getElementById("gameover-screen").style.display = "none";
 
   score = 0;
-  timeLeft = 120;
+  timeCount = 0; // 🔥 reset
   gameRunning = true;
 
   document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
-  document.getElementById("leketes-timer").innerText = `⏱️ 2:00`;
-  document.getElementById("leketes-area").className = "";
+  document.getElementById("leketes-timer").innerText = `⏱️ 0`;
 
   try {
     bgAudio.currentTime = 0;
@@ -431,11 +429,17 @@ function startGame() {
   setTimeout(() => {
     bonusDiamondInterval = setInterval(spawnDiamond, 20000);
   }, 60000);
+
+  // ❌ κάθε 10 δευτερόλεπτα
+  xInterval = setInterval(spawnX, 10000); // 🔥 ΝΕΟ
 }
+
+
 
 /* -----------------------------------------
    ΣΠΑWN ΛΕΚΕΔΩΝ
 ----------------------------------------- */
+
 function spawnBatch() {
   for (let i = 0; i < 6; i++) {
     spawnLekes();
@@ -465,16 +469,18 @@ function spawnLekes() {
   }, 5500);
 }
 
+
+
 /* -----------------------------------------
    ⭐ BONUS STAR (+25)
 ----------------------------------------- */
+
 function spawnStar() {
   if (!gameRunning) return;
 
   const star = document.createElement("div");
-  // Χρησιμοποιούμε leke για το animation, αλλά καθαρίζουμε το background
   star.className = "leke";
-  star.style.backgroundImage = "none"; 
+  star.style.backgroundImage = "none";
   star.style.backgroundColor = "transparent";
   star.style.display = "flex";
   star.style.alignItems = "center";
@@ -485,9 +491,8 @@ function spawnStar() {
   star.style.left = Math.random() * 90 + "%";
   star.style.top = "-80px";
 
-  // Χρήση mousedown αντί για onclick για πιο γρήγορη απόκριση
   star.onmousedown = (e) => {
-    e.stopPropagation(); // Αποφυγή πολλαπλών κλικ
+    e.stopPropagation();
     score += 25;
     document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
     bonusAudio.currentTime = 0;
@@ -502,9 +507,12 @@ function spawnStar() {
   }, 5400);
 }
 
+
+
 /* -----------------------------------------
    💎 BONUS DIAMOND (+50)
 ----------------------------------------- */
+
 function spawnDiamond() {
   if (!gameRunning) return;
 
@@ -537,29 +545,67 @@ function spawnDiamond() {
   }, 5400);
 }
 
-/* -----------------------------------------
-   TIMER
------------------------------------------ */
-function updateTimer() {
-  timeLeft--;
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  document.getElementById("leketes-timer").innerText =
-    `⏱️ ${minutes}:${seconds.toString().padStart(2, "0")}`;
 
-  if (timeLeft <= 0) {
-    endGame(true);
-  }
+
+/* -----------------------------------------
+   ❌ BONUS NEGATIVE (-20)
+----------------------------------------- */
+
+function spawnX() {
+  if (!gameRunning) return;
+
+  const x = document.createElement("div");
+  x.className = "leke";
+  x.style.backgroundImage = "none";
+  x.style.backgroundColor = "transparent";
+  x.style.display = "flex";
+  x.style.alignItems = "center";
+  x.style.justifyContent = "center";
+  x.style.fontSize = "50px";
+  x.innerHTML = "❌";
+
+  x.style.left = Math.random() * 90 + "%";
+  x.style.top = "-80px";
+
+  x.onmousedown = (e) => {
+    e.stopPropagation();
+    score -= 20;
+    document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
+    x.remove();
+  };
+
+  document.getElementById("leketes-area").appendChild(x);
+
+  setTimeout(() => {
+    if (document.body.contains(x)) x.remove();
+  }, 5400);
 }
+
+
+
+/* -----------------------------------------
+   TIMER – ΜΕΤΡΑΕΙ ΠΡΟΣ ΤΑ ΠΑΝΩ 🔥
+----------------------------------------- */
+
+function updateTimer() {
+  timeCount++; // 🔥 ανεβαίνει
+
+  document.getElementById("leketes-timer").innerText =
+    `⏱️ ${timeCount}`;
+}
+
+
 
 /* -----------------------------------------
    GAME END
 ----------------------------------------- */
+
 function endGame(won) {
   clearInterval(gameInterval);
   clearInterval(timerInterval);
   clearInterval(bonusStarInterval);
   clearInterval(bonusDiamondInterval);
+  clearInterval(xInterval);
 
   gameRunning = false;
   bgAudio.pause();
@@ -579,37 +625,45 @@ function endGame(won) {
     area.classList.add("game-over");
     failAudio.play();
     document.getElementById("game-ui").style.display = "none";
+    document.getElementById("gameover-score").innerText = `Τελικό Σκορ: ${score} πόντοι`;
+    document.getElementById("gameover-time").innerText = `Χρόνος παιχνιδιού: ${timeCount} δευτερόλεπτα`;
     document.getElementById("gameover-screen").style.display = "flex";
   }
-  // --- SEND SCORE TO BACKEND ---
-const nickname = getNickname();
 
-fetch("/submit_score", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    nickname: nickname,
-    score: score
+  const nickname = getNickname();
+
+  fetch("/submit_score", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      nickname: nickname,
+      score: score
+    })
   })
-})
-.then(res => res.json())
-.then(data => {
-  console.log("Score saved:", data);
-})
-.catch(err => console.error("Error saving score:", err));
+  .then(res => res.json())
+  .then(data => {
+    console.log("Score saved:", data);
+  })
+  .catch(err => console.error("Error saving score:", err));
 }
+
+
 
 /* -----------------------------------------
    RESTART
 ----------------------------------------- */
+
 function restartGame() {
   document.getElementById("gameover-screen").style.display = "none";
   document.getElementById("instructions").style.display = "block";
 }
 
+
+
 /* -----------------------------------------
    CONFETTI
 ----------------------------------------- */
+
 function confetti() {
   for (let i = 0; i < 100; i++) {
     const dot = document.createElement("div");
@@ -627,13 +681,18 @@ function confetti() {
   }
 }
 
+
+
 /* -----------------------------------------
    INIT
 ----------------------------------------- */
+
 window.startGame = startGame;
 window.restartGame = restartGame;
 
 document.addEventListener("DOMContentLoaded", initNickname);
+
 </script>
-</body>
+
+  </body>
 </html>
