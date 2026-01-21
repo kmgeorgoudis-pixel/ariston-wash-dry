@@ -310,3 +310,29 @@ html, body {
     border-color: var(--accent-color);
     transform: translateY(-2px);
 }
+/* Language Switcher */
+.language-switcher {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 10px 12px;
+}
+
+.language-switcher a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-switcher img {
+  width: 26px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.85;
+}
+
+.language-switcher img:hover {
+  transform: scale(1.15);
+  opacity: 1;
+}
