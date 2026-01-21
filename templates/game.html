@@ -637,7 +637,8 @@ function endGame(won) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       nickname: nickname,
-      score: score
+      score: score,
+      time_played: timeCount   // 🔥 ΣΤΕΛΝΟΥΜΕ ΤΟΝ ΧΡΟΝΟ
     })
   })
   .then(res => res.json())
