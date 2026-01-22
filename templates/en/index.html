@@ -96,6 +96,13 @@
             font-weight: bold;
         }
 
+        /* Pulse Animation για το κουμπί */
+        @keyframes pulse-btn {
+            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 15px 45px rgba(0, 112, 255, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4); }
+        }
+
         .promo-btn {
             display: block;
             background: #0070ff;
@@ -107,13 +114,13 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4);
+            animation: pulse-btn 2.5s infinite ease-in-out; /* Εδώ μπήκε το animation */
         }
 
         .promo-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 112, 255, 0.6);
             background: #0084ff;
+            animation: none; /* Σταματάει το pulse όταν το ποντίκι είναι από πάνω */
         }
 
         .promo-close {
@@ -159,7 +166,7 @@
             <li>Exclusive Member Coupons</li>
             <li>Usage History & Analytics</li>
             <li>Ariston AI Assistant Access</li>
-            <li>Ariston Game Rewards</li>
+            <li>Access To Ariston Game </li>
             <li>VIP Priority Updates</li>
         </ul>
 
@@ -283,20 +290,19 @@
             document.addEventListener("click", () => dropdown.classList.remove("open"));
         }
 
-        // --- Promo Overlay Logic with Session Storage ---
+        // --- Promo Overlay Logic ---
         const overlay = document.getElementById("promo-overlay");
         const closeBtn = document.getElementById("promo-close-btn");
 
         if (overlay) {
-            if (!sessionStorage.getItem("promoDismissed")) {
-                setTimeout(function () {
-                    overlay.classList.add("show");
-                }, 10000);
-            }
+            // Εμφανίζεται πάντα μετά από 10 δευτερόλεπτα σε κάθε refresh
+            setTimeout(function () {
+                overlay.classList.add("show");
+            }, 10000);
 
             closeBtn.addEventListener("click", function () {
                 overlay.classList.remove("show");
-                sessionStorage.setItem("promoDismissed", "true");
+                // Αφαιρέσαμε το sessionStorage.setItem ώστε να ξαναβγαίνει στο επόμενο refresh
             });
         }
     });

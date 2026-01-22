@@ -111,6 +111,136 @@ professional laundry Samos
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+        /* --- Premium Promo Overlay Style (Greek Version) --- */
+        .promo-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(1, 4, 9, 0.85); 
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .promo-overlay.show {
+            display: flex;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .promo-modal {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px 40px;
+            border-radius: 40px;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 112, 255, 0.1);
+            position: relative;
+            color: white;
+        }
+
+        .promo-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .promo-logo span {
+            color: #0070ff;
+            font-style: italic;
+            text-shadow: 0 0 15px rgba(0, 112, 255, 0.5);
+        }
+
+        .promo-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+
+        .promo-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .promo-benefits {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 0 auto 35px auto;
+            max-width: 450px;
+        }
+
+        .promo-benefits li {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .promo-benefits li::before {
+            content: '✓';
+            color: #0070ff;
+            font-weight: bold;
+        }
+
+        /* Pulse Animation για το κουμπί */
+        @keyframes pulse-btn {
+            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 15px 45px rgba(0, 112, 255, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4); }
+        }
+
+        .promo-btn {
+            display: block;
+            background: #0070ff;
+            color: white !important;
+            padding: 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            animation: pulse-btn 2.5s infinite ease-in-out;
+        }
+
+        .promo-btn:hover {
+            transform: translateY(-5px);
+            background: #0084ff;
+            animation: none;
+        }
+
+        .promo-close {
+            display: block;
+            margin: 20px auto 0;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            text-decoration: underline;
+        }
+
+        .promo-close:hover { color: white; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
 
@@ -259,45 +389,69 @@ document.addEventListener("DOMContentLoaded", () => {
             ARISTON <span>Members</span>
         </div>
 
-        <h2 class="promo-title">Γίνε μέλος της ARISTON Wash & Dry</h2>
+        <h2 class="promo-title">Ζήστε την Εμπειρία ARISTON</h2>
         <p class="promo-text">
-            Απόκτησε πρόσβαση σε αποκλειστικά κουπόνια, προσφορές για συχνά μέλη
-            και άμεση ενημέρωση για όλες τις νέες υπηρεσίες.
+            Γίνετε μέλος της αποκλειστικής μας κοινότητας και αναβαθμίστε την καθημερινή φροντίδα των ρούχων σας.
         </p>
 
         <ul class="promo-benefits">
-            <li>• Προσωπικά κουπόνια και ειδικές εκπτώσεις</li>
-            <li>• Ιστορικό χρήσης & ενημερώσεων σε ένα σημείο</li>
-            <li>• Γρηγορότερη εξυπηρέτηση και προσαρμοσμένες προτάσεις</li>
-            <li>• Αποκλειστική πρόσβαση στο παιχνίδι Ariston Wash & Dry</li>
-            <li>• Πρόσβαση στον επίσημο ARISTON AI Assistant για άμεσες απαντήσεις</li>
+            <li>Αποκλειστικά Κουπόνια & Εκπτώσεις</li>
+            <li>Ιστορικό Χρήσης & Αναλύσεις</li>
+            <li>Πρόσβαση στον ARISTON AI Assistant</li>
+            <li>Αποκλειστική πρόσβαση στο παιχνίδι Ariston Wash & Dry</li>
+            <li>Προτεραιότητα σε Νέες Υπηρεσίες</li>
         </ul>
 
         <a href="/auth_choice" class="promo-btn">Εγγραφή / Σύνδεση</a>
 
-        <button class="promo-close" id="promo-close-btn">Δεν επιθυμώ τώρα</button>
+        <button class="promo-close" id="promo-close-btn">Συνεχεια ως επισκεπτης</button>
     </div>
 </div>
 {% endif %}
 {% if not current_user.is_authenticated %}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", () => {
+        // Hamburger Menu
+        document.getElementById("hamburger-btn").onclick = function() {
+            document.getElementById("nav-menu").classList.toggle("active");
+        };
+
+        // User Dropdown
+        const avatar = document.querySelector(".user-avatar");
+        const dropdown = document.querySelector(".user-dropdown");
+        if (avatar) {
+            avatar.addEventListener("click", (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle("open-dropdown"); // Χρησιμοποίησε κλάση στο CSS σου για display:block
+            });
+        }
+
+        // --- Promo Overlay Logic (Every Refresh) ---
         const overlay = document.getElementById("promo-overlay");
         const closeBtn = document.getElementById("promo-close-btn");
-
-        // Εμφάνιση μετά από 10 δευτερόλεπτα
-        setTimeout(function () {
-            if (overlay) {
+        if (overlay) {
+            setTimeout(() => {
                 overlay.classList.add("show");
-            }
-        }, 10000);
+            }, 10000);
 
-        // Κλείσιμο με το κουμπί "Δεν επιθυμώ τώρα"
-        if (closeBtn) {
-            closeBtn.addEventListener("click", function () {
+            closeBtn.addEventListener("click", () => {
                 overlay.classList.remove("show");
             });
         }
+
+        // --- Cookie Logic ---
+        const banner = document.getElementById("cookie-banner");
+        if (!document.cookie.includes("cookie_consent")) {
+            banner.style.display = "block";
+        }
+        document.getElementById("accept-cookies").onclick = () => {
+            document.cookie = "cookie_consent=accepted; max-age=" + 365*24*60*60 + "; path=/";
+            banner.style.display = "none";
+        };
+        document.getElementById("reject-cookies").onclick = () => {
+            document.cookie = "cookie_consent=rejected; max-age=" + 365*24*60*60 + "; path=/";
+            banner.style.display = "none";
+        };
     });
 </script>
 {% endif %}
