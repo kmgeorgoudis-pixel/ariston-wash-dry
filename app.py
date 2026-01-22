@@ -1386,6 +1386,7 @@ def change_password():
         return redirect("/change-password")
 
     return render_template("change-password.html")
+
 ######APOSTOLHMAIL####
 import threading
 import time
@@ -1466,6 +1467,9 @@ def admin_bulk_email():
 
     users = User.query.all()
     return render_template("admin/bulk-email.html", users=users, active_page="bulk_email")
+@app.route("/auth")
+def auth_choice():
+    return render_template("auth_choice.html")
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
@@ -1475,6 +1479,10 @@ def en_index():
 @login_required
 def home_en_index():
     return render_template("en/index.html")
+@app.route("/en/auth")
+def auth_choice_en():
+    return render_template("en/auth_choice_en.html")
+
 
 
 # Αγγλική έκδοση Terms / Όροι Χρήσης

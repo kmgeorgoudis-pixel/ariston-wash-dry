@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ariston Wash & Dry | Ultra Premium</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="icon" href="/favicon.ico">
+
+    <style>
+        :root {
+            --accent-blue: #0070ff;
+            --bright-blue: #00d4ff;
+            --deep-ocean: #010409;
+            --pure-white: #ffffff;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--deep-ocean);
+            color: white;
+            overflow: hidden;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
+
+        .hero {
+            position: relative;
+            width: 100%; height: 100vh;
+            background: linear-gradient(rgba(1, 4, 9, 0.4), rgba(1, 4, 9, 0.9)), 
+                        url('https://aristonwashdry.gr/templates/images/1new.png') center/cover no-repeat;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2;
+        }
+
+        .premium-card {
+            position: relative;
+            text-align: center;
+            backdrop-filter: blur(30px);
+            background: rgba(1, 4, 9, 0.85);
+            padding: 60px 50px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+            max-width: 600px;
+            width: 90%;
+            z-index: 5;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(38px, 7vw, 60px);
+            margin-bottom: 10px;
+        }
+
+        .title-accent {
+            color: var(--accent-blue);
+            display: block;
+            font-style: italic;
+            text-shadow: 0 0 20px rgba(0, 112, 255, 0.5);
+        }
+
+        h2 {
+            font-weight: 400;
+            font-size: 11px;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            margin-bottom: 45px;
+            color: var(--bright-blue);
+        }
+
+        .btn-wrapper {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn-premium {
+            flex: 1;
+            max-width: 200px;
+            padding: 22px 0;
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            text-align: center;
+        }
+
+        .btn-reg {
+            background: var(--accent-blue);
+            color: white;
+            box-shadow: 0 15px 35px rgba(0, 112, 255, 0.5);
+        }
+
+        .btn-log {
+            background: white;
+            color: var(--deep-ocean);
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-8px);
+        }
+
+        .footer-text {
+            position: absolute;
+            bottom: 30px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            opacity: 0.5;
+            text-transform: uppercase;
+        }
+        /* --- BACK HOME BUTTON --- */
+.back-home-btn {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    opacity: 0; /* Ξεκινάει κρυφό για το animation */
+    transform: translateX(-20px);
+}
+
+.back-home-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--bright-blue);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    transform: translateX(0) scale(1.05);
+}
+
+.back-home-btn .arrow {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.back-home-btn:hover .arrow {
+    transform: translateX(-5px);
+}
+
+/* Mobile προσαρμογή */
+@media (max-width: 768px) {
+    .back-home-btn {
+        top: 20px;
+        left: 20px;
+        padding: 10px 15px;
+    }
+}
+    </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+<a href="https://aristonwashdry.gr/en" class="back-home-btn">
+    <span class="arrow">←</span> 
+    <span class="text">home</span>
+</a>
+<section class="hero">
+    <div class="premium-card" id="card">
+        <h2>Luxury Redefined</h2>
+        <h1>Ariston <span class="title-accent">Wash & Dry</span></h1>
+
+        <div class="btn-wrapper">
+            <a href="/en/register" class="btn-premium btn-reg">Register</a>
+            <a href="/en/login" class="btn-premium btn-log">Login</a>
+        </div>
+    </div>
+
+    <div class="footer-text">The Ariston Experience</div>
+</section>
+
+<script>
+    particlesJS("particles-js", {
+        particles: {
+            number: { value: 50 },
+            color: { value: ["#0070ff", "#ffffff"] },
+            opacity: { value: 0.3 },
+            size: { value: 2 },
+            line_linked: { enable: true, distance: 150, color: "#0070ff", opacity: 0.1 },
+            move: { enable: true, speed: 1 }
+        }
+    });
+
+    window.onload = () => {
+    // Animation για την κάρτα (το έχεις ήδη)
+    gsap.to("#card", {
+        duration: 1.2,
+        opacity: 1,
+        y: 0,
+        ease: "power4.out"
+    });
+
+    // ΝΕΟ: Animation για το κουμπί επιστροφής
+    gsap.to(".back-home-btn", {
+        duration: 1,
+        opacity: 1,
+        x: 0,
+        delay: 0.5, // Εμφανίζεται λίγο μετά την κάρτα
+        ease: "power3.out"
+    });
+};
+</script>
+
+</body>
+</html>
