@@ -6,79 +6,118 @@
 
     <title>ARISTON Wash & Dry | Self Service Laundry in Samos</title>
 
-    <!-- English SEO -->
     <meta name="description" content="Ariston Wash & Dry in Samos – modern self-service laundry. Fast, affordable washing & drying. Ideal for locals, tourists and Airbnb hosts.">
     <meta name="keywords" content="laundry Samos, self service laundry Samos, laundromat Samos, washing machines Samos, dryers Samos, coin laundry Samos, Ariston Wash & Dry">
     <meta name="author" content="Konstantinos Georgoudis">
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <style>
+        /* Σύντομο CSS για το Promo Overlay αν δεν υπάρχει στο style.css */
+        .promo-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .promo-overlay.show { display: flex; }
+        .promo-modal {
+            background: #010409; border: 1px solid rgba(255,255,255,0.1);
+            padding: 40px; border-radius: 30px; text-align: center; max-width: 500px; color: white;
+        }
+        .promo-logo { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+        .promo-logo span { color: #0070ff; }
+        .promo-benefits { list-style: none; padding: 0; text-align: left; margin: 20px 0; font-size: 14px; }
+        .promo-btn {
+            display: block; background: #0070ff; color: white; padding: 15px;
+            border-radius: 12px; text-decoration: none; font-weight: bold; margin-bottom: 10px;
+        }
+        .promo-close {
+            background: transparent; border: none; color: #888; cursor: pointer; text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
 
-<header>
-
-<div class="header-top">
-    <div class="logo">
-        <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
-        ARISTON <span>Wash & Dry</span>
-    </div> 
-
-    <div class="language-switcher">
-        <a href="{{ url_for('home') }}">
-            <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
-        </a>
-
-        <a href="{{ url_for('en_index') }}">
-            <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
-        </a>
-    </div>
-</div>
-
-
-
-
-</div>
-    </div>
-</div>
-
-<div class="store-notice">
-    OUR STORE IS NOT OPEN YET — COMING SOON!
-</div>
-
-<nav class="main-nav">
-
-    <div class="hamburger" id="hamburger-btn">☰</div>
-
-    <div class="nav-links" id="nav-menu">
-        <a href="/en">Home</a>
-        <a href="/en/pricing">Pricing</a>
-        <a href="/en/photos">Photos</a>
-        <a href="/en/special-services">Special Services</a>
-        <a href="/en/reviews">Reviews</a>
-        <a href="/en/contact">Contact</a>
-
-        {% if current_user.is_authenticated %}
-        <div class="user-menu">
-            <div class="user-avatar">{{ current_user.fullname[0] }}</div>
-            <span class="user-hint">Member options</span>
-
-            <div class="user-dropdown">
-                <a href="/en/settings-menu">Settings</a>
-                <a href="/en/updates-menu-en">Updates</a>
-                <a href="/en/ai" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
-
-                <a href="/game">ARISTON Game</a>
-                <a href="/logout" class="logout">Logout</a>
-            </div>
+{% if not current_user.is_authenticated %}
+<div id="promo-overlay" class="promo-overlay">
+    <div class="promo-modal">
+        <div class="promo-logo">
+            ARISTON <span>Members</span>
         </div>
-        {% else %}
-        <a href="/en/auth_choice_en" class="nav-btn">Register / Login</a>
-        {% endif %}
-    </div>
-</nav>
 
+        <h2 class="promo-title">Join ARISTON Wash & Dry</h2>
+        <p class="promo-text">
+            Get access to exclusive coupons, loyalty rewards 
+            and stay updated on all our new premium services.
+        </p>
+
+        <ul class="promo-benefits">
+            <li>• Personal coupons and special discounts</li>
+            <li>• Usage history & status updates in one place</li>
+            <li>• Faster service and personalized suggestions</li>
+            <li>• Exclusive access to the Ariston Wash & Dry Game</li>
+            <li>• Access to the official ARISTON AI Assistant for instant help</li>
+        </ul>
+
+        <a href="/en/auth_choice_en" class="promo-btn">Sign Up / Login</a>
+
+        <button class="promo-close" id="promo-close-btn">Not now</button>
+    </div>
+</div>
+{% endif %}
+
+<header>
+    <div class="header-top">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+            ARISTON <span>Wash & Dry</span>
+        </div> 
+
+        <div class="language-switcher">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
+            </a>
+            <a href="{{ url_for('en_index') }}">
+                <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+            </a>
+        </div>
+    </div>
+
+    <div class="store-notice">
+        OUR STORE IS NOT OPEN YET — COMING SOON!
+    </div>
+
+    <nav class="main-nav">
+        <div class="hamburger" id="hamburger-btn">☰</div>
+
+        <div class="nav-links" id="nav-menu">
+            <a href="/en">Home</a>
+            <a href="/en/pricing">Pricing</a>
+            <a href="/en/photos">Photos</a>
+            <a href="/en/special-services">Special Services</a>
+            <a href="/en/reviews">Reviews</a>
+            <a href="/en/contact">Contact</a>
+
+            {% if current_user.is_authenticated %}
+            <div class="user-menu">
+                <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+                <span class="user-hint">Member options</span>
+
+                <div class="user-dropdown">
+                    <a href="/en/settings-menu">Settings</a>
+                    <a href="/en/updates-menu-en">Updates</a>
+                    <a href="/en/ai" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="/game">ARISTON Game</a>
+                    <a href="/logout" class="logout">Logout</a>
+                </div>
+            </div>
+            {% else %}
+            <a href="/en/auth_choice_en" class="nav-btn">Register / Login</a>
+            {% endif %}
+        </div>
+    </nav>
 </header>
 
 <section class="hero">
@@ -124,21 +163,42 @@
 </footer>
 
 <script>
-document.getElementById("hamburger-btn").onclick = function() {
-    document.getElementById("nav-menu").classList.toggle("active");
-};
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const avatar = document.querySelector(".user-avatar");
-    const dropdown = document.querySelector(".user-dropdown");
+    // Mobile Menu Toggle
+    document.getElementById("hamburger-btn").onclick = function() {
+        document.getElementById("nav-menu").classList.toggle("active");
+    };
 
-    if (avatar && dropdown) {
-        avatar.addEventListener("click", () => {
-            dropdown.classList.toggle("open");
-        });
-    }
-});
+    // User Dropdown Toggle
+    document.addEventListener("DOMContentLoaded", () => {
+        const avatar = document.querySelector(".user-avatar");
+        const dropdown = document.querySelector(".user-dropdown");
+
+        if (avatar && dropdown) {
+            avatar.addEventListener("click", (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle("open");
+            });
+            document.addEventListener("click", () => dropdown.classList.remove("open"));
+        }
+
+        // --- Promo Overlay Logic with Session Storage ---
+        const overlay = document.getElementById("promo-overlay");
+        const closeBtn = document.getElementById("promo-close-btn");
+
+        if (overlay) {
+            // Αν ο χρήστης δεν το έχει κλείσει σε αυτό το session
+            if (!sessionStorage.getItem("promoDismissed")) {
+                setTimeout(function () {
+                    overlay.classList.add("show");
+                }, 10000);
+            }
+
+            closeBtn.addEventListener("click", function () {
+                overlay.classList.remove("show");
+                sessionStorage.setItem("promoDismissed", "true");
+            });
+        }
+    });
 </script>
 
 </body>
