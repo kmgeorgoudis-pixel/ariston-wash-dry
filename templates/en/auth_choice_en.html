@@ -196,19 +196,21 @@
     <div class="footer-text">The Ariston Experience</div>
 </section>
 
-<script>
-    particlesJS("particles-js", {
-        particles: {
-            number: { value: 50 },
-            color: { value: ["#0070ff", "#ffffff"] },
-            opacity: { value: 0.3 },
-            size: { value: 2 },
-            line_linked: { enable: true, distance: 150, color: "#0070ff", opacity: 0.1 },
-            move: { enable: true, speed: 1 }
-        }
-    });
+  <script>
+        // Particles με μπλε τόνους για βάθος
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 50 },
+                "color": { "value": ["#0070ff", "#ffffff"] },
+                "opacity": { "value": 0.3 },
+                "size": { "value": 2 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#0070ff", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 1 }
+            }
+        });
 
-    window.onload = () => {
+        // GSAP Είσοδος
+        window.onload = () => {
     // Animation για την κάρτα (το έχεις ήδη)
     gsap.to("#card", {
         duration: 1.2,
@@ -226,7 +228,20 @@
         ease: "power3.out"
     });
 };
-</script>
+
+        // 3D Tilt Effect - Κάνει το UI να φαίνεται ακριβό
+        const card = document.getElementById("card");
+        document.addEventListener("mousemove", (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 45;
+            const y = (window.innerHeight / 2 - e.pageY) / 45;
+            gsap.to(card, {
+                rotationY: x,
+                rotationX: -y,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        });
+    </script>
 
 </body>
 </html>
