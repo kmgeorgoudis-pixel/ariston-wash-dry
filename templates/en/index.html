@@ -227,6 +227,28 @@
             {% endif %}
         </div>
     </nav>
+{% if current_user.is_authenticated %}
+<div class="welcome-banner">
+    <div class="welcome-accent">
+        {{ current_user.fullname[0]|upper }}
+    </div>
+
+    <div>
+        <div class="welcome-text-main">
+            Welcome back, {{ current_user.fullname }} 👋
+        </div>
+        <div class="welcome-text-sub">
+            We're happy to have you with us in the world of Ariston Wash & Dry.
+        </div>
+    </div>
+
+    <div class="welcome-pill">
+        <div class="welcome-pill-dot"></div>
+        <span>Connected member</span>
+    </div>
+</div>
+{% endif %}
+
 </header>
 
 <section class="hero">
@@ -307,6 +329,18 @@
         }
     });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const banner = document.querySelector(".welcome-banner");
+    if (banner) {
+        setTimeout(() => {
+            banner.style.animation = "bannerFadeOut 0.7s ease forwards";
+            setTimeout(() => banner.remove(), 700);
+        }, 7000); // 7 δευτερόλεπτα
+    }
+});
+</script>
+
 
 </body>
 </html>
