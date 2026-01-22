@@ -14,26 +14,129 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     
     <style>
-        /* Σύντομο CSS για το Promo Overlay αν δεν υπάρχει στο style.css */
+        /* --- Premium Promo Overlay Style --- */
         .promo-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: center; z-index: 1000;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(1, 4, 9, 0.85); 
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
         }
-        .promo-overlay.show { display: flex; }
+
+        .promo-overlay.show {
+            display: flex;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
         .promo-modal {
-            background: #010409; border: 1px solid rgba(255,255,255,0.1);
-            padding: 40px; border-radius: 30px; text-align: center; max-width: 500px; color: white;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px 40px;
+            border-radius: 40px;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 
+                        0 0 40px rgba(0, 112, 255, 0.1);
+            position: relative;
+            color: white;
         }
-        .promo-logo { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-        .promo-logo span { color: #0070ff; }
-        .promo-benefits { list-style: none; padding: 0; text-align: left; margin: 20px 0; font-size: 14px; }
+
+        .promo-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .promo-logo span {
+            color: #0070ff;
+            font-style: italic;
+            text-shadow: 0 0 15px rgba(0, 112, 255, 0.5);
+        }
+
+        .promo-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+
+        .promo-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .promo-benefits {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 0 auto 35px auto;
+            max-width: 400px;
+        }
+
+        .promo-benefits li {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .promo-benefits li::before {
+            content: '✓';
+            color: #0070ff;
+            font-weight: bold;
+        }
+
         .promo-btn {
-            display: block; background: #0070ff; color: white; padding: 15px;
-            border-radius: 12px; text-decoration: none; font-weight: bold; margin-bottom: 10px;
+            display: block;
+            background: #0070ff;
+            color: white !important;
+            padding: 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4);
         }
+
+        .promo-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 112, 255, 0.6);
+            background: #0084ff;
+        }
+
         .promo-close {
-            background: transparent; border: none; color: #888; cursor: pointer; text-decoration: underline;
+            display: block;
+            margin: 20px auto 0;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            text-decoration: underline;
+        }
+
+        .promo-close:hover {
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
@@ -47,23 +150,22 @@
             ARISTON <span>Members</span>
         </div>
 
-        <h2 class="promo-title">Join ARISTON Wash & Dry</h2>
+        <h2 class="promo-title">Experience the Ariston Privilege</h2>
         <p class="promo-text">
-            Get access to exclusive coupons, loyalty rewards 
-            and stay updated on all our new premium services.
+            Join our exclusive community and transform your laundry routine into a premium experience.
         </p>
 
         <ul class="promo-benefits">
-            <li>• Personal coupons and special discounts</li>
-            <li>• Usage history & status updates in one place</li>
-            <li>• Faster service and personalized suggestions</li>
-            <li>• Exclusive access to the Ariston Wash & Dry Game</li>
-            <li>• Access to the official ARISTON AI Assistant for instant help</li>
+            <li>Exclusive Member Coupons</li>
+            <li>Usage History & Analytics</li>
+            <li>Ariston AI Assistant Access</li>
+            <li>Ariston Game Rewards</li>
+            <li>VIP Priority Updates</li>
         </ul>
 
         <a href="/en/auth_choice_en" class="promo-btn">Sign Up / Login</a>
 
-        <button class="promo-close" id="promo-close-btn">Not now</button>
+        <button class="promo-close" id="promo-close-btn">Continue as Guest</button>
     </div>
 </div>
 {% endif %}
@@ -168,7 +270,7 @@
         document.getElementById("nav-menu").classList.toggle("active");
     };
 
-    // User Dropdown Toggle
+    // User Dropdown Toggle & Overlay Logic
     document.addEventListener("DOMContentLoaded", () => {
         const avatar = document.querySelector(".user-avatar");
         const dropdown = document.querySelector(".user-dropdown");
@@ -186,7 +288,6 @@
         const closeBtn = document.getElementById("promo-close-btn");
 
         if (overlay) {
-            // Αν ο χρήστης δεν το έχει κλείσει σε αυτό το session
             if (!sessionStorage.getItem("promoDismissed")) {
                 setTimeout(function () {
                     overlay.classList.add("show");
