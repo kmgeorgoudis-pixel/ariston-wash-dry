@@ -1467,7 +1467,7 @@ def admin_bulk_email():
 
     users = User.query.all()
     return render_template("admin/bulk-email.html", users=users, active_page="bulk_email")
-@app.route("/auth")
+@app.route("/auth_choice")
 def auth_choice():
     return render_template("auth_choice.html")
 #####AGGLIKA####
@@ -1479,7 +1479,7 @@ def en_index():
 @login_required
 def home_en_index():
     return render_template("en/index.html")
-@app.route("/en/auth")
+@app.route("/en/auth_choice_en")
 def auth_choice_en():
     return render_template("en/auth_choice_en.html")
 
