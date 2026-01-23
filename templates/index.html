@@ -554,40 +554,31 @@ function createBubble() {
 
     const bubble = document.createElement('div');
     bubble.classList.add('bubble');
+    bubble.textContent = "🫧"; // το emoji φυσαλίδας
 
-    // Τυχαίο μέγεθος
-    const size = Math.random() * 40 + 20; // 20–60px
-    bubble.style.width = size + 'px';
-    bubble.style.height = size + 'px';
+    // Τυχαίο μέγεθος (όχι πολύ μεγάλο)
+    const size = Math.random() * 20 + 20; // 20–40px
+    bubble.style.fontSize = size + "px";
 
     // Τυχαία οριζόντια θέση
-    const left = Math.random() * 100; // 0–100%
-    bubble.style.left = left + 'vw';
+    bubble.style.left = Math.random() * 100 + "vw";
 
     // Τυχαία διάρκεια πτώσης
-    const duration = Math.random() * 3 + 4; // 4–7s
-    bubble.style.animationDuration = duration + 's';
+    bubble.style.animationDuration = (Math.random() * 3 + 4) + "s";
 
     container.appendChild(bubble);
 
-    // Αφαίρεση μετά το animation
-    bubble.addEventListener('animationend', () => {
-        bubble.remove();
-    });
+    bubble.addEventListener("animationend", () => bubble.remove());
 }
 
-// Δημιουργεί 5 φυσαλίδες κάθε 5 δευτερόλεπτα
+// 5 φυσαλίδες κάθε 5 δευτερόλεπτα
 function spawnBubblesBatch() {
     for (let i = 0; i < 5; i++) {
-        // Μικρή τυχαία καθυστέρηση για να μην πέφτουν όλες μαζί ακριβώς
         setTimeout(createBubble, i * 300);
     }
 }
 
-// Πρώτο batch αμέσως
 spawnBubblesBatch();
-
-// Κάθε 5 δευτερόλεπτα νέο batch
 setInterval(spawnBubblesBatch, 5000);
 </script>
 
