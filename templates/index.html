@@ -556,14 +556,14 @@ function createBubble() {
     bubble.classList.add('bubble');
     bubble.textContent = "🫧"; // το emoji φυσαλίδας
 
-    // Τυχαίο μέγεθος (όχι πολύ μεγάλο)
+    
     const size = Math.random() * 20 + 20; // 20–40px
     bubble.style.fontSize = size + "px";
 
-    // Τυχαία οριζόντια θέση
+    
     bubble.style.left = Math.random() * 100 + "vw";
 
-    // Τυχαία διάρκεια πτώσης
+    
     bubble.style.animationDuration = (Math.random() * 3 + 4) + "s";
 
     container.appendChild(bubble);
@@ -571,9 +571,8 @@ function createBubble() {
     bubble.addEventListener("animationend", () => bubble.remove());
 }
 
-// 5 φυσαλίδες κάθε 5 δευτερόλεπτα
 function spawnBubblesBatch() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {   
         setTimeout(createBubble, i * 300);
     }
 }
