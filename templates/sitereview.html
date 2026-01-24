@@ -606,11 +606,20 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Εμφάνιση overlay επιτυχίας
-        overlay.style.display = "flex";
+        // ⭐ ΑΠΟΣΤΟΛΗ ΣΤΟ BACKEND
+        const formData = new FormData(form);
 
-        // Καθαρισμός φόρμας
-        form.reset();
+        fetch("/site-review", {
+            method: "POST",
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === "ok") {
+                overlay.style.display = "flex";
+                form.reset();
+            }
+        });
     });
 
     // Κλείσιμο overlay
