@@ -1497,9 +1497,9 @@ def site_review():
         return jsonify({"status": "ok"})
 
     return render_template("sitereview.html")
-@app.route("/admin/reviews")
+@app.route("/admin/reviews_site")
 @login_required
-def admin_reviews():
+def admin_reviews_site():
     if not session.get("admin_logged_in"):
         return redirect("/admin/login")
 
