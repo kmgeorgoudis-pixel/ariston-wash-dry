@@ -1477,7 +1477,7 @@ def auth_choice():
 @app.route("/site-review", methods=["GET", "POST"])
 def site_review():
     if request.method == "POST":
-        review = Review(
+        review = siteReview(
             q1=request.form.get("q1"),
             q2=request.form.get("q2"),
             q3=request.form.get("q3"),
@@ -1504,7 +1504,7 @@ def admin_reviews_site():
     if not current_user.is_admin:
         return redirect("/")
     
-    reviews = Review.query.order_by(Review.created_at.desc()).all()
+    reviews = siteReview.query.order_by(siteReview.created_at.desc()).all()
     return render_template("admin/admin_reviews_site.html", reviews=reviews)
 @app.route("/admin/review/<int:review_id>")
 @login_required
@@ -1512,7 +1512,7 @@ def admin_review_details(review_id):
     if not session.get("admin_logged_in"):
         return redirect("/admin/login")
 
-    review = Review.query.get_or_404(review_id)
+    review = siteReview.query.get_or_404(review_id)
     return render_template("admin_review_details_site.html", review=review)
 @app.route("/admin/review_site/<int:review_id>")
 @login_required
