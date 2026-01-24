@@ -607,7 +607,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         fetch("/site-review", {
             method: "POST",
-            body: formData
+            body: new URLSearchParams([...formData])
         })
         .then(r => r.json())
         .then(data => {
