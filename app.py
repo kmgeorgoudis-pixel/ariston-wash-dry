@@ -1477,25 +1477,29 @@ def auth_choice():
 @app.route("/site-review", methods=["GET", "POST"])
 def site_review():
     if request.method == "POST":
-        review = siteReview(
-            q1=request.form.get("q1"),
-            q2=request.form.get("q2"),
-            q3=request.form.get("q3"),
-            q4=request.form.get("q4"),
-            q5=request.form.get("q5"),
-            t1=request.form.get("t1"),
-            t2=request.form.get("t2"),
-            t3=request.form.get("t3"),
-            t4=request.form.get("t4"),
-            t5=request.form.get("t5"),
-            email=request.form.get("email"),
-            phone=request.form.get("phone")
-        )
+        try:
+            review = siteReview(
+                q1=request.form.get("q1"),
+                q2=request.form.get("q2"),
+                q3=request.form.get("q3"),
+                q4=request.form.get("q4"),
+                q5=request.form.get("q5"),
+                t1=request.form.get("t1"),
+                t2=request.form.get("t2"),
+                t3=request.form.get("t3"),
+                t4=request.form.get("t4"),
+                t5=request.form.get("t5"),
+                email=request.form.get("email"),
+                phone=request.form.get("phone")
+            )
 
-        db.session.add(review)
-        db.session.commit()
+            db.session.add(review)
+            db.session.commit()
 
-        return jsonify({"status": "ok"})
+            return jsonify({"status": "ok"})
+        except Exception as e:
+            print("⚠️ ERROR:", e)
+            return jsonify({"status": "error", "message": str(e)}), 500
 
     return render_template("sitereview.html")
 @app.route("/admin/reviews_site")
