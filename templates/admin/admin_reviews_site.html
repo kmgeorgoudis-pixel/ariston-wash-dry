@@ -56,7 +56,7 @@
 
     <div class="grid">
         {% for r in reviews %}
-        <a href="/admin/review/{{ r.id }}" class="review-icon">
+        <a href="/admin/review_site/{{ r.id }}" class="review-icon">
             <div class="icon-circle">📝</div>
             <p>Κριτική #{{ r.id }}</p>
             <span>{{ r.created_at.strftime("%d/%m/%Y") }}</span>
