@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from email.header import Header
 from database import db, init_db
 from database import Review
-from database import siteReview
+
 
 
 from datetime import datetime, timedelta
