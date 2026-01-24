@@ -1505,7 +1505,7 @@ def admin_reviews_site():
         return redirect("/")
     
     reviews = siteReview.query.order_by(siteReview.created_at.desc()).all()
-    return render_template("admin_reviews_site.html", reviews=reviews)
+    return render_template("admin/admin_reviews_site.html", reviews=reviews)
 @app.route("/admin/review/<int:review_id>")
 @login_required
 def admin_review_details(review_id):
