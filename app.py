@@ -1504,7 +1504,7 @@ def admin_reviews_site():
     if not current_user.is_admin:
         return redirect("/")
     
-    reviews = siteReview.query.order_by(siteReview.created_at.desc()).all()
+    reviews = Review.query.order_by(Review.created_at.desc()).all()
     return render_template("admin/admin_reviews_site.html", reviews=reviews)
 @app.route("/admin/review/<int:review_id>")
 @login_required
