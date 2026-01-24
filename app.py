@@ -1500,10 +1500,10 @@ def site_review():
 @app.route("/admin/reviews_site")
 @login_required
 def admin_reviews_site():
-    if not session.get("admin_logged_in"):
-        return redirect("/admin/login")
-
-    reviews = Review.query.order_by(Review.created_at.desc()).all()
+    if not current_user.is_admin:
+        return redirect("/")
+    
+    reviews = siteReview.query.order_by(siteReview.created_at.desc()).all()
     return render_template("admin_reviews_site.html", reviews=reviews)
 @app.route("/admin/review/<int:review_id>")
 @login_required
