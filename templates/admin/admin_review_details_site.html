@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Λεπτομέρειες Κριτικής</title>
+    <link rel="stylesheet" href="/static/admin.css">
+<style>
+.btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 18px;
+    background: #38bdf8;
+    color: #0f172a;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.btn-back:hover {
+    background: #0ea5e9;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Κριτική #{{ review.id }}</h1>
+    <p>Ημερομηνία: {{ review.created_at.strftime("%d/%m/%Y %H:%M") }}</p>
+
+    <div class="review-card">
+        <h3>Πολλαπλής επιλογής</h3>
+        <ul>
+            <li><strong>Πλοήγηση:</strong> {{ review.q1 }}</li>
+            <li><strong>Ταχύτητα:</strong> {{ review.q2 }}</li>
+            <li><strong>Σχεδιασμός:</strong> {{ review.q3 }}</li>
+            <li><strong>Εύρεση πληροφοριών:</strong> {{ review.q4 }}</li>
+            <li><strong>Επιστροφή στο site:</strong> {{ review.q5 }}</li>
+        </ul>
+
+        <h3>Ανοιχτές απαντήσεις</h3>
+        <ul>
+            <li><strong>Τι άρεσε:</strong> {{ review.t1 or "—" }}</li>
+            <li><strong>Τι να βελτιώσουμε:</strong> {{ review.t2 or "—" }}</li>
+            <li><strong>Δυσκολίες:</strong> {{ review.t3 or "—" }}</li>
+            <li><strong>Τι λείπει:</strong> {{ review.t4 or "—" }}</li>
+            <li><strong>Συνολική εμπειρία:</strong> {{ review.t5 or "—" }}</li>
+        </ul>
+
+        <h3>Στοιχεία επικοινωνίας</h3>
+        <p><strong>Email:</strong> {{ review.email or "—" }}</p>
+        <p><strong>Τηλέφωνο:</strong> {{ review.phone or "—" }}</p>
+    </div>
+
+    <a href="/admin/reviews" class="btn-back">← Επιστροφή</a>
+</div>
+
+</body>
+</html>

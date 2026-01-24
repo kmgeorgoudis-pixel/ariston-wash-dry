@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from app import db
 from flask_login import UserMixin
 from datetime import datetime
 
@@ -102,6 +103,38 @@ class User(db.Model, UserMixin):
     reset_code = db.Column(db.String(6), nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(120))
+from app import db
+from datetime import datetime
+
+class siteReview(db.Model):
+    __tablename__ = "reviews"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    # Multiple choice answers (ΥΠΟΧΡΕΩΤΙΚΕΣ)
+    q1 = db.Column(db.String(120), nullable=False)
+    q2 = db.Column(db.String(120), nullable=False)
+    q3 = db.Column(db.String(120), nullable=False)
+    q4 = db.Column(db.String(120), nullable=False)
+    q5 = db.Column(db.String(120), nullable=False)
+
+    # Text answers (ΠΡΟΑΙΡΕΤΙΚΕΣ)
+    t1 = db.Column(db.Text, nullable=True)
+    t2 = db.Column(db.Text, nullable=True)
+    t3 = db.Column(db.Text, nullable=True)
+    t4 = db.Column(db.Text, nullable=True)
+    t5 = db.Column(db.Text, nullable=True)
+
+    # Optional contact info
+    email = db.Column(db.String(120), nullable=True)
+    phone = db.Column(db.String(50), nullable=True)
+
+    # Timestamp
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Review {self.id}>"
+
     
     
 

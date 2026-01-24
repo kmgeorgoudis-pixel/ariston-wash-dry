@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from email.header import Header
 from database import db, init_db
+from database import Review
+from database import siteReview
+
 
 from datetime import datetime, timedelta
 from flask_migrate import Migrate
@@ -1470,6 +1473,49 @@ def admin_bulk_email():
 @app.route("/auth_choice")
 def auth_choice():
     return render_template("auth_choice.html")
+@app.route("/site-review", methods=["GET", "POST"])
+def site_review():
+    if request.method == "POST":
+        review = Review(
+            q1=request.form.get("q1"),
+            q2=request.form.get("q2"),
+            q3=request.form.get("q3"),
+            q4=request.form.get("q4"),
+            q5=request.form.get("q5"),
+            t1=request.form.get("t1"),
+            t2=request.form.get("t2"),
+            t3=request.form.get("t3"),
+            t4=request.form.get("t4"),
+            t5=request.form.get("t5"),
+            email=request.form.get("email"),
+            phone=request.form.get("phone")
+        )
+
+        db.session.add(review)
+        db.session.commit()
+
+        return jsonify({"status": "ok"})
+
+    return render_template("sitereview.html")
+@app.route("/admin/reviews")
+@login_required
+def admin_reviews():
+    if not session.get("admin_logged_in"):
+        return redirect("/admin/login")
+
+    reviews = Review.query.order_by(Review.created_at.desc()).all()
+    return render_template("admin_reviews_site.html", reviews=reviews)
+@app.route("/admin/review/<int:review_id>")
+@login_required
+def admin_review_details(review_id):
+    if not session.get("admin_logged_in"):
+        return redirect("/admin/login")
+
+    review = Review.query.get_or_404(review_id)
+    return render_template("admin_review_details_site.html", review=review)
+
+
+
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
