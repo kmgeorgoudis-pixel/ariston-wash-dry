@@ -1514,6 +1514,14 @@ def admin_review_details(review_id):
 
     review = Review.query.get_or_404(review_id)
     return render_template("admin_review_details_site.html", review=review)
+@app.route("/admin/review_site/<int:review_id>")
+@login_required
+def admin_review_details_site(review_id):
+    if not current_user.is_admin:
+        return redirect("/")
+    
+    review = Review.query.get_or_404(review_id)
+    return render_template("admin/admin_review_details_site.html", review=review)
 
 
 
