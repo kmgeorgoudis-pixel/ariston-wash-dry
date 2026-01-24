@@ -1,17 +1,21 @@
 from flask_sqlalchemy import SQLAlchemy
-from app import db
 from flask_login import UserMixin
 from datetime import datetime
 
 db = SQLAlchemy()
+
+
 class Score(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(50), unique=True, nullable=False)
     best_score = db.Column(db.Integer, default=0)
     last_played = db.Column(db.DateTime, default=datetime.utcnow)
     time_played = db.Column(db.Integer, default=0)
+
     def __repr__(self):
         return f"<Score {self.nickname} - {self.best_score}>"
+
+
 class ContactMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
@@ -29,38 +33,18 @@ class ContactMessage(db.Model):
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    # Σύνδεση με User
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", backref="reviews")
 
-    # Ερώτηση 1
     rating = db.Column(db.Integer)
-
-    # Ερώτηση 2
     q2 = db.Column(db.Integer)
-
-    # Ερώτηση 3
     q3 = db.Column(db.Integer)
-
-    # Ερώτηση 4
     q4 = db.Column(db.Integer)
-
-    # Ερώτηση 5
     recommend = db.Column(db.String(20))
-
-    # Ερώτηση 6
     comment_like = db.Column(db.Text)
-
-    # Ερώτηση 7
     comment_improve = db.Column(db.Text)
-
-    # Ερώτηση 8
     name = db.Column(db.String(120))
-
-    # Ερώτηση 9
     want_contact = db.Column(db.String(10))
-
-    # Ερώτηση 10
     contact_info = db.Column(db.String(200))
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -69,7 +53,6 @@ class Review(db.Model):
 class Coupon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    # ΜΟΝΟ ΜΙΑ ΦΟΡΑ το user_id
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
     title = db.Column(db.String(100))
@@ -103,40 +86,32 @@ class User(db.Model, UserMixin):
     reset_code = db.Column(db.String(6), nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(120))
-from app import db
-from datetime import datetime
+
 
 class siteReview(db.Model):
     __tablename__ = "reviews"
 
     id = db.Column(db.Integer, primary_key=True)
 
-    # Multiple choice answers (ΥΠΟΧΡΕΩΤΙΚΕΣ)
     q1 = db.Column(db.String(120), nullable=False)
     q2 = db.Column(db.String(120), nullable=False)
     q3 = db.Column(db.String(120), nullable=False)
     q4 = db.Column(db.String(120), nullable=False)
     q5 = db.Column(db.String(120), nullable=False)
 
-    # Text answers (ΠΡΟΑΙΡΕΤΙΚΕΣ)
     t1 = db.Column(db.Text, nullable=True)
     t2 = db.Column(db.Text, nullable=True)
     t3 = db.Column(db.Text, nullable=True)
     t4 = db.Column(db.Text, nullable=True)
     t5 = db.Column(db.Text, nullable=True)
 
-    # Optional contact info
     email = db.Column(db.String(120), nullable=True)
     phone = db.Column(db.String(50), nullable=True)
 
-    # Timestamp
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return f"<Review {self.id}>"
-
-    
-    
 
 
 def init_db(app):
