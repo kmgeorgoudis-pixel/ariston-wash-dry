@@ -2005,6 +2005,35 @@ from flask import send_from_directory
 @app.route('/templates/en/ai/<path:filename>')
 def custom_static(filename):
     return send_from_directory('templates/en/ai', filename)
+@app.route("/en/site-review", methods=["GET", "POST"])
+def site_review_en():
+    if request.method == "POST":
+        try:
+            review = siteReview(
+                q1=request.form.get("q1"),
+                q2=request.form.get("q2"),
+                q3=request.form.get("q3"),
+                q4=request.form.get("q4"),
+                q5=request.form.get("q5"),
+                t1=request.form.get("t1"),
+                t2=request.form.get("t2"),
+                t3=request.form.get("t3"),
+                t4=request.form.get("t4"),
+                t5=request.form.get("t5"),
+                email=request.form.get("email"),
+                phone=request.form.get("phone")
+            )
+
+            db.session.add(review)
+            db.session.commit()
+
+            return jsonify({"status": "ok"})
+        except Exception as e:
+            print("⚠️ ERROR:", e)
+            return jsonify({"status": "error", "message": str(e)}), 500
+
+    return render_template("en/sitereview.html")
+
 
 
 

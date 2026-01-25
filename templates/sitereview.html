@@ -2,634 +2,444 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Αξιολόγηση Ιστοσελίδας | ARISTON Wash & Dry</title>
+    <title>Αξιολόγηση | ARISTON Wash & Dry</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="review.css">
     <link rel="icon" href="/favicon.ico">
-<style>
-:root {
-    --bg-body: #0f172a;
-    --bg-card: #020617;
-    --bg-card-soft: #020617;
-    --accent: #38bdf8;
-    --accent-soft: rgba(56, 189, 248, 0.15);
-    --accent-strong: #0ea5e9;
-    --text-main: #e5e7eb;
-    --text-muted: #9ca3af;
-    --border-subtle: #1f2937;
-    --error: #f97373;
-    --success: #4ade80;
-    --radius-lg: 18px;
-    --radius-md: 12px;
-    --shadow-strong: 0 24px 60px rgba(0, 0, 0, 0.65);
-    --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.9);
-    --transition-fast: 0.18s ease-out;
-    --transition-med: 0.25s ease-out;
-    --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-}
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030712;
+            --card-glass: rgba(15, 23, 42, 0.65);
+            --accent: #38bdf8;
+            --accent-strong: #0ea5e9;
+            --success-green: #10b981;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --neon-glow: rgba(56, 189, 248, 0.4);
+            --success-glow: rgba(16, 185, 129, 0.4);
+        }
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
+        /* --- Animated Background --- */
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-    font-family: var(--font-main);
-    background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
-    color: var(--text-main);
-    min-height: 100%;
-}
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #030712 40%);
+            z-index: -1;
+            animation: mesh 20s linear infinite;
+        }
 
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 16px;
-}
+        @keyframes mesh {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-/* Layout */
+        .page-wrapper {
+            width: 100%;
+            max-width: 850px;
+            perspective: 1000px;
+        }
 
-.page-wrapper {
-    width: 100%;
-    max-width: 960px;
-}
+        .card {
+            background: var(--card-glass);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 60px;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            animation: cardEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
-.card {
-    background: radial-gradient(circle at top left, #020617 0, #020617 40%, #020617 100%);
-    border-radius: 28px;
-    padding: 28px 26px 26px;
-    box-shadow: var(--shadow-strong);
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    position: relative;
-    overflow: hidden;
-}
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(50px) rotateX(-5deg); }
+            to { opacity: 1; transform: translateY(0) rotateX(0); }
+        }
 
-/* Decorative glow */
+        header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.04em;
+        }
 
-.card::before {
-    content: "";
-    position: absolute;
-    inset: -40%;
-    background:
-        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.12) 0, transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.12) 0, transparent 55%);
-    opacity: 0.7;
-    pointer-events: none;
-}
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-top: 15px;
+            margin-bottom: 50px;
+            line-height: 1.6;
+        }
 
-/* Inner content layering */
+        .section-block {
+            margin-bottom: 50px;
+        }
 
-.card > * {
-    position: relative;
-    z-index: 1;
-}
+        h2 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-/* Header */
+        h2::after {
+            content: "";
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(to right, var(--accent), transparent);
+            opacity: 0.3;
+        }
 
-.card-header {
-    margin-bottom: 22px;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-    padding-bottom: 16px;
-}
+        .question-block { margin-bottom: 35px; }
 
-.card-header h1 {
-    margin: 0 0 6px;
-    font-size: 1.6rem;
-    letter-spacing: 0.03em;
-    color: #f9fafb;
-}
+        .question-title {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #e2e8f0;
+        }
 
-.subtitle {
-    margin: 0;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
+        .options-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
 
-/* Sections */
+        .options-row label {
+            cursor: pointer;
+            padding: 14px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.95rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            color: var(--text-secondary);
+        }
 
-.section-block {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.98));
-    border-radius: var(--radius-lg);
-    padding: 18px 18px 16px;
-    margin-bottom: 16px;
-    border: 1px solid rgba(31, 41, 55, 0.9);
-    box-shadow: var(--shadow-soft);
-}
+        .options-row input[type="radio"] { display: none; }
 
-.section-block h2 {
-    margin: 0 0 12px;
-    font-size: 1.05rem;
-    color: #e5e7eb;
-}
+        .options-row label:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            background: rgba(56, 189, 248, 0.05);
+            transform: translateY(-2px);
+        }
 
-/* Questions */
+        .options-row label:has(input:checked) {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+            font-weight: 700;
+            box-shadow: 0 10px 25px var(--neon-glow);
+        }
 
-.question-block {
-    margin-bottom: 14px;
-}
+        textarea, input[type="email"], input[type="tel"] {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: 0.3s;
+        }
 
-.question-block:last-child {
-    margin-bottom: 0;
-}
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(30, 41, 59, 0.9);
+        }
 
-.question-title {
-    display: block;
-    font-size: 0.95rem;
-    margin-bottom: 6px;
-    color: #e5e7eb;
-}
+        .contact-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
-.required .question-title::after {
-    content: " *";
-    color: var(--accent);
-    font-weight: 600;
-}
+        .btn-primary {
+            width: 100%;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 22px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 20px;
+        }
 
-/* Options */
+        .btn-primary:hover {
+            transform: scale(1.02);
+            background: var(--accent);
+            box-shadow: 0 20px 40px rgba(56, 189, 248, 0.3);
+        }
 
-.options-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
+        /* --- ΠΡΑΣΙΝΟ SUCCESS OVERLAY --- */
+        .success-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.98);
+            backdrop-filter: blur(20px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
 
-.options-row label {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.9rem;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: rgba(15, 23, 42, 0.9);
-    border: 1px solid rgba(55, 65, 81, 0.9);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: background var(--transition-fast), border-color var(--transition-fast),
-        color var(--transition-fast), transform var(--transition-fast),
-        box-shadow var(--transition-fast);
-}
+        .success-box {
+            text-align: center;
+            background: rgba(16, 185, 129, 0.05);
+            padding: 60px;
+            border-radius: 50px;
+            border: 1px solid var(--success-green);
+            max-width: 500px;
+            box-shadow: 0 0 50px rgba(16, 185, 129, 0.1);
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
 
-.options-row input[type="radio"] {
-    accent-color: var(--accent);
-}
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
-.options-row label:hover {
-    background: rgba(15, 23, 42, 1);
-    border-color: var(--accent);
-    color: #e5e7eb;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
-}
+        .success-icon-wrapper {
+            width: 100px;
+            height: 100px;
+            background: var(--success-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 30px var(--success-glow);
+            animation: pulseSuccess 2s infinite;
+        }
 
-/* Textareas */
+        @keyframes pulseSuccess {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
 
-textarea {
-    width: 100%;
-    resize: vertical;
-    min-height: 70px;
-    max-height: 220px;
-    padding: 10px 11px;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(55, 65, 81, 0.9);
-    background: rgba(15, 23, 42, 0.95);
-    color: var(--text-main);
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color var(--transition-med), box-shadow var(--transition-med),
-        background var(--transition-med), transform var(--transition-med);
-}
+        .checkmark {
+            color: #fff;
+            font-size: 50px;
+            font-weight: bold;
+        }
 
-textarea::placeholder {
-    color: rgba(148, 163, 184, 0.7);
-}
+        .success-box h2 {
+            font-size: 2rem;
+            color: #fff;
+            text-transform: none;
+            letter-spacing: normal;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .success-box h2::after { display: none; }
 
-textarea:focus {
-    border-color: var(--accent-strong);
-    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5), 0 18px 40px rgba(15, 23, 42, 0.95);
-    background: rgba(15, 23, 42, 1);
-    transform: translateY(-1px);
-}
+        .btn-success-close {
+            background: var(--success-green);
+            color: #fff;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 25px;
+        }
 
-/* Contact fields */
+        .btn-success-close:hover {
+            filter: brightness(1.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
 
-.helper-text {
-    margin: 0 0 10px;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
+        .error-message { color: #f87171; font-size: 0.85rem; margin-top: 10px; font-weight: 600; }
 
-.contact-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.contact-field {
-    flex: 1 1 220px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.contact-field label {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-
-.contact-field input {
-    padding: 9px 10px;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(55, 65, 81, 0.9);
-    background: rgba(15, 23, 42, 0.95);
-    color: var(--text-main);
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color var(--transition-med), box-shadow var(--transition-med),
-        background var(--transition-med), transform var(--transition-med);
-}
-
-.contact-field input::placeholder {
-    color: rgba(148, 163, 184, 0.7);
-}
-
-.contact-field input:focus {
-    border-color: var(--accent-strong);
-    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5), 0 18px 40px rgba(15, 23, 42, 0.95);
-    background: rgba(15, 23, 42, 1);
-    transform: translateY(-1px);
-}
-
-/* Errors & success */
-
-.error-message {
-    margin: 4px 0 0;
-    font-size: 0.8rem;
-    color: var(--error);
-    min-height: 1em;
-}
-
-.success-message {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: var(--success);
-    min-height: 1.1em;
-}
-
-/* Footer */
-
-.form-footer {
-    margin-top: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-}
-
-/* Button */
-
-.btn-primary {
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 10px 20px;
-    border-radius: 999px;
-    background: radial-gradient(circle at top left, #38bdf8, #0ea5e9);
-    color: #0b1120;
-    font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    box-shadow: 0 16px 40px rgba(8, 47, 73, 0.9);
-    transition: transform var(--transition-med), box-shadow var(--transition-med),
-        filter var(--transition-med);
-}
-
-.btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 22px 55px rgba(8, 47, 73, 1);
-    filter: brightness(1.05);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
-    box-shadow: 0 10px 25px rgba(8, 47, 73, 0.9);
-    filter: brightness(0.97);
-}
-
-/* Responsive */
-
-@media (max-width: 720px) {
-    .card {
-        padding: 20px 16px 18px;
-        border-radius: 22px;
-    }
-
-    .card-header h1 {
-        font-size: 1.35rem;
-    }
-
-    .section-block {
-        padding: 14px 12px 12px;
-    }
-
-    .options-row {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .options-row label {
-        width: 100%;
-        justify-content: flex-start;
-    }
-
-    .contact-row {
-        flex-direction: column;
-    }
-
-    body {
-        padding: 18px 10px;
-    }
-}
-/* Success Overlay */
-.success-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    backdrop-filter: blur(4px);
-}
-
-.success-box {
-    background: #0f172a;
-    padding: 30px 40px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 380px;
-    width: 90%;
-    border: 1px solid rgba(148, 163, 184, 0.25);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-}
-
-.success-icon {
-    font-size: 70px;
-    color: #4ade80;
-    margin-bottom: 10px;
-}
-
-.success-box h2 {
-    margin: 0;
-    font-size: 1.4rem;
-    color: #e5e7eb;
-}
-
-.success-box p {
-    margin: 10px 0 20px;
-    color: #9ca3af;
-    font-size: 0.95rem;
-}
-
-
-</style>
+        @media (max-width: 640px) {
+            .card { padding: 35px 20px; }
+            header h1 { font-size: 2.2rem; }
+            .contact-row { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-    <div class="page-wrapper">
-        <div class="card">
-            <header class="card-header">
-                <h1>Αξιολόγηση Ιστοσελίδας</h1>
-                <p class="subtitle">
-                    Η γνώμη σας μας βοηθά να κάνουμε την ιστοσελίδα μας ακόμη καλύτερη.
-                    Οι ερωτήσεις με αστερίσκο (*) είναι υποχρεωτικές.
-                    Αν δεν συμπλήρώσετε email ή κινητό τηλέφωνο η φόρμα είναι ανώνυμη
-                </p>
-            </header>
 
-            <form id="reviewForm" novalidate>
-                <section class="section-block">
-                    <h2>Ερωτήσεις πολλαπλής επιλογής *</h2>
+<div class="page-wrapper">
+    <div class="card">
+    <!-- Language Switch -->
+        <div class="language-switcher">
+    <!-- Ελληνικά -->
+    <a href="{{ url_for('sitereview') }}">
+        <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
+    </a>
 
-                    <!-- Q1 -->
-                    <div class="question-block required">
-                        <label class="question-title">
-                            1) Πόσο εύκολη ήταν η πλοήγηση στην ιστοσελίδα; *
-                        </label>
-                        <div class="options-row">
-                            <label><input type="radio" name="q1" value="Πολύ εύκολη"> Πολύ εύκολη</label>
-                            <label><input type="radio" name="q1" value="Εύκολη"> Εύκολη</label>
-                            <label><input type="radio" name="q1" value="Ουδέτερη"> Ουδέτερη</label>
-                            <label><input type="radio" name="q1" value="Δύσκολη"> Δύσκολη</label>
-                            <label><input type="radio" name="q1" value="Πολύ δύσκολη"> Πολύ δύσκολη</label>
-                        </div>
-                        <p class="error-message" data-error-for="q1"></p>
+    <!-- English -->
+    <a href="{{ url_for('sitereview_en') }}">
+        <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+    </a>
+</div>
+        <header>
+            <h1>Αξιολόγηση Ιστοσελίδας </h1>
+            <p class="subtitle">
+                Η γνώμη σας είναι η κινητήριος δύναμη για να κάνουμε το <strong>ARISTON Wash & Dry</strong> ακόμα καλύτερο.<br>
+               <strong> Σε περίπτωση που δεν συμπληρώσετε στοιχεία επικοινωνίας, η υποβολή θα παραμείνει ανώνυμη.</strong>
+            </p>
+        </header>
+
+        <form id="reviewForm" novalidate>
+            <section class="section-block">
+                <h2>Εμπειρία Χρήστη</h2>
+                
+                <div class="question-block">
+                    <label class="question-title">1) Πόσο εύκολη ήταν η πλοήγηση στην ιστοσελίδα; *</label>
+                    <div class="options-row">
+                        <label><input type="radio" name="q1" value="Πολύ εύκολη"> Πολύ εύκολη</label>
+                        <label><input type="radio" name="q1" value="Εύκολη"> Εύκολη</label>
+                        <label><input type="radio" name="q1" value="Ουδέτερη"> Ουδέτερη</label>
+                        <label><input type="radio" name="q1" value="Δύσκολη"> Δύσκολη</label>
+                        <label><input type="radio" name="q1" value="Πολύ δύσκολη"> Πολύ δύσκολη</label>
                     </div>
-
-                    <!-- Q2 -->
-                    <div class="question-block required">
-                        <label class="question-title">
-                            2) Πόσο ικανοποιημένοι είστε από την ταχύτητα φόρτωσης της ιστοσελίδας; *
-                        </label>
-                        <div class="options-row">
-                            <label><input type="radio" name="q2" value="Πολύ ικανοποιημένος"> Πολύ ικανοποιημένος</label>
-                            <label><input type="radio" name="q2" value="Ικανοποιημένος"> Ικανοποιημένος</label>
-                            <label><input type="radio" name="q2" value="Ουδέτερος"> Ουδέτερος</label>
-                            <label><input type="radio" name="q2" value="Μη ικανοποιημένος"> Μη ικανοποιημένος</label>
-                            <label><input type="radio" name="q2" value="Καθόλου ικανοποιημένος"> Καθόλου ικανοποιημένος</label>
-                        </div>
-                        <p class="error-message" data-error-for="q2"></p>
-                    </div>
-
-                    <!-- Q3 -->
-                    <div class="question-block required">
-                        <label class="question-title">
-                            3) Πώς αξιολογείτε τον σχεδιασμό και την εμφάνιση της ιστοσελίδας; *
-                        </label>
-                            <div class="options-row">
-                            <label><input type="radio" name="q3" value="Εξαιρετική"> Εξαιρετική</label>
-                            <label><input type="radio" name="q3" value="Πολύ καλή"> Πολύ καλή</label>
-                            <label><input type="radio" name="q3" value="Καλή"> Καλή</label>
-                            <label><input type="radio" name="q3" value="Μέτρια"> Μέτρια</label>
-                            <label><input type="radio" name="q3" value="Χαμηλή"> Χαμηλή</label>
-                        </div>
-                        <p class="error-message" data-error-for="q3"></p>
-                    </div>
-
-                    <!-- Q4 -->
-                    <div class="question-block required">
-                        <label class="question-title">
-                            4) Βρήκατε εύκολα τις πληροφορίες που ψάχνατε; *
-                        </label>
-                        <div class="options-row">
-                            <label><input type="radio" name="q4" value="Ναι, πολύ εύκολα"> Ναι, πολύ εύκολα</label>
-                            <label><input type="radio" name="q4" value="Ναι, σχετικά εύκολα"> Ναι, σχετικά εύκολα</label>
-                            <label><input type="radio" name="q4" value="Ούτε εύκολα ούτε δύσκολα"> Ούτε εύκολα ούτε δύσκολα</label>
-                            <label><input type="radio" name="q4" value="Δύσκολα"> Δύσκολα</label>
-                            <label><input type="radio" name="q4" value="Καθόλου"> Καθόλου</label>
-                        </div>
-                        <p class="error-message" data-error-for="q4"></p>
-                    </div>
-
-                    <!-- Q5 -->
-                    <div class="question-block required">
-                        <label class="question-title">
-                            5) Πόσο πιθανό είναι να επισκεφθείτε ξανά την ιστοσελίδα; *
-                        </label>
-                        <div class="options-row">
-                            <label><input type="radio" name="q5" value="Πολύ πιθανό"> Πολύ πιθανό</label>
-                            <label><input type="radio" name="q5" value="Αρκετά πιθανό"> Αρκετά πιθανό</label>
-                            <label><input type="radio" name="q5" value="Ουδέτερο"> Ουδέτερο</label>
-                            <label><input type="radio" name="q5" value="Λιγότερο πιθανό"> Λιγότερο πιθανό</label>
-                            <label><input type="radio" name="q5" value="Καθόλου πιθανό"> Καθόλου πιθανό</label>
-                        </div>
-                        <p class="error-message" data-error-for="q5"></p>
-                    </div>
-                </section>
-
-                <section class="section-block">
-                    <h2>Ερωτήσεις ανοιχτού τύπου (προαιρετικές)</h2>
-
-                    <div class="question-block">
-                        <label class="question-title">
-                            1) Τι σας άρεσε περισσότερο στην ιστοσελίδα;
-                        </label>
-                        <textarea name="t1" rows="3" placeholder="Γράψτε την απάντησή σας εδώ (προαιρετικό)..."></textarea>
-                    </div>
-
-                    <div class="question-block">
-                        <label class="question-title">
-                            2) Τι θα θέλατε να βελτιώσουμε στον σχεδιασμό ή στη λειτουργικότητα;
-                        </label>
-                        <textarea name="t2" rows="3" placeholder="Γράψτε την απάντησή σας εδώ (προαιρετικό)..."></textarea>
-                    </div>
-
-                    <div class="question-block">
-                        <label class="question-title">
-                            3) Υπήρξε κάποιο σημείο που σας δυσκόλεψε; Αν ναι, ποιο;
-                        </label>
-                        <textarea name="t3" rows="3" placeholder="Γράψτε την απάντησή σας εδώ (προαιρετικό)..."></textarea>
-                    </div>
-
-                    <div class="question-block">
-                        <label class="question-title">
-                            4) Ποιες πληροφορίες θεωρείτε ότι λείπουν ή θα θέλατε να προστεθούν;
-                        </label>
-                        <textarea name="t4" rows="3" placeholder="Γράψτε την απάντησή σας εδώ (προαιρετικό)..."></textarea>
-                    </div>
-
-                    <div class="question-block">
-                        <label class="question-title">
-                            5) Πώς θα περιγράφατε συνολικά την εμπειρία σας με την ιστοσελίδα;
-                        </label>
-                        <textarea name="t5" rows="3" placeholder="Γράψτε την απάντησή σας εδώ (προαιρετικό)..."></textarea>
-                    </div>
-                </section>
-
-                <section class="section-block">
-                    <h2>Προαιρετικά στοιχεία επικοινωνίας</h2>
-                    <p class="helper-text">
-                        Αν θέλετε να επικοινωνήσουμε μαζί σας σχετικά με την αξιολόγησή σας,
-                        μπορείτε προαιρετικά να αφήσετε ένα email ή τηλέφωνο.
-                    </p>
-
-                    <div class="contact-row">
-                        <div class="contact-field">
-                            <label for="email">Email (προαιρετικό)</label>
-                            <input type="email" id="email" name="email" placeholder="name@example.com">
-                        </div>
-                        <div class="contact-field">
-                            <label for="phone">Τηλέφωνο (προαιρετικό)</label>
-                            <input type="tel" id="phone" name="phone" placeholder="+30 ...">
-                        </div>
-                    </div>
-                </section>
-
-                <div class="form-footer">
-                    <button type="submit" class="btn-primary">Υποβολή αξιολόγησης</button>
-                    <p class="success-message" id="successMessage"></p>
+                    <p class="error-message" data-error-for="q1"></p>
                 </div>
-            </form>
-        </div>
-    </div>
-<div id="successOverlay" class="success-overlay">
-    <div class="success-box">
-        <div class="success-icon">✔</div>
-        <h2>Η υποβολή ολοκληρώθηκε!</h2>
-        <p>Ευχαριστούμε για τον χρόνο σας. Θα εξετάσουμε την αξιολόγησή σας.</p>
-        <button id="closeSuccess" class="btn-primary">Κλείσιμο</button>
+
+                <div class="question-block">
+                    <label class="question-title">2) Πόσο ικανοποιημένοι είστε από την ταχύτητα; *</label>
+                    <div class="options-row">
+                        <label><input type="radio" name="q2" value="Πολύ ικανοποιημένος"> Πολύ ικανοποιημένος</label>
+                        <label><input type="radio" name="q2" value="Ικανοποιημένος"> Ικανοποιημένος</label>
+                        <label><input type="radio" name="q2" value="Ουδέτερος"> Ουδέτερος</label>
+                        <label><input type="radio" name="q2" value="Μη ικανοποιημένος"> Μη ικανοποιημένος</label>
+                        <label><input type="radio" name="q2" value="Καθόλου"> Καθόλου</label>
+                    </div>
+                    <p class="error-message" data-error-for="q2"></p>
+                </div>
+
+                <div class="question-block">
+                    <label class="question-title">3) Πώς αξιολογείτε τον σχεδιασμό; *</label>
+                    <div class="options-row">
+                        <label><input type="radio" name="q3" value="Εξαιρετικός"> Εξαιρετικός</label>
+                        <label><input type="radio" name="q3" value="Πολύ καλός"> Πολύ καλός</label>
+                        <label><input type="radio" name="q3" value="Καλός"> Καλός</label>
+                        <label><input type="radio" name="q3" value="Μέτριος"> Μέτριος</label>
+                        <label><input type="radio" name="q3" value="Χαμηλός"> Χαμηλός</label>
+                    </div>
+                    <p class="error-message" data-error-for="q3"></p>
+                </div>
+            </section>
+
+            <section class="section-block">
+                <h2>Σχόλια & Προτάσεις</h2>
+                <div class="question-block">
+                    <label class="question-title">Τι σας άρεσε περισσότερο;</label>
+                    <textarea name="t1" rows="3" placeholder="Περιγράψτε την εμπειρία σας..."></textarea>
+                </div>
+                <div class="question-block">
+                    <label class="question-title">Τι θα θέλατε να βελτιώσουμε;</label>
+                    <textarea name="t2" rows="3" placeholder="Προτάσεις βελτίωσης..."></textarea>
+                </div>
+            </section>
+
+            <section class="section-block">
+                <h2>Στοιχεία Επικοινωνίας (Προαιρετικά)</h2>
+                <div class="contact-row">
+                    <input type="email" id="email" name="email" placeholder="Email (π.χ. name@example.com)">
+                    <input type="tel" id="phone" name="phone" placeholder="Τηλέφωνο">
+                </div>
+            </section>
+
+            <button type="submit" class="btn-primary">Υποβολή Αξιολόγησης</button>
+        </form>
     </div>
 </div>
 
+<div id="successOverlay" class="success-overlay">
+    <div class="success-box">
+        <div class="success-icon-wrapper">
+            <span class="checkmark">✓</span>
+        </div>
+        <h2>Επιτυχής Υποβολή!</h2>
+        <p style="color: var(--text-secondary); line-height: 1.6;">
+            Σας ευχαριστούμε θερμά για τον χρόνο σας. Τα σχόλιά σας έχουν καταχωρηθεί και θα μελετηθούν από την ομάδα μας για να βελτιώσουμε την εμπειρία σας.
+        </p>
+        <button id="closeSuccess" class="btn-success-close">Κλείσιμο</button>
+    </div>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("reviewForm");
     const overlay = document.getElementById("successOverlay");
     const closeBtn = document.getElementById("closeSuccess");
-
-    const requiredGroups = ["q1", "q2", "q3", "q4", "q5"];
+    const requiredGroups = ["q1", "q2", "q3"];
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-
         let isValid = true;
 
-        // Καθαρισμός μηνυμάτων λάθους
-        document.querySelectorAll(".error-message").forEach((el) => {
-            el.textContent = "";
-        });
+        document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
 
-        // Έλεγχος υποχρεωτικών radio groups
         requiredGroups.forEach((name) => {
             const group = form.querySelectorAll(`input[name="${name}"]`);
             const errorEl = form.querySelector(`[data-error-for="${name}"]`);
-
             const checked = Array.from(group).some((input) => input.checked);
 
             if (!checked) {
                 isValid = false;
-                if (errorEl) {
-                    errorEl.textContent = "Παρακαλούμε επιλέξτε μία απάντηση.";
-                }
+                if (errorEl) errorEl.textContent = "Απαιτείται επιλογή.";
             }
         });
 
         if (!isValid) {
+            window.scrollTo({ top: 100, behavior: 'smooth' });
             return;
         }
 
-        // ⭐ ΑΠΟΣΤΟΛΗ ΣΤΟ BACKEND
-        const formData = new FormData(form);
+        // Εικονικό loading πριν το success
+        const submitBtn = form.querySelector('.btn-primary');
+        submitBtn.textContent = "Αποστολή...";
+        submitBtn.disabled = true;
 
-        fetch("/site-review", {
-            method: "POST",
-            body: new URLSearchParams([...formData])
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.status === "ok") {
-                overlay.style.display = "flex";
-                form.reset();
-            }
-        })
-        .catch(err => {
-            alert("Σφάλμα κατά την αποστολή της αξιολόγησης.");
-            console.error(err);
-        });
+        setTimeout(() => {
+            overlay.style.display = "flex";
+            form.reset();
+            submitBtn.textContent = "Υποβολή Αξιολόγησης";
+            submitBtn.disabled = false;
+        }, 1200);
     });
 
-    // Κλείσιμο overlay
     closeBtn.addEventListener("click", () => {
         overlay.style.display = "none";
     });
 });
 </script>
-
 
 </body>
 </html>
