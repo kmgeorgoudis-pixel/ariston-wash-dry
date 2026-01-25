@@ -1526,6 +1526,18 @@ def admin_review_details_site(review_id):
     
     review = siteReview.query.get_or_404(review_id)
     return render_template("admin/admin_review_details_site.html", review=review)
+@app.route("/admin/review_site/delete/<int:review_id>", methods=["POST"])
+@login_required
+def delete_review_site(review_id):
+    if not current_user.is_admin:
+        return redirect("/")
+
+    review = siteReview.query.get_or_404(review_id)
+    db.session.delete(review)
+    db.session.commit()
+
+    return redirect("/admin/reviews_site")
+
 
 
 
