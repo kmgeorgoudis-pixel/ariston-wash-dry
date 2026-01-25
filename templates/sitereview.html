@@ -488,8 +488,10 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         let isValid = true;
 
+        // Καθαρισμός προηγούμενων λαθών
         document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
 
+        // Έλεγχος υποχρεωτικών πεδίων
         requiredGroups.forEach((name) => {
             const group = form.querySelectorAll(`input[name="${name}"]`);
             const errorEl = form.querySelector(`[data-error-for="${name}"]`);
@@ -509,17 +511,43 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // Animation κουμπιού
         const submitBtn = form.querySelector('.btn-primary');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = "Αποστολή...";
         submitBtn.disabled = true;
 
-        setTimeout(() => {
-            overlay.style.display = "flex";
-            form.reset();
+        // ΣΥΛΛΟΓΗ ΚΑΙ ΑΠΟΣΤΟΛΗ ΔΕΔΟΜΕΝΩΝ ΣΤΗΝ PYTHON
+        const formData = new FormData(form);
+
+        fetch("/site-review", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Σφάλμα διακομιστή");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === "ok") {
+                // Εμφάνιση επιτυχίας
+                overlay.style.display = "flex";
+                form.reset();
+            } else {
+                alert("Κάτι πήγε στραβά: " + (data.message || "Προσπαθήστε ξανά."));
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Αποτυχία σύνδεσης με τον διακομιστή.");
+        })
+        .finally(() => {
+            // Επαναφορά κουμπιού
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
-        }, 1500);
+        });
     });
 
     closeBtn.addEventListener("click", () => {
