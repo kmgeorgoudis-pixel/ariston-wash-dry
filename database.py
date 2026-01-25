@@ -86,6 +86,7 @@ class User(db.Model, UserMixin):
     reset_code = db.Column(db.String(6), nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(120))
+    
 
 
 class siteReview(db.Model):
@@ -112,6 +113,8 @@ class siteReview(db.Model):
 
     def __repr__(self):
         return f"<Review {self.id}>"
+
+
 
 
 def init_db(app):
