@@ -2,9 +2,8 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Αξιολόγηση | ARISTON Wash & Dry</title>
+    <title>Αξιολόγηση Ιστοσελίδας | ARISTON Wash & Dry</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -23,7 +22,7 @@
         /* --- Animated Background --- */
         body {
             margin: 0;
-            padding: 40px 20px;
+            padding: 40px 16px;
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg);
             color: var(--text-primary);
@@ -52,6 +51,7 @@
             width: 100%;
             max-width: 850px;
             perspective: 1000px;
+            position: relative;
         }
 
         .card {
@@ -63,6 +63,45 @@
             padding: 60px;
             box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1);
             animation: cardEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            position: relative; /* Για να κλειδώσει ο switcher μέσα */
+        }
+
+        /* --- Language Switcher Styles --- */
+        .language-switcher {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .language-switcher a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .flag-icon {
+            width: 28px;
+            height: 28px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .language-switcher a:hover .flag-icon {
+            transform: scale(1.2) rotate(5deg);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--neon-glow);
+        }
+
+        /* Active flag style (προαιρετικό) */
+        .language-switcher a.active .flag-icon {
+            border-color: var(--accent);
         }
 
         @keyframes cardEntrance {
@@ -71,33 +110,34 @@
         }
 
         header h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 800;
             margin: 0;
             background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.04em;
+            padding-right: 80px; /* Χώρος για τις σημαίες σε desktop */
         }
 
         .subtitle {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             margin-top: 15px;
             margin-bottom: 50px;
             line-height: 1.6;
         }
 
         .section-block {
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
 
         h2 {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.2em;
             color: var(--accent);
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -111,7 +151,7 @@
             opacity: 0.3;
         }
 
-        .question-block { margin-bottom: 35px; }
+        .question-block { margin-bottom: 40px; }
 
         .question-title {
             display: block;
@@ -119,21 +159,22 @@
             font-weight: 600;
             margin-bottom: 20px;
             color: #e2e8f0;
+            line-height: 1.4;
         }
 
         .options-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
 
         .options-row label {
             cursor: pointer;
-            padding: 14px 24px;
+            padding: 12px 20px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
             border-radius: 100px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             color: var(--text-secondary);
         }
@@ -171,6 +212,7 @@
             outline: none;
             border-color: var(--accent);
             background: rgba(30, 41, 59, 0.9);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
         }
 
         .contact-row {
@@ -194,13 +236,19 @@
             margin-top: 20px;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: scale(1.02);
             background: var(--accent);
             box-shadow: 0 20px 40px rgba(56, 189, 248, 0.3);
         }
 
-        /* --- ΠΡΑΣΙΝΟ SUCCESS OVERLAY --- */
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #475569;
+        }
+
+        /* --- Success Overlay --- */
         .success-overlay {
             position: fixed;
             inset: 0;
@@ -219,6 +267,7 @@
             border-radius: 50px;
             border: 1px solid var(--success-green);
             max-width: 500px;
+            width: 90%;
             box-shadow: 0 0 50px rgba(16, 185, 129, 0.1);
             animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
@@ -229,8 +278,8 @@
         }
 
         .success-icon-wrapper {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             background: var(--success-green);
             border-radius: 50%;
             display: flex;
@@ -247,11 +296,7 @@
             100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        .checkmark {
-            color: #fff;
-            font-size: 50px;
-            font-weight: bold;
-        }
+        .checkmark { color: #fff; font-size: 40px; font-weight: bold; }
 
         .success-box h2 {
             font-size: 2rem;
@@ -275,18 +320,14 @@
             margin-top: 25px;
         }
 
-        .btn-success-close:hover {
-            filter: brightness(1.2);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-        }
-
         .error-message { color: #f87171; font-size: 0.85rem; margin-top: 10px; font-weight: 600; }
 
-        @media (max-width: 640px) {
-            .card { padding: 35px 20px; }
-            header h1 { font-size: 2.2rem; }
+        @media (max-width: 768px) {
+            .card { padding: 40px 24px; }
+            .language-switcher { top: 20px; right: 20px; }
+            header h1 { font-size: 2.2rem; padding-right: 0; margin-top: 20px; }
             .contact-row { grid-template-columns: 1fr; }
+            .options-row label { width: 100%; text-align: left; }
         }
     </style>
 </head>
@@ -294,32 +335,28 @@
 
 <div class="page-wrapper">
     <div class="card">
-    <!-- Language Switch -->
         <div class="language-switcher">
-    <!-- Ελληνικά -->
-    <a href="{{ url_for('site_review') }}">
+            <a href="{{ url_for('site_review') }}" title="Ελληνικά" class="active">
+                <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Greek" class="flag-icon">
+            </a>
+            <a href="{{ url_for('site_review_en') }}" title="English">
+                <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+            </a>
+        </div>
 
-        <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
-    </a>
-
-    <!-- English -->
-    <a href="{{ url_for('site_review_en') }}">
-
-        <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
-    </a>
-</div>
         <header>
-            <h1>Αξιολόγηση Ιστοσελίδας </h1>
+            <h1>Αξιολόγηση Ιστοσελίδας</h1>
             <p class="subtitle">
-                Η γνώμη σας είναι η κινητήριος δύναμη για να κάνουμε το <strong>ARISTON Wash & Dry</strong> ακόμα καλύτερο.<br>
-               <strong> Σε περίπτωση που δεν συμπληρώσετε στοιχεία επικοινωνίας, η υποβολή θα παραμείνει ανώνυμη.</strong>
+                Η γνώμη σας μας βοηθά να κάνουμε την εμπειρία σας στο <strong>ARISTON Wash & Dry</strong> ακόμη καλύτερη. 
+                Οι ερωτήσεις με αστερίσκο (*) είναι υποχρεωτικές.<br>
+                <strong>Σε περίπτωση που δεν συμπληρώσετε στοιχεία επικοινωνίας, η υποβολή θα παραμείνει ανώνυμη.</strong>
             </p>
         </header>
 
         <form id="reviewForm" novalidate>
             <section class="section-block">
-                <h2>Εμπειρία Χρήστη</h2>
-                
+                <h2>Ερωτήσεις πολλαπλής επιλογής *</h2>
+
                 <div class="question-block">
                     <label class="question-title">1) Πόσο εύκολη ήταν η πλοήγηση στην ιστοσελίδα; *</label>
                     <div class="options-row">
@@ -333,47 +370,91 @@
                 </div>
 
                 <div class="question-block">
-                    <label class="question-title">2) Πόσο ικανοποιημένοι είστε από την ταχύτητα; *</label>
+                    <label class="question-title">2) Πόσο ικανοποιημένοι είστε από την ταχύτητα φόρτωσης; *</label>
                     <div class="options-row">
                         <label><input type="radio" name="q2" value="Πολύ ικανοποιημένος"> Πολύ ικανοποιημένος</label>
                         <label><input type="radio" name="q2" value="Ικανοποιημένος"> Ικανοποιημένος</label>
                         <label><input type="radio" name="q2" value="Ουδέτερος"> Ουδέτερος</label>
                         <label><input type="radio" name="q2" value="Μη ικανοποιημένος"> Μη ικανοποιημένος</label>
-                        <label><input type="radio" name="q2" value="Καθόλου"> Καθόλου</label>
+                        <label><input type="radio" name="q2" value="Καθόλου ικανοποιημένος"> Καθόλου</label>
                     </div>
                     <p class="error-message" data-error-for="q2"></p>
                 </div>
 
                 <div class="question-block">
-                    <label class="question-title">3) Πώς αξιολογείτε τον σχεδιασμό; *</label>
+                    <label class="question-title">3) Πώς αξιολογείτε τον σχεδιασμό και την εμφάνιση; *</label>
                     <div class="options-row">
-                        <label><input type="radio" name="q3" value="Εξαιρετικός"> Εξαιρετικός</label>
-                        <label><input type="radio" name="q3" value="Πολύ καλός"> Πολύ καλός</label>
-                        <label><input type="radio" name="q3" value="Καλός"> Καλός</label>
-                        <label><input type="radio" name="q3" value="Μέτριος"> Μέτριος</label>
-                        <label><input type="radio" name="q3" value="Χαμηλός"> Χαμηλός</label>
+                        <label><input type="radio" name="q3" value="Εξαιρετική"> Εξαιρετική</label>
+                        <label><input type="radio" name="q3" value="Πολύ καλή"> Πολύ καλή</label>
+                        <label><input type="radio" name="q3" value="Καλή"> Καλή</label>
+                        <label><input type="radio" name="q3" value="Μέτρια"> Μέτρια</label>
+                        <label><input type="radio" name="q3" value="Χαμηλή"> Χαμηλή</label>
                     </div>
                     <p class="error-message" data-error-for="q3"></p>
                 </div>
+
+                <div class="question-block">
+                    <label class="question-title">4) Βρήκατε εύκολα τις πληροφορίες που ψάχνατε; *</label>
+                    <div class="options-row">
+                        <label><input type="radio" name="q4" value="Ναι, πολύ εύκολα"> Ναι, πολύ εύκολα</label>
+                        <label><input type="radio" name="q4" value="Ναι, σχετικά εύκολα"> Ναι, σχετικά εύκολα</label>
+                        <label><input type="radio" name="q4" value="Ούτε εύκολα ούτε δύσκολα"> Ουδέτερα</label>
+                        <label><input type="radio" name="q4" value="Δύσκολα"> Δύσκολα</label>
+                        <label><input type="radio" name="q4" value="Καθόλου"> Καθόλου</label>
+                    </div>
+                    <p class="error-message" data-error-for="q4"></p>
+                </div>
+
+                <div class="question-block">
+                    <label class="question-title">5) Πόσο πιθανό είναι να επισκεφθείτε ξανά την ιστοσελίδα; *</label>
+                    <div class="options-row">
+                        <label><input type="radio" name="q5" value="Πολύ πιθανό"> Πολύ πιθανό</label>
+                        <label><input type="radio" name="q5" value="Αρκετά πιθανό"> Αρκετά πιθανό</label>
+                        <label><input type="radio" name="q5" value="Ουδέτερο"> Ουδέτερο</label>
+                        <label><input type="radio" name="q5" value="Λιγότερο πιθανό"> Λιγότερο πιθανό</label>
+                        <label><input type="radio" name="q5" value="Καθόλου πιθανό"> Καθόλου πιθανό</label>
+                    </div>
+                    <p class="error-message" data-error-for="q5"></p>
+                </div>
             </section>
 
             <section class="section-block">
-                <h2>Σχόλια & Προτάσεις</h2>
+                <h2>Ερωτήσεις ανοιχτού τύπου (προαιρετικές)</h2>
+
                 <div class="question-block">
-                    <label class="question-title">Τι σας άρεσε περισσότερο;</label>
-                    <textarea name="t1" rows="3" placeholder="Περιγράψτε την εμπειρία σας..."></textarea>
+                    <label class="question-title">1) Τι σας άρεσε περισσότερο στην ιστοσελίδα;</label>
+                    <textarea name="t1" rows="3" placeholder="Γράψτε εδώ..."></textarea>
                 </div>
+
                 <div class="question-block">
-                    <label class="question-title">Τι θα θέλατε να βελτιώσουμε;</label>
-                    <textarea name="t2" rows="3" placeholder="Προτάσεις βελτίωσης..."></textarea>
+                    <label class="question-title">2) Τι θα θέλατε να βελτιώσουμε στον σχεδιασμό ή στη λειτουργικότητα;</label>
+                    <textarea name="t2" rows="3" placeholder="Γράψτε εδώ..."></textarea>
+                </div>
+
+                <div class="question-block">
+                    <label class="question-title">3) Υπήρξε κάποιο σημείο που σας δυσκόλεψε; Αν ναι, ποιο;</label>
+                    <textarea name="t3" rows="3" placeholder="Γράψτε εδώ..."></textarea>
+                </div>
+
+                <div class="question-block">
+                    <label class="question-title">4) Ποιες πληροφορίες θεωρείτε ότι λείπουν ή θα θέλατε να προστεθούν;</label>
+                    <textarea name="t4" rows="3" placeholder="Γράψτε εδώ..."></textarea>
+                </div>
+
+                <div class="question-block">
+                    <label class="question-title">5) Πώς θα περιγράφατε συνολικά την εμπειρία σας;</label>
+                    <textarea name="t5" rows="3" placeholder="Γράψτε εδώ..."></textarea>
                 </div>
             </section>
 
             <section class="section-block">
-                <h2>Στοιχεία Επικοινωνίας (Προαιρετικά)</h2>
+                <h2>Στοιχεία Επικοινωνίας</h2>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 25px;">
+                    Προαιρετικά, αν επιθυμείτε να επικοινωνήσουμε μαζί σας.
+                </p>
                 <div class="contact-row">
                     <input type="email" id="email" name="email" placeholder="Email (π.χ. name@example.com)">
-                    <input type="tel" id="phone" name="phone" placeholder="Τηλέφωνο">
+                    <input type="tel" id="phone" name="phone" placeholder="Τηλέφωνο επικοινωνίας">
                 </div>
             </section>
 
@@ -387,9 +468,9 @@
         <div class="success-icon-wrapper">
             <span class="checkmark">✓</span>
         </div>
-        <h2>Επιτυχής Υποβολή!</h2>
+        <h2>Ευχαριστούμε!</h2>
         <p style="color: var(--text-secondary); line-height: 1.6;">
-            Σας ευχαριστούμε θερμά για τον χρόνο σας. Τα σχόλιά σας έχουν καταχωρηθεί και θα μελετηθούν από την ομάδα μας για να βελτιώσουμε την εμπειρία σας.
+            Η αξιολόγησή σας υποβλήθηκε επιτυχώς. Η γνώμη σας είναι πολύτιμη για εμάς.
         </p>
         <button id="closeSuccess" class="btn-success-close">Κλείσιμο</button>
     </div>
@@ -400,7 +481,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("reviewForm");
     const overlay = document.getElementById("successOverlay");
     const closeBtn = document.getElementById("closeSuccess");
-    const requiredGroups = ["q1", "q2", "q3"];
+    
+    const requiredGroups = ["q1", "q2", "q3", "q4", "q5"];
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -415,30 +497,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!checked) {
                 isValid = false;
-                if (errorEl) errorEl.textContent = "Απαιτείται επιλογή.";
+                if (errorEl) errorEl.textContent = "Παρακαλούμε επιλέξτε μια απάντηση.";
             }
         });
 
         if (!isValid) {
-            window.scrollTo({ top: 100, behavior: 'smooth' });
+            const firstError = document.querySelector(".error-message:not(:empty)");
+            if (firstError) {
+                firstError.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
             return;
         }
 
-        // Εικονικό loading πριν το success
         const submitBtn = form.querySelector('.btn-primary');
+        const originalText = submitBtn.textContent;
         submitBtn.textContent = "Αποστολή...";
         submitBtn.disabled = true;
 
         setTimeout(() => {
             overlay.style.display = "flex";
             form.reset();
-            submitBtn.textContent = "Υποβολή Αξιολόγησης";
+            submitBtn.textContent = originalText;
             submitBtn.disabled = false;
-        }, 1200);
+        }, 1500);
     });
 
     closeBtn.addEventListener("click", () => {
         overlay.style.display = "none";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });
 </script>
