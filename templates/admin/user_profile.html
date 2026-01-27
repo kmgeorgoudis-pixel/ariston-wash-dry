@@ -76,39 +76,33 @@
 <div class="admin-card" style="margin-top:20px;">
     <div class="admin-card-title">Κουπόνια Χρήστη</div>
 
-    {% if user.coupons %}
+    {% if coupons %}
         <div style="margin-top:12px;">
-            {% for c in user.coupons %}
+            {% for c in coupons %}
                 <div style="padding:12px; border-bottom:1px solid #e5e7eb;">
 
-                    <!-- Τίτλος + Ποσό -->
                     <div style="font-size:15px; font-weight:700; color:#0d47a1;">
                         {{ c.title }} — {{ "%.2f"|format(c.amount or 0) }}€
                     </div>
 
-                    <!-- Περιγραφή -->
                     <div style="font-size:14px; color:#374151; margin-top:4px;">
                         {{ c.description or "-" }}
                     </div>
 
-                    <!-- Ημερομηνίες -->
                     <div style="font-size:12px; color:#6b7280; margin-top:6px;">
                         Από {{ c.start_date.strftime('%d/%m/%Y') }}
                         έως {{ c.end_date.strftime('%d/%m/%Y') }}
                     </div>
 
-                    <!-- BADGE ΧΡΗΣΙΜΟΠΟΙΗΘΗΚΕ -->
                     {% if c.used %}
                         <span style="display:inline-block; margin-top:8px; padding:4px 8px; background:#fee2e2; color:#b91c1c; border-radius:6px; font-size:12px;">
                             Χρησιμοποιήθηκε στις {{ c.used_at.strftime('%d/%m/%Y') }}
                         </span>
                     {% endif %}
 
-                    <!-- ΚΟΥΜΠΙΑ ΕΝΕΡΓΕΙΩΝ -->
                     <div style="display:flex; gap:8px; margin-top:10px;">
 
                         {% if not c.used %}
-                        <!-- Πραγματοποιήθηκε -->
                         <form action="/admin/coupon/{{ c.id }}/use" method="POST">
                             <button type="submit"
                                 style="padding:6px 10px; border:none; border-radius:8px; background:#d1fae5; color:#065f46; cursor:pointer; font-size:12px;">
@@ -117,7 +111,6 @@
                         </form>
                         {% endif %}
 
-                        <!-- Διαγραφή -->
                         <form action="/admin/coupon/{{ c.id }}/delete" method="POST">
                             <button type="submit"
                                 style="padding:6px 10px; border:none; border-radius:8px; background:#fee2e2; color:#b91c1c; cursor:pointer; font-size:12px;">
