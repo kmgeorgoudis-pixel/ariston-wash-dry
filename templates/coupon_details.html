@@ -75,7 +75,7 @@
 
         <div class="details-title">{{ coupon.title }}</div>
 
-{% set today = date.today() %}
+
 {% set expired = coupon.end_date.date() < today %}
 
 {% if coupon.used %}

@@ -220,11 +220,13 @@ def game():
 @app.route("/timokatalogos")
 def timokatalogos():
     return render_template("timokatalogos.html")
+
+
 @app.route("/coupon/<int:coupon_id>")
 @login_required
 def coupon_details(coupon_id):
     coupon = Coupon.query.filter_by(id=coupon_id, user_id=current_user.id).first_or_404()
-    return render_template("coupon_details.html", coupon=coupon)
+    return render_template("coupon_details.html", coupon=coupon, today=date.today())
 @app.route("/admin/coupon/<int:id>/delete", methods=["POST"])
 @login_required
 def admin_delete_coupon(id):
