@@ -75,33 +75,43 @@
 
         <div class="details-title">{{ coupon.title }}</div>
 
-        {% if coupon.used %}
-            <div class="used-badge">Χρησιμοποιήθηκε</div>
-        {% else %}
-            <div class="active-badge">Ενεργό Κουπόνι</div>
-        {% endif %}
+{% set today = date.today() %}
+{% set expired = coupon.end_date.date() < today %}
 
-        <div class="detail-row">
-            <span class="label">Περιγραφή:</span>
-            <div class="value">{{ coupon.description }}</div>
-        </div>
+{% if coupon.used %}
+    <div class="used-badge">Χρησιμοποιήθηκε</div>
+{% elif expired %}
+    <div class="used-badge" style="background:#6b7280;">Έληξε</div>
+{% else %}
+    <div class="active-badge">Ενεργό Κουπόνι</div>
+{% endif %}
 
-        <div class="detail-row">
-            <span class="label">Ημερομηνία Έναρξης:</span>
-            <div class="value">{{ coupon.start_date.strftime('%d/%m/%Y') }}</div>
-        </div>
+<div class="detail-row">
+    <span class="label">Ποσό Έκπτωσης:</span>
+    <div class="value">{{ "%.2f"|format(coupon.amount) }}€</div>
+</div>
 
-        <div class="detail-row">
-            <span class="label">Ημερομηνία Λήξης:</span>
-            <div class="value">{{ coupon.end_date.strftime('%d/%m/%Y') }}</div>
-        </div>
+<div class="detail-row">
+    <span class="label">Περιγραφή:</span>
+    <div class="value">{{ coupon.description }}</div>
+</div>
 
-        {% if coupon.used %}
-        <div class="detail-row">
-            <span class="label">Ημερομηνία Χρήσης:</span>
-            <div class="value">{{ coupon.used_at.strftime('%d/%m/%Y') }}</div>
-        </div>
-        {% endif %}
+<div class="detail-row">
+    <span class="label">Ημερομηνία Έναρξης:</span>
+    <div class="value">{{ coupon.start_date.strftime('%d/%m/%Y') }}</div>
+</div>
+
+<div class="detail-row">
+    <span class="label">Ημερομηνία Λήξης:</span>
+    <div class="value">{{ coupon.end_date.strftime('%d/%m/%Y') }}</div>
+</div>
+
+{% if coupon.used %}
+<div class="detail-row">
+    <span class="label">Ημερομηνία Χρήσης:</span>
+    <div class="value">{{ coupon.used_at.strftime('%d/%m/%Y') }}</div>
+</div>
+{% endif %}
 
         <a href="/coupons" class="back-link">← Επιστροφή στα κουπόνια</a>
 
