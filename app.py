@@ -1071,7 +1071,8 @@ def admin_send_announcements():
     # 🔥 Background thread για αποστολή email
     threading.Thread(
         target=send_announcements_background,
-        args=(users, title, description),
+        args=(safe_users, title, description),
+
         daemon=True
     ).start()
 
