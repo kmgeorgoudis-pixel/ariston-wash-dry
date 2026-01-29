@@ -888,28 +888,29 @@ def admin_announcement_submit(user_id):
     )
     db.session.add(announcement)
     db.session.commit()
+
     # ============================
-#  UPLOAD ΕΙΚΟΝΩΝ (ΜΕΧΡΙ 3)
-# ============================
-files = request.files.getlist("images")
-files = files[:3]  # περιορισμός σε 3 εικόνες
+    #  UPLOAD ΕΙΚΟΝΩΝ (ΜΕΧΡΙ 3)
+    # ============================
+    files = request.files.getlist("images")
+    files = files[:3]  # περιορισμός σε 3 εικόνες
 
-upload_folder = "static/uploads/announcements"
-os.makedirs(upload_folder, exist_ok=True)
+    upload_folder = "static/uploads/announcements"
+    os.makedirs(upload_folder, exist_ok=True)
 
-for file in files:
-    if file and file.filename:
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(upload_folder, filename)
-        file.save(filepath)
+    for file in files:
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(upload_folder, filename)
+            file.save(filepath)
 
-        img = AnnouncementImage(
-            announcement_id=announcement.id,
-            filename=filename
-        )
-        db.session.add(img)
+            img = AnnouncementImage(
+                announcement_id=announcement.id,
+                filename=filename
+            )
+            db.session.add(img)
 
-db.session.commit()
+    db.session.commit()
 
     # Αποστολή email μέσω Resend
     subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
@@ -935,22 +936,8 @@ https://aristonwashdry.gr/updates
 Με εκτίμηση,
 ARISTON Wash & Dry
 https://aristonwashdry.gr/
-
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-<img src="https://aristonwashdry.gr/templates/images/1new.png"
-alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;">
-</a>
-
-<hr>
-<p style='font-size: 12px; color: #666;'>
-Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
-<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
-Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
-και δεν κοινοποιούνται σε τρίτους.
-</p>
 """
 
-    # Χρήση της send_email που ήδη δουλεύει
     send_email(
         user.email,
         subject,
@@ -1065,6 +1052,8 @@ def admin_send_announcements():
     # Φέρνουμε τους επιλεγμένους χρήστες
     users = User.query.filter(User.id.in_(selected_ids)).all()
 
+    announcements = []
+
     # Δημιουργούμε ΜΙΑ ανακοίνωση για κάθε χρήστη
     for user in users:
         announcement = Announcement(
@@ -1073,31 +1062,33 @@ def admin_send_announcements():
             description=description
         )
         db.session.add(announcement)
+        announcements.append(announcement)
 
     db.session.commit()
+
     # ============================
-#  UPLOAD ΕΙΚΟΝΩΝ (ΜΕΧΡΙ 3)
-# ============================
-files = request.files.getlist("images")
-files = files[:3]  # περιορισμός σε 3 εικόνες
+    #  UPLOAD ΕΙΚΟΝΩΝ (ΜΕΧΡΙ 3)
+    # ============================
+    files = request.files.getlist("images")
+    files = files[:3]
 
-upload_folder = "static/uploads/announcements"
-os.makedirs(upload_folder, exist_ok=True)
+    upload_folder = "static/uploads/announcements"
+    os.makedirs(upload_folder, exist_ok=True)
 
-for announcement in announcements:
-    for file in files:
-        if file and file.filename:
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(upload_folder, filename)
-            file.save(filepath)
+    for announcement in announcements:
+        for file in files:
+            if file and file.filename:
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(upload_folder, filename)
+                file.save(filepath)
 
-            img = AnnouncementImage(
-                announcement_id=announcement.id,
-                filename=filename
-            )
-            db.session.add(img)
+                img = AnnouncementImage(
+                    announcement_id=announcement.id,
+                    filename=filename
+                )
+                db.session.add(img)
 
-db.session.commit()
+    db.session.commit()
 
     # 🔥 Background thread για αποστολή email
     threading.Thread(
