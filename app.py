@@ -991,17 +991,16 @@ import threading
 import time
 
 def send_announcements_background(users, title, description):
-    with app.app_context():  # 🔥 ΑΥΤΟ ΕΙΝΑΙ ΤΟ ΣΩΣΤΟ
-        count = 0
+    count = 0
 
-        for user in users:
-            try:
-                if not user.email or user.email.strip() == "":
-                    print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
-                    continue
+    for user in users:
+        try:
+            if not user.email or user.email.strip() == "":
+                print(f"⚠️ SKIPPED: User {user.id} έχει άδειο email")
+                continue
 
-                subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
-                body = f"""
+            subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
+            body = f"""
 Αγαπητέ/ή {user.fullname},
 
 Υπάρχει μια νέα ανακοίνωση από το ARISTON Wash & Dry.
@@ -1029,17 +1028,16 @@ https://aristonwashdry.gr/
 </p>
 """
 
-                send_email(user.email, subject, body)
-                count += 1
+            send_email(user.email, subject, body)
+            count += 1
 
-                # Resend → 2 emails/sec
-                if count % 2 == 0:
-                    time.sleep(1)
+            # Resend → 2 emails/sec
+            if count % 2 == 0:
+                time.sleep(1)
 
-            except Exception as e:
-                print(f"❌ ERROR sending to user {user.id}: {e}")
-                continue
-
+        except Exception as e:
+            print(f"❌ ERROR sending to user {user.id}: {e}")
+            continue
 
 
 @app.route("/admin/announcements2/send", methods=["POST"])
@@ -1059,8 +1057,6 @@ def admin_send_announcements():
     # Φέρνουμε τους επιλεγμένους χρήστες
     users = User.query.filter(User.id.in_(selected_ids)).all()
 
-    announcements = []
-
     # Δημιουργούμε ΜΙΑ ανακοίνωση για κάθε χρήστη
     for user in users:
         announcement = Announcement(
@@ -1069,11 +1065,9 @@ def admin_send_announcements():
             description=description
         )
         db.session.add(announcement)
-        announcements.append(announcement)
 
     db.session.commit()
 
-    
     # 🔥 Background thread για αποστολή email
     threading.Thread(
         target=send_announcements_background,
@@ -1083,7 +1077,6 @@ def admin_send_announcements():
 
     flash("Η αποστολή ξεκίνησε στο παρασκήνιο.", "success")
     return redirect("/admin/announcements2")
-
 @app.route("/admin/announcements/list")
 @login_required
 def admin_announcements_list():
@@ -1092,7 +1085,7 @@ def admin_announcements_list():
 
     announcements = Announcement.query.order_by(Announcement.date.desc()).all()
 
-    return render_template("admin/announcements_list.html", announcements=announcements)    
+    return render_template("admin/announcements_list.html", announcements=announcements)     
 @app.route("/admin")
 @login_required
 def admin_dashboard():
