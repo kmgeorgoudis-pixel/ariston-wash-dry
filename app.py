@@ -16,6 +16,17 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 from email.message import EmailMessage
+MAINTENANCE_MODE = True
+@app.before_request
+def maintenance_lock():
+    if MAINTENANCE_MODE:
+        # Αν είσαι εσύ (admin), μπαίνεις κανονικά σε ΟΛΟ το site
+        if current_user.is_authenticated and current_user.is_admin:
+            return
+
+        # Αλλιώς δείξε maintenance page
+        return render_template("maintenance.html"), 503
+
 def register_user(fullname, email, password, confirm):
     if password != confirm:
         return "Οι κωδικοί δεν ταιριάζουν."
