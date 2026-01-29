@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="Qc2OA-gLDNhpJ-XnGJjJ6jLk_VCl4Ny73a9xrsVdLhI" />
-    <title>ARISTON Wash & Dry | Premium Laundry Experience</title>
-    <!-- Ελληνικά SEO -->
+    <title>ARISTON Wash & Dry</title>
+    
+
+
+    
+
+<!-- Ελληνικά SEO -->
 <meta name="description" content="Ariston Wash & Dry στη Σάμο – σύγχρονο self-service πλυντήριο ρούχων. Πλύσιμο & στέγνωμα γρήγορα, οικονομικά και εύκολα. Ανοιχτά καθημερινά. Καθαρά ρούχα, σύγχρονα πλυντήρια, ιδανικό για ντόπιους και επισκέπτες.">
 
 <meta name="keywords" content="
@@ -101,284 +106,487 @@ laundry for rental apartments Samos,
 professional laundry Samos
 ">
 
-    <meta name="description" content="Ariston Wash & Dry στη Σάμο – σύγχρονο self-service πλυντήριο ρούχων. Πλύσιμο & στέγνωμα γρήγορα, οικονομικά και εύκολα. Ανοιχτά καθημερινά.">
-    <meta name="keywords" content="πλυντήρια Σάμος, self service laundry Samos, Ariston Wash & Dry, κλπ">
-    <meta name="author" content="Konstantinos Georgoudis | Κωνσταντίνος Γεωργούδης">
-
+    <!-- Favicon -->
     <link rel="icon" href="/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-    <style>
-        :root {
-            --primary: #0070ff;
-            --accent: #00d4ff;
-            --dark: #010409;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text: #ffffff;
-            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+<style>
+        /* --- Premium Promo Overlay Style (Greek Version) --- */
+        .promo-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(1, 4, 9, 0.85); 
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--dark);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+        .promo-overlay.show {
+            display: flex;
+            animation: fadeIn 0.6s ease forwards;
         }
 
-        /* --- AURORA BACKGROUND ANIMATION --- */
-        .aurora-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden; background: #000;
-        }
-        .blob {
-            position: absolute; width: 600px; height: 600px;
-            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-            filter: blur(80px); opacity: 0.15; animation: move 25s infinite alternate;
-        }
-        @keyframes move {
-            from { transform: translate(-20%, -20%) rotate(0deg); }
-            to { transform: translate(40%, 40%) rotate(360deg); }
-        }
-
-        /* --- MODERN FLOATING NAV --- */
-        header {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            width: 95%; max-width: 1200px; z-index: 1000;
-            background: rgba(1, 4, 9, 0.7);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 24px;
-            padding: 12px 25px; transition: var(--transition);
-        }
-
-        .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
-        .logo span { background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo-icon { height: 35px; filter: drop-shadow(0 0 8px var(--primary)); }
-
-        .main-nav { margin-top: 10px; border-top: 1px solid var(--glass-border); padding-top: 10px; }
-        .nav-links { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; }
-        .nav-links a { text-decoration: none; color: rgba(255,255,255,0.6); font-size: 0.85rem; font-weight: 600; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-        .nav-btn { background: var(--primary); color: white !important; padding: 8px 18px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,112,255,0.3); }
-
-        /* --- HERO: THE MASTERPIECE --- */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column; justify-content: center;
-            align-items: center; text-align: center; padding: 0 8%;
-        }
-        .hero h1 {
-            font-size: clamp(3rem, 10vw, 6.5rem); font-weight: 800; line-height: 0.9;
-            letter-spacing: -4px; margin-bottom: 20px;
-            background: linear-gradient(to bottom, #fff 50%, #666);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .hero h2 { color: var(--accent); letter-spacing: 4px; text-transform: uppercase; font-size: 1rem; margin-bottom: 20px; }
-        .hero p { max-width: 600px; color: rgba(255,255,255,0.5); font-size: 1.1rem; }
-
-        /* --- INFO SECTION: BENTO BOX STYLE --- */
-        .info-section {
-            padding: 100px 8%; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-        }
-        .info-text {
-            background: var(--glass); border: 1px solid var(--glass-border);
-            padding: 50px; border-radius: 40px; backdrop-filter: blur(10px);
-            transform: translateY(50px); opacity: 0; transition: var(--transition);
-        }
-        .info-text.reveal { transform: translateY(0); opacity: 1; }
-        .info-image img {
-            width: 100%; border-radius: 40px; border: 1px solid var(--glass-border);
-            transition: var(--transition);
-        }
-        .info-image:hover img { transform: scale(1.02) rotate(1deg); }
-
-        /* --- USER WELCOME BANNER --- */
-        .welcome-banner {
-            position: fixed; bottom: 30px; left: 30px; z-index: 1001;
-            background: var(--primary); padding: 15px 25px; border-radius: 20px;
-            display: flex; align-items: center; gap: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-
-        /* --- STORE NOTICE --- */
-        .store-notice {
-            background: #fff; color: #000; padding: 10px; text-align: center;
-            font-weight: 900; font-size: 0.7rem; letter-spacing: 2px;
-            position: relative; top: 120px; width: fit-content; margin: 0 auto; border-radius: 50px;
-        }
-
-        /* --- CONTACT --- */
-        .contact {
-            text-align: center; padding: 100px 8%;
-            background: radial-gradient(circle at center, #0a192f 0%, transparent 100%);
-        }
-
-        /* --- PROMO OVERLAY (RE-STYLED) --- */
         .promo-modal {
-            background: #000 !important; border: 1px solid var(--primary) !important;
-            box-shadow: 0 0 60px rgba(0,112,255,0.4) !important;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px 40px;
+            border-radius: 40px;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 112, 255, 0.1);
+            position: relative;
+            color: white;
         }
 
-        /* --- FOOTER --- */
-        footer { padding: 50px 8%; text-align: center; border-top: 1px solid var(--glass-border); color: #444; }
-        footer a { color: #888; text-decoration: none; margin: 0 10px; }
+        .promo-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
 
-        @media (max-width: 900px) {
-            .info-section { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 4rem; }
-            .nav-links a:not(.nav-btn) { display: none; }
+        .promo-logo span {
+            color: #0070ff;
+            font-style: italic;
+            text-shadow: 0 0 15px rgba(0, 112, 255, 0.5);
+        }
+
+        .promo-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+
+        .promo-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .promo-benefits {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 0 auto 35px auto;
+            max-width: 450px;
+        }
+
+        .promo-benefits li {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .promo-benefits li::before {
+            content: '✓';
+            color: #0070ff;
+            font-weight: bold;
+        }
+
+        /* Pulse Animation για το κουμπί */
+        @keyframes pulse-btn {
+            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 15px 45px rgba(0, 112, 255, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4); }
+        }
+
+        .promo-btn {
+            display: block;
+            background: #0070ff;
+            color: white !important;
+            padding: 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            animation: pulse-btn 2.5s infinite ease-in-out;
+        }
+
+        .promo-btn:hover {
+            transform: translateY(-5px);
+            background: #0084ff;
+            animation: none;
+        }
+
+        .promo-close {
+            display: block;
+            margin: 20px auto 0;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            text-decoration: underline;
+        }
+
+        .promo-close:hover { color: white; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <div class="aurora-bg">
-        <div class="blob" style="top: -10%; left: -10%;"></div>
-        <div class="blob" style="bottom: -10%; right: -10%; background: var(--accent);"></div>
+    <!-- Navigation -->
+<header>
+
+    <!-- LOGO -->
+<div class="header-top">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+        ARISTON <span>Wash & Dry</span>
+    </div> 
+
+    <div class="language-switcher">
+        <a href="{{ url_for('home') }}">
+            <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
+        </a>
+        <a href="{{ url_for('en_index') }}">
+            <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+        </a>
+    </div>
+</div>
+
+
+
+        
+</div>
+
+    <!-- Google Translate element (κρυφό) -->
+    <div id="google_translate_element" style="display: none;"></div>
+</div>
     </div>
 
-    <div class="store-notice">ΣΥΝΤΟΜΑ ΚΟΝΤΑ ΣΑΣ</div>
+    
 
-    <header id="main-header">
-        <div class="header-top">
-            <div class="logo">
-                <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
-                ARISTON <span>Wash & Dry</span>
-            </div> 
-            <div class="language-switcher">
-                <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/gr-flag.png') }}" style="width:24px; border-radius:4px; opacity:0.8;"></a>
-                <a href="{{ url_for('en_index') }}"><img src="{{ url_for('static', filename='images/en-flag.png') }}" style="width:24px; border-radius:4px; opacity:0.8;"></a>
+
+
+    <!-- 🔥 ΕΝΗΜΕΡΩΤΙΚΟ ΜΗΝΥΜΑ -->
+    <div class="store-notice">
+        ΤΟ ΚΑΤΑΣΤΗΜΑ ΜΑΣ ΔΕΝ ΕΙΝΑΙ ΑΝΟΙΧΤΟ ΑΚΟΜΑ — ΣΥΝΤΟΜΑ ΚΟΝΤΑ ΣΑΣ!
+    </div>
+</div>
+<div class="bubbles-container"></div>
+
+    
+
+    <!-- NAVIGATION (κάτω από το logo) -->
+    <nav class="main-nav">
+
+        <!-- Hamburger button (mobile only) -->
+        <div class="hamburger" id="hamburger-btn">☰</div>
+
+        <!-- Menu links -->
+        <div class="nav-links" id="nav-menu">
+
+            <a href="/">Αρχική</a>
+            <a href="/timokatalogos">Τιμοκατάλογος</a>
+            <a href="/fwtografies">Φωτογραφίες</a>
+            <a href="/eidikes-ypiresies">Ειδικές Υπηρεσίες</a>
+            <a href="/kritikes">Κριτικές</a>
+            <a href="/epikoinonia">Επικοινωνία</a>
+
+            {% if current_user.is_authenticated %}
+            <div class="user-menu">
+                <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+                <span class="user-hint">Επιλογές μέλους</span>
+
+                <div class="user-dropdown">
+                    <a href="/settings-menu">Ρυθμίσεις</a>
+                    <a href="/updates-menu">Ενημερώσεις</a>
+                    <a href="{{ url_for('ai') }}" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="/game">ARISTON Game</a>
+                    
+                    <a href="/logout" class="logout">Αποσύνδεση</a>
+                    <div id="google_translate_element"></div>
+                </div>
             </div>
+            {% else %}
+            <a href="/auth_choice" class="nav-btn">Εγγραφή / Σύνδεση</a>
+            {% endif %}
+
         </div>
-        <nav class="main-nav">
-            <div class="nav-links">
-                <a href="/">Αρχική</a>
-                <a href="/timokatalogos">Τιμοκατάλογος</a>
-                <a href="/fwtografies">Φωτογραφίες</a>
-                <a href="/eidikes-ypiresies">Υπηρεσίες</a>
-                <a href="/kritikes">Κριτικές</a>
-                <a href="/epikoinonia">Επικοινωνία</a>
-                {% if not current_user.is_authenticated %}
-                <a href="/auth_choice" class="nav-btn">ΕΙΣΟΔΟΣ ΜΕΛΩΝ</a>
-                {% endif %}
-            </div>
-        </nav>
-    </header>
+    </nav>
+{% if current_user.is_authenticated %}
+<div class="welcome-banner">
+    <div class="welcome-accent">
+        {{ current_user.fullname[0]|upper }}
+    </div>
 
+    <div>
+        <div class="welcome-text-main">
+            Καλώς ήρθες ξανά, {{ current_user.fullname }} 👋
+        </div>
+        <div class="welcome-text-sub">
+            Χαιρόμαστε που σε έχουμε μαζί μας στον κόσμο του Ariston Wash & Dry.
+        </div>
+    </div>
+
+    <div class="welcome-pill">
+        <div class="welcome-pill-dot"></div>
+        <span>Συνδεδεμένο μέλος</span>
+    </div>
+</div>
+{% endif %}
+
+
+</header>
+
+    <!-- Hero Section -->
     <section class="hero">
-        <h2>Easy, Fast, Affordable & Effective</h2>
         <h1>ARISTON Wash & Dry</h1>
-        <p>Το νέο self-service πλυντήριο στη Σάμο είναι εδώ!
-
-Ariston Wash & Dry – πλύνετε και στεγνώστε τα ρούχα σας μόνοι σας, εύκολα, γρήγορα και οικονομικά.
-
-Ανοικτό καθημερινά, έτοιμο να σας εξυπηρετήσει όποτε το χρειαστείτε.</p>
+        <h2>Easy, Fast, Affordable & Effective</h2>
+        <p>Το νέο self-service πλυντήριο στη Σάμο είναι εδώ!</p>
+        <p>Ariston Wash & Dry – πλύνετε και στεγνώστε τα ρούχα σας μόνοι σας, εύκολα, γρήγορα και οικονομικά.</p>
+        <p>Ανοικτό καθημερινά, έτοιμο να σας εξυπηρετήσει όποτε το χρειαστείτε.</p>
     </section>
 
+    <!-- Info Section with Image -->
     <section class="info-section">
-        <div class="info-text" id="reveal-target">
-            <h3>Καλώς ήρθατε στο Ariston!</h3>
+        <div class="info-text">
+            <h3>Καλώς ήρθατε στο Ariston Wash & Dry!</h3>
             <p>Στο Ariston Wash & Dry μπορείτε να πλύνετε και να στεγνώσετε τα ρούχα σας εύκολα, γρήγορα και οικονομικά, σε λιγότερο από μία ώρα.</p>
-            <p>Απολαύστε έναν καθαρό, μοντέρνο χώρο με σύγχρονα μηχανήματα υψηλής απόδοσης και απλή λειτουργία.</p>
-            <p><strong>Premium Amenities:</strong> Free Wi-Fi, αυτόματος πωλητής καφέ και snacks, άνετο lounge αναμονής.</p>
-            <p style="color: var(--accent); font-weight: 800;">Ariston Wash & Dry – Καθαρά ρούχα, καθαρό μυαλό.</p>
+            <p>Απολαύστε έναν καθαρό, μοντέρνο χώρο με σύγχρονα μηχανήματα υψηλής απόδοσης και απλή λειτουργία, με δυνατότητα πληρωμής με κάρτα ή μετρητά.</p>
+            <p>Ιδανικό για κατοίκους, φοιτητές και ταξιδιώτες που θέλουν καθαρά ρούχα χωρίς αναμονή.</p>
+            <p>Δεν χρειάζεται ραντεβού — απλώς φέρτε τα ρούχα σας, πατήστε start και χαλαρώστε!</p>
+            <p>Ενώ περιμένετε, μπορείτε να απολαύσετε έναν καφέ ή να περιηγηθείτε στο κινητό σας με το δωρεάν Wi-Fi.</p>
+            <p>Στον χώρο μας θα βρείτε επίσης αυτόματο πωλητή καφέ, αναψυκτικών, νερών, χυμών και snacks, ώστε η αναμονή σας να είναι ακόμη πιο ευχάριστη.</p>
+            <p><strong>Καθαριότητα, ευκολία και οικονομία — όλα σε ένα μέρος.</strong></p>
+            <p><strong>Ariston Wash & Dry – Καθαρά ρούχα, καθαρό μυαλό.</strong></p>
         </div>
+
         <div class="info-image">
-            <img src="{{ url_for('static', filename='images/1new.png') }}" alt="Ariston Interior">
+            <img src="{{ url_for('static', filename='images/1new.png') }}" alt="Ariston Wash & Dry">
         </div>
     </section>
 
-    {% if current_user.is_authenticated %}
-    <div class="welcome-banner">
-        <div style="background: #fff; color: #000; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">
-            {{ current_user.fullname[0]|upper }}
-        </div>
-        <div>
-            <div style="font-weight: 800; font-size: 0.9rem;">Welcome back, {{ current_user.fullname }}</div>
-            <div style="font-size: 0.7rem; opacity: 0.8;">Premium Member Access Active</div>
-        </div>
-    </div>
-    {% endif %}
-
+    <!-- Contact Section -->
     <section class="contact">
         <h3>Επικοινωνία</h3>
-        <p>📍 Δερβενακίων 10 , Βαθύ, Σάμος</p>
-        <p>📞 +30 698 759 8416</p>
-        <p>📧 aristonwashing@gmail.com</p>
+        <p>📍 Διεύθυνση: Δερβενακίων 10 , Βαθύ, Σάμος 83100</p>
+        <p>📞 Τηλέφωνο: +30 698 759 8416</p>
+        <p>📧 Email: aristonwashing@gmail.com</p>
     </section>
 
     <footer>
-        © 2025 Ariston Wash & Dry — Crafted by K. Georgoudis<br><br>
-        <a href="/terms">Όροι</a> | <a href="/privacy">Πολιτική</a> | <a href="/cookies">Cookies</a>
-    </footer>
+    © 2025 Ariston Wash & Dry — All Rights Reserved<br>
+    Website designed & developed by Konstantinos Georgoudis
+    <br><br>
+    <a href="/terms">Όροι Χρήσης</a> |
+    <a href="/privacy">Πολιτική Απορρήτου</a> |
+    <a href="/cookies">Πολιτική Cookies</a>
+</footer>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const avatar = document.querySelector(".user-avatar");
+    const dropdown = document.querySelector(".user-dropdown");
 
-    {% if not current_user.is_authenticated %}
-    <div id="promo-overlay" class="promo-overlay">
-        <div class="promo-modal">
-            <div class="promo-logo">ARISTON <span>Elite</span></div>
-            <h2 class="promo-title">Ζήστε την Εμπειρία</h2>
-            <p class="promo-text">Γίνετε μέλος για να ξεκλειδώσετε τον AI Assistant, το Ariston Game και αποκλειστικές προσφορές.</p>
-            <a href="/auth_choice" class="promo-btn">ΓΙΝΕ ΜΕΛΟΣ ΤΩΡΑ</a>
-            <button class="promo-close" id="promo-close-btn">Συνέχεια στην περιήγηση</button>
+    if (avatar) {
+        avatar.addEventListener("click", () => {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+    }
+});
+</script>
+{% if not current_user.is_authenticated %}
+<div id="promo-overlay" class="promo-overlay">
+    <div class="promo-modal">
+        <div class="promo-logo">
+            ARISTON <span>Members</span>
+        </div>
+
+        <h2 class="promo-title">Ζήστε την Εμπειρία ARISTON</h2>
+        <p class="promo-text">
+            Γίνετε μέλος της αποκλειστικής μας κοινότητας και αναβαθμίστε την καθημερινή φροντίδα των ρούχων σας.
+        </p>
+
+        <ul class="promo-benefits">
+            <li>Αποκλειστικά Κουπόνια & Εκπτώσεις</li>
+            <li>Ιστορικό Χρήσης & Αναλύσεις</li>
+            <li>Πρόσβαση στον ARISTON AI Assistant</li>
+            <li>Αποκλειστική πρόσβαση στο παιχνίδι Ariston Game</li>
+            <li>Προτεραιότητα σε Νέες Υπηρεσίες</li>
+        </ul>
+
+        <a href="/auth_choice" class="promo-btn">Εγγραφή / Σύνδεση</a>
+
+        <button class="promo-close" id="promo-close-btn">Συνεχεια ως επισκεπτης</button>
+    </div>
+</div>
+{% endif %}
+{% if not current_user.is_authenticated %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Hamburger Menu
+        document.getElementById("hamburger-btn").onclick = function() {
+            document.getElementById("nav-menu").classList.toggle("active");
+        };
+
+        // User Dropdown
+        const avatar = document.querySelector(".user-avatar");
+        const dropdown = document.querySelector(".user-dropdown");
+        if (avatar) {
+            avatar.addEventListener("click", (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle("open-dropdown"); // Χρησιμοποίησε κλάση στο CSS σου για display:block
+            });
+        }
+
+        // --- Promo Overlay Logic (Every Refresh) ---
+        const overlay = document.getElementById("promo-overlay");
+        const closeBtn = document.getElementById("promo-close-btn");
+        if (overlay) {
+            setTimeout(() => {
+                overlay.classList.add("show");
+            }, 10000);
+
+            closeBtn.addEventListener("click", () => {
+                overlay.classList.remove("show");
+            });
+        }
+
+        // --- Cookie Logic ---
+        const banner = document.getElementById("cookie-banner");
+        if (!document.cookie.includes("cookie_consent")) {
+            banner.style.display = "block";
+        }
+        document.getElementById("accept-cookies").onclick = () => {
+            document.cookie = "cookie_consent=accepted; max-age=" + 365*24*60*60 + "; path=/";
+            banner.style.display = "none";
+        };
+        document.getElementById("reject-cookies").onclick = () => {
+            document.cookie = "cookie_consent=rejected; max-age=" + 365*24*60*60 + "; path=/";
+            banner.style.display = "none";
+        };
+    });
+</script>
+{% endif %}
+
+
+
+<script>
+document.getElementById("hamburger-btn").onclick = function() {
+    document.getElementById("nav-menu").classList.toggle("active");
+};
+</script>
+<div id="cookie-banner" class="cookie-banner">
+    <div class="cookie-content">
+        <p>
+            Χρησιμοποιούμε cookies για να διασφαλίσουμε την ορθή λειτουργία της ιστοσελίδας.
+            Μπορείτε να επιλέξετε αν τα αποδέχεστε.
+            <a href="/cookies">Μάθε περισσότερα</a>
+        </p>
+
+        <div class="cookie-buttons">
+            <button id="accept-cookies">Αποδοχή</button>
+            <button id="reject-cookies">Απόρριψη</button>
         </div>
     </div>
-    {% endif %}
+</div>
+<script>
+    function setCookie(name, value, days) {
+        const d = new Date();
+        d.setTime(d.getTime() + (days*24*60*60*1000));
+        let expires = "expires="+ d.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
 
-    <script>
-        // 1. Reveal Elements on Scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('reveal');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.info-text').forEach(el => observer.observe(el));
-
-        // 2. Header Shrink on Scroll
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('main-header');
-            if (window.scrollY > 50) {
-                header.style.padding = '8px 20px';
-                header.style.width = '85%';
-            } else {
-                header.style.padding = '12px 25px';
-                header.style.width = '95%';
-            }
-        });
-
-        // 3. Promo Overlay Logic
-        const overlay = document.getElementById("promo-overlay");
-        if (overlay) {
-            setTimeout(() => { overlay.classList.add("show"); }, 5000);
-            document.getElementById("promo-close-btn").onclick = () => overlay.classList.remove("show");
+    function getCookie(name) {
+        let cname = name + "=";
+        let decoded = decodeURIComponent(document.cookie);
+        let ca = decoded.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i].trim();
+            if (c.indexOf(cname) === 0) return c.substring(cname.length, c.length);
         }
+        return "";
+    }
 
-        // 4. Smooth Bubbles
-        function createBubble() {
-            const b = document.createElement('div');
-            b.innerHTML = '🫧';
-            b.style.position = 'fixed';
-            b.style.bottom = '-50px';
-            b.style.left = Math.random() * 100 + 'vw';
-            b.style.fontSize = Math.random() * 20 + 10 + 'px';
-            b.style.opacity = '0.3';
-            b.style.zIndex = '0';
-            b.style.transition = 'transform 6s linear, opacity 6s';
-            document.body.appendChild(b);
-
-            setTimeout(() => {
-                b.style.transform = `translateY(-110vh) translateX(${Math.random() * 50}px)`;
-                b.style.opacity = '0';
-            }, 100);
-            setTimeout(() => b.remove(), 7000);
+    window.onload = function() {
+        let consent = getCookie("cookie_consent");
+        if (!consent) {
+            document.getElementById("cookie-banner").style.display = "block";
         }
-        setInterval(createBubble, 1500);
-    </script>
+    };
+
+    document.getElementById("accept-cookies").onclick = function() {
+        setCookie("cookie_consent", "accepted", 365);
+        document.getElementById("cookie-banner").style.display = "none";
+    };
+
+    document.getElementById("reject-cookies").onclick = function() {
+        setCookie("cookie_consent", "rejected", 365);
+        document.getElementById("cookie-banner").style.display = "none";
+    };
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const banner = document.querySelector(".welcome-banner");
+    if (banner) {
+        setTimeout(() => {
+            banner.style.animation = "bannerFadeOut 0.7s ease forwards";
+            setTimeout(() => banner.remove(), 700);
+        }, 7000); // 7 δευτερόλεπτα
+    }
+});
+</script>
+<script>
+function createBubble() {
+    const container = document.querySelector('.bubbles-container');
+    if (!container) return;
+
+    const bubble = document.createElement('div');
+    bubble.classList.add('bubble');
+    bubble.textContent = "🫧"; // το emoji φυσαλίδας
+
+    
+    const size = Math.random() * 20 + 20; // 20–40px
+    bubble.style.fontSize = size + "px";
+
+    
+    bubble.style.left = Math.random() * 100 + "vw";
+
+    
+    bubble.style.animationDuration = (Math.random() * 3 + 4) + "s";
+
+    container.appendChild(bubble);
+
+    bubble.addEventListener("animationend", () => bubble.remove());
+}
+
+function spawnBubblesBatch() {
+    for (let i = 0; i < 3; i++) {   
+        setTimeout(createBubble, i * 300);
+    }
+}
+
+spawnBubblesBatch();
+setInterval(spawnBubblesBatch, 5000);
+</script>
+
+
+
+
+
+
+
+
 </body>
 </html>
