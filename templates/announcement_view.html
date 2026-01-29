@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ announcement.title }}</title>
+
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+
+        .date {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .text {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            color: #0d47a1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="title">{{ announcement.title }}</div>
+
+        <div class="date">
+            {{ announcement.date.strftime('%d/%m/%Y %H:%M') }}
+        </div>
+
+        <div class="text">
+            {{ announcement.description }}
+        </div>
+
+        <a href="/updates" class="back">← Επιστροφή στις ανακοινώσεις</a>
+
+    </div>
+
+</body>
+</html>

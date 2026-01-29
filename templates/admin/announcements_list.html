@@ -19,6 +19,14 @@
             <div style="font-size:12px; color:#777;">
                 {{ ann.date.strftime("%d/%m/%Y %H:%M") }}
             </div>
+            {% if ann.images %}
+    <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+        {% for img in ann.images %}
+            <img src="{{ url_for('static', filename='uploads/announcements/' + img.filename) }}"
+                 style="width:120px; height:auto; border-radius:8px; border:1px solid #e5e7eb;">
+        {% endfor %}
+    </div>
+{% endif %}
 
             <form method="POST" action="/admin/announcement/{{ ann.id }}/delete" style="margin-top:10px;">
                 <button style="padding:8px 12px; background:#dc2626; color:white; border:none; border-radius:8px; cursor:pointer;">

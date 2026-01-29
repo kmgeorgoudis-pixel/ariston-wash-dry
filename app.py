@@ -849,6 +849,19 @@ def admin_delete_user(user_id):
 # ============================
 #  ΦΟΡΜΑ ΑΝΑΚΟΙΝΩΣΗΣ (GET)
 # ============================
+@app.route("/admin/announcements/image/<int:image_id>/delete")
+@login_required
+def delete_announcement_image(image_id):
+    img = AnnouncementImage.query.get_or_404(image_id)
+
+    filepath = os.path.join("static/uploads/announcements", img.filename)
+    if os.path.exists(filepath):
+        os.remove(filepath)
+
+    db.session.delete(img)
+    db.session.commit()
+
+    return redirect(request.referrer)
 @app.route("/admin/announcements/")
 @login_required
 def admin_announcements_page_slash():
@@ -875,6 +888,28 @@ def admin_announcement_submit(user_id):
     )
     db.session.add(announcement)
     db.session.commit()
+    # ============================
+#  UPLOAD ΕΙΚΟΝΩΝ (ΜΕΧΡΙ 3)
+# ============================
+files = request.files.getlist("images")
+files = files[:3]  # περιορισμός σε 3 εικόνες
+
+upload_folder = "static/uploads/announcements"
+os.makedirs(upload_folder, exist_ok=True)
+
+for file in files:
+    if file and file.filename:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(upload_folder, filename)
+        file.save(filepath)
+
+        img = AnnouncementImage(
+            announcement_id=announcement.id,
+            filename=filename
+        )
+        db.session.add(img)
+
+db.session.commit()
 
     # Αποστολή email μέσω Resend
     subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
@@ -1040,6 +1075,29 @@ def admin_send_announcements():
         db.session.add(announcement)
 
     db.session.commit()
+    # ============================
+#  UPLOAD ΕΙΚΟΝΩΝ (ΜΕΧΡΙ 3)
+# ============================
+files = request.files.getlist("images")
+files = files[:3]  # περιορισμός σε 3 εικόνες
+
+upload_folder = "static/uploads/announcements"
+os.makedirs(upload_folder, exist_ok=True)
+
+for announcement in announcements:
+    for file in files:
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(upload_folder, filename)
+            file.save(filepath)
+
+            img = AnnouncementImage(
+                announcement_id=announcement.id,
+                filename=filename
+            )
+            db.session.add(img)
+
+db.session.commit()
 
     # 🔥 Background thread για αποστολή email
     threading.Thread(
@@ -1211,6 +1269,15 @@ def updates():
     ).order_by(Announcement.id.desc()).all()
 
     return render_template("updates.html", announcements=announcements)
+@app.route("/announcement/<int:announcement_id>")
+@login_required
+def announcement_view(announcement_id):
+    announcement = Announcement.query.filter(
+        (Announcement.id == announcement_id) &
+        ((Announcement.user_id == None) | (Announcement.user_id == current_user.id))
+    ).first_or_404()
+
+    return render_template("announcement_view.html", announcement=announcement)
 
 
 

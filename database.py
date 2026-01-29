@@ -75,6 +75,13 @@ class Announcement(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship("User", backref="announcements")
+class AnnouncementImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    announcement_id = db.Column(db.Integer, db.ForeignKey("announcement.id"), nullable=False)
+    filename = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    announcement = db.relationship("Announcement", backref="images", lazy=True)
 
 
 class User(db.Model, UserMixin):
