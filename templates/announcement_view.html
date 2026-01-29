@@ -38,6 +38,48 @@
             color: #333;
             line-height: 1.6;
             white-space: pre-line;
+            margin-bottom: 20px;
+        }
+
+        .images {
+            margin-top: 20px;
+        }
+
+        .images img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .reactions {
+            margin-top: 20px;
+            font-size: 32px;
+            display: flex;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .comment-box {
+            margin-top: 30px;
+        }
+
+        .comment-box textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            font-size: 15px;
+            resize: vertical;
+        }
+
+        .comment-box button {
+            margin-top: 10px;
+            padding: 10px 16px;
+            background: #0d47a1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
         }
 
         .back {
@@ -63,9 +105,45 @@
             {{ announcement.description }}
         </div>
 
+        <!-- ΕΙΚΟΝΕΣ -->
+        {% if announcement.images %}
+        <div class="images">
+            {% for img in announcement.images %}
+                <img src="{{ url_for('static', filename='uploads/announcements/' + img.filename) }}">
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- ΑΝΤΙΔΡΑΣΕΙΣ -->
+        <div class="reactions">
+            <span onclick="sendReaction({{ announcement.id }}, 'like')">👍</span>
+            <span onclick="sendReaction({{ announcement.id }}, 'love')">❤️</span>
+            <span onclick="sendReaction({{ announcement.id }}, 'laugh')">😂</span>
+            <span onclick="sendReaction({{ announcement.id }}, 'wow')">😮</span>
+            <span onclick="sendReaction({{ announcement.id }}, 'sad')">😢</span>
+        </div>
+
+        <!-- ΣΧΟΛΙΟ -->
+        <div class="comment-box">
+            <form method="POST" action="/announcement/{{ announcement.id }}/comment">
+                <textarea name="comment" rows="4" placeholder="Γράψε το σχόλιό σου εδώ..." required></textarea>
+                <button type="submit">Αποστολή σχολίου</button>
+            </form>
+        </div>
+
         <a href="/updates" class="back">← Επιστροφή στις ανακοινώσεις</a>
 
     </div>
+
+    <script>
+        function sendReaction(id, reaction) {
+            fetch(`/announcement/${id}/reaction`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ reaction: reaction })
+            });
+        }
+    </script>
 
 </body>
 </html>

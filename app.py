@@ -1099,6 +1099,16 @@ def admin_send_announcements():
 
     flash("Η αποστολή ξεκίνησε στο παρασκήνιο.", "success")
     return redirect("/admin/announcements2")
+@app.route("/announcement/<int:ann_id>/reaction", methods=["POST"])
+@login_required
+def announcement_reaction(ann_id):
+    data = request.get_json()
+    reaction = data.get("reaction")
+
+    # Εδώ μπορείς να το αποθηκεύσεις σε πίνακα reactions
+    print(f"User {current_user.id} reacted {reaction} to announcement {ann_id}")
+
+    return {"status": "ok"}
 @app.route("/admin/announcements/list")
 @login_required
 def admin_announcements_list():
