@@ -1,3 +1,3 @@
 git add .
-git commit -m "look feed 2.0 update 1"
+git commit -m "look feed 2.0 update del "
 git push
