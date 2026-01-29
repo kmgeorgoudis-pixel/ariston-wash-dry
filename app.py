@@ -106,6 +106,13 @@ def maintenance_lock():
 
         # Αλλιώς → δείξε maintenance page
         return render_template("maintenance.html"), 503
+@app.route("/lock-secret-ARISTON-987654321")
+def lock_secret():
+    global MAINTENANCE_MODE
+    MAINTENANCE_MODE = True
+    session["access_granted"] = False
+    return "🔒 Το site κλειδώθηκε ξανά με επιτυχία."
+
 
 from email.message import EmailMessage
 
