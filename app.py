@@ -1054,7 +1054,7 @@ def admin_send_announcements():
         flash("Δεν επιλέχθηκαν χρήστες.", "danger")
         return redirect("/admin/announcements2")
 
-    # Φέρνουμε τους επιλεγμένους χρήστες
+    # ORM users
     users = User.query.filter(User.id.in_(selected_ids)).all()
 
     # Δημιουργούμε ΜΙΑ ανακοίνωση για κάθε χρήστη
@@ -1068,16 +1068,26 @@ def admin_send_announcements():
 
     db.session.commit()
 
-    # 🔥 Background thread για αποστολή email
+    # 🔥 Μετατροπή ORM → dicts (ΑΠΑΡΑΙΤΗΤΟ)
+    safe_users = [
+        {
+            "id": u.id,
+            "email": u.email,
+            "fullname": u.fullname
+        }
+        for u in users
+    ]
+
+    # 🔥 Background thread
     threading.Thread(
         target=send_announcements_background,
         args=(safe_users, title, description),
-
         daemon=True
     ).start()
 
     flash("Η αποστολή ξεκίνησε στο παρασκήνιο.", "success")
     return redirect("/admin/announcements2")
+
 @app.route("/admin/announcements/list")
 @login_required
 def admin_announcements_list():
