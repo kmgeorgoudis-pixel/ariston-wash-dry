@@ -85,27 +85,10 @@
         {% if announcements %}
     {% for ann in announcements %}
         <div class="update-box">
-    <h3>{{ ann.title }}</h3>
-    <p>{{ ann.description }}</p>
-    <small>{{ ann.date.strftime("%d/%m/%Y %H:%M") }}</small>
-
-    <!-- LINK ΓΙΑ ΠΕΡΙΣΣΟΤΕΡΑ -->
-    <div style="margin-top:10px;">
-        <a href="/announcement/{{ ann.id }}" 
-           style="color:#0d47a1; font-weight:bold; text-decoration:none;">
-            Πατήστε πάνω για περισσότερες πληροφορίες →
-        </a>
-    </div>
-
-    <!-- EMOJI REACTIONS -->
-    <div style="margin-top:15px; font-size:26px; cursor:pointer;">
-        <span onclick="sendReaction({{ ann.id }}, 'like')">👍</span>
-        <span onclick="sendReaction({{ ann.id }}, 'love')">❤️</span>
-        <span onclick="sendReaction({{ ann.id }}, 'laugh')">😂</span>
-        <span onclick="sendReaction({{ ann.id }}, 'wow')">😮</span>
-        <span onclick="sendReaction({{ ann.id }}, 'sad')">😢</span>
-    </div>
-</div>
+            <h3>{{ ann.title }}</h3>
+            <p>{{ ann.description }}</p>
+            <small>{{ ann.date.strftime("%d/%m/%Y %H:%M") }}</small>
+        </div>
     {% endfor %}
 {% else %}
     <div class="no-updates">
@@ -117,14 +100,6 @@
         <a href="/updates-menu" class="back-btn">← Επιστροφή στις Ενημερώσεις</a>
 
     </div>
-<script>
-function sendReaction(announcementId, reaction) {
-    fetch("/announcement/" + announcementId + "/reaction", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ reaction: reaction })
-    });
-}
-</script>
+
 </body>
 </html>

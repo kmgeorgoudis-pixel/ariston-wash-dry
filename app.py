@@ -849,19 +849,7 @@ def admin_delete_user(user_id):
 # ============================
 #  ΦΟΡΜΑ ΑΝΑΚΟΙΝΩΣΗΣ (GET)
 # ============================
-@app.route("/admin/announcements/image/<int:image_id>/delete")
-@login_required
-def delete_announcement_image(image_id):
-    img = AnnouncementImage.query.get_or_404(image_id)
 
-    filepath = os.path.join("static/uploads/announcements", img.filename)
-    if os.path.exists(filepath):
-        os.remove(filepath)
-
-    db.session.delete(img)
-    db.session.commit()
-
-    return redirect(request.referrer)
 @app.route("/admin/announcements/")
 @login_required
 def admin_announcements_page_slash():
@@ -889,28 +877,7 @@ def admin_announcement_submit(user_id):
     db.session.add(announcement)
     db.session.commit()
 
-    # ============================
-    #  UPLOAD ΕΙΚΟΝΩΝ (ΜΕΧΡΙ 3)
-    # ============================
-    files = request.files.getlist("images")
-    files = files[:3]  # περιορισμός σε 3 εικόνες
-
-    upload_folder = "static/uploads/announcements"
-    os.makedirs(upload_folder, exist_ok=True)
-
-    for file in files:
-        if file and file.filename:
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(upload_folder, filename)
-            file.save(filepath)
-
-            img = AnnouncementImage(
-                announcement_id=announcement.id,
-                filename=filename
-            )
-            db.session.add(img)
-
-    db.session.commit()
+    
 
     # Αποστολή email μέσω Resend
     subject = "Νέα ανακοίνωση από το ARISTON Wash & Dry"
@@ -1066,30 +1033,7 @@ def admin_send_announcements():
 
     db.session.commit()
 
-    # ============================
-    #  UPLOAD ΕΙΚΟΝΩΝ (ΜΕΧΡΙ 3)
-    # ============================
-    files = request.files.getlist("images")
-    files = files[:3]
-
-    upload_folder = "static/uploads/announcements"
-    os.makedirs(upload_folder, exist_ok=True)
-
-    for announcement in announcements:
-        for file in files:
-            if file and file.filename:
-                filename = secure_filename(file.filename)
-                filepath = os.path.join(upload_folder, filename)
-                file.save(filepath)
-
-                img = AnnouncementImage(
-                    announcement_id=announcement.id,
-                    filename=filename
-                )
-                db.session.add(img)
-
-    db.session.commit()
-
+    
     # 🔥 Background thread για αποστολή email
     threading.Thread(
         target=send_announcements_background,
@@ -1099,16 +1043,7 @@ def admin_send_announcements():
 
     flash("Η αποστολή ξεκίνησε στο παρασκήνιο.", "success")
     return redirect("/admin/announcements2")
-@app.route("/announcement/<int:ann_id>/reaction", methods=["POST"])
-@login_required
-def announcement_reaction(ann_id):
-    data = request.get_json()
-    reaction = data.get("reaction")
 
-    # Εδώ μπορείς να το αποθηκεύσεις σε πίνακα reactions
-    print(f"User {current_user.id} reacted {reaction} to announcement {ann_id}")
-
-    return {"status": "ok"}
 @app.route("/admin/announcements/list")
 @login_required
 def admin_announcements_list():
