@@ -286,6 +286,37 @@
                 top: -12px;
             }
         }
+        .access-box {
+    margin-top: 18px;
+    padding: 14px;
+    background: rgba(30,41,59,0.55);
+    border: 1px solid rgba(148,163,184,0.25);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #cbd5e1;
+    font-size: 13px;
+    backdrop-filter: blur(6px);
+}
+
+.access-btn {
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+}
+
+.access-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(37,99,235,0.45);
+}
+
     </style>
 </head>
 <body>
@@ -335,6 +366,11 @@
             <span>Μπορείς να ανανεώσεις τη σελίδα σε λίγο για να ελέγξεις ξανά.</span>
             <a href="javascript:void(0)" id="refreshLink">Ανανέωση τώρα</a>
         </div>
+        <div class="access-box">
+    <span>Έχεις ειδικό κωδικό πρόσβασης;</span>
+    <a href="/access" class="access-btn">Είσοδος με κωδικό</a>
+</div>
+
 
         <div class="small-note">
             ARISTON Wash & Dry • Η άνεση σου, η προτεραιότητά μας.
@@ -367,6 +403,17 @@
         window.location.reload();
     });
 </script>
+<script>
+    // Μικρή παλμική κίνηση στο κουμπί
+    const accessBtn = document.querySelector(".access-btn");
+    if (accessBtn) {
+        setInterval(() => {
+            accessBtn.style.transform = "scale(1.06)";
+            setTimeout(() => accessBtn.style.transform = "scale(1)", 180);
+        }, 2600);
+    }
+</script>
+
 
 </body>
 </html>

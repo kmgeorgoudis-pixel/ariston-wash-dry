@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Access Code • ARISTON Wash & Dry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        :root {
+            --primary: #1d4ed8;
+            --primary-light: #3b82f6;
+            --bg: #0b1020;
+            --card-bg: #111827;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #1e3a8a 0, #020617 55%, #000 100%);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(15,23,42,0.92);
+            padding: 32px 26px;
+            border-radius: 20px;
+            width: 92%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.6);
+            border: 1px solid rgba(148,163,184,0.25);
+            backdrop-filter: blur(14px);
+            position: relative;
+        }
+
+        .logo-box {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 10px 25px rgba(37,99,235,0.6);
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 22px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            background: #1e293b;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.35);
+        }
+
+        button {
+            margin-top: 18px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37,99,235,0.45);
+        }
+
+        .error {
+            margin-top: 14px;
+            color: #f87171;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .floating-icon {
+            position: absolute;
+            right: -18px;
+            top: -18px;
+            width: 70px;
+            height: 70px;
+            border-radius: 24px;
+            background: radial-gradient(circle at 20% 0, #facc15, #f97316);
+            box-shadow: 0 18px 40px rgba(248, 181, 0, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-6deg); }
+            50% { transform: translateY(6px) rotate(4deg); }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="floating-icon">🔐</div>
+
+    <div class="logo-box">A</div>
+
+    <h2>Access Code Απαιτείται</h2>
+    <p>Εισάγετε τον μυστικό κωδικό για να αποκτήσετε πρόσβαση στην ιστοσελίδα.</p>
+
+    <form method="POST">
+        <input type="password" name="code" placeholder="Εισάγετε τον κωδικό..." required>
+
+        <button type="submit">Συνέχεια</button>
+
+        {% if error %}
+        <div class="error">Λάθος κωδικός. Προσπαθήστε ξανά.</div>
+        {% endif %}
+    </form>
+</div>
+
+</body>
+</html>

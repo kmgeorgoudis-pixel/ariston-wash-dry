@@ -16,16 +16,7 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 from email.message import EmailMessage
-MAINTENANCE_MODE = True
-@app.before_request
-def maintenance_lock():
-    if MAINTENANCE_MODE:
-        # Αν είσαι εσύ (admin), μπαίνεις κανονικά σε ΟΛΟ το site
-        if current_user.is_authenticated and current_user.is_admin:
-            return
 
-        # Αλλιώς δείξε maintenance page
-        return render_template("maintenance.html"), 503
 
 def register_user(fullname, email, password, confirm):
     if password != confirm:
@@ -97,6 +88,24 @@ https://aristonwashdry.gr/coupons
 
     send_email(user.email, "Νέο Κουπόνι από το ARISTON Wash & Dry", body)
 
+from flask import session, request
+
+MAINTENANCE_MODE = True
+ACCESS_CODE = "the@code@is9!8!7!4!5!6!3!2!1!ARISTON_Wash_Dry"
+
+@app.before_request
+def maintenance_lock():
+    if MAINTENANCE_MODE:
+        # Αν έχει βάλει σωστό κωδικό → πλήρης πρόσβαση
+        if session.get("access_granted") == True:
+            return
+
+        # Αν πάει στη σελίδα εισαγωγής κωδικού → επιτρέπεται
+        if request.path == "/access":
+            return
+
+        # Αλλιώς → δείξε maintenance page
+        return render_template("maintenance.html"), 503
 
 from email.message import EmailMessage
 
@@ -137,6 +146,17 @@ def load_user(user_id):
 @app.context_processor
 def inject_coming_soon_flag():
     return dict(show_coming_soon=True)
+@app.route("/access", methods=["GET", "POST"])
+def access_page():
+    if request.method == "POST":
+        code = request.form.get("code")
+        if code == ACCESS_CODE:
+            session["access_granted"] = True
+            return redirect("/")
+        else:
+            return render_template("access.html", error=True)
+
+    return render_template("access.html", error=False)
 
 @app.route("/")
 def home():
