@@ -5,191 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Επικοινωνία – ARISTON Wash & Dry</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* PAGE TITLE */
-        .page-title {
-            text-align: center;
-            padding: 40px 20px;
+        :root {
+            --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .page-title h1 {
-            font-size: 42px;
-            color: #0d47a1;
-            margin-bottom: 10px;
-            font-weight: 800;
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
         }
 
-        .page-title p {
-            font-size: 17px;
-            color: #444;
-            max-width: 700px;
-            margin: 0 auto 10px;
-            line-height: 1.6;
-        }
+        /* --- Animations --- */
+        .reveal { opacity: 0; transform: translateY(30px); transition: var(--transition); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* CONTACT INFO BOX */
-        .contact-box {
-            max-width: 900px;
-            margin: 40px auto;
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 18px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
-        }
-
-        .contact-box h2 {
-            color: #0d47a1;
-            margin-bottom: 15px;
-        }
-
-        .contact-box p {
-            font-size: 17px;
-            color: #333;
-            margin-bottom: 12px;
-        }
-
-        /* MAP */
-        .map-container {
-            margin: 40px auto;
-            max-width: 900px;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
-        }
-
-        /* FORM */
-        .contact-form {
-            max-width: 900px;
-            margin: 40px auto;
-            background: #ffffff;
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
-        }
-
-        .contact-form h2 {
-            color: #0d47a1;
-            margin-bottom: 10px;
-        }
-
-        .contact-form p {
-            color: #444;
-            margin-bottom: 20px;
-        }
-
-        .form-field {
-            margin-bottom: 25px;
-        }
-
-        .form-field label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-            color: #0d47a1;
-        }
-
-        .contact-form input,
-        .contact-form textarea {
+        /* --- Header & Nav --- */
+        header {
+            background: rgba(3, 5, 8, 0.95);
+            backdrop-filter: blur(20px);
+            position: fixed;
             width: 100%;
-            padding: 14px;
-            border: 1px solid #cfd8dc;
-            border-radius: 12px;
-            font-size: 16px;
-            background: #fafbfc;
-            transition: 0.25s;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .contact-form input:focus,
-        .contact-form textarea:focus {
-            border-color: #0d47a1;
-            box-shadow: 0 0 8px rgba(13,71,161,0.25);
-            background: #ffffff;
+        .store-notice {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white; padding: 8px; text-align: center; font-weight: 700; font-size: 0.75rem;
+            letter-spacing: 1px; text-transform: uppercase;
         }
+
+        .header-top {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 5%; max-width: 1400px; margin: 0 auto;
+        }
+
+        .logo { font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 12px; }
+        .logo span { background: linear-gradient(to right, #fff, var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
+
+        .main-nav { border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(255, 255, 255, 0.02); }
+        .nav-links { display: flex; justify-content: center; align-items: center; gap: 30px; padding: 12px 5%; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: 0.3s; opacity: 0.6; }
+        .nav-links a:hover { opacity: 1; color: var(--secondary); }
+
+        /* User Menu */
+        .user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .user-avatar { width: 32px; height: 32px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; }
+        .user-dropdown { 
+            position: absolute; top: 100%; right: 0; width: 220px; background: #0a0c10; 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; 
+            display: none; flex-direction: column; gap: 5px; 
+        }
+        .user-menu:hover .user-dropdown { display: flex; }
+        .user-dropdown a { padding: 10px; border-radius: 8px; opacity: 1 !important; }
+        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff); color: white !important; font-weight: 700 !important; }
+        .nav-btn { background: var(--white); color: var(--dark-bg) !important; padding: 6px 18px; border-radius: 100px; font-weight: 700 !important; opacity: 1 !important; }
+
+        /* --- Content Sections --- */
+        .page-title { padding: 180px 5% 60px; text-align: center; background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.15), transparent 70%); }
+        .page-title h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 15px; letter-spacing: -1px; }
+        .page-title p { color: var(--text-dim); max-width: 800px; margin: 0 auto; }
+
+        .contact-box, .contact-form, .success-box {
+            max-width: 900px; margin: 0 auto 40px; padding: 40px;
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px;
+        }
+
+        .contact-box h2, .contact-form h2 { color: var(--secondary); margin-bottom: 20px; }
+        .contact-box p { margin-bottom: 15px; }
+        .contact-box strong { color: var(--primary); }
+
+        .map-container { max-width: 900px; margin: 40px auto; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+
+        /* --- Form Elements --- */
+        .form-field { margin-bottom: 25px; }
+        .form-field label { display: block; margin-bottom: 10px; font-weight: 600; color: var(--white); }
+
+        input, textarea {
+            width: 100%; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px; border-radius: 12px; color: white; font-family: inherit; transition: 0.3s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); background: rgba(255,255,255,0.08); }
 
         .submit-btn {
-            padding: 14px 26px;
-            background: linear-gradient(135deg, #0d47a1, #1565c0);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: 700;
-            width: 100%;
-            transition: 0.25s;
+            width: 100%; padding: 18px; border-radius: 15px; border: none;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.4s;
         }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--primary-glow); }
 
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(13,71,161,0.35);
-        }
+        .success-box { background: rgba(0, 255, 127, 0.05); border-color: rgba(0, 255, 127, 0.2); text-align: center; }
+        .success-box h2 { color: #00ff7f; }
 
-        .contact {
-            max-width: 900px;
-            margin: 40px auto;
-            text-align: center;
-        }
+        /* --- Footer --- */
+        .contact-footer { padding: 60px 5%; text-align: center; }
+        footer { padding: 40px 5%; text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; }
+        footer a { color: var(--white); text-decoration: none; margin: 0 10px; }
 
-        /* SUCCESS BOX */
-        .success-box {
-            max-width: 900px;
-            margin: 40px auto;
-            background: #e8f5e9;
-            border: 1px solid #a5d6a7;
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.05);
-            text-align: center;
-        }
+        .hamburger { display: none; color: white; font-size: 1.8rem; cursor: pointer; }
 
-        .success-box h2 {
-            color: #1b5e20;
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
-
-        .success-box p {
-            color: #2e7d32;
-            font-size: 17px;
-            margin-bottom: 0;
+        @media (max-width: 768px) {
+            .hamburger { display: block; margin-left: auto; padding: 10px; }
+            .nav-links {
+                display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(3, 5, 8, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
+            }
+            .nav-links.active { display: flex; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
 <header>
-
-    <!-- LOGO -->
-<div class="header-top">
-    <div class="logo">
-        <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
-        ARISTON <span>Wash & Dry</span>
+    <div class="header-top">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+            ARISTON <span>Wash & Dry</span>
+        </div>
+        <div class="store-notice">ΤΟ ΚΑΤΑΣΤΗΜΑ ΜΑΣ ΔΕΝ ΕΙΝΑΙ ΑΝΟΙΧΤΟ ΑΚΟΜΑ — ΣΥΝΤΟΜΑ ΚΟΝΤΑ ΣΑΣ!</div>
     </div>
 
-    <!-- 🔥 ΕΝΗΜΕΡΩΤΙΚΟ ΜΗΝΥΜΑ -->
-    <div class="store-notice">
-        ΤΟ ΚΑΤΑΣΤΗΜΑ ΜΑΣ ΔΕΝ ΕΙΝΑΙ ΑΝΟΙΧΤΟ ΑΚΟΜΑ — ΣΥΝΤΟΜΑ ΚΟΝΤΑ ΣΑΣ!
-    </div>
-</div>
-
-    
-
-    <!-- NAVIGATION (κάτω από το logo) -->
     <nav class="main-nav">
-
-        <!-- Hamburger button (mobile only) -->
         <div class="hamburger" id="hamburger-btn">☰</div>
-
-        <!-- Menu links -->
         <div class="nav-links" id="nav-menu">
-
             <a href="/">Αρχική</a>
             <a href="/timokatalogos">Τιμοκατάλογος</a>
             <a href="/fwtografies">Φωτογραφίες</a>
@@ -201,75 +159,56 @@
             <div class="user-menu">
                 <div class="user-avatar">{{ current_user.fullname[0] }}</div>
                 <span class="user-hint">Επιλογές μέλους</span>
-
                 <div class="user-dropdown">
                     <a href="/settings-menu">Ρυθμίσεις</a>
                     <a href="/updates-menu">Ενημερώσεις</a>
                     <a href="{{ url_for('ai') }}" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
                     <a href="/game">ARISTON Game</a>
                     <a href="/logout" class="logout">Αποσύνδεση</a>
-                    <div id="google_translate_element"></div>
                 </div>
             </div>
             {% else %}
             <a href="/auth_choice" class="nav-btn">Εγγραφή / Σύνδεση</a>
             {% endif %}
-
         </div>
     </nav>
-
 </header>
 
-    <!-- Page Title -->
-    <section class="page-title">
-        <h1>💙 Επικοινωνήστε μαζί μας</h1>
-        <p>Έχουμε πάντα χαρά να σας εξυπηρετούμε! Αν έχετε οποιαδήποτε απορία σχετικά με τις υπηρεσίες μας, τα πλυντήρια ή τις τιμές, μη διστάσετε να επικοινωνήσετε μαζί μας.</p>
-    </section>
+<section class="page-title reveal">
+    <h1>💙 Επικοινωνήστε μαζί μας</h1>
+    <p>Έχουμε πάντα χαρά να σας εξυπηρετούμε! Αν έχετε οποιαδήποτε απορία σχετικά με τις υπηρεσίες μας, τα πλυντήρια ή τις τιμές, μη διστάσετε να επικοινωνήσετε μαζί μας.</p>
+</section>
 
-    <!-- CONTACT INFO -->
-    <div class="contact-box">
-        <h2>📍 Στοιχεία Επικοινωνίας</h2>
+<div class="contact-box reveal">
+    <h2>📍 Στοιχεία Επικοινωνίας</h2>
+    <p><strong>Διεύθυνση:</strong><br> Δερβενακίων 10 , Βαθύ, Σάμος 83100</p>
+    <p><strong>Τηλέφωνο:</strong><br>+30 698 759 8416</p>
+    <p><strong>Email:</strong><br>aristonwashing@gmail.com</p>
+    <p><strong>Ώρες λειτουργίας:</strong><br>Καθημερινά 07:00 – 23:00</p>
+    <p><strong>Πού θα μας βρείτε:</strong><br>
+    Το Ariston Wash & Dry βρίσκεται στο κέντρο της πόλης της Σάμου. Ελάτε εύκολα με τα πόδια ή με το αυτοκίνητό σας — υπάρχει διαθέσιμο πάρκινγκ κοντά στο κατάστημα.</p>
+</div>
 
-        <p><strong>Διεύθυνση:</strong><br> Δερβενακίων 10 , Βαθύ, Σάμος 83100</p>
+<div class="map-container reveal">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m13!1d3161.4636611065!2d26.9749!3d37.756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDQ1JzIxLjYiTiAyNsKwNTgnMjkuNiJF!5e0!3m2!1sel!2sgr!4v1710000000000" 
+            width="100%" height="400" style="border:0; filter: invert(90%) hue-rotate(180deg) opacity(0.8);" allowfullscreen="" loading="lazy"></iframe>
+</div>
 
-        <p><strong>Τηλέφωνο:</strong><br>+30 698 759 8416</p>
-
-        <p><strong>Email:</strong><br>aristonwashing@gmail.com</p>
-
-        <p><strong>Ώρες λειτουργίας:</strong><br>Καθημερινά 07:00 – 23:00</p>
-
-        <p><strong>Πού θα μας βρείτε:</strong><br>
-        Το Ariston Wash & Dry βρίσκεται στο κέντρο της πόλης της Σάμου.
-        Ελάτε εύκολα με τα πόδια ή με το αυτοκίνητό σας — υπάρχει διαθέσιμο πάρκινγκ κοντά στο κατάστημα.</p>
-    </div>
-
-    <!-- MAP -->
-    <div class="map-container">
-        <iframe 
-            src="https://www.google.com/maps?q=10%20Δερβενακίων%20Βαθύ%20Σάμος&output=embed"
-            width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy">
-        </iframe>
-    </div>
-
-   <!-- CONTACT FORM OR SUCCESS -->
-<div id="form-container">
-
+<div id="form-container" class="reveal">
     <div class="contact-form" id="contact-form">
         <h2>📩 Φόρμα Επικοινωνίας</h2>
         <p>Συμπληρώστε τη φόρμα και η ομάδα μας θα επικοινωνήσει μαζί σας άμεσα.</p>
 
         <form id="contactForm">
             {% if current_user.is_authenticated %}
-                <p style="margin-bottom:20px; font-size:14px; color:#444;">
-                    Είστε συνδεδεμένος ως <strong>{{ current_user.fullname }}</strong> ({{ current_user.email }}).  
-                    Το μήνυμά σας θα αποσταλεί με αυτά τα στοιχεία.
+                <p style="margin-bottom:20px; font-size:14px; color:var(--secondary);">
+                    Είστε συνδεδεμένος ως <strong>{{ current_user.fullname }}</strong> ({{ current_user.email }}).
                 </p>
             {% else %}
                 <div class="form-field">
                     <label>Ονοματεπώνυμο *</label>
                     <input type="text" name="name" required>
                 </div>
-
                 <div class="form-field">
                     <label>Email ή Τηλέφωνο επικοινωνίας *</label>
                     <input type="text" name="email" required>
@@ -280,100 +219,74 @@
                 <label>Θέμα / Λόγος επικοινωνίας *</label>
                 <input type="text" name="subject" required>
             </div>
-
             <div class="form-field">
                 <label>Μήνυμα *</label>
                 <textarea name="message" rows="5" required></textarea>
             </div>
 
             <button class="submit-btn" type="submit">Αποστολή</button>
-            <p style="font-size: 12px; color: #666; margin-top: 10px;">
-Με την υποβολή της φόρμας, αποδέχεστε την 
-<a href="/privacy" target="_blank">Πολιτική Απορρήτου</a> και συμφωνείτε 
-με την επεξεργασία των δεδομένων σας σύμφωνα με τον GDPR.
-</p>
+            <p style="font-size: 11px; color: #666; margin-top: 15px; text-align: center;">
+                Με την υποβολή της φόρμας, αποδέχεστε την <a href="/privacy" target="_blank">Πολιτική Απορρήτου</a>.
+            </p>
         </form>
-
     </div>
-    
 
-    <!-- SUCCESS BOX (ΑΡΧΙΚΑ ΚΡΥΜΜΕΝΟ) -->
     <div class="success-box" id="success-box" style="display:none;">
         <h2>✔ Το μήνυμά σας στάλθηκε με επιτυχία</h2>
         <p>Η ομάδα του ARISTON Wash & Dry έλαβε το αίτημά σας και θα επικοινωνήσει μαζί σας το συντομότερο δυνατόν.</p>
-
-        <button onclick="resetForm()" class="submit-btn" style="margin-top:25px; width:250px;">
-            Νέα Φόρμα
-        </button>
+        <button onclick="resetForm()" class="submit-btn" style="margin-top:25px; width:auto; padding: 12px 40px;">Νέα Φόρμα</button>
     </div>
-
 </div>
 
-<script>
-document.getElementById("contactForm").addEventListener("submit", async function(e) {
-    e.preventDefault(); // Μην κάνει reload
+<section class="contact-footer reveal">
+    <h3>Επικοινωνία</h3>
+    <p>📍 Διεύθυνση: Δερβενακίων 10 , Βαθύ, Σάμος 83100</p>
+    <p>📞 Τηλέφωνο: +30 698 759 8416</p>
+    <p>📧 Email: aristonwashing@gmail.com</p>
+</section>
 
-    const formData = new FormData(this);
-
-    // Στέλνουμε τη φόρμα στο Flask
-    await fetch("/epikoinonia", {
-        method: "POST",
-        body: formData
-    });
-
-    // Κρύβουμε τη φόρμα
-    document.getElementById("contact-form").style.display = "none";
-
-    // Εμφανίζουμε το success box
-    document.getElementById("success-box").style.display = "block";
-});
-
-function resetForm() {
-    document.getElementById("success-box").style.display = "none";
-    document.getElementById("contact-form").style.display = "block";
-    document.getElementById("contactForm").reset();
-}
-</script>
-
-    <!-- Contact (footer-style) -->
-    <section class="contact">
-        <h3>Επικοινωνία</h3>
-        <p>📍 Διεύθυνση: Δερβενακίων 10 , Βαθύ, Σάμος 83100</p>
-        <p>📞 Τηλέφωνο: +30 698 759 8416</p>
-        <p>📧 Email: aristonwashing@gmail.com</p>
-    </section>
-
-    <footer>
+<footer>
     © 2025 Ariston Wash & Dry — All Rights Reserved<br>
     Website designed & developed by Konstantinos Georgoudis
     <br><br>
-    <a href="/terms">Όροι Χρήσης</a> |
-    <a href="/privacy">Πολιτική Απορρήτου</a> |
-    <a href="/cookies">Πολιτική Cookies</a>
+    <a href="/terms">Όροι Χρήσης</a> | <a href="/privacy">Πολιτική Απορρήτου</a> | <a href="/cookies">Πολιτική Cookies</a>
 </footer>
 
-    <script>
-    function toggleMenu() {
-        const menu = document.getElementById("dropdownMenu");
-        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+<script>
+    // Reveal Animations
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 100;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
     }
-    </script>
-<script>
-document.getElementById("hamburger-btn").onclick = function() {
-    document.getElementById("nav-menu").classList.toggle("active");
-};
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const avatar = document.querySelector(".user-avatar");
-    const dropdown = document.querySelector(".user-dropdown");
+    window.addEventListener("scroll", reveal);
+    window.addEventListener("load", reveal);
 
-    if (avatar && dropdown) {
-        avatar.addEventListener("click", () => {
-            dropdown.classList.toggle("open");
-        });
+    // Form Handle
+    document.getElementById("contactForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        await fetch("/epikoinonia", { method: "POST", body: formData });
+        document.getElementById("contact-form").style.display = "none";
+        document.getElementById("success-box").style.display = "block";
+    });
+
+    function resetForm() {
+        document.getElementById("success-box").style.display = "none";
+        document.getElementById("contact-form").style.display = "block";
+        document.getElementById("contactForm").reset();
     }
-});
+
+    // Mobile Menu
+    document.getElementById("hamburger-btn").onclick = function() {
+        document.getElementById("nav-menu").classList.toggle("active");
+    };
 </script>
 
 </body>
