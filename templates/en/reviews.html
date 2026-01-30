@@ -6,63 +6,270 @@
     <title>Reviews – ARISTON Wash & Dry</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(30px); 
+            transition: var(--transition); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+
+        /* --- Header & Nav --- */
+        header {
+            background: rgba(3, 5, 8, 0.95);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .store-notice {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%; 
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo span {
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
+
+        .main-nav {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            padding: 12px 5%;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.6;
+        }
+
+        .nav-links a:hover { opacity: 1; color: var(--secondary); }
+
+        /* User Menu & Dropdown */
+        .user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .user-avatar { width: 32px; height: 32px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: white; }
+        .user-hint { font-size: 0.8rem; opacity: 0.7; color: white; }
+        .user-dropdown { 
+            position: absolute; top: 100%; right: 0; width: 220px; background: #0a0c10; 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; 
+            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+        .user-menu:hover .user-dropdown { display: flex; }
+        .user-dropdown a { padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
+        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff); color: white !important; font-weight: 700 !important; }
+        .logout { color: #ff4444 !important; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; }
+        .nav-btn { background: var(--white); color: var(--dark-bg) !important; padding: 6px 18px; border-radius: 100px; font-weight: 700 !important; opacity: 1 !important; text-decoration: none; }
+
+        /* --- Page Title --- */
+        .page-title {
+            padding: 180px 5% 60px;
+            text-align: center;
+            background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.15), transparent 70%);
+        }
+        .page-title h1 { font-size: clamp(2.5rem, 6vw, 3.5rem); margin-bottom: 15px; letter-spacing: -1px; }
+        .page-title p { color: var(--text-dim); }
+
+        /* --- Photo Block (Intro) --- */
+        .photo-blocks { padding: 0 5%; max-width: 900px; margin: 0 auto 60px; }
+        .photo-block {
+            display: flex; gap: 30px; background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 24px;
+            padding: 30px; align-items: center;
+        }
+        .photo-block img { width: 120px; height: 120px; border-radius: 20px; object-fit: cover; }
+        .photo-block-text h3 { color: var(--secondary); margin-bottom: 5px; }
+
+        /* --- Form Style --- */
+        .google-form {
+            max-width: 800px; margin: 0 auto 100px; padding: 60px 5%;
+            background: var(--card-bg); border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .google-form h2 { text-align: center; margin-bottom: 10px; font-size: 1.8rem; }
+        .google-form p { text-align: center; color: var(--text-dim); margin-bottom: 40px; font-size: 0.95rem; }
+        .anonymous { color: var(--secondary) !important; font-weight: 600; }
+
+        .form-field { margin-bottom: 35px; }
+        .form-field label { display: block; margin-bottom: 15px; font-weight: 600; color: var(--white); }
+
+        /* Star Rating */
+        .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 10px; }
+        .star-rating input { display: none; }
+        .star-rating label { font-size: 2.5rem; color: rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; margin: 0; }
+        .star-rating label:hover, .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label { color: #ffcc00; text-shadow: 0 0 15px rgba(255, 204, 0, 0.5); }
+
+        /* Horizontal Options (1-5) */
+        .horizontal-options { display: flex; justify-content: space-between; gap: 10px; }
+        .horizontal-options label {
+            flex: 1; background: var(--input-bg); padding: 15px; border-radius: 12px;
+            text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
+        }
+        .horizontal-options input { display: none; }
+        .horizontal-options label:has(input:checked) { background: var(--primary); border-color: var(--white); transform: scale(1.05); }
+        .option-number { display: block; font-weight: 800; font-size: 1.2rem; }
+
+        /* Inputs & Dropdowns */
+        select, textarea, input[type="text"] {
+            width: 100%; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px; border-radius: 12px; color: white; font-family: inherit; font-size: 1rem; transition: 0.3s;
+            appearance: none; cursor: pointer;
+        }
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 18px;
+        }
+        select option { background-color: #0a0c10; color: white; }
+        select:focus, textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--primary); background: rgba(255,255,255,0.08); }
+        textarea { height: 100px; resize: vertical; }
+
+        .submit-btn {
+            width: 100%; padding: 18px; border-radius: 15px; border: none;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white; font-weight: 800; font-size: 1.1rem; cursor: pointer;
+            transition: 0.4s; margin-top: 20px;
+        }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--primary-glow); filter: brightness(1.1); }
+
+        .thankyou { padding: 40px; border-radius: 30px; background: rgba(0, 255, 127, 0.05); border: 1px solid rgba(0, 255, 127, 0.2); }
+
+        /* --- Contact --- */
+        .contact { padding: 80px 10%; background: #f4f7f6; color: #000; text-align: center; border-radius: 60px 60px 0 0; }
+        footer { padding: 60px 10% 30px; background: var(--dark-bg); text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
+        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.8rem; }
+
+        .hamburger { display: none; color: white; font-size: 1.8rem; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: block; margin-left: auto; padding: 10px; }
+            .nav-links {
+                display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(3, 5, 8, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
+            }
+            .nav-links.active { display: flex; }
+            .horizontal-options { flex-wrap: wrap; }
+            .horizontal-options label { flex: 1 1 40%; }
+            .photo-block { flex-direction: column; text-align: center; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Navigation -->
 <header>
-
-<div class="header-top">
-    <div class="logo">
-        <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
-        ARISTON <span>Wash & Dry</span>
-    </div>
-
-    <div class="store-notice">
-        OUR STORE IS NOT OPEN YET — OPENING SOON!
-    </div>
-</div>
-
-<nav class="main-nav">
-    <div class="hamburger" id="hamburger-btn">☰</div>
-
-    <div class="nav-links" id="nav-menu">
-        <a href="/en">Home</a>
-        <a href="/en/pricing">Pricing</a>
-        <a href="/en/photos">Photos</a>
-        <a href="/en/special-services">Special Services</a>
-        <a href="/en/reviews">Reviews</a>
-        <a href="/en/contact">Contact</a>
-
-        {% if current_user.is_authenticated %}
-        <div class="user-menu">
-            <div class="user-avatar">{{ current_user.fullname[0] }}</div>
-            <span class="user-hint">Member Options</span>
-            <div class="user-dropdown">
-                <a href="/en/settings-menu">Settings</a>
-                <a href="/en/updates-menu-en">Updates</a>
-                <a href="/en/ai" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
-
-                <a href="/game">ARISTON Game</a>
-                <a href="/logout" class="logout">Logout</a>
-                <div id="google_translate_element"></div>
-            </div>
+    <div class="header-top">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+            ARISTON <span>Wash & Dry</span>
         </div>
-        {% else %}
-        <a href="/en/auth_choice_en" class="nav-btn">Sign Up / Login</a>
-        {% endif %}
+        <div class="store-notice">OUR STORE IS NOT OPEN YET — OPENING SOON!</div>
     </div>
-</nav>
 
+    <nav class="main-nav">
+        <div class="hamburger" id="hamburger-btn">☰</div>
+        <div class="nav-links" id="nav-menu">
+            <a href="/en">Home</a>
+            <a href="/en/pricing">Pricing</a>
+            <a href="/en/photos">Photos</a>
+            <a href="/en/special-services">Special Services</a>
+            <a href="/en/reviews">Reviews</a>
+            <a href="/en/contact">Contact</a>
+
+            {% if current_user.is_authenticated %}
+            <div class="user-menu">
+                <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+                <span class="user-hint">Member Options</span>
+                <div class="user-dropdown">
+                    <a href="/en/settings-menu">Settings</a>
+                    <a href="/en/updates-menu-en">Updates</a>
+                    <a href="/en/ai" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="/game">ARISTON Game</a>
+                    <a href="/logout" class="logout">Logout</a>
+                </div>
+            </div>
+            {% else %}
+            <a href="/en/auth_choice_en" class="nav-btn">Sign Up / Login</a>
+            {% endif %}
+        </div>
+    </nav>
 </header>
 
-<section class="page-title">
+<section class="page-title reveal">
     <h1>Reviews</h1>
     <p>We want to know your opinion!</p>
 </section>
 
-<section class="photo-blocks">
+<section class="photo-blocks reveal">
     <div class="photo-block">
         <img src="{{ url_for('static', filename='images/15.png') }}" alt="Reviews">
         <div class="photo-block-text">
@@ -73,15 +280,12 @@
     </div>
 </section>
 
-<section class="google-form">
-
+<section class="google-form reveal">
     <h2>Experience Rating – Ariston Wash & Dry Samos</h2>
     <p class="anonymous">The form is 100% anonymous — we do not collect personal data.</p>
     <p>Fill out the form — it takes less than 2 minutes 🧺</p>
 
     <form id="reviewForm" action="/submit_review" method="POST">
-
-        <!-- Question 1 – Stars -->
         <div class="form-field">
             <label>How satisfied are you with your experience? *</label>
             <div class="star-rating">
@@ -93,7 +297,6 @@
             </div>
         </div>
 
-        <!-- Question 2 -->
         <div class="form-field">
             <label>How easy was it to use the washers and dryers? *</label>
             <div class="horizontal-options">
@@ -105,7 +308,6 @@
             </div>
         </div>
 
-        <!-- Question 3 -->
         <div class="form-field">
             <label>How clean and comfortable did you find the space? *</label>
             <div class="horizontal-options">
@@ -117,7 +319,6 @@
             </div>
         </div>
 
-        <!-- Question 4 -->
         <div class="form-field">
             <label>How satisfied are you with our prices? *</label>
             <div class="horizontal-options">
@@ -129,7 +330,6 @@
             </div>
         </div>
 
-        <!-- Question 5 -->
         <div class="form-field">
             <label>Would you recommend Ariston Wash & Dry? *</label>
             <select id="recommend" name="recommend" required>
@@ -140,25 +340,21 @@
             </select>
         </div>
 
-        <!-- Question 6 -->
         <div class="form-field">
             <label>What did you like the most?</label>
             <textarea name="comment_like"></textarea>
         </div>
 
-        <!-- Question 7 -->
         <div class="form-field">
             <label>Is there anything we could improve?</label>
             <textarea name="comment_improve"></textarea>
         </div>
 
-        <!-- Question 8 -->
         <div class="form-field">
             <label>Name (optional):</label>
             <input type="text" name="name">
         </div>
 
-        <!-- Question 9 -->
         <div class="form-field">
             <label>Would you like us to contact you? *</label>
             <select id="wantContact" name="wantContact" required>
@@ -168,7 +364,6 @@
             </select>
         </div>
 
-        <!-- Question 10 -->
         <div id="contactInfoBlock" class="form-field" style="display:none;">
             <label>Email or Phone *</label>
             <input type="text" id="contactInfo" name="contactInfo">
@@ -176,11 +371,10 @@
 
         <button class="submit-btn" type="submit">Submit</button>
         <p style="font-size: 12px; color: #666; margin-top: 10px;">
-By submitting this form, you accept our 
-<a href="/en/privacy" target="_blank">Privacy Policy</a> and agree 
-to the processing of your data according to GDPR.
+            By submitting this form, you accept our 
+            <a href="/en/privacy" target="_blank">Privacy Policy</a> and agree 
+            to the processing of your data according to GDPR.
         </p>
-
     </form>
 
     <div id="thankYouMessage" class="thankyou" style="display:none; text-align:center; margin-top:30px;">
@@ -190,10 +384,9 @@ to the processing of your data according to GDPR.
         <p>— Ariston Wash & Dry, Samos 🧺</p>
         <button onclick="location.reload()" class="submit-btn">Submit another response</button>
     </div>
-
 </section>
 
-<section class="contact">
+<section class="contact reveal">
     <h3>Contact</h3>
     <p>📍 Address: Dervenakion 10, Vathy, Samos 83100</p>
     <p>📞 Phone: +30 698 759 8416</p>
@@ -210,50 +403,53 @@ to the processing of your data according to GDPR.
 </footer>
 
 <script>
-const wantContact = document.getElementById("wantContact");
-const contactInfoBlock = document.getElementById("contactInfoBlock");
-const contactInfoInput = document.getElementById("contactInfo");
-const form = document.getElementById("reviewForm");
-const thankYou = document.getElementById("thankYouMessage");
-
-wantContact.addEventListener("change", () => {
-    if (wantContact.value === "yes") {
-        contactInfoBlock.style.display = "block";
-        contactInfoInput.required = true;
-    } else if (wantContact.value === "no") {
-        contactInfoBlock.style.display = "none";
-        contactInfoInput.required = false;
-        form.requestSubmit();
+    // Reveal animations
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 150;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
     }
-});
+    window.addEventListener("scroll", reveal);
+    window.addEventListener("load", reveal);
 
-form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    fetch("/submit_review", {
-        method: "POST",
-        body: new FormData(form)
-    }).then(() => {
-        form.style.display = "none";
-        thankYou.style.display = "block";
+    // Form logic
+    const wantContact = document.getElementById("wantContact");
+    const contactInfoBlock = document.getElementById("contactInfoBlock");
+    const contactInfoInput = document.getElementById("contactInfo");
+    const form = document.getElementById("reviewForm");
+    const thankYou = document.getElementById("thankYouMessage");
+
+    wantContact.addEventListener("change", () => {
+        if (wantContact.value === "yes") {
+            contactInfoBlock.style.display = "block";
+            contactInfoInput.required = true;
+        } else {
+            contactInfoBlock.style.display = "none";
+            contactInfoInput.required = false;
+        }
     });
-});
 
-function toggleMenu() {
-    const menu = document.getElementById("dropdownMenu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
-}
-document.getElementById("hamburger-btn").onclick = function() {
-    document.getElementById("nav-menu").classList.toggle("active");
-};
-document.addEventListener("DOMContentLoaded", () => {
-    const avatar = document.querySelector(".user-avatar");
-    const dropdown = document.querySelector(".user-dropdown");
-    if (avatar && dropdown) {
-        avatar.addEventListener("click", () => {
-            dropdown.classList.toggle("open");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        fetch("/submit_review", {
+            method: "POST",
+            body: new FormData(form)
+        }).then(() => {
+            form.style.display = "none";
+            thankYou.style.display = "block";
         });
-    }
-});
+    });
+
+    // Mobile menu logic
+    document.getElementById("hamburger-btn").onclick = function() {
+        document.getElementById("nav-menu").classList.toggle("active");
+    };
 </script>
 
 </body>
