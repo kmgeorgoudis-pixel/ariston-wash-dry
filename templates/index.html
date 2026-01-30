@@ -219,11 +219,21 @@
         .info-section { grid-template-columns: 1fr; padding: 60px 5%; }
         .hero { padding-top: 140px; }
     }
-    /* Welcome Banner Style */
+    /* Welcome Banner Style -*/
     .welcome-banner {
-        position: fixed; top: 140px; right: 20px; background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(10px); padding: 15px 25px; border-radius: 20px;
-        border: 1px solid rgba(255,255,255,0.2); z-index: 999; display: flex; align-items: center; gap: 15px;
+        position: fixed; 
+        top: 200px; 
+        right: 20px; 
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px); 
+        padding: 15px 25px; 
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2); 
+        z-index: 9999; 
+        display: flex; 
+        align-items: center; 
+        gap: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
         animation: slideIn 0.5s ease-out;
     }
     @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
