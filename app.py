@@ -90,7 +90,7 @@ https://aristonwashdry.gr/coupons
 
 from flask import session, request
 
-MAINTENANCE_MODE = True
+MAINTENANCE_MODE = False
 ACCESS_CODE = "the@code@is9!8!7!4!5!6!3!2!1!ARISTON_Wash_Dry"
 
 @app.before_request
