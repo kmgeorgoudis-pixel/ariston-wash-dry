@@ -5,282 +5,220 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Σύνδεση – ARISTON Wash & Dry</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
-     
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        :root {
+            --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+        }
 
-   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<style>
-    :root {
-        --primary: #0d47a1;
-        --accent: #1976d2;
-        --bg-gradient: linear-gradient(135deg, #f8faff 0%, #e0e7ff 100%);
-        --glass: rgba(255, 255, 255, 0.9);
-    }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.12), transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(0, 212, 255, 0.05), transparent 40%);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    body {
-        background: var(--bg-gradient);
-        font-family: 'Plus Jakarta Sans', sans-serif; /* Πιο μοντέρνα γραμματοσειρά */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        margin: 0;
-        overflow: auto;
-    }
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            padding: 50px 40px;
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            animation: containerEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-    /* Διακοσμητικοί κύκλοι στο background για το "WOW" εφέ */
-    body::before, body::after {
-        content: "";
-        position: absolute;
-        width: 300px;
-        height: 300px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(13, 71, 161, 0.1), rgba(25, 118, 210, 0.05));
-        z-index: -1;
-    }
-    body::before { top: -100px; right: -50px; }
-    body::after { bottom: -100px; left: -50px; }
+        @keyframes containerEntrance {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
 
-    .login-container {
-        width: 100%;
-        max-width: 400px;
-        background: var(--glass);
-        backdrop-filter: blur(20px);
-        padding: 50px 40px;
-        border-radius: 30px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        text-align: center;
-        animation: containerEntrance 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
+        /* Flash Messages */
+        .flash-msg {
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: left;
+            border: 1px solid transparent;
+        }
+        .flash-error { 
+            background: rgba(255, 68, 68, 0.1); 
+            color: #ff4444; 
+            border-color: rgba(255, 68, 68, 0.2);
+        }
+        .flash-success { 
+            background: rgba(0, 255, 127, 0.1); 
+            color: #00ff7f; 
+            border-color: rgba(0, 255, 127, 0.2);
+        }
 
-    @keyframes containerEntrance {
-        from { opacity: 0; transform: scale(0.9) translateY(20px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
-    }
+        .login-logo {
+            width: 110px;
+            margin-bottom: 35px;
+            filter: drop-shadow(0 0 15px var(--primary-glow));
+            transition: 0.4s;
+        }
+        .login-logo:hover { transform: scale(1.05); }
 
-    .login-logo {
-        width: 150px;
-        margin-bottom: 60px;
-        filter: drop-shadow(0 10px 15px rgba(13, 71, 161, 0.15));
-        transition: transform 0.3s ease;
-    }
-    .login-logo:hover { transform: rotate(-5deg) scale(1.05); }
+        .login-title {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
 
-    .login-title {
-        font-size: 24px;
-        font-weight: 800;
-        letter-spacing: -1px;
-        color: var(--primary);
-        margin-bottom: 8px;
-    }
+        .login-subtitle {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 30px;
+        }
 
-    .login-subtitle {
-        font-size: 14px;
-        color: #64748b;
-        margin-bottom: 35px;
-        font-weight: 400;
-    }
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .flag-icon {
+            width: 26px; height: 26px; border-radius: 50%;
+            object-fit: cover; border: 2px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .flag-icon:hover { transform: translateY(-3px); border-color: var(--primary); }
 
-    .form-field {
-        text-align: left;
-        margin-bottom: 20px;
-        position: relative;
-    }
+        /* Form */
+        .form-field { text-align: left; margin-bottom: 22px; }
+        .form-field label {
+            font-size: 11px; font-weight: 700; color: var(--secondary);
+            margin-bottom: 8px; display: block; text-transform: uppercase;
+            letter-spacing: 1px; padding-left: 5px;
+        }
+        .form-field input {
+            width: 100%; padding: 15px 20px; border-radius: 16px;
+            background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1);
+            color: white; font-size: 15px; transition: 0.3s;
+        }
+        .form-field input:focus {
+            outline: none; border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 112, 255, 0.2);
+        }
 
-    .form-field label {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--primary);
-        margin-bottom: 8px;
-        display: block;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        opacity: 0.8;
-    }
+        .submit-btn {
+            width: 100%; padding: 16px; border-radius: 18px; border: none;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white; font-weight: 800; font-size: 16px;
+            cursor: pointer; transition: 0.4s; text-transform: uppercase;
+            letter-spacing: 1px; margin-top: 5px;
+        }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--primary-glow); }
 
-    .form-field input {
-        width: 100%;
-        padding: 16px 20px;
-        border: 2px solid transparent;
-        border-radius: 16px;
-        font-size: 15px;
-        background: #f1f5f9;
-        color: #1e293b;
-        transition: all 0.3s ease;
-    }
+        .forgot-link {
+            display: inline-block; margin-top: 20px; font-size: 13px;
+            color: var(--text-dim); text-decoration: none; transition: 0.3s;
+        }
+        .forgot-link:hover { color: var(--secondary); }
 
-    .form-field input:focus {
-        outline: none;
-        background: #fff;
-        border-color: var(--accent);
-        box-shadow: 0 10px 20px -5px rgba(13, 71, 161, 0.15);
-        transform: translateY(-2px);
-    }
+        /* Footer links */
+        .register-link-container {
+            margin-top: 35px; padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .register-text { font-size: 14px; color: var(--text-dim); margin-bottom: 15px; display: block; }
+        
+        .register-cta {
+            display: inline-block; padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.05); color: var(--white);
+            border-radius: 100px; font-size: 14px; font-weight: 700;
+            text-decoration: none; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .register-cta:hover { background: var(--white); color: var(--dark-bg); }
 
-    .submit-btn {
-        width: 100%;
-        padding: 16px;
-        background: var(--primary);
-        color: white;
-        border: none;
-        border-radius: 16px;
-        font-size: 16px;
-        font-weight: 700;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        margin-top: 10px;
-    }
-
-    .submit-btn::before {
-        content: "";
-        position: absolute;
-        top: 0; left: -100%;
-        width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: 0.5s;
-    }
-
-    .submit-btn:hover::before {
-        left: 100%;
-    }
-
-    .submit-btn:hover {
-        background: #0a367a;
-        box-shadow: 0 15px 30px rgba(13, 71, 161, 0.3);
-        transform: translateY(-3px);
-    }
-
-    .forgot-link {
-        display: inline-block;
-        margin-top: 20px;
-        font-size: 13px;
-        color: #64748b;
-        text-decoration: none;
-        font-weight: 500;
-        transition: 0.2s;
-    }
-    .forgot-link:hover { color: var(--primary); }
-
-    .register-link {
-        margin-top: 30px;
-        padding-top: 20px;
-        border-top: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .register-link span {
-        font-size: 14px;
-        color: #64748b;
-    }
-
-    .register-cta {
-        color: var(--primary);
-        font-weight: 800;
-        text-decoration: none;
-        margin-left: 5px;
-        border-bottom: 2px solid transparent;
-        transition: all 0.3s ease;
-    }
-
-    .register-cta:hover {
-        border-bottom-color: var(--primary);
-    }
-
-    /* Flash Messages */
-    .flash-container {
-        position: absolute;
-        top: 20px;
-        width: 100%;
-        max-width: 400px;
-    }
-</style>
+        .cancel-btn {
+            display: block; margin-top: 20px; font-size: 13px;
+            color: var(--text-dim); text-decoration: none; transition: 0.3s;
+        }
+        .cancel-btn:hover { color: #ff4444; }
+    </style>
 </head>
 <body>
-    
 
-    <!-- LOGIN BOX -->
     <div class="login-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div style="
-          background: {% if category == 'success' %}#e3f2fd{% else %}#ffebee{% endif %};
-          color: {% if category == 'success' %}#0d47a1{% else %}#c62828{% endif %};
-          border-left: 6px solid {% if category == 'success' %}#0d47a1{% else %}#c62828{% endif %};
-          padding: 14px 18px;
-          border-radius: 10px;
-          font-size: 15px;
-          font-weight: 600;
-          text-align: left;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-          margin-bottom: 20px;
-      ">
-        {{ message }}
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-msg {% if category == 'success' %}flash-success{% else %}flash-error{% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 
-        <!-- Logo -->
         <img src="{{ url_for('static', filename='images/1new.png') }}" class="login-logo" alt="Logo">
 
-        <!-- Title -->
         <div class="login-title">ARISTON WASH & DRY</div>
         <div class="login-subtitle">Σύνδεση στον λογαριασμό σας</div>
+
         <div class="language-switcher">
-    <!-- Ελληνικά -->
-    <a href="{{ url_for('login') }}">
-        <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
-    </a>
+            <a href="{{ url_for('login') }}">
+                <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
+            </a>
+            <a href="{{ url_for('login_en') }}">
+                <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+            </a>
+        </div>
 
-    <!-- English -->
-    <a href="{{ url_for('login_en') }}">
-        <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
-    </a>
-</div>
-
-
-        <!-- Login Form -->
         <form action="/login" method="POST">
-
             <div class="form-field">
-                <label>Email</label>
-                <input type="email" name="email" required>
+                <label>Email Address</label>
+                <input type="email" name="email" required placeholder="email@example.com">
             </div>
 
             <div class="form-field">
-                <label>Κωδικός</label>
-                <input type="password" name="password" required>
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="••••••••">
             </div>
 
             <button class="submit-btn" type="submit">Σύνδεση</button>
         </form>
-        <a href="/forgot-password" class="forgot-link">Ξέχασα τον κωδικό μου</a>
-        <div class="register-link">
-        <div class="register-link" style="margin-top: 25px; font-size: 17px; font-weight: 600;">
-    Δεν έχετε λογαριασμό;
-    <a href="/register" style="
-        display: inline-block;
-        padding: 10px 18px;
-        margin-left: 6px;
-        background: linear-gradient(135deg, #0d47a1, #1565c0);
-        color: #fff;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 700;
-        text-decoration: none;
-        transition: 0.25s;
-    ">Εγγραφή εδώ</a>
-    <a href="/" class="cancel-btn">Ακύρωση & Επιστροφή</a>
-</div>
 
+        <a href="/forgot-password" class="forgot-link">Ξέχασα τον κωδικό μου</a>
+
+        <div class="register-link-container">
+            <span class="register-text">Δεν έχετε λογαριασμό;</span>
+            <a href="/register" class="register-cta">Εγγραφή εδώ</a>
+            <a href="/" class="cancel-btn">Ακύρωση & Επιστροφή</a>
+        </div>
     </div>
 
 </body>

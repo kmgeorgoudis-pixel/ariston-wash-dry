@@ -5,229 +5,263 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register – ARISTON Wash & Dry</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #0d47a1;
-            --accent: #1976d2;
-            --bg-gradient: linear-gradient(135deg, #f8faff 0%, #e0e7ff 100%);
-            --glass: rgba(255, 255, 255, 0.92);
-            --input-bg: #f1f5f9;
+            --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: var(--bg-gradient);
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 112, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 40%);
+            color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            margin: 0;
             padding: 20px;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            top: -150px;
-            left: -100px;
-            background: radial-gradient(circle, rgba(13, 71, 161, 0.08) 0%, transparent 70%);
-            z-index: -1;
         }
 
         .register-container {
             width: 100%;
             max-width: 480px;
-            background: var(--glass);
+            background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(25px);
-            padding: 45px 40px;
+            padding: 50px 40px;
             border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
-            animation: premiumReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: premiumReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes premiumReveal {
-            from { opacity: 0; transform: translateY(30px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .register-logo {
-            width: 150px;
-            margin-bottom: 60px;
-            filter: drop-shadow(0 8px 12px rgba(13, 71, 161, 0.1));
+            width: 100px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 15px var(--primary-glow));
         }
 
         .register-title {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--primary);
-            margin-bottom: 6px;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
             text-transform: uppercase;
         }
 
         .register-subtitle {
-            font-size: 15px;
-            color: #64748b;
+            font-size: 14px;
+            color: var(--text-dim);
             margin-bottom: 35px;
         }
 
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .flag-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .flag-icon:hover {
+            transform: scale(1.2);
+            border-color: var(--primary);
+        }
+
+        /* Form Styling */
         .form-field {
             text-align: left;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .form-field label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--secondary);
             margin-bottom: 8px;
             display: block;
-            margin-left: 5px;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
+            padding-left: 5px;
         }
 
         .form-field input {
             width: 100%;
-            padding: 14px 20px;
-            border: 2px solid transparent;
+            padding: 15px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             font-size: 15px;
             background: var(--input-bg);
-            color: #1e293b;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white;
+            transition: all 0.3s ease;
         }
 
         .form-field input:focus {
             outline: none;
-            background: #fff;
-            border-color: var(--accent);
-            box-shadow: 0 10px 25px -5px rgba(13, 71, 161, 0.1);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 112, 255, 0.2);
         }
 
         .submit-btn {
             width: 100%;
             padding: 16px;
-            background: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white;
             border: none;
             border-radius: 18px;
-            font-size: 17px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
             transition: all 0.4s ease;
-            margin-top: 15px;
-            box-shadow: 0 4px 6px rgba(13, 71, 161, 0.1);
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .submit-btn:hover {
-            background: #093a85;
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(13, 71, 161, 0.25);
+            box-shadow: 0 10px 25px var(--primary-glow);
         }
 
-        .login-link {
-            margin-top: 30px;
+        /* Links & Info */
+        .policy-text {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+        .policy-text a { color: var(--secondary); text-decoration: none; }
+
+        .login-link-container {
+            margin-top: 35px;
             padding-top: 25px;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            font-size: 15px;
-            color: #475569;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .login-text {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 15px;
+            display: block;
         }
 
         .login-cta {
-            color: var(--primary);
+            display: inline-block;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 700;
             text-decoration: none;
-            font-weight: 800;
-            margin-left: 5px;
-            padding: 6px 12px;
-            border-radius: 10px;
-            background: rgba(13, 71, 161, 0.05);
-            transition: all 0.3s ease;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .login-cta:hover {
-            background: var(--primary);
-            color: #fff;
+            background: var(--white);
+            color: var(--dark-bg);
         }
 
+        .cancel-btn {
+            display: block;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .cancel-btn:hover { color: #ff4444; }
+
         @media (max-width: 480px) {
-            .register-container {
-                padding: 30px 20px;
-            }
+            .register-container { padding: 40px 25px; }
         }
     </style>
 </head>
 <body>
 
     <div class="register-container">
-
         <img src="{{ url_for('static', filename='images/1new.png') }}" class="register-logo" alt="Logo">
 
         <div class="register-title">ARISTON WASH & DRY</div>
         <div class="register-subtitle">Create a new account</div>
+
         <div class="language-switcher">
-    <a href="{{ url_for('register') }}">
-        <img src="{{ url_for('static', filename='images/gr-flag.png') }}"
-             alt="Ελληνικά" class="flag-icon">
-    </a>
-
-    <a href="{{ url_for('register_en') }}">
-        <img src="{{ url_for('static', filename='images/en-flag.png') }}"
-             alt="English" class="flag-icon">
-    </a>
-</div>
-
-
+            <a href="{{ url_for('register') }}">
+                <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
+            </a>
+            <a href="{{ url_for('register_en') }}">
+                <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
+            </a>
+        </div>
 
         <form action="/en/register" method="POST">
-
             <div class="form-field">
                 <label>Full Name</label>
-                <input type="text" name="fullname" required>
+                <input type="text" name="fullname" required placeholder="e.g. John Doe">
             </div>
 
             <div class="form-field">
-                <label>Email</label>
-                <input type="email" name="email" required>
+                <label>Email Address</label>
+                <input type="email" name="email" required placeholder="email@example.com">
             </div>
 
             <div class="form-field">
                 <label>Password</label>
-                <input type="password" name="password" required>
+                <input type="password" name="password" required placeholder="••••••••">
             </div>
 
             <div class="form-field">
                 <label>Confirm Password</label>
-                <input type="password" name="confirm_password" required>
+                <input type="password" name="confirm_password" required placeholder="••••••••">
             </div>
 
             <button class="submit-btn" type="submit">Register</button>
         </form>
 
-        <p style="font-size: 12px; color: #666; margin-top: 10px;">
+        <p class="policy-text">
             By submitting this form, you accept our 
             <a href="/en/privacy" target="_blank">Privacy Policy</a> and agree 
             to the processing of your data according to GDPR.
         </p>
 
-        <div class="login-link" style="margin-top: 25px; font-size: 17px; font-weight: 600;">
-            Already have an account?
+        <div class="login-link-container">
+            <span class="login-text">Already have an account?</span>
             <a href="/en/login" class="login-cta">Login here</a>
             <a href="/en" class="cancel-btn">Cancel & Return</a>
         </div>
-
     </div>
 
 </body>
