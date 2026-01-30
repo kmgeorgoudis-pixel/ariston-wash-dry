@@ -219,6 +219,33 @@
         .info-section { grid-template-columns: 1fr; padding: 60px 5%; }
         .hero { padding-top: 140px; }
     }
+    /* Welcome Banner Style */
+    .welcome-banner {
+        position: fixed; top: 140px; right: 20px; background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px); padding: 15px 25px; border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.2); z-index: 999; display: flex; align-items: center; gap: 15px;
+        animation: slideIn 0.5s ease-out;
+    }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+    /* Promo Overlay Style */
+    .promo-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(1, 4, 9, 0.9); backdrop-filter: blur(12px);
+        display: none; justify-content: center; align-items: center; z-index: 10000;
+    }
+    .promo-overlay.show { display: flex; animation: fadeIn 0.6s ease forwards; }
+    .promo-modal {
+        background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 50px 40px; border-radius: 40px; text-align: center; max-width: 550px; width: 90%;
+    }
+    .promo-btn {
+        display: block; background: var(--primary); color: white !important;
+        padding: 18px; border-radius: 20px; text-decoration: none; font-weight: 900;
+        text-transform: uppercase; margin-top: 20px; animation: pulse 2.5s infinite;
+    }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 </style>
 </head>
 <body>
@@ -259,8 +286,37 @@
         </div>
     </nav>
 </header>
+{% if not current_user.is_authenticated %}
+<div id="promo-overlay" class="promo-overlay">
+    <div class="promo-modal">
+        <div class="logo" style="justify-content: center; margin-bottom: 20px;">
+            ARISTON <span>Members</span>
+        </div>
+        <h2 style="color: var(--secondary); margin-bottom: 15px;">Ζήστε την Εμπειρία Ariston</h2>
+        <p style="opacity: 0.8; margin-bottom: 25px;">Γίνετε μέλος της κοινότητάς μας και αναβαθμίστε την καθημερινή φροντίδα των ρούχων σας.</p>
+        <ul style="text-align: left; list-style: none; margin-bottom: 30px; display: inline-block; color: rgba(255,255,255,0.9);">
+            <li style="margin-bottom: 10px;">✓ Αποκλειστικά Κουπόνια Μελών</li>
+            <li style="margin-bottom: 10px;">✓ Ιστορικό Χρήσης & Στατιστικά</li>
+            <li style="margin-bottom: 10px;">✓ Πρόσβαση στο Ariston AI Assistant</li>
+            <li style="margin-bottom: 10px;">✓ Πρόσβαση στο Ariston Game</li>
+        </ul>
+        <a href="/auth_choice" class="promo-btn">Εγγραφη / Συνδεση</a>
+        <button id="promo-close-btn" style="background:none; border:none; color:var(--text-dim); cursor:pointer; margin-top:20px; text-decoration:underline; font-size: 12px;">ΣΥΝΕΧΕΙΑ ΩΣ ΕΠΙΣΚΕΠΤΗΣ</button>
+    </div>
+</div>
+{% endif %}
 
-<div class="bubbles-container" id="bubbles"></div>
+{% if current_user.is_authenticated %}
+<div class="welcome-banner" id="welcome-banner">
+    <div style="background: var(--primary); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">
+        {{ current_user.fullname[0]|upper }}
+    </div>
+    <div>
+        <div style="font-weight: 700; font-size: 0.9rem;">Καλώς ήρθες ξανά, {{ current_user.fullname.split(' ')[0] }}!</div>
+        <div style="font-size: 0.75rem; opacity: 0.7;">Συνδεδεμένο Μέλος</div>
+    </div>
+</div>
+{% endif %} <div class="bubbles-container" id="bubbles"></div>
 
 <section class="hero">
     <h1 class="reveal">ARISTON Wash & Dry</h1>
@@ -351,6 +407,23 @@
         setTimeout(() => bubble.remove(), 8000);
     }
     setInterval(createBubble, 600);
+    // Promo Overlay Logic
+    const overlay = document.getElementById("promo-overlay");
+    if (overlay) {
+        setTimeout(() => overlay.classList.add("show"), 10000);
+        document.getElementById("promo-close-btn").onclick = () => overlay.classList.remove("show");
+    }
+
+    // Welcome Banner Timeout
+    const banner = document.getElementById('welcome-banner');
+    if (banner) {
+        setTimeout(() => {
+            banner.style.transition = "0.8s cubic-bezier(0.16, 1, 0.3, 1)";
+            banner.style.opacity = "0";
+            banner.style.transform = "translateX(50px)";
+            setTimeout(() => banner.remove(), 800);
+        }, 7000);
+    }
 </script>
 
 </body>

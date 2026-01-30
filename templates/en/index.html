@@ -3,206 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>ARISTON Wash & Dry | Self Service Laundry in Samos</title>
 
     <meta name="description" content="Ariston Wash & Dry in Samos – modern self-service laundry. Fast, affordable washing & drying. Ideal for locals, tourists and Airbnb hosts.">
     <meta name="keywords" content="laundry Samos, self service laundry Samos, laundromat Samos, washing machines Samos, dryers Samos, coin laundry Samos, Ariston Wash & Dry">
     <meta name="author" content="Konstantinos Georgoudis">
 
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- Premium Promo Overlay Style --- */
+        :root {
+            --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        .reveal { opacity: 0; transform: translateY(40px) scale(0.98); transition: var(--transition); }
+        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+
+        /* --- Promo Overlay --- */
         .promo-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(1, 4, 9, 0.85); 
-            backdrop-filter: blur(12px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(1, 4, 9, 0.9); backdrop-filter: blur(12px);
+            display: none; justify-content: center; align-items: center; z-index: 10000;
         }
-
-        .promo-overlay.show {
-            display: flex;
-            animation: fadeIn 0.6s ease forwards;
-        }
-
+        .promo-overlay.show { display: flex; animation: fadeIn 0.6s ease forwards; }
         .promo-modal {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 50px 40px;
-            border-radius: 40px;
-            text-align: center;
-            max-width: 550px;
-            width: 90%;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 
-                        0 0 40px rgba(0, 112, 255, 0.1);
-            position: relative;
-            color: white;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px 40px; border-radius: 40px; text-align: center; max-width: 550px; width: 90%;
         }
-
-        .promo-logo {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 25px;
-            letter-spacing: 2px;
-        }
-
-        .promo-logo span {
-            color: #0070ff;
-            font-style: italic;
-            text-shadow: 0 0 15px rgba(0, 112, 255, 0.5);
-        }
-
-        .promo-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #00d4ff;
-        }
-
-        .promo-text {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .promo-benefits {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-            margin: 0 auto 35px auto;
-            max-width: 400px;
-        }
-
-        .promo-benefits li {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .promo-benefits li::before {
-            content: '✓';
-            color: #0070ff;
-            font-weight: bold;
-        }
-
-        /* Pulse Animation για το κουμπί */
-        @keyframes pulse-btn {
-            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4); }
-            50% { transform: scale(1.03); box-shadow: 0 15px 45px rgba(0, 112, 255, 0.6); }
-            100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 112, 255, 0.4); }
-        }
-
+        .promo-logo span { color: var(--primary); font-style: italic; }
         .promo-btn {
-            display: block;
-            background: #0070ff;
-            color: white !important;
-            padding: 18px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            animation: pulse-btn 2.5s infinite ease-in-out; /* Εδώ μπήκε το animation */
+            display: block; background: var(--primary); color: white !important;
+            padding: 18px; border-radius: 20px; text-decoration: none; font-weight: 900;
+            text-transform: uppercase; margin-top: 20px; animation: pulse 2.5s infinite;
         }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 
-        .promo-btn:hover {
-            transform: translateY(-5px);
-            background: #0084ff;
-            animation: none; /* Σταματάει το pulse όταν το ποντίκι είναι από πάνω */
+        /* --- Welcome Banner --- */
+        .welcome-banner {
+            position: fixed; top: 140px; right: 20px; background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px); padding: 15px 25px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2); z-index: 999; display: flex; align-items: center; gap: 15px;
+            animation: slideIn 0.5s ease-out;
         }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-        .promo-close {
-            display: block;
-            margin: 20px auto 0;
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.3s;
-            text-decoration: underline;
+        /* --- Header & Nav --- */
+        header {
+            background: rgba(3, 5, 8, 0.95); backdrop-filter: blur(20px);
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
+        .store-notice {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white; padding: 8px; text-align: center; font-weight: 700; font-size: 0.75rem;
+        }
+        .header-top {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 5%; max-width: 1400px; margin: 0 auto;
+        }
+        .logo { font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 12px; }
+        .logo span { background: linear-gradient(to right, #fff, var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-icon { height: 45px; }
 
-        .promo-close:hover {
-            color: white;
-        }
+        .language-switcher { display: flex; gap: 12px; }
+        .language-switcher img { width: 24px; border-radius: 4px; transition: 0.3s; }
+        .language-switcher img:hover { transform: scale(1.15); }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+        .main-nav { border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(255, 255, 255, 0.02); }
+        .nav-links { display: flex; justify-content: center; gap: 30px; padding: 12px 5%; max-width: 1400px; margin: 0 auto; }
+        .nav-links a { color: var(--white); text-decoration: none; font-size: 0.9rem; opacity: 0.6; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--secondary); }
+        .auth-btn { background: var(--white); color: var(--dark-bg) !important; padding: 6px 18px; border-radius: 100px; font-weight: 700 !important; opacity: 1 !important; }
+
+        /* --- Hero --- */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; padding: 180px 20px 80px;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 112, 255, 0.1), transparent 70%);
         }
+        .hero h1 { font-size: clamp(2.5rem, 8vw, 5rem); margin-bottom: 20px; }
+        .hero h2 { color: var(--secondary); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+
+        /* --- Info Section --- */
+        .info-section {
+            padding: 100px 10%; display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+            align-items: center; background: #fff; color: #000; border-radius: 60px 60px 0 0;
+        }
+        .info-text h3 { font-size: 2.2rem; margin-bottom: 25px; color: var(--primary); }
+        .info-image img { width: 100%; border-radius: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+
+        /* --- Contact & Footer --- */
+        .contact { padding: 80px 10%; background: #f4f7f6; color: #000; text-align: center; }
+        footer { padding: 60px 10% 30px; background: var(--dark-bg); text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
+        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.8rem; }
+
+        /* --- Bubbles --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), transparent); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(100vh); opacity: 0; } 50% { opacity: 0.4; } to { transform: translateY(-10vh); opacity: 0; } }
+
+        /* --- Mobile --- */
+        .hamburger { display: none; color: white; font-size: 1.8rem; cursor: pointer; }
+        @media (max-width: 900px) {
+            .hamburger { display: block; }
+            .nav-links {
+                display: none; flex-direction: column; position: absolute;
+                top: 100%; left: 0; width: 100%; background: rgba(3, 5, 8, 0.98);
+                padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
+            }
+            .nav-links.active { display: flex; }
+            .info-section { grid-template-columns: 1fr; }
+        }
+        
     </style>
 </head>
-
 <body>
 
 {% if not current_user.is_authenticated %}
 <div id="promo-overlay" class="promo-overlay">
     <div class="promo-modal">
-        <div class="promo-logo">
+        <div class="logo" style="justify-content: center; margin-bottom: 20px;">
             ARISTON <span>Members</span>
         </div>
-
-        <h2 class="promo-title">Experience the Ariston Privilege</h2>
-        <p class="promo-text">
-            Join our exclusive community and transform your laundry routine into a premium experience.
-        </p>
-
-        <ul class="promo-benefits">
-            <li>Exclusive Member Coupons</li>
-            <li>Usage History & Analytics</li>
-            <li>Ariston AI Assistant Access</li>
-            <li>Access To Ariston Game </li>
-            <li>VIP Priority Updates</li>
+        <h2 style="color: var(--secondary); margin-bottom: 15px;">Experience the Ariston Privilege</h2>
+        <p style="opacity: 0.8; margin-bottom: 25px;">Join our exclusive community and transform your laundry routine into a premium experience.</p>
+        <ul style="text-align: left; list-style: none; margin-bottom: 30px; display: inline-block;">
+            <li>✓ Exclusive Member Coupons</li>
+            <li>✓ Usage History & Analytics</li>
+            <li>✓ Ariston AI Assistant Access</li>
+            <li>✓ Access To Ariston Game</li>
         </ul>
-
         <a href="/en/auth_choice_en" class="promo-btn">Sign Up / Login</a>
-
-        <button class="promo-close" id="promo-close-btn">Continue as Guest</button>
+        <button id="promo-close-btn" style="background:none; border:none; color:var(--text-dim); cursor:pointer; margin-top:20px; text-decoration:underline;">Continue as Guest</button>
     </div>
 </div>
 {% endif %}
 
 <header>
+    <div class="store-notice">OUR STORE IS NOT OPEN YET — COMING SOON!</div>
     <div class="header-top">
         <div class="logo">
             <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
             ARISTON <span>Wash & Dry</span>
         </div> 
-
-        <div class="language-switcher">
-            <a href="{{ url_for('home') }}">
-                <img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά" class="flag-icon">
-            </a>
-            <a href="{{ url_for('en_index') }}">
-                <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
-            </a>
+        <div class="right-actions">
+            <div class="language-switcher">
+                <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Greek"></a>
+                <a href="{{ url_for('en_index') }}"><img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English"></a>
+            </div>
+            <div class="hamburger" id="hamburger-btn">☰</div>
         </div>
     </div>
-
-
-    <div class="store-notice">
-        OUR STORE IS NOT OPEN YET — COMING SOON!
-    </div>
-    <div class="bubbles-container"></div>
-
     <nav class="main-nav">
-        <div class="hamburger" id="hamburger-btn">☰</div>
-
         <div class="nav-links" id="nav-menu">
             <a href="/en">Home</a>
             <a href="/en/pricing">Pricing</a>
@@ -210,58 +179,37 @@
             <a href="/en/special-services">Special Services</a>
             <a href="/en/reviews">Reviews</a>
             <a href="/en/contact">Contact</a>
-
             {% if current_user.is_authenticated %}
-            <div class="user-menu">
-                <div class="user-avatar">{{ current_user.fullname[0] }}</div>
-                <span class="user-hint">Member options</span>
-
-                <div class="user-dropdown">
-                    <a href="/en/settings-menu">Settings</a>
-                    <a href="/en/updates-menu-en">Updates</a>
-                    <a href="/en/ai" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
-                    <a href="/game">ARISTON Game</a>
-                    <a href="/logout" class="logout">Logout</a>
-                </div>
-            </div>
+                <a href="/en/settings-menu" class="auth-btn">Account Menu</a>
             {% else %}
-            <a href="/en/auth_choice_en" class="nav-btn">Register / Login</a>
+                <a href="/en/auth_choice_en" class="auth-btn">Register / Login</a>
             {% endif %}
         </div>
     </nav>
+</header>
+
 {% if current_user.is_authenticated %}
-<div class="welcome-banner">
-    <div class="welcome-accent">
+<div class="welcome-banner" id="welcome-banner">
+    <div style="background: var(--primary); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">
         {{ current_user.fullname[0]|upper }}
     </div>
-
     <div>
-        <div class="welcome-text-main">
-            Welcome back, {{ current_user.fullname }} 👋
-        </div>
-        <div class="welcome-text-sub">
-            We're happy to have you with us in the world of Ariston Wash & Dry.
-        </div>
-    </div>
-
-    <div class="welcome-pill">
-        <div class="welcome-pill-dot"></div>
-        <span>Connected member</span>
+        <div style="font-weight: 700; font-size: 0.9rem;">Welcome back, {{ current_user.fullname.split(' ')[0] }}!</div>
+        <div style="font-size: 0.75rem; opacity: 0.7;">Premium Member Connected</div>
     </div>
 </div>
 {% endif %}
 
-</header>
+<div class="bubbles-container" id="bubbles"></div>
 
 <section class="hero">
-    <h1>ARISTON Wash & Dry</h1>
-    <h2>Easy, Fast, Affordable & Effective</h2>
-    <p>The new self-service laundry in Samos is here!</p>
-    <p>Wash and dry your clothes easily, quickly and affordably.</p>
-    <p>Open daily and ready whenever you need us.</p>
+    <h1 class="reveal">ARISTON Wash & Dry</h1>
+    <h2 class="reveal">Easy, Fast, Affordable & Effective</h2>
+    <p class="reveal">The new self-service laundry in Samos is here!</p>
+    <p class="reveal">Wash and dry your clothes easily, quickly and affordably.</p>
 </section>
 
-<section class="info-section">
+<section class="info-section reveal">
     <div class="info-text">
         <h3>Welcome to Ariston Wash & Dry!</h3>
         <p>At Ariston Wash & Dry you can wash and dry your clothes quickly and easily in less than one hour.</p>
@@ -273,110 +221,72 @@
         <p><strong>Clean clothes, simple life.</strong></p>
         <p><strong>Ariston Wash & Dry – Clean clothes, clear mind.</strong></p>
     </div>
-
     <div class="info-image">
-        <img src="{{ url_for('static', filename='images/1new.png') }}" alt="Ariston Wash & Dry">
+        <img src="{{ url_for('static', filename='images/1new.png') }}" alt="Laundry Interior">
     </div>
 </section>
 
-<section class="contact">
-    <h3>Contact</h3>
-    <p>📍 Address: Dervenakion 10, Vathy, Samos 83100</p>
-    <p>📞 Phone: +30 698 759 8416</p>
-    <p>📧 Email: aristonwashing@gmail.com</p>
+<section class="contact reveal">
+    <h3>Contact Us</h3>
+    <p>📍 Dervenakion 10, Vathy, Samos 83100</p>
+    <p>📞 +30 698 759 8416 | 📧 aristonwashing@gmail.com</p>
 </section>
 
 <footer>
     © 2025 Ariston Wash & Dry — All Rights Reserved<br>
     Website designed & developed by Konstantinos Georgoudis
     <br><br>
-    <a href="/en/terms">Terms of Use</a> |
-    <a href="/en/privacy">Privacy Policy</a> |
-    <a href="/en/cookies">Cookie Policy</a>
+    <a href="/en/terms">Terms</a> | <a href="/en/privacy">Privacy</a> | <a href="/en/cookies">Cookies</a>
 </footer>
 
 <script>
-    // Mobile Menu Toggle
-    document.getElementById("hamburger-btn").onclick = function() {
-        document.getElementById("nav-menu").classList.toggle("active");
-    };
+    // Reveal Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // User Dropdown Toggle & Overlay Logic
-    document.addEventListener("DOMContentLoaded", () => {
-        const avatar = document.querySelector(".user-avatar");
-        const dropdown = document.querySelector(".user-dropdown");
+    // Hamburger Mobile
+    const btn = document.getElementById('hamburger-btn');
+    const menu = document.getElementById('nav-menu');
+    btn.onclick = () => menu.classList.toggle('active');
 
-        if (avatar && dropdown) {
-            avatar.addEventListener("click", (e) => {
-                e.stopPropagation();
-                dropdown.classList.toggle("open");
-            });
-            document.addEventListener("click", () => dropdown.classList.remove("open"));
-        }
+    // Promo Overlay Logic
+    const overlay = document.getElementById("promo-overlay");
+    const closeBtn = document.getElementById("promo-close-btn");
+    if (overlay) {
+        setTimeout(() => overlay.classList.add("show"), 10000);
+        closeBtn.onclick = () => overlay.classList.remove("show");
+    }
 
-        // --- Promo Overlay Logic ---
-        const overlay = document.getElementById("promo-overlay");
-        const closeBtn = document.getElementById("promo-close-btn");
-
-        if (overlay) {
-            // Εμφανίζεται πάντα μετά από 10 δευτερόλεπτα σε κάθε refresh
-            setTimeout(function () {
-                overlay.classList.add("show");
-            }, 10000);
-
-            closeBtn.addEventListener("click", function () {
-                overlay.classList.remove("show");
-                // Αφαιρέσαμε το sessionStorage.setItem ώστε να ξαναβγαίνει στο επόμενο refresh
-            });
-        }
-    });
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const banner = document.querySelector(".welcome-banner");
+    // Welcome Banner Timeout
+    const banner = document.getElementById('welcome-banner');
     if (banner) {
         setTimeout(() => {
-            banner.style.animation = "bannerFadeOut 0.7s ease forwards";
-            setTimeout(() => banner.remove(), 700);
-        }, 7000); // 7 δευτερόλεπτα
+            banner.style.transition = "0.5s";
+            banner.style.opacity = "0";
+            banner.style.transform = "translateX(100px)";
+            setTimeout(() => banner.remove(), 500);
+        }, 7000);
     }
-});
-</script>
-<script>
-function createBubble() {
-    const container = document.querySelector('.bubbles-container');
-    if (!container) return;
 
-    const bubble = document.createElement('div');
-    bubble.classList.add('bubble');
-    bubble.textContent = "🫧"; // το emoji φυσαλίδας
-
-    
-    const size = Math.random() * 20 + 20; // 20–40px
-    bubble.style.fontSize = size + "px";
-
-    
-    bubble.style.left = Math.random() * 100 + "vw";
-
-    
-    bubble.style.animationDuration = (Math.random() * 3 + 4) + "s";
-
-    container.appendChild(bubble);
-
-    bubble.addEventListener("animationend", () => bubble.remove());
-}
-
-
-function spawnBubblesBatch() {
-    for (let i = 0; i < 3; i++) {   
-        setTimeout(createBubble, i * 300);
+    // Bubbles
+    function createBubble() {
+        const container = document.getElementById('bubbles');
+        const bubble = document.createElement('div');
+        const size = Math.random() * 40 + 10 + 'px';
+        bubble.className = 'bubble';
+        bubble.style.width = size;
+        bubble.style.height = size;
+        bubble.style.left = Math.random() * 100 + 'vw';
+        bubble.style.animationDuration = Math.random() * 4 + 6 + 's';
+        container.appendChild(bubble);
+        setTimeout(() => bubble.remove(), 8000);
     }
-}
-
-spawnBubblesBatch();
-setInterval(spawnBubblesBatch, 5000);
+    setInterval(createBubble, 800);
 </script>
-
 
 </body>
 </html>
