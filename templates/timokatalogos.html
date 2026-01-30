@@ -5,41 +5,252 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Τιμοκατάλογος – ARISTON Wash & Dry</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px) scale(0.98); 
+            transition: var(--transition); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+
+        /* --- Header & Nav --- */
+        header {
+            background: rgba(3, 5, 8, 0.95);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .store-notice {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%; 
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
+
+        .main-nav {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            padding: 12px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.6;
+        }
+
+        .nav-links a:hover { opacity: 1; color: var(--secondary); }
+
+        /* User Menu & Dropdown */
+        .user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .user-avatar { width: 32px; height: 32px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: white; }
+        .user-hint { font-size: 0.8rem; opacity: 0.7; color: white; }
+        .user-dropdown { 
+            position: absolute; top: 100%; right: 0; width: 220px; background: #0a0c10; 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; 
+            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+        .user-menu:hover .user-dropdown { display: flex; }
+        .user-dropdown a { padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
+        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff); color: white !important; font-weight: 700 !important; }
+        .logout { color: #ff4444 !important; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; }
+
+        .auth-btn { background: var(--white); color: var(--dark-bg) !important; padding: 6px 18px; border-radius: 100px; font-weight: 700 !important; opacity: 1 !important; }
+
+        /* --- Page Title Section --- */
+        .page-title {
+            padding: 180px 5% 60px;
+            text-align: center;
+            background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.15), transparent 70%);
+        }
+
+        .page-title h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 20px; letter-spacing: -1px; }
+        .page-title p { color: var(--text-dim); max-width: 800px; margin: 0 auto 15px; }
+
+        /* --- Pricing Sections --- */
+        .pricing-section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
+        .pricing-header { text-align: center; margin-bottom: 50px; }
+        .pricing-header h2 { font-size: 2rem; color: var(--secondary); margin-bottom: 10px; }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .pricing-grid.small { max-width: 900px; margin: 0 auto 40px; }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 30px;
+            padding: 40px;
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .pricing-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .badge-highlight { background: var(--primary); color: white; }
+
+        .pricing-price { font-size: 3rem; font-weight: 800; margin-bottom: 5px; }
+        .pricing-subtitle { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 25px; }
+
+        .pricing-list { list-style: none; text-align: left; margin-bottom: 25px; }
+        .pricing-list li { margin-bottom: 12px; font-size: 0.95rem; opacity: 0.9; display: flex; align-items: center; gap: 10px; }
+
+        .pricing-tagline { font-size: 0.85rem; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; font-style: italic; }
+
+        .note { text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-top: 20px; }
+
+        /* --- Footer & Contact --- */
+        .contact { padding: 80px 10%; background: #f4f7f6; color: #000; text-align: center; border-radius: 60px 60px 0 0; }
+        .contact h3 { margin-bottom: 20px; color: var(--primary); }
+        
+        footer { padding: 60px 10% 30px; background: var(--dark-bg); text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
+        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.8rem; }
+
+        /* --- Bubbles --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), transparent); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(100vh); opacity: 0; } 50% { opacity: 0.4; } to { transform: translateY(-10vh); opacity: 0; } }
+
+        /* --- Welcome Banner --- */
+        .welcome-banner {
+            position: fixed; top: 180px; right: 20px; background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px); padding: 15px 25px; border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2); z-index: 9999; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: slideIn 0.5s ease-out;
+        }
+
+        /* --- Mobile Responsive --- */
+        .hamburger { display: none; color: white; font-size: 1.8rem; cursor: pointer; }
+
+        @media (max-width: 900px) {
+            .hamburger { display: block; margin-left: auto; padding: 10px; }
+            .header-top { padding: 10px 5%; }
+            .nav-links {
+                display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(3, 5, 8, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
+            }
+            .nav-links.active { display: flex; }
+            .user-menu { justify-content: center; }
+            .user-dropdown { position: static; width: 100%; background: transparent; box-shadow: none; display: none; }
+            .user-menu:hover .user-dropdown { display: flex; }
+            .pricing-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Navigation -->
 <header>
-
-    <!-- LOGO -->
-<div class="header-top">
-    <div class="logo">
-        <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
-        ARISTON <span>Wash & Dry</span>
-    </div>
-
-    <!-- 🔥 ΕΝΗΜΕΡΩΤΙΚΟ ΜΗΝΥΜΑ -->
     <div class="store-notice">
         ΤΟ ΚΑΤΑΣΤΗΜΑ ΜΑΣ ΔΕΝ ΕΙΝΑΙ ΑΝΟΙΧΤΟ ΑΚΟΜΑ — ΣΥΝΤΟΜΑ ΚΟΝΤΑ ΣΑΣ!
     </div>
-</div>
-
     
-
-    <!-- NAVIGATION (κάτω από το logo) -->
-    <nav class="main-nav">
-
-        <!-- Hamburger button (mobile only) -->
+    <div class="header-top">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
+            ARISTON <span>Wash & Dry</span>
+        </div>
         <div class="hamburger" id="hamburger-btn">☰</div>
+    </div>
 
-        <!-- Menu links -->
+    <nav class="main-nav">
         <div class="nav-links" id="nav-menu">
-
             <a href="/">Αρχική</a>
             <a href="/timokatalogos">Τιμοκατάλογος</a>
             <a href="/fwtografies">Φωτογραφίες</a>
@@ -49,158 +260,140 @@
 
             {% if current_user.is_authenticated %}
             <div class="user-menu">
-                <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+                <div class="user-avatar">{{ current_user.fullname[0]|upper }}</div>
                 <span class="user-hint">Επιλογές μέλους</span>
-
                 <div class="user-dropdown">
                     <a href="/settings-menu">Ρυθμίσεις</a>
                     <a href="/updates-menu">Ενημερώσεις</a>
-                    <a href="{{ url_for('ai') }}" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="{{ url_for('ai') }}" class="ai-btn">🤖 ARISTON AI ASSISTANT</a>
                     <a href="/game">ARISTON Game</a>
                     <a href="/logout" class="logout">Αποσύνδεση</a>
-                    <div id="google_translate_element"></div>
                 </div>
             </div>
             {% else %}
-            <a href="/auth_choice" class="nav-btn">Εγγραφή / Σύνδεση</a>
+            <a href="/auth_choice" class="auth-btn">Εγγραφή / Σύνδεση</a>
             {% endif %}
-
         </div>
     </nav>
-
 </header>
 
-    <!-- Page Title -->
-    <section class="page-title">
-        <h1>Τιμοκατάλογος</h1>
-        <p>Καθαρά ρούχα, εύκολα και οικονομικά!</p>
-    </section>
 
-    <section class="page-title">
-        <p>Στο Ariston Wash & Dry πλένετε και στεγνώνετε ό,τι χρειάζεστε γρήγορα, απλά και φθηνά.</p>
-        <p>Διαλέξτε το μέγεθος πλυντηρίου που ταιριάζει στις ανάγκες σας και αφήστε τα υπόλοιπα σε εμάς!</p>
-        <p>Είτε έχετε λίγα ρούχα είτε ολόκληρη οικογενειακή πλύση, εδώ θα βρείτε το πλυντήριο που σας ταιριάζει.</p>
-        <p>Ρίξτε τα ρούχα, επιλέξτε πρόγραμμα, πατήστε Start — τόσο απλά!</p>
-    </section>
 
-    <!-- ΠΛΥΣΙΜΟ -->
-    <section class="pricing-section">
-        <div class="pricing-header">
-            <h2>🧺 Τιμοκατάλογος  — Πλύσιμο </h2>
-            <p>Καθαρά & φρέσκα σε λιγότερο από 1 ώρα</p>
+<div class="bubbles-container" id="bubbles"></div>
+
+<section class="page-title reveal">
+    <h1>Τιμοκατάλογος</h1>
+    <p>Καθαρά ρούχα, εύκολα και οικονομικά!</p>
+    <p>Στο Ariston Wash & Dry πλένετε και στεγνώνετε ό,τι χρειάζεστε γρήγορα, απλά και φθηνά.</p>
+    <p>Διαλέξτε το μέγεθος πλυντηρίου που ταιριάζει στις ανάγκες σας και αφήστε τα υπόλοιπα σε εμάς!</p>
+    <p>Είτε έχετε λίγα ρούχα είτε ολόκληρη οικογενειακή πλύση, εδώ θα βρείτε το πλυντήριο που σας ταιριάζει.</p>
+    <p>Ρίξτε τα ρούχα, επιλέξτε πρόγραμμα, πατήστε Start — τόσο απλά!</p>
+</section>
+
+<section class="pricing-section reveal">
+    <div class="pricing-header">
+        <h2>🧺 Τιμοκατάλογος — Πλύσιμο</h2>
+        <p>Καθαρά & φρέσκα σε λιγότερο από 1 ώρα</p>
+    </div>
+
+    <div class="pricing-grid">
+        <div class="pricing-card">
+            <div class="pricing-badge">10 κιλών</div>
+            <div class="pricing-price">--- €</div>
+            <div class="pricing-subtitle">Ιδανικό για μικρές πλύσεις</div>
+            <ul class="pricing-list">
+                <li>👕 8–10 μπλούζες</li>
+                <li>👖 4–5 παντελόνια</li>
+                <li>🛏️ 2 σετ σεντόνια</li>
+                <li>🧺 6–8 πετσέτες</li>
+            </ul>
+            <div class="pricing-tagline">Καθημερινά ρούχα & γρήγορες πλύσεις.</div>
         </div>
 
-        <div class="pricing-grid">
-            <!-- Κάρτα 10 κιλών -->
-            <div class="pricing-card">
-                <div class="pricing-badge">10 κιλών</div>
-                <div class="pricing-price">--- €</div>
-                <div class="pricing-subtitle">Ιδανικό για μικρές πλύσεις</div>
-                <ul class="pricing-list">
-                    <li>👕 8–10 μπλούζες</li>
-                    <li>👖 4–5 παντελόνια</li>
-                    <li>🛏️ 2 σετ σεντόνια (μονά ή  διπλά)</li>
-                    <li>🧺 6–8 πετσέτες</li>
-                </ul>
-                <div class="pricing-tagline">
-                    Καθημερινά ρούχα & γρήγορες πλύσεις.
-                </div>
-            </div>
+        <div class="pricing-card">
+            <div class="pricing-badge badge-highlight">14 κιλών</div>
+            <div class="pricing-price">--- €</div>
+            <div class="pricing-subtitle">Ιδανικό για οικογένειες</div>
+            <ul class="pricing-list">
+                <li>👕 12–15 μπλούζες</li>
+                <li>👖 6–8 παντελόνια</li>
+                <li>🛏️ 3 σετ σεντόνια</li>
+                <li>🧥 1–2 μπουφάν / 🛌 Παπλώματα</li>
+            </ul>
+            <div class="pricing-tagline">Ολόκληρες οικογενειακές πλύσεις, σεντόνια & παπλώματα.</div>
+        </div>
+    </div>
+    <p class="note">Σημείωση: Μην γεμίζετε το πλυντήριο πάνω από ~80% — αφήστε χώρο για σωστό καθαρισμό.</p>
+</section>
 
-            <!-- Κάρτα 14 κιλών -->
-            <div class="pricing-card">
-                <div class="pricing-badge badge-highlight">14 κιλών</div>
-                <div class="pricing-price">--- €</div>
-                <div class="pricing-subtitle">Ιδανικό για οικογένειες</div>
-                <ul class="pricing-list">
-                    <li>👕 12–15 μπλούζες</li>
-                    <li>👖 6–8 παντελόνια</li>
-                    <li>🛏️ 3 σετ σεντόνια</li>
-                    <li>🧥 1–2 μπουφάν / 🛌 1–2 παπλώματα μεσαίου μεγέθους</li>
-                </ul>
-                <div class="pricing-tagline">
-                    Ολόκληρες οικογενειακές πλύσεις, σεντόνια & παπλώματα.
-                </div>
-            </div>
+<section class="pricing-section reveal">
+    <div class="pricing-header">
+        <h2>💨 Τιμές Στεγνωτηρίων</h2>
+        <p>Τιμές ανά 15λεπτο κύκλο</p>
+    </div>
+
+    <div class="pricing-grid small">
+        <div class="pricing-card">
+            <div class="pricing-badge">14 κιλών</div>
+            <div class="pricing-price">--- €</div>
+            <div class="pricing-subtitle">ανά 15 λεπτά</div>
+            <div class="pricing-tagline">Ιδανικό για κανονικές πλύσεις ρούχων.</div>
         </div>
 
-        <p class="note">
-            Σημείωση: Μην γεμίζετε το πλυντήριο πάνω από ~80% — αφήστε χώρο για σωστό καθαρισμό και περιστροφή.
-        </p>
-    </section>
-
-    <!-- ΣΤΕΓΝΩΤΗΡΙΑ -->
-    <section class="pricing-section">
-        <div class="pricing-header">
-            <h2>💨 Τιμές Στεγνωτηρίων</h2>
-            <p>Τιμές ανά 15λεπτο κύκλο</p>
+        <div class="pricing-card">
+            <div class="pricing-badge badge-highlight">18 κιλών</div>
+            <div class="pricing-price">--- €</div>
+            <div class="pricing-subtitle">ανά 15 λεπτά</div>
+            <div class="pricing-tagline">Ιδανικό για παπλώματα & μεγάλες ποσότητες.</div>
         </div>
+    </div>
+    <p class="note">Μπορείτε να προσθέσετε επιπλέον χρόνο στέγνωσης αν χρειάζεται.</p>
+</section>
 
-        <div class="pricing-grid small">
-            <!-- 14 κιλών στεγνωτήριο -->
-            <div class="pricing-card">
-                <div class="pricing-badge">Στεγνωτήριο 14 κιλών</div>
-                <div class="pricing-price">--- €</div>
-                <div class="pricing-subtitle">ανά 15 λεπτά</div>
-                <div class="pricing-tagline">
-                    Ιδανικό για κανονικές πλύσεις ρούχων.
-                </div>
-            </div>
+<section class="contact reveal">
+    <h3>Επικοινωνία</h3>
+    <p>📍 Διεύθυνση: Δερβενακίων 10 , Βαθύ, Σάμος 83100</p>
+    <p>📞 Τηλέφωνο: +30 698 759 8416</p>
+    <p>📧 Email: aristonwashing@gmail.com</p>
+</section>
 
-            <!-- 18 κιλών στεγνωτήριο -->
-            <div class="pricing-card">
-                <div class="pricing-badge badge-highlight">Στεγνωτήριο 18 κιλών</div>
-                <div class="pricing-price">--- €</div>
-                <div class="pricing-subtitle">ανά 15 λεπτά</div>
-                <div class="pricing-tagline">
-                    Ιδανικό για παπλώματα, κουβέρτες & μεγάλες ποσότητες.
-                </div>
-            </div>
-        </div>
-
-        <p class="note">
-            Μπορείτε να προσθέσετε επιπλέον χρόνο στέγνωσης αν χρειάζεται. Οι τιμές αναφέρονται ανά 15 λεπτά κύκλου.
-        </p>
-    </section>
-
-    <!-- Contact -->
-    <section class="contact">
-        <h3>Επικοινωνία</h3>
-        <p>📍 Διεύθυνση: Δερβενακίων 10 , Βαθύ, Σάμος 83100</p>
-        <p>📞 Τηλέφωνο: +30 698 759 8416</p>
-        <p>📧 Email: aristonwashing@gmail.com</p>
-    </section>
-
-    <footer>
+<footer>
     © 2025 Ariston Wash & Dry — All Rights Reserved<br>
     Website designed & developed by Konstantinos Georgoudis
     <br><br>
-    <a href="/terms">Όροι Χρήσης</a> |
-    <a href="/privacy">Πολιτική Απορρήτου</a> |
-    <a href="/cookies">Πολιτική Cookies</a>
+    <a href="/terms">Όροι Χρήσης</a> | <a href="/privacy">Πολιτική Απορρήτου</a> | <a href="/cookies">Πολιτική Cookies</a>
 </footer>
-<script>
-function toggleMenu() {
-    const menu = document.getElementById("dropdownMenu");
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
-}
-</script>
-<script>
-document.getElementById("hamburger-btn").onclick = function() {
-    document.getElementById("nav-menu").classList.toggle("active");
-};
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const avatar = document.querySelector(".user-avatar");
-    const dropdown = document.querySelector(".user-dropdown");
 
-    if (avatar && dropdown) {
-        avatar.addEventListener("click", () => {
-            dropdown.classList.toggle("open");
+<script>
+    // Reveal Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('active');
         });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Hamburger Mobile
+    document.getElementById('hamburger-btn').onclick = function() {
+        document.getElementById("nav-menu").classList.toggle("active");
+    };
+
+    // Bubbles
+    function createBubble() {
+        const container = document.getElementById('bubbles');
+        const bubble = document.createElement('div');
+        const size = Math.random() * 60 + 10 + 'px';
+        bubble.className = 'bubble';
+        bubble.style.width = size;
+        bubble.style.height = size;
+        bubble.style.left = Math.random() * 100 + 'vw';
+        bubble.style.animationDuration = Math.random() * 4 + 6 + 's';
+        container.appendChild(bubble);
+        setTimeout(() => bubble.remove(), 8000);
     }
-});
+    setInterval(createBubble, 600);
+
+   
 </script>
 
 </body>

@@ -5,34 +5,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing – ARISTON Wash & Dry</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px) scale(0.98); 
+            transition: var(--transition); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+
+        /* --- Header & Nav --- */
+        header {
+            background: rgba(3, 5, 8, 0.95);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .store-notice {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%; 
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
+
+        .main-nav {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            padding: 12px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            opacity: 0.6;
+        }
+
+        .nav-links a:hover { opacity: 1; color: var(--secondary); }
+
+        /* User Menu & Dropdown */
+        .user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .user-avatar { width: 32px; height: 32px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: white; }
+        .user-hint { font-size: 0.8rem; opacity: 0.7; color: white; }
+        .user-dropdown { 
+            position: absolute; top: 100%; right: 0; width: 220px; background: #0a0c10; 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; 
+            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+        .user-menu:hover .user-dropdown { display: flex; }
+        .user-dropdown a { padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
+        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff); color: white !important; font-weight: 700 !important; }
+        .logout { color: #ff4444 !important; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; }
+
+        .auth-btn { background: var(--white); color: var(--dark-bg) !important; padding: 6px 18px; border-radius: 100px; font-weight: 700 !important; opacity: 1 !important; text-decoration: none; }
+
+        /* --- Page Title Section --- */
+        .page-title {
+            padding: 180px 5% 60px;
+            text-align: center;
+            background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.15), transparent 70%);
+        }
+
+        .page-title h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 20px; letter-spacing: -1px; }
+        .page-title p { color: var(--text-dim); max-width: 800px; margin: 0 auto 15px; }
+
+        /* --- Pricing Sections --- */
+        .pricing-section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
+        .pricing-header { text-align: center; margin-bottom: 50px; }
+        .pricing-header h2 { font-size: 2rem; color: var(--secondary); margin-bottom: 10px; }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .pricing-grid.small { max-width: 900px; margin: 0 auto 40px; }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 30px;
+            padding: 40px;
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .pricing-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .badge-highlight { background: var(--primary); color: white; }
+
+        .pricing-price { font-size: 3rem; font-weight: 800; margin-bottom: 5px; }
+        .pricing-subtitle { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 25px; }
+
+        .pricing-list { list-style: none; text-align: left; margin-bottom: 25px; }
+        .pricing-list li { margin-bottom: 12px; font-size: 0.95rem; opacity: 0.9; display: flex; align-items: center; gap: 10px; }
+
+        .pricing-tagline { font-size: 0.85rem; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; font-style: italic; }
+
+        .note { text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-top: 20px; }
+
+        /* --- Footer & Contact --- */
+        .contact { padding: 80px 10%; background: #f4f7f6; color: #000; text-align: center; border-radius: 60px 60px 0 0; }
+        .contact h3 { margin-bottom: 20px; color: var(--primary); }
+        
+        footer { padding: 60px 10% 30px; background: var(--dark-bg); text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
+        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.8rem; }
+
+        /* --- Bubbles --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), transparent); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(100vh); opacity: 0; } 50% { opacity: 0.4; } to { transform: translateY(-10vh); opacity: 0; } }
+
+        /* --- Mobile Responsive --- */
+        .hamburger { display: none; color: white; font-size: 1.8rem; cursor: pointer; }
+
+        @media (max-width: 900px) {
+            .hamburger { display: block; margin-left: auto; padding: 10px; }
+            .header-top { padding: 10px 5%; }
+            .nav-links {
+                display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(3, 5, 8, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
+            }
+            .nav-links.active { display: flex; }
+            .user-menu { justify-content: center; }
+            .user-dropdown { position: static; width: 100%; background: transparent; box-shadow: none; display: none; }
+            .user-menu:hover .user-dropdown { display: flex; }
+            .pricing-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
 <header>
-
-    <!-- LOGO -->
+    <div class="store-notice">
+        OUR STORE IS NOT OPEN YET — COMING SOON!
+    </div>
+    
     <div class="header-top">
         <div class="logo">
             <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
             ARISTON <span>Wash & Dry</span>
         </div>
-
-        <!-- STORE NOTICE -->
-        <div class="store-notice">
-            OUR STORE IS NOT OPEN YET — COMING SOON!
-        </div>
+        <div class="hamburger" id="hamburger-btn">☰</div>
     </div>
 
-    <!-- NAVIGATION -->
     <nav class="main-nav">
-
-        <div class="hamburger" id="hamburger-btn">☰</div>
-
         <div class="nav-links" id="nav-menu">
             <a href="/en">Home</a>
             <a href="/en/pricing">Pricing</a>
@@ -43,48 +252,41 @@
 
             {% if current_user.is_authenticated %}
             <div class="user-menu">
-                <div class="user-avatar">{{ current_user.fullname[0] }}</div>
+                <div class="user-avatar">{{ current_user.fullname[0]|upper }}</div>
                 <span class="user-hint">Member Options</span>
-
                 <div class="user-dropdown">
                     <a href="/en/settings-menu">Settings</a>
-                <a href="/en/updates-menu-en">Updates</a>
-                <a href="/en/ai" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
-
-                <a href="/game">ARISTON Game</a>
-                <a href="/logout" class="logout">Logout</a>
+                    <a href="/en/updates-menu-en">Updates</a>
+                    <a href="/en/ai" class="ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="/game">ARISTON Game</a>
+                    <a href="/logout" class="logout">Logout</a>
                 </div>
             </div>
             {% else %}
-            <a href="/en/auth_choice_en" class="nav-btn">Sign Up / Login</a>
+            <a href="/en/auth_choice_en" class="auth-btn">Sign Up / Login</a>
             {% endif %}
         </div>
     </nav>
-
 </header>
 
-<!-- Page Title -->
-<section class="page-title">
+<div class="bubbles-container" id="bubbles"></div>
+
+<section class="page-title reveal">
     <h1>Pricing</h1>
     <p>Clean clothes, easy and affordable!</p>
-</section>
-
-<section class="page-title">
     <p>At Ariston Wash & Dry, you can wash and dry whatever you need quickly, easily, and cheaply.</p>
     <p>Choose the washing machine size that suits your needs and leave the rest to us!</p>
     <p>Whether you have a few clothes or a full family load, you'll find the perfect washer here.</p>
     <p>Drop your clothes, select a program, press Start — it's that simple!</p>
 </section>
 
-<!-- WASHING -->
-<section class="pricing-section">
+<section class="pricing-section reveal">
     <div class="pricing-header">
         <h2>🧺 Washing Prices</h2>
         <p>Clean & fresh in less than 1 hour</p>
     </div>
 
     <div class="pricing-grid">
-        <!-- 10kg card -->
         <div class="pricing-card">
             <div class="pricing-badge">10 kg</div>
             <div class="pricing-price">--- €</div>
@@ -95,12 +297,9 @@
                 <li>🛏️ 2 sets of sheets (single or double)</li>
                 <li>🧺 6–8 towels</li>
             </ul>
-            <div class="pricing-tagline">
-                Everyday clothes & quick washes.
-            </div>
+            <div class="pricing-tagline">Everyday clothes & quick washes.</div>
         </div>
 
-        <!-- 14kg card -->
         <div class="pricing-card">
             <div class="pricing-badge badge-highlight">14 kg</div>
             <div class="pricing-price">--- €</div>
@@ -109,55 +308,39 @@
                 <li>👕 12–15 shirts</li>
                 <li>👖 6–8 trousers</li>
                 <li>🛏️ 3 sets of sheets</li>
-                <li>🧥 1–2 jackets / 🛌 1–2 medium-sized quilts</li>
+                <li>🧥 1–2 jackets / 🛌 1–2 medium quilts</li>
             </ul>
-            <div class="pricing-tagline">
-                Full family loads, sheets & quilts.
-            </div>
+            <div class="pricing-tagline">Full family loads, sheets & quilts.</div>
         </div>
     </div>
-
-    <p class="note">
-        Note: Do not fill the washing machine above ~80% — leave space for proper cleaning and spinning.
-    </p>
+    <p class="note">Note: Do not fill the washing machine above ~80% — leave space for proper cleaning.</p>
 </section>
 
-<!-- DRYERS -->
-<section class="pricing-section">
+<section class="pricing-section reveal">
     <div class="pricing-header">
         <h2>💨 Dryer Prices</h2>
         <p>Price per 15-minute cycle</p>
     </div>
 
     <div class="pricing-grid small">
-        <!-- 14kg dryer -->
         <div class="pricing-card">
             <div class="pricing-badge">14 kg Dryer</div>
             <div class="pricing-price">--- €</div>
             <div class="pricing-subtitle">per 15 minutes</div>
-            <div class="pricing-tagline">
-                Ideal for normal laundry loads.
-            </div>
+            <div class="pricing-tagline">Ideal for normal laundry loads.</div>
         </div>
 
-        <!-- 18kg dryer -->
         <div class="pricing-card">
             <div class="pricing-badge badge-highlight">18 kg Dryer</div>
             <div class="pricing-price">--- €</div>
             <div class="pricing-subtitle">per 15 minutes</div>
-            <div class="pricing-tagline">
-                Perfect for quilts, blankets & large loads.
-            </div>
+            <div class="pricing-tagline">Perfect for quilts, blankets & large loads.</div>
         </div>
     </div>
-
-    <p class="note">
-        You can add extra drying time if needed. Prices are per 15-minute cycle.
-    </p>
+    <p class="note">You can add extra drying time if needed. Prices are per 15-minute cycle.</p>
 </section>
 
-<!-- Contact -->
-<section class="contact">
+<section class="contact reveal">
     <h3>Contact</h3>
     <p>📍 Address: Dervenakion 10, Vathy, Samos 83100</p>
     <p>📞 Phone: +30 698 759 8416</p>
@@ -168,26 +351,37 @@
     © 2025 Ariston Wash & Dry — All Rights Reserved<br>
     Website designed & developed by Konstantinos Georgoudis
     <br><br>
-    <a href="/en/terms">Terms & Conditions</a> |
-    <a href="/en/privacy">Privacy Policy</a> |
-    <a href="/en/cookies">Cookies Policy</a>
+    <a href="/en/terms">Terms & Conditions</a> | <a href="/en/privacy">Privacy Policy</a> | <a href="/en/cookies">Cookies Policy</a>
 </footer>
 
 <script>
-document.getElementById("hamburger-btn").onclick = function() {
-    document.getElementById("nav-menu").classList.toggle("active");
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-    const avatar = document.querySelector(".user-avatar");
-    const dropdown = document.querySelector(".user-dropdown");
-
-    if (avatar && dropdown) {
-        avatar.addEventListener("click", () => {
-            dropdown.classList.toggle("open");
+    // Reveal Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('active');
         });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Hamburger Mobile
+    document.getElementById('hamburger-btn').onclick = function() {
+        document.getElementById("nav-menu").classList.toggle("active");
+    };
+
+    // Bubbles
+    function createBubble() {
+        const container = document.getElementById('bubbles');
+        const bubble = document.createElement('div');
+        const size = Math.random() * 60 + 10 + 'px';
+        bubble.className = 'bubble';
+        bubble.style.width = size;
+        bubble.style.height = size;
+        bubble.style.left = Math.random() * 100 + 'vw';
+        bubble.style.animationDuration = Math.random() * 4 + 6 + 's';
+        container.appendChild(bubble);
+        setTimeout(() => bubble.remove(), 8000);
     }
-});
+    setInterval(createBubble, 600);
 </script>
 
 </body>
