@@ -12,7 +12,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     
-    <style>
+<style>
         :root {
             --primary: #0070ff;
             --primary-glow: rgba(0, 112, 255, 0.4);
@@ -45,7 +45,7 @@
             transform: translateY(0) scale(1); 
         }
 
-        /* --- Header & Nav --- */
+        /* --- Header & Nav (2-Level Update) --- */
         header {
             background: rgba(3, 5, 8, 0.85);
             backdrop-filter: blur(20px);
@@ -67,6 +67,7 @@
             text-transform: uppercase;
         }
 
+        /* Επιπέδο 1: Logo & Flags */
         .header-top {
             display: flex;
             justify-content: space-between;
@@ -95,7 +96,6 @@
 
         .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
 
-        /* New Right Actions Container */
         .right-actions {
             display: flex;
             align-items: center;
@@ -121,11 +121,20 @@
             transform: scale(1.15);
         }
 
+        /* Επιπέδο 2: Menu Επιλογών (Desktop) */
+        .main-nav {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 5%;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
         .nav-links {
             display: flex;
-            gap: 25px;
+            justify-content: center; /* Κεντράρισμα μενού */
+            gap: 35px;
             align-items: center;
-            margin-left: 40px; 
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .nav-links a {
@@ -142,7 +151,7 @@
         .auth-btn {
             background: var(--white);
             color: var(--dark-bg) !important;
-            padding: 10px 24px;
+            padding: 8px 20px;
             border-radius: 100px;
             font-weight: 700 !important;
             opacity: 1 !important;
@@ -162,6 +171,7 @@
                 radial-gradient(circle at 50% 50%, rgba(0, 112, 255, 0.15) 0%, transparent 50%),
                 radial-gradient(circle at 0% 0%, rgba(0, 212, 255, 0.05) 0%, transparent 30%);
             padding: 20px;
+            padding-top: 120px; /* Προσθήκη χώρου για το διπλό header */
         }
 
         .hero h1 { 
@@ -249,6 +259,8 @@
         .hamburger { display: none; color: white; font-size: 2rem; cursor: pointer; }
 
         @media (max-width: 900px) {
+            .main-nav { padding: 0; border: none; } /* Κρύβουμε τη δεύτερη σειρά στο mobile */
+            
             .nav-links {
                 display: none;
                 flex-direction: column;
@@ -265,7 +277,6 @@
             .hamburger { display: block; }
             .info-section { grid-template-columns: 1fr; padding: 80px 5%; }
             .hero h1 { font-size: 3.5rem; }
-            
             
             .right-actions {
                 gap: 15px;
@@ -288,6 +299,7 @@
     <div class="store-notice">
         ΤΟ ΚΑΤΑΣΤΗΜΑ ΜΑΣ ΔΕΝ ΕΙΝΑΙ ΑΝΟΙΧΤΟ ΑΚΟΜΑ — ΣΥΝΤΟΜΑ ΚΟΝΤΑ ΣΑΣ!
     </div>
+    
     <div class="header-top">
         <div class="logo">
             <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
@@ -301,8 +313,10 @@
             </div>
             <div class="hamburger" id="hamburger-btn">☰</div>
         </div>
+    </div>
 
-        <nav class="nav-links" id="nav-menu">
+    <nav class="main-nav">
+        <div class="nav-links" id="nav-menu">
             <a href="/">Αρχική</a>
             <a href="/timokatalogos">Τιμοκατάλογος</a>
             <a href="/fwtografies">Φωτογραφίες</a>
@@ -314,8 +328,8 @@
             {% else %}
                 <a href="/auth_choice" class="auth-btn">Εγγραφή / Σύνδεση</a>
             {% endif %}
-        </nav>
-    </div>
+        </div>
+    </nav>
 </header>
 
 <div class="bubbles-container" id="bubbles"></div>
