@@ -142,6 +142,23 @@
             .nav-links.active { display: flex; }
             .info-section { grid-template-columns: 1fr; }
         }
+        /* User Menu & Dropdown */
+.user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.user-avatar { width: 32px; height: 32px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: white; }
+.user-hint { font-size: 0.8rem; opacity: 0.7; }
+
+.user-dropdown { 
+    position: absolute; top: 100%; right: 0; width: 220px; background: #0a0c10; 
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; 
+    display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+}
+.user-menu:hover .user-dropdown { display: flex; }
+.user-dropdown a { padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; }
+.ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff); color: white !important; font-weight: 700 !important; }
+.logout { color: #ff4444 !important; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; }
+
+/* Διόρθωση Welcome Banner για να μην κρύβεται */
+.welcome-banner { top: 180px !important; z-index: 9999 !important; }
         
     </style>
 </head>
@@ -190,10 +207,22 @@
             <a href="/en/special-services">Special Services</a>
             <a href="/en/reviews">Reviews</a>
             <a href="/en/contact">Contact</a>
+
             {% if current_user.is_authenticated %}
-                <a href="/en/settings-menu" class="auth-btn">Account Menu</a>
+            <div class="user-menu">
+                <div class="user-avatar">{{ current_user.fullname[0]|upper }}</div>
+                <span class="user-hint">Member Area</span>
+
+                <div class="user-dropdown">
+                    <a href="/en/settings-menu">Settings</a>
+                    <a href="/en/updates-menu">Updates</a>
+                    <a href="{{ url_for('ai') }}" class="ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="/en/game">ARISTON Game</a>
+                    <a href="/logout" class="logout">Logout</a>
+                </div>
+            </div>
             {% else %}
-                <a href="/en/auth_choice_en" class="auth-btn">Register / Login</a>
+            <a href="/en/auth_choice_en" class="auth-btn">Register / Login</a>
             {% endif %}
         </div>
     </nav>
