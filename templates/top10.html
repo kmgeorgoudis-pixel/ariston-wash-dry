@@ -3,154 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top 10 Παίκτες – Ariston Wash & Dry</title>
+    <title>Top 10 Παίκτες | Ariston Wash & Dry</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #ffffff, #d6ecff);
-            font-family: 'Segoe UI', sans-serif;
-            color: #003366;
+        :root {
+            --accent-blue: #0070ff;
+            --bright-blue: #00d4ff;
+            --deep-ocean: #010409;
+            --pure-white: #ffffff;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; min-height: 100%;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--deep-ocean);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
+
+        .hero-bg {
+            position: fixed;
+            width: 100%; height: 100vh;
+            background: linear-gradient(rgba(1, 4, 9, 0.7), rgba(1, 4, 9, 0.9)), 
+                        url('https://aristonwashdry.gr/templates/images/1new.png') center/cover no-repeat;
+            z-index: 0;
         }
 
         .container {
-            max-width: 700px;
-            margin: 40px auto;
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            position: relative;
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 20px;
+            z-index: 5;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .leaderboard-card {
+            backdrop-filter: blur(25px);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
             text-align: center;
         }
 
         h1 {
-            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(30px, 5vw, 48px);
             margin-bottom: 10px;
+            color: var(--pure-white);
         }
 
-        p.subtitle {
-            font-size: 1rem;
-            color: #446688;
-            margin-bottom: 30px;
+        .subtitle {
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--bright-blue);
+            margin-bottom: 40px;
+            display: block;
         }
 
-        .leaderboard {
+        .leaderboard-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        .leaderboard li {
+        .player-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 18px;
-            margin-bottom: 10px;
-            border-radius: 12px;
-            background: #f3f8ff;
-            border: 1px solid #d0e2ff;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 18px 25px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
         }
 
-        /* TOP 1 */
-        .leaderboard li:nth-child(1) {
-            background: linear-gradient(to right, #ffe08a, #ffd65c);
-            border: none;
-            color: #5a3d00;
-            font-size: 1.25rem;
-            box-shadow: 0 6px 16px rgba(255, 200, 0, 0.35);
+        .player-row:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-blue);
         }
 
-        /* TOP 2 */
-        .leaderboard li:nth-child(2) {
-            background: linear-gradient(to right, #e6e6e6, #d9d9d9);
-            border: none;
-            color: #333333;
+        /* Rankings Colors */
+        .player-row.rank-1 { border-left: 5px solid var(--gold); background: rgba(255, 215, 0, 0.05); }
+        .player-row.rank-2 { border-left: 5px solid var(--silver); background: rgba(192, 192, 192, 0.05); }
+        .player-row.rank-3 { border-left: 5px solid var(--bronze); background: rgba(205, 127, 50, 0.05); }
+
+        .rank-id {
+            font-weight: 900;
             font-size: 1.2rem;
-            box-shadow: 0 6px 16px rgba(180, 180, 180, 0.35);
+            width: 40px;
+            color: var(--accent-blue);
         }
 
-        /* TOP 3 */
-        .leaderboard li:nth-child(3) {
-            background: linear-gradient(to right, #f3c7a7, #e8a475);
-            border: none;
-            color: #4a2e14;
-            font-size: 1.15rem;
-            box-shadow: 0 6px 16px rgba(200, 120, 60, 0.35);
-        }
-
-        .rank {
-            font-weight: bold;
-            margin-right: 10px;
-        }
+        .rank-1 .rank-id { color: var(--gold); }
 
         .nickname {
             flex: 1;
             text-align: left;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding-left: 10px;
         }
 
-        .score {
-            font-weight: bold;
-            color: #003366;
+        .stats {
+            text-align: right;
+        }
+
+        .score-val {
+            display: block;
+            font-weight: 900;
+            color: var(--pure-white);
+            font-size: 1.1rem;
+        }
+
+        .time-val {
+            font-size: 0.8rem;
+            color: var(--bright-blue);
+            opacity: 0.8;
         }
 
         .back-btn {
-            margin-top: 25px;
-            display: inline-block;
-            padding: 12px 22px;
-            background: #0077cc;
-            color: white;
-            border-radius: 10px;
+            margin-top: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 35px;
+            background: var(--pure-white);
+            color: var(--deep-ocean);
+            border-radius: 100px;
             text-decoration: none;
-            font-size: 1rem;
-            font-weight: 600;
-            box-shadow: 0 8px 18px rgba(0,119,204,0.25);
-            transition: 0.2s;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
         }
 
         .back-btn:hover {
-            background: #005fa3;
-            transform: translateY(-2px);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
+            background: var(--bright-blue);
         }
 
         @media (max-width: 600px) {
-            .leaderboard li {
-                font-size: 1rem;
-            }
-            .leaderboard li:nth-child(1),
-            .leaderboard li:nth-child(2),
-            .leaderboard li:nth-child(3) {
-                font-size: 1.1rem;
-            }
+            .leaderboard-card { padding: 25px 15px; }
+            .player-row { padding: 15px; }
+            .nickname { font-size: 1rem; }
         }
-        .time {
-    font-weight: 600;
-    color: #005599;
-    margin-left: 15px;
-         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🏆 Top 10 Παίκτες</h1>
-    <p class="subtitle">Τα καλύτερα σκορ από το Ariston Wash & Dry Game</p>
+<div id="particles-js"></div>
+<div class="hero-bg"></div>
 
-    <ul class="leaderboard">
-        {% for p in players %}
-        <li>
-             <span class="rank">#{{ loop.index }}</span>
-             <span class="nickname">{{ p.nickname }}</span>
-             <span class="score">{{ p.best_score }} πόντοι/points</span>
-             <span class="time">{{ p.time_played }} δευτ./sec</span>
-    </li>
-        {% endfor %}
-    </ul>
+<div class="container" id="leaderboard">
+    <div class="leaderboard-card">
+        <h2>Luxury Gaming</h2>
+        <h1>🏆 Top 10 Παίκτες</h1>
+        <span class="subtitle">Ariston Wash & Dry Hall of Fame</span>
 
-    <a href="/game" class="back-btn">⬅ Επιστροφή στο Παιχνίδι/back to game</a>
+        <ul class="leaderboard-list">
+            {% for p in players %}
+            <li class="player-row rank-{{ loop.index }}">
+                <span class="rank-id">#{{ loop.index }}</span>
+                <span class="nickname">{{ p.nickname }}</span>
+                <div class="stats">
+                    <span class="score-val">{{ p.best_score }} points</span>
+                    <span class="time-val">⏱ {{ p.time_played }} sec</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <a href="/game" class="back-btn">
+            <span>←</span> Back to Game
+        </a>
+    </div>
 </div>
+
+<script>
+    // Particles.js
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 40 },
+            "color": { "value": ["#0070ff", "#ffffff"] },
+            "opacity": { "value": 0.2 },
+            "size": { "value": 2 },
+            "line_linked": { "enable": true, "distance": 150, "color": "#0070ff", "opacity": 0.1 },
+            "move": { "enable": true, "speed": 1 }
+        }
+    });
+
+    // GSAP Entrance
+    window.onload = () => {
+        gsap.to("#leaderboard", {
+            duration: 1.2,
+            opacity: 1,
+            y: 0,
+            ease: "power4.out"
+        });
+
+        // Stagger animation for rows
+        gsap.from(".player-row", {
+            duration: 0.8,
+            opacity: 0,
+            x: -20,
+            stagger: 0.1,
+            delay: 0.5,
+            ease: "power2.out"
+        });
+    };
+</script>
 
 </body>
 </html>
