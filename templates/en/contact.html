@@ -96,6 +96,8 @@
         .contact-box p { margin-bottom: 15px; font-size: 1rem; }
         .contact-box strong { color: var(--primary); }
 
+        .map-container { max-width: 900px; margin: 40px auto; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+
         /* --- Form Elements --- */
         .form-field { margin-bottom: 25px; }
         .form-field label { display: block; margin-bottom: 10px; font-weight: 600; color: var(--white); }
@@ -186,6 +188,18 @@
     <p><strong>Location:</strong><br> Ariston Wash & Dry is in the center of Vathy. Easy access on foot or by car, parking available nearby.</p>
 </div>
 
+<div class="map-container reveal">
+    <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3156.9110753066144!2d26.974914175785863!3d37.75694467198941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14be0d68f700030d%3A0xc47e307736340263!2zzpTOtc-BzrLOtc69zrHOus6vz4nOvSAxMCwgzqPOrM68zr_PgiA4MzEgMDA!5e0!3m2!1sel!2sgr!4v1715421234567!5m2!1sel!2sgr" 
+        width="100%" 
+        height="400" 
+        style="border:0; filter: invert(90%) hue-rotate(180deg) opacity(0.8);" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+</div>
+
 <div id="form-container" class="reveal">
     <div class="contact-form" id="contact-form">
         <h2>📩 Contact Form</h2>
@@ -194,8 +208,7 @@
         <form id="contactForm">
             {% if current_user.is_authenticated %}
             <p style="margin-bottom:20px; font-size:14px; color:var(--secondary);">
-                You are logged in as <strong>{{ current_user.fullname }}</strong> ({{ current_user.email }}).  
-                Your message will be sent with these details.
+                You are logged in as <strong>{{ current_user.fullname }}</strong> ({{ current_user.email }}).
             </p>
             {% else %}
             <div class="form-field">
@@ -218,18 +231,16 @@
             </div>
 
             <button class="submit-btn" type="submit">Send</button>
-            <p style="font-size:11px; color:#666; margin-top:15px; text-align: center;">
-                By submitting the form, you accept the <a href="/en/privacy" target="_blank">Privacy Policy</a> and consent to the processing of your data under GDPR.
+            <p style="font-size: 11px; color: #666; margin-top: 15px; text-align: center;">
+                By submitting the form, you accept the <a href="/en/privacy" target="_blank">Privacy Policy</a>.
             </p>
         </form>
     </div>
 
     <div class="success-box" id="success-box" style="display:none;">
-        <h2>✔ Your message has been sent successfully</h2>
-        <p>The ARISTON Wash & Dry team received your request and will contact you as soon as possible.</p>
-        <button onclick="resetForm()" class="submit-btn" style="margin-top:25px; width:auto; padding: 12px 40px;">
-            New Form
-        </button>
+        <h2>✔ Message sent successfully</h2>
+        <p>The ARISTON Wash & Dry team has received your request and will contact you shortly.</p>
+        <button onclick="resetForm()" class="submit-btn" style="margin-top:25px; width:auto; padding: 12px 40px;">New Form</button>
     </div>
 </div>
 
@@ -237,9 +248,7 @@
     © 2025 Ariston Wash & Dry — All Rights Reserved<br>
     Website designed & developed by Konstantinos Georgoudis
     <br><br>
-    <a href="/en/terms">Terms of Use</a> |
-    <a href="/en/privacy">Privacy Policy</a> |
-    <a href="/en/cookies">Cookies Policy</a>
+    <a href="/en/terms">Terms of Use</a> | <a href="/en/privacy">Privacy Policy</a> | <a href="/en/cookies">Cookies Policy</a>
 </footer>
 
 <script>
@@ -258,14 +267,11 @@
     window.addEventListener("scroll", reveal);
     window.addEventListener("load", reveal);
 
-    // Form logic
+    // Form Handle
     document.getElementById("contactForm").addEventListener("submit", async function(e) {
         e.preventDefault();
         const formData = new FormData(this);
-        await fetch("/en/contact", {
-            method: "POST",
-            body: formData
-        });
+        await fetch("/en/contact", { method: "POST", body: formData });
         document.getElementById("contact-form").style.display = "none";
         document.getElementById("success-box").style.display = "block";
     });
@@ -276,21 +282,10 @@
         document.getElementById("contactForm").reset();
     }
 
-    // Hamburger Menu
+    // Mobile Menu
     document.getElementById("hamburger-btn").onclick = function() {
         document.getElementById("nav-menu").classList.toggle("active");
     };
-
-    // User Avatar Dropdown
-    document.addEventListener("DOMContentLoaded", () => {
-        const avatar = document.querySelector(".user-avatar");
-        const dropdown = document.querySelector(".user-dropdown");
-        if (avatar && dropdown) {
-            avatar.addEventListener("click", () => {
-                dropdown.classList.toggle("open");
-            });
-        }
-    });
 </script>
 
 </body>
