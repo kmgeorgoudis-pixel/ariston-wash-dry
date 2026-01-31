@@ -242,19 +242,20 @@
             <a href="/epikoinonia">Επικοινωνία</a>
 
             {% if current_user.is_authenticated %}
-            <div class="user-menu">
+            <div class="user-menu" id="user-menu-toggle">
                 <div class="user-avatar">{{ current_user.fullname[0]|upper }}</div>
                 <span class="user-hint">Επιλογές μέλους</span>
-                <div class="user-dropdown">
+
+                <div class="user-dropdown" id="user-dropdown-menu">
                     <a href="/settings-menu">Ρυθμίσεις</a>
                     <a href="/updates-menu">Ενημερώσεις</a>
-                    <a href="{{ url_for('ai') }}" class="ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="{{ url_for('ai') }}" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
                     <a href="/game">ARISTON Game</a>
                     <a href="/logout" class="logout">Αποσύνδεση</a>
                 </div>
             </div>
             {% else %}
-            <a href="/auth_choice" class="auth-btn">Εγγραφή / Σύνδεση</a>
+            <a href="/auth_choice" class="auth-btn" style="background:white; color:black !important; opacity:1;">Εγγραφή / Σύνδεση</a>
             {% endif %}
         </div>
     </nav>
@@ -389,10 +390,37 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Hamburger
-    document.getElementById('hamburger-btn').onclick = function() {
-        document.getElementById("nav-menu").classList.toggle("active");
+    // 2. Hamburger Mobile (Κύριο Μενού)
+    const btn = document.getElementById('hamburger-btn');
+    const menu = document.getElementById('nav-menu');
+    btn.onclick = (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('active');
     };
+
+    // 3. ΔΙΟΡΘΩΣΗ ΓΙΑ ΤΟ USER MENU ΣΤΟ ΚΙΝΗΤΟ
+    const userToggle = document.getElementById('user-menu-toggle');
+    const userDropdown = document.getElementById('user-dropdown-menu');
+
+    if (userToggle) {
+        userToggle.addEventListener('click', function(e) {
+            // Αν είμαστε σε κινητό (πλάτος κάτω από 900px)
+            if (window.innerWidth <= 900) {
+                e.stopPropagation();
+                // Εναλλαγή εμφάνισης (αντί για hover)
+                const isVisible = userDropdown.style.display === 'flex';
+                userDropdown.style.display = isVisible ? 'none' : 'flex';
+            }
+        });
+    }
+
+    // Κλείσιμο των μενού αν ο χρήστης κάνει κλικ οπουδήποτε αλλού στην οθόνη
+    document.addEventListener('click', () => {
+        if (window.innerWidth <= 900) {
+            if(userDropdown) userDropdown.style.display = 'none';
+            menu.classList.remove('active');
+        }
+    });
 
     // Bubbles
     function createBubble() {

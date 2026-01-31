@@ -251,19 +251,20 @@
             <a href="/en/contact">Contact</a>
 
             {% if current_user.is_authenticated %}
-            <div class="user-menu">
+            <div class="user-menu" id="user-menu-toggle">
                 <div class="user-avatar">{{ current_user.fullname[0]|upper }}</div>
-                <span class="user-hint">Member Options</span>
-                <div class="user-dropdown">
+                <span class="user-hint">Member Area</span>
+
+                <div class="user-dropdown" id="user-dropdown-menu">
                     <a href="/en/settings-menu">Settings</a>
                     <a href="/en/updates-menu-en">Updates</a>
-                    <a href="/en/ai" class="ai-btn">🤖 ARISTON AI ASSISTANT</a>
+                    <a href="/en/ai" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
                     <a href="/game">ARISTON Game</a>
                     <a href="/logout" class="logout">Logout</a>
                 </div>
             </div>
             {% else %}
-            <a href="/en/auth_choice_en" class="auth-btn">Sign Up / Login</a>
+            <a href="/en/auth_choice_en" class="auth-btn">Register / Login</a>
             {% endif %}
         </div>
     </nav>
@@ -363,10 +364,36 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Hamburger Mobile
-    document.getElementById('hamburger-btn').onclick = function() {
-        document.getElementById("nav-menu").classList.toggle("active");
+    // 2. Hamburger Mobile
+    const btn = document.getElementById('hamburger-btn');
+    const menu = document.getElementById('nav-menu');
+    btn.onclick = (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('active');
     };
+
+    // 3. FIX FOR USER MENU ON MOBILE
+    const userToggle = document.getElementById('user-menu-toggle');
+    const userDropdown = document.getElementById('user-dropdown-menu');
+
+    if (userToggle) {
+        userToggle.addEventListener('click', function(e) {
+            // Check if mobile view
+            if (window.innerWidth <= 900) {
+                e.stopPropagation();
+                const isVisible = userDropdown.style.display === 'flex';
+                userDropdown.style.display = isVisible ? 'none' : 'flex';
+            }
+        });
+    }
+
+    // Close menus when clicking anywhere else
+    document.addEventListener('click', () => {
+        if (window.innerWidth <= 900) {
+            if(userDropdown) userDropdown.style.display = 'none';
+            menu.classList.remove('active');
+        }
+    });
 
     // Bubbles
     function createBubble() {
