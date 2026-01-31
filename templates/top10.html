@@ -26,19 +26,19 @@
             font-family: 'Outfit', sans-serif;
             background-color: var(--deep-ocean);
             color: white;
-            overflow-x: hidden;
         }
 
         #particles-js {
             position: fixed;
             width: 100%; height: 100%;
             z-index: 1;
+            pointer-events: none; /* Για να μην εμποδίζει το click στα κουμπιά */
         }
 
         .hero-bg {
             position: fixed;
             width: 100%; height: 100vh;
-            background: linear-gradient(rgba(1, 4, 9, 0.7), rgba(1, 4, 9, 0.9)), 
+            background: linear-gradient(rgba(1, 4, 9, 0.8), rgba(1, 4, 9, 0.95)), 
                         url('https://aristonwashdry.gr/templates/images/1new.png') center/cover no-repeat;
             z-index: 0;
         }
@@ -46,11 +46,11 @@
         .container {
             position: relative;
             max-width: 800px;
-            margin: 60px auto;
-            padding: 20px;
-            z-index: 5;
-            opacity: 0;
-            transform: translateY(30px);
+            margin: 0 auto;
+            padding: 60px 20px;
+            z-index: 10; /* Αυξημένο z-index */
+            opacity: 0; 
+            transform: translateY(20px);
         }
 
         .leaderboard-card {
@@ -66,12 +66,12 @@
         h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(30px, 5vw, 48px);
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
             color: var(--pure-white);
         }
 
         .subtitle {
-            font-size: 12px;
+            font-size: 11px;
             letter-spacing: 4px;
             text-transform: uppercase;
             color: var(--bright-blue);
@@ -91,7 +91,7 @@
             align-items: center;
             padding: 18px 25px;
             margin-bottom: 12px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.07);
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
@@ -99,35 +99,32 @@
 
         .player-row:hover {
             transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.12);
             border-color: var(--accent-blue);
         }
 
-        /* Rankings Colors */
-        .player-row.rank-1 { border-left: 5px solid var(--gold); background: rgba(255, 215, 0, 0.05); }
-        .player-row.rank-2 { border-left: 5px solid var(--silver); background: rgba(192, 192, 192, 0.05); }
-        .player-row.rank-3 { border-left: 5px solid var(--bronze); background: rgba(205, 127, 50, 0.05); }
+        /* Rankings */
+        .rank-1 { border-left: 5px solid var(--gold) !important; }
+        .rank-2 { border-left: 5px solid var(--silver) !important; }
+        .rank-3 { border-left: 5px solid var(--bronze) !important; }
 
         .rank-id {
             font-weight: 900;
             font-size: 1.2rem;
-            width: 40px;
+            width: 45px;
+            text-align: left;
             color: var(--accent-blue);
         }
-
-        .rank-1 .rank-id { color: var(--gold); }
 
         .nickname {
             flex: 1;
             text-align: left;
             font-weight: 700;
             font-size: 1.1rem;
-            padding-left: 10px;
+            color: #fff;
         }
 
-        .stats {
-            text-align: right;
-        }
+        .stats { text-align: right; }
 
         .score-val {
             display: block;
@@ -139,7 +136,12 @@
         .time-val {
             font-size: 0.8rem;
             color: var(--bright-blue);
-            opacity: 0.8;
+        }
+
+        .no-data {
+            padding: 40px;
+            opacity: 0.6;
+            font-style: italic;
         }
 
         .back-btn {
@@ -155,19 +157,19 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.4s ease;
+            transition: 0.3s;
         }
 
         .back-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
             background: var(--bright-blue);
         }
 
         @media (max-width: 600px) {
             .leaderboard-card { padding: 25px 15px; }
-            .player-row { padding: 15px; }
-            .nickname { font-size: 1rem; }
+            .player-row { padding: 15px; flex-wrap: wrap; }
+            .rank-id { width: 30px; font-size: 1rem; }
+            .nickname { font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -188,15 +190,17 @@
                 <span class="rank-id">#{{ loop.index }}</span>
                 <span class="nickname">{{ p.nickname }}</span>
                 <div class="stats">
-                    <span class="score-val">{{ p.best_score }} Πόντοι / points</span>
-                    <span class="time-val">⏱ {{ p.time_played }} δευτ / sec</span>
+                    <span class="score-val">{{ p.best_score }} Πόντοι</span>
+                    <span class="time-val">⏱ {{ p.time_played }}s</span>
                 </div>
             </li>
+            {% else %}
+            <li class="no-data">Δεν υπάρχουν ακόμα σκορ. Γίνε ο πρώτος!</li>
             {% endfor %}
         </ul>
 
         <a href="/game" class="back-btn">
-            <span>←</span> Πίσω Στο παιχνίδι / Back to Game
+            <span>←</span> Πίσω Στο παιχνίδι
         </a>
     </div>
 </div>
@@ -214,25 +218,23 @@
         }
     });
 
-    // GSAP Entrance
-    window.onload = () => {
-        gsap.to("#leaderboard", {
-            duration: 1.2,
-            opacity: 1,
-            y: 0,
-            ease: "power4.out"
-        });
+    // GSAP Animation - Εκτελείται αμέσως χωρίς να περιμένει το window.onload
+    gsap.to("#leaderboard", {
+        duration: 1,
+        opacity: 1,
+        y: 0,
+        ease: "power3.out",
+        delay: 0.2
+    });
 
-        // Stagger animation for rows
-        gsap.from(".player-row", {
-            duration: 0.8,
-            opacity: 0,
-            x: -20,
-            stagger: 0.1,
-            delay: 0.5,
-            ease: "power2.out"
-        });
-    };
+    gsap.from(".player-row", {
+        duration: 0.6,
+        opacity: 0,
+        x: -20,
+        stagger: 0.08,
+        delay: 0.5,
+        ease: "power2.out"
+    });
 </script>
 
 </body>
