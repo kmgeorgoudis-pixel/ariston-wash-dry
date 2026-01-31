@@ -6,104 +6,152 @@
     <title>Delete Account – ARISTON Wash & Dry</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --danger: #ff1744;
+            --danger-hover: #d50000;
+            --dark-bg: #030508;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: #f5f7fa;
-            font-family: Arial, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(255, 23, 68, 0.15), transparent 50%);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .delete-container {
-            max-width: 450px;
-            margin: 60px auto;
-            background: #ffffff;
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 480px;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            padding: 45px;
+            border-radius: 32px;
+            border: 1px solid rgba(255, 23, 68, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: formReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes formReveal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .flash-box {
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 23, 68, 0.2);
+            background: rgba(255, 23, 68, 0.1);
+            color: var(--danger);
+            text-align: center;
         }
 
         .delete-title {
-            text-align: center;
             font-size: 26px;
             font-weight: 800;
-            color: #c62828;
-            margin-bottom: 10px;
+            color: var(--danger);
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: -0.5px;
         }
 
         .delete-warning {
             text-align: center;
-            color: #555;
-            margin-bottom: 25px;
+            color: var(--text-dim);
+            margin-bottom: 35px;
+            font-size: 14px;
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .delete-warning strong {
+            color: var(--white);
+            display: block;
+            margin-bottom: 5px;
             font-size: 15px;
         }
 
-        .form-field {
-            margin-bottom: 20px;
-        }
+        .form-field { margin-bottom: 15px; }
 
         .form-field input {
             width: 100%;
-            padding: 14px;
-            border: 1px solid #cfd8dc;
-            border-radius: 12px;
-            font-size: 16px;
-            background: #fafbfc;
-            transition: 0.25s;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 18px;
+            border-radius: 16px;
+            color: var(--white);
+            font-size: 15px;
+            transition: all 0.3s;
+            text-align: center;
         }
 
         .form-field input:focus {
-            border-color: #c62828;
-            box-shadow: 0 0 8px rgba(198,40,40,0.25);
-            background: #ffffff;
+            outline: none;
+            border-color: var(--danger);
+            background: rgba(255, 25, 68, 0.05);
+            box-shadow: 0 0 0 4px rgba(255, 23, 68, 0.1);
         }
 
         .delete-btn {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #c62828, #b71c1c);
+            padding: 18px;
+            background: var(--danger);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
-            transition: 0.25s;
-            margin-top: 10px;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(255, 23, 68, 0.2);
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .delete-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(198,40,40,0.35);
+            background: var(--danger-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(255, 23, 68, 0.4);
         }
 
-        .flash-box {
-            padding: 14px 18px;
-            border-radius: 12px;
-            font-size: 15px;
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 20px;
-            animation: fadeIn 0.35s ease-out;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-            border-left: 6px solid;
+            transition: 0.3s;
         }
 
-        .flash-box.success {
-            background: #e3f2fd;
-            color: #0d47a1;
-            border-color: #0d47a1;
-        }
+        .back-link:hover { color: var(--white); }
 
-        .flash-box.error,
-        .flash-box.danger {
-            background: #ffebee;
-            color: #c62828;
-            border-color: #c62828;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-6px); }
-            to { opacity: 1; transform: translateY(0); }
+        @media (max-width: 480px) {
+            .delete-container { padding: 35px 20px; }
         }
     </style>
 </head>
@@ -114,32 +162,35 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
-              <div class="flash-box {{ category }}">
+              <div class="flash-box">
                 {{ message }}
               </div>
             {% endfor %}
           {% endif %}
         {% endwith %}
 
-        <div class="delete-title">Delete Account</div>
+        <div class="delete-title">Account Deletion</div>
+        
         <div class="delete-warning">
-            This action is irreversible.  
-            Your account and all associated data will be permanently deleted.
+            <strong>Warning: Irreversible Action</strong>
+            Your profile and all associated data will be permanently removed from our servers.
         </div>
 
         <form action="/en/delete-account" method="POST">
 
             <div class="form-field">
-                <input type="email" name="email" placeholder="Confirm your email" required>
+                <input type="email" name="email" placeholder="Confirm your Email" required autocomplete="off">
             </div>
 
             <div class="form-field">
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Your Password" required>
             </div>
 
-            <button class="delete-btn" type="submit">Delete Account</button>
+            <button class="delete-btn" type="submit">Delete My Account</button>
 
         </form>
+
+        <a href="/en/account-settings" class="back-link">Cancel and Go Back</a>
 
     </div>
 

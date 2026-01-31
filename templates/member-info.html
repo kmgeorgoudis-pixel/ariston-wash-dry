@@ -5,88 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Πληροφορίες Μέλους – ARISTON Wash & Dry</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --primary: #0070ff;
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: #f5f7fa;
-            font-family: Arial, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 50% -10%, rgba(0, 112, 255, 0.15), transparent 40%),
+                radial-gradient(circle at 0% 100%, rgba(0, 212, 255, 0.05), transparent 30%);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .member-container {
-            max-width: 600px;
-            margin: 60px auto;
-            background: #ffffff;
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 550px;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            padding: 45px 35px;
+            border-radius: 32px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .member-title {
             text-align: center;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
-            color: #0d47a1;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .member-subtitle {
             text-align: center;
-            color: #555;
-            margin-bottom: 30px;
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 40px;
         }
 
         .info-block {
-            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: 0.3s;
         }
 
         .info-block h3 {
-            color: #0d47a1;
-            margin-bottom: 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--secondary);
+            margin-bottom: 18px;
+            font-weight: 700;
         }
 
         .info-block p {
-            color: #444;
-            margin-bottom: 6px;
-            font-size: 16px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-block p strong {
+            color: var(--text-dim);
+            font-weight: 500;
         }
 
         .stats-box {
-            background: #eef3ff;
-            padding: 18px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 112, 255, 0.1), rgba(0, 212, 255, 0.05));
+            padding: 20px;
+            border-radius: 20px;
             margin-top: 15px;
-            border-left: 5px solid #0d47a1;
+            border-left: 4px solid var(--primary);
         }
 
         .stats-box p {
-            margin: 5px 0;
-            color: #0d47a1;
+            margin: 8px 0;
+            font-size: 14px;
+            color: #d1e5ff;
             font-weight: 600;
+            justify-content: flex-start;
+            gap: 10px;
         }
 
         .back-btn {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
-            text-align: center;
-            padding: 14px;
-            background: linear-gradient(135deg, #0d47a1, #1565c0);
-            color: white;
-            border-radius: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
             text-decoration: none;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
-            margin-top: 25px;
-            transition: 0.25s;
+            margin-top: 30px;
+            transition: 0.3s;
         }
 
         .back-btn:hover {
+            background: var(--white);
+            color: var(--dark-bg);
             transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(13,71,161,0.35);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 480px) {
+            .member-container { padding: 30px 20px; }
+            .info-block p { flex-direction: column; gap: 4px; }
         }
     </style>
 </head>
@@ -99,14 +160,14 @@
 
         <div class="info-block">
             <h3>Βασικά Στοιχεία</h3>
-            <p><strong>Όνομα:</strong> {{ current_user.fullname }}</p>
-            <p><strong>Email:</strong> {{ current_user.email }}</p>
+            <p><strong>Όνομα:</strong> <span>{{ current_user.fullname }}</span></p>
+            <p><strong>Email:</strong> <span>{{ current_user.email }}</span></p>
         </div>
 
         <div class="info-block">
             <h3>Διάρκεια Μέλους</h3>
-            <p><strong>Ημερομηνία Εγγραφής:</strong> {{ current_user.created_at.strftime('%d/%m/%Y') }}</p>
-            <p><strong>Μέρες Μέλος:</strong> {{ days_member }}</p>
+            <p><strong>Ημερομηνία Εγγραφής:</strong> <span>{{ current_user.created_at.strftime('%d/%m/%Y') }}</span></p>
+            <p><strong>Μέρες Μέλος:</strong> <span>{{ days_member }}</span></p>
 
             <div class="stats-box">
                 <p>🎉 Ευχαριστούμε που είστε μέλος της κοινότητάς μας!</p>
