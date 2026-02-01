@@ -1636,6 +1636,20 @@ def en_special_services():
 @app.route("/en/reviews")
 def reviews_en():
     return render_template("en/reviews.html")
+@app.route("/en/coupon/<int:coupon_id>")
+@login_required
+def coupon_details_en(coupon_id):
+    coupon = Coupon.query.filter_by(
+        id=coupon_id,
+        user_id=current_user.id
+    ).first_or_404()
+
+    return render_template(
+        "en/coupon_details.html",
+        coupon=coupon,
+        today=date.today()
+    )
+
 
 # Υποβολή φόρμας (χρησιμοποιεί το ίδιο POST route, αν θέλεις να ξεχωρίζεις μπορεί να φτιάξεις /en/submit_review)
 @app.route("/en/submit_review", methods=["POST"])
