@@ -72,11 +72,7 @@ https://aristonwashdry.gr/coupons
 Η ομάδα του ARISTON Wash & Dry
 https://aristonwashdry.gr
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
 
 
 <hr>
@@ -506,11 +502,7 @@ def register():
 Η ομάδα του Ariston Wash & Dry
 https://aristonwashdry.gr
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
 
 
 <hr>
@@ -946,11 +938,7 @@ https://aristonwashdry.gr/updates
 Με εκτίμηση,
 ARISTON Wash & Dry
 https://aristonwashdry.gr/
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
 
 """
 
@@ -1029,11 +1017,8 @@ def send_announcements_background(users, title, description):
 Με εκτίμηση,
 ARISTON Wash & Dry
 https://aristonwashdry.gr/
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
 <p style="font-size: 12px; color: #666;">
 Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
 <a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
@@ -1161,12 +1146,10 @@ def forgot_password():
 
 Με εκτίμηση,
 Η ομάδα του ARISTON Wash & Dry
+https://aristonwashdry.gr
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
 <hr>
 <p style="font-size: 12px; color: #666;">
 Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
@@ -1336,11 +1319,8 @@ def delete_account():
 Ευχαριστούμε που χρησιμοποιήσατε το ARISTON Wash & Dry.
 https://aristonwashdry.gr/
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
 
 
 <hr>
@@ -1409,11 +1389,8 @@ def send_password_change_email(user):
 Με εκτίμηση,
 Η ομάδα του ARISTON Wash & Dry
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
 
 <hr>
 <p style="font-size: 12px; color: #666;">
@@ -1480,11 +1457,8 @@ def send_bulk_email_background(users, subject, message):
 ARISTON Wash & Dry
 https://aristonwashdry.gr/
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
 
 <hr>
 <p style="font-size: 12px; color: #666;">
@@ -1777,11 +1751,8 @@ If you need anything, we are always here for you.
 Best regards,
 The ARISTON Wash & Dry Team
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
 
 
 <hr>
@@ -1833,11 +1804,8 @@ If you did not request a password reset, you can safely ignore this email.
 Best regards,
 The ARISTON Wash & Dry Team
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
 
 <hr>
 <p style="font-size: 12px; color: #666;">
@@ -1953,11 +1921,8 @@ If you did not make this change, please contact us immediately.
 Best regards,
 The ARISTON Wash & Dry Team
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
 
 <hr>
 <p style="font-size: 12px; color: #666;">
@@ -2030,11 +1995,8 @@ You are no longer a member of the service.
 Thank you for using ARISTON Wash & Dry.
 https://aristonwashdry.gr/
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
-    <img src="https://aristonwashdry.gr/static/images/1new.png"
-         alt="ARISTON Wash & Dry"
-         style="height:100px; width:auto; margin-top:12px;">
-</a>
+<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
 
 
 <hr>
