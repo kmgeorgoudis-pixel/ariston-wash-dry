@@ -16,10 +16,12 @@
             --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
             --dark-bg: #030508;
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --input-bg: rgba(255, 255, 255, 0.05);
             --white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.6);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,151 +29,188 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.12), transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(0, 212, 255, 0.05), transparent 40%);
+            background: radial-gradient(circle at 50% 50%, #0d1b2a 0%, #030508 100%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
+            overflow-x: hidden; /* Επιτρέπει το scroll αλλά κλειδώνει το πλάτος */
+            position: relative;
+        }
+
+        /* --- BUBBLES SYSTEM --- */
+        .bubbles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(0,112,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-up 15s infinite ease-in;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translateY(-50vh) translateX(30px) scale(1.1); }
+            100% { transform: translateY(-120vh) translateX(-20px) scale(1.5); opacity: 0; }
         }
 
         .login-container {
             width: 100%;
-            max-width: 420px;
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(25px);
+            max-width: 440px;
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             padding: 50px 40px;
-            border-radius: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            animation: containerEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            position: relative;
+            z-index: 2;
+            animation: containerEntrance 0.8s var(--transition);
         }
 
         @keyframes containerEntrance {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         /* Flash Messages */
         .flash-msg {
-            padding: 14px;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: 18px;
             margin-bottom: 25px;
             font-size: 14px;
             font-weight: 600;
             text-align: left;
             border: 1px solid transparent;
+            animation: fadeIn 0.4s ease;
         }
-        .flash-error { 
-            background: rgba(255, 68, 68, 0.1); 
-            color: #ff4444; 
-            border-color: rgba(255, 68, 68, 0.2);
-        }
-        .flash-success { 
-            background: rgba(0, 255, 127, 0.1); 
-            color: #00ff7f; 
-            border-color: rgba(0, 255, 127, 0.2);
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .flash-error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2); }
+        .flash-success { background: rgba(0, 255, 136, 0.1); color: #00ff88; border-color: rgba(0, 255, 136, 0.2); }
 
         .login-logo {
-            width: 110px;
-            margin-bottom: 35px;
-            filter: drop-shadow(0 0 15px var(--primary-glow));
-            transition: 0.4s;
+            width: 120px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 20px var(--primary-glow));
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .login-logo:hover { transform: scale(1.05); }
+        .login-logo:hover { transform: scale(1.1) rotate(5deg); }
 
         .login-title {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
-            letter-spacing: 1px;
-            background: linear-gradient(to right, #fff, var(--secondary));
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 8px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .login-subtitle {
             font-size: 14px;
             color: var(--text-dim);
             margin-bottom: 30px;
+            font-weight: 500;
         }
 
         /* Language Switcher */
         .language-switcher {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 35px;
         }
         .flag-icon {
-            width: 26px; height: 26px; border-radius: 50%;
-            object-fit: cover; border: 2px solid rgba(255,255,255,0.1);
+            width: 30px; height: 30px; border-radius: 50%;
+            object-fit: cover; border: 2px solid var(--glass-border);
             transition: 0.3s;
+            cursor: pointer;
         }
-        .flag-icon:hover { transform: translateY(-3px); border-color: var(--primary); }
+        .flag-icon:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 5px 15px var(--primary-glow); }
 
         /* Form Styling */
-        .form-field { text-align: left; margin-bottom: 22px; }
+        .form-field { text-align: left; margin-bottom: 24px; }
         .form-field label {
-            font-size: 11px; font-weight: 700; color: var(--secondary);
+            font-size: 10px; font-weight: 800; color: var(--secondary);
             margin-bottom: 8px; display: block; text-transform: uppercase;
-            letter-spacing: 1px; padding-left: 5px;
+            letter-spacing: 1.5px; padding-left: 5px;
         }
         .form-field input {
-            width: 100%; padding: 15px 20px; border-radius: 16px;
-            background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1);
+            width: 100%; padding: 18px 24px; border-radius: 20px;
+            background: var(--input-bg); border: 1px solid var(--glass-border);
             color: white; font-size: 15px; transition: 0.3s;
+            font-family: inherit;
         }
         .form-field input:focus {
             outline: none; border-color: var(--primary);
             background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 20px rgba(0, 112, 255, 0.2);
+            box-shadow: 0 0 25px rgba(0, 112, 255, 0.15);
         }
 
         .submit-btn {
-            width: 100%; padding: 16px; border-radius: 18px; border: none;
+            width: 100%; padding: 18px; border-radius: 20px; border: none;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: white; font-weight: 800; font-size: 16px;
             cursor: pointer; transition: 0.4s; text-transform: uppercase;
-            letter-spacing: 1px; margin-top: 5px;
+            letter-spacing: 1.5px; margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(0, 112, 255, 0.2);
         }
-        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--primary-glow); }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--primary-glow); filter: brightness(1.1); }
 
         .forgot-link {
-            display: inline-block; margin-top: 20px; font-size: 13px;
+            display: inline-block; margin-top: 25px; font-size: 13px;
             color: var(--text-dim); text-decoration: none; transition: 0.3s;
+            font-weight: 600;
         }
         .forgot-link:hover { color: var(--secondary); }
 
         /* Footer links */
         .register-link-container {
-            margin-top: 35px; padding-top: 25px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 40px; padding-top: 30px;
+            border-top: 1px solid var(--glass-border);
         }
         .register-text { font-size: 14px; color: var(--text-dim); margin-bottom: 15px; display: block; }
         
         .register-cta {
-            display: inline-block; padding: 12px 25px;
-            background: rgba(255, 255, 255, 0.05); color: var(--white);
-            border-radius: 100px; font-size: 14px; font-weight: 700;
-            text-decoration: none; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1);
+            display: inline-block; padding: 14px 30px;
+            background: rgba(255, 255, 255, 0.04); color: var(--white);
+            border-radius: 100px; font-size: 13px; font-weight: 800;
+            text-decoration: none; transition: 0.3s; border: 1px solid var(--glass-border);
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        .register-cta:hover { background: var(--white); color: var(--dark-bg); }
+        .register-cta:hover { background: var(--white); color: var(--dark-bg); transform: scale(1.05); }
 
         .cancel-btn {
-            display: block; margin-top: 20px; font-size: 13px;
+            display: block; margin-top: 25px; font-size: 12px;
             color: var(--text-dim); text-decoration: none; transition: 0.3s;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
         }
-        .cancel-btn:hover { color: #ff4444; }
+        .cancel-btn:hover { color: #ef4444; }
+
+        @media (max-width: 480px) {
+            .login-container { padding: 40px 25px; border-radius: 30px; }
+            .login-title { font-size: 20px; }
+        }
     </style>
 </head>
 <body>
+
+    <div class="bubbles-container" id="bubbles-container"></div>
 
     <div class="login-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -184,7 +223,7 @@
           {% endif %}
         {% endwith %}
 
-        <img src="{{ url_for('static', filename='images/1new.png') }}" class="login-logo" alt="Logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="login-logo" alt="Logo">
 
         <div class="login-title">ARISTON WASH & DRY</div>
         <div class="login-subtitle">Login to your account</div>
@@ -220,6 +259,25 @@
             <a href="/en" class="cancel-btn">Cancel & Return</a>
         </div>
     </div>
+
+    <script>
+        function createBubbles() {
+            const container = document.getElementById('bubbles-container');
+            const bubbleCount = 12;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 60 + 20 + 'px';
+                bubble.style.width = size;
+                bubble.style.height = size;
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = Math.random() * 8 + 10 + 's';
+                bubble.style.animationDelay = Math.random() * 7 + 's';
+                container.appendChild(bubble);
+            }
+        }
+        createBubbles();
+    </script>
 
 </body>
 </html>

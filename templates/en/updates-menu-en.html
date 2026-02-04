@@ -13,44 +13,75 @@
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
-            --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --dark-bg: #0a1118;
+            --card-bg: rgba(255, 255, 255, 0.06);
             --white: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.6);
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #0d1b2a, #030508);
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(0, 112, 255, 0.1), transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(0, 212, 255, 0.1), transparent 40%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            overflow: hidden;
+            position: relative;
         }
 
+        /* --- BUBBLES SYSTEM --- */
+        .bubbles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,112,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-up 15s infinite ease-in;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translateY(-50vh) translateX(30px) scale(1.1); }
+            100% { transform: translateY(-120vh) translateX(-20px) scale(1.5); opacity: 0; }
+        }
+
+        /* --- CONTAINER --- */
         .menu-container {
             width: 100%;
             max-width: 600px;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
+            background: var(--card-bg);
+            backdrop-filter: blur(30px);
             padding: 50px 40px;
             border-radius: 40px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
-            animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            animation: containerReveal 0.8s var(--transition);
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
+        @keyframes containerReveal {
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -61,28 +92,31 @@
             color: var(--text-dim);
             text-decoration: none;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 35px;
-            transition: 0.3s;
-            padding: 8px 16px;
+            padding: 10px 20px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            transition: var(--transition);
         }
 
         .back-home:hover {
             color: var(--white);
             background: rgba(255, 255, 255, 0.1);
             transform: translateX(-5px);
+            border-color: var(--primary);
         }
 
         .menu-title {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
             background: linear-gradient(to right, #fff, var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 40px;
             text-align: center;
+            letter-spacing: -1px;
         }
 
         .menu-grid {
@@ -97,35 +131,37 @@
             justify-content: space-between;
             width: 100%;
             padding: 24px 30px;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--glass-border);
             color: var(--white);
             text-decoration: none;
-            border-radius: 24px;
+            border-radius: 28px;
             font-size: 18px;
             font-weight: 700;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             position: relative;
             overflow: hidden;
         }
 
-        .menu-btn::before {
+        .menu-btn::after {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            opacity: 0;
-            transition: 0.4s;
-            z-index: 0;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
         }
 
         .menu-btn:hover {
             transform: translateY(-5px) scale(1.02);
-            border-color: var(--secondary);
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.07);
             box-shadow: 0 20px 40px rgba(0, 112, 255, 0.2);
         }
 
-        .menu-btn:hover::before { opacity: 0.1; }
+        .menu-btn:hover::after {
+            transform: translateX(100%);
+        }
 
         .btn-content {
             display: flex;
@@ -136,27 +172,31 @@
         }
 
         .icon-box {
-            width: 50px;
-            height: 50px;
+            width: 54px;
+            height: 54px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--secondary);
-            transition: 0.3s;
+            transition: var(--transition);
         }
 
         .menu-btn:hover .icon-box {
             background: var(--primary);
             color: white;
-            transform: rotate(-10deg);
+            transform: rotate(-10deg) scale(1.1);
+            border-color: transparent;
+            box-shadow: 0 10px 20px var(--primary-glow);
         }
 
         .arrow-icon {
             opacity: 0.3;
-            transition: 0.3s;
+            transition: var(--transition);
             transform: translateX(-10px);
+            color: var(--secondary);
         }
 
         .menu-btn:hover .arrow-icon {
@@ -166,16 +206,20 @@
 
         @media (max-width: 480px) {
             .menu-container { padding: 40px 20px; }
-            .menu-btn { padding: 20px; }
+            .menu-title { font-size: 28px; }
+            .menu-btn { padding: 20px; font-size: 16px; }
+            .icon-box { width: 44px; height: 44px; }
         }
     </style>
 </head>
 <body>
 
+<div class="bubbles-container" id="bubbles-container"></div>
+
 <div class="menu-container">
 
     <a href="/en" class="back-home">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         Back to Home
     </a>
 
@@ -189,7 +233,7 @@
                 </div>
                 Member Updates
             </div>
-            <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </a>
 
         <a class="menu-btn" href="/en/coupons">
@@ -199,11 +243,30 @@
                 </div>
                 Coupons & Offers
             </div>
-            <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </a>
     </div>
 
 </div>
+
+<script>
+    function createBubbles() {
+        const container = document.getElementById('bubbles-container');
+        const bubbleCount = 12;
+        for (let i = 0; i < bubbleCount; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 60 + 20 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.animationDuration = Math.random() * 8 + 10 + 's';
+            bubble.style.animationDelay = Math.random() * 7 + 's';
+            container.appendChild(bubble);
+        }
+    }
+    createBubbles();
+</script>
 
 </body>
 </html>

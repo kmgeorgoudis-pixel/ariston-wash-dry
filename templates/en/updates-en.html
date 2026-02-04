@@ -13,146 +13,206 @@
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
-            --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --dark-bg: #0a1118;
+            --card-bg: rgba(255, 255, 255, 0.06);
             --white: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.6);
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #0d1b2a, #030508);
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.1), transparent 50%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 40px 20px;
+            overflow-x: hidden;
+            position: relative;
         }
 
+        /* --- BUBBLES SYSTEM --- */
+        .bubbles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,112,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-up 15s infinite ease-in;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translateY(-50vh) translateX(30px) scale(1.1); }
+            100% { transform: translateY(-120vh) translateX(-20px) scale(1.5); opacity: 0; }
+        }
+
+        /* --- CONTAINER --- */
         .updates-container {
             width: 100%;
             max-width: 650px;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            padding: 45px;
+            background: var(--card-bg);
+            backdrop-filter: blur(30px);
+            padding: 50px 45px;
             border-radius: 40px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
-            animation: fadeIn 0.6s ease-out;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            animation: containerReveal 0.8s var(--transition);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes containerReveal {
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .updates-title {
             text-align: center;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
-            margin-bottom: 10px;
-            background: linear-gradient(to bottom, #fff, var(--text-dim));
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #fff, var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
         }
 
         .updates-subtitle {
             text-align: center;
             color: var(--text-dim);
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             font-size: 16px;
+            font-weight: 500;
         }
 
         .update-box {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 25px;
-            border-radius: 24px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary);
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border-radius: 28px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary);
+            transition: var(--transition);
             border-top: 1px solid var(--glass-border);
             border-right: 1px solid var(--glass-border);
             border-bottom: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .update-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            opacity: 0;
+            transition: 0.4s;
         }
 
         .update-box:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(8px) scale(1.01);
             border-left-color: var(--secondary);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
 
         .update-box h3 {
-            font-size: 19px;
+            font-size: 20px;
             color: var(--white);
-            margin-bottom: 10px;
-            font-weight: 700;
+            margin-bottom: 12px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
         }
 
         .update-box p {
             color: var(--text-dim);
             font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            line-height: 1.7;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
         }
 
         .update-box small {
-            display: block;
-            color: var(--primary);
+            display: inline-block;
+            color: var(--secondary);
+            background: rgba(0, 212, 255, 0.1);
+            padding: 6px 14px;
+            border-radius: 100px;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
         .no-updates {
             text-align: center;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.01);
-            border-radius: 24px;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 30px;
             color: var(--text-dim);
             font-size: 16px;
-            border: 1px dashed var(--glass-border);
+            font-weight: 600;
+            border: 2px dashed var(--glass-border);
         }
 
         .back-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
-            margin-top: 35px;
-            padding: 18px;
+            margin-top: 40px;
+            padding: 20px;
             background: var(--white);
             color: var(--dark-bg);
             font-weight: 800;
-            border-radius: 20px;
+            border-radius: 24px;
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .back-btn:hover {
             background: var(--primary);
             color: var(--white);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 112, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px var(--primary-glow);
         }
 
         @media (max-width: 480px) {
-            .updates-container { padding: 30px 20px; }
-            .updates-title { font-size: 26px; }
+            .updates-container { padding: 40px 20px; }
+            .updates-title { font-size: 28px; }
+            .update-box { padding: 25px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="bubbles-container" id="bubbles-container"></div>
 
     <div class="updates-container">
 
@@ -176,6 +236,25 @@
         <a href="/en/updates-menu-en" class="back-btn">← Back to Updates Menu</a>
 
     </div>
+
+    <script>
+        function createBubbles() {
+            const container = document.getElementById('bubbles-container');
+            const bubbleCount = 12;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 60 + 20 + 'px';
+                bubble.style.width = size;
+                bubble.style.height = size;
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = Math.random() * 8 + 10 + 's';
+                bubble.style.animationDelay = Math.random() * 7 + 's';
+                container.appendChild(bubble);
+            }
+        }
+        createBubbles();
+    </script>
 
 </body>
 </html>

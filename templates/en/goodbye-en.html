@@ -13,133 +13,222 @@
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
-            --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --dark-bg: #0a1118;
+            --card-bg: rgba(255, 255, 255, 0.06);
             --white: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.6);
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #0d1b2a, #030508);
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 112, 255, 0.08), transparent 70%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            overflow: hidden;
+            position: relative;
         }
 
+        /* --- BUBBLES SYSTEM --- */
+        .bubbles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,112,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-up 15s infinite ease-in;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translateY(-50vh) translateX(30px) scale(1.1); }
+            100% { transform: translateY(-120vh) translateX(-20px) scale(1.5); opacity: 0; }
+        }
+
+        /* --- GOODBYE CARD --- */
         .goodbye-container {
             width: 100%;
-            max-width: 550px;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
+            max-width: 580px;
+            background: var(--card-bg);
+            backdrop-filter: blur(30px);
             padding: 60px 40px;
             border-radius: 40px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
             text-align: center;
-            animation: containerEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            animation: containerReveal 1s var(--transition);
         }
 
-        @keyframes containerEntry {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+        @keyframes containerReveal {
+            from { opacity: 0; transform: scale(0.9) translateY(40px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
+        .icon-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 35px;
+        }
+
         .check-icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(0, 112, 255, 0.1);
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            color: var(--primary);
-            border: 1px solid rgba(0, 112, 255, 0.2);
+            color: var(--white);
+            box-shadow: 0 15px 35px var(--primary-glow);
+            animation: iconPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+        }
+
+        @keyframes iconPop {
+            from { transform: scale(0) rotate(-45deg); opacity: 0; }
+            to { transform: scale(1) rotate(0); opacity: 1; }
         }
 
         .goodbye-title {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
-            background: linear-gradient(to bottom, #fff, var(--text-dim));
+            background: linear-gradient(to right, #ffffff, #a5b4fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             letter-spacing: -1px;
         }
 
         .goodbye-text {
-            font-size: 17px;
+            font-size: 16px;
             color: var(--text-dim);
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             line-height: 1.8;
+            animation: textFade 1s ease-out 0.8s both;
         }
 
-        .goodbye-text strong {
-            color: var(--white);
-            font-weight: 600;
+        .privacy-notice {
+            font-size: 13px;
+            color: var(--primary);
+            background: rgba(0, 112, 255, 0.08);
+            padding: 15px 25px;
+            border-radius: 18px;
+            border: 1px solid rgba(0, 112, 255, 0.15);
+            margin-bottom: 40px;
+            line-height: 1.5;
+            font-weight: 500;
+            animation: textFade 1s ease-out 1s both;
+        }
+
+        @keyframes textFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .home-btn {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            padding: 18px 35px;
+            padding: 20px 45px;
             background: var(--white);
             color: var(--dark-bg);
             font-size: 16px;
-            font-weight: 700;
-            border-radius: 20px;
+            font-weight: 800;
+            border-radius: 22px;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
         }
 
         .home-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
             background: var(--secondary);
             color: var(--white);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
         }
 
         @media (max-width: 480px) {
-            .goodbye-container { padding: 40px 20px; }
-            .goodbye-title { font-size: 26px; }
+            .goodbye-container { padding: 45px 25px; }
+            .goodbye-title { font-size: 28px; }
+            .home-btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
+    <div class="bubbles-container" id="bubbles-container"></div>
+
     <div class="goodbye-container">
         
-        <div class="check-icon">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
+        <div class="icon-wrapper">
+            <div class="check-icon">
+                <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
         </div>
 
-        <h1 class="goodbye-title">Thank you!</h1>
+        <h1 class="goodbye-title">Account Deleted</h1>
 
         <p class="goodbye-text">
-            Your account has been permanently deleted from <strong>ARISTON Wash & Dry</strong>.<br>
-            It was a pleasure serving you, and we hope to see you again in the future.
+            Your account has been successfully and <strong>permanently removed</strong> from <strong>ARISTON Wash & Dry</strong>. 
+            We are sad to see you go, but we respect your decision.
         </p>
 
+        <div class="privacy-notice">
+            Official Notice: In accordance with our Privacy Policy and GDPR standards, all personal identification data, 
+            login credentials, and activity logs have been <strong>permanently purged</strong> from our production servers 
+            and databases.
+        </div>
+
         <a href="/" class="home-btn">
-            Back to Homepage
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            Return Home
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
 
     </div>
+
+    <script>
+        function createBubbles() {
+            const container = document.getElementById('bubbles-container');
+            const bubbleCount = 15;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 60 + 20 + 'px';
+                bubble.style.width = size;
+                bubble.style.height = size;
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = Math.random() * 8 + 10 + 's';
+                bubble.style.animationDelay = Math.random() * 7 + 's';
+                container.appendChild(bubble);
+            }
+        }
+        createBubbles();
+    </script>
 
 </body>
 </html>

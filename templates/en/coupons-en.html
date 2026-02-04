@@ -13,65 +13,107 @@
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
             --success: #00ff88;
             --warning: #f59e0b;
             --error: #ef4444;
-            --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --dark-bg: #0a1118;
+            --card-bg: rgba(255, 255, 255, 0.06);
             --white: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.6);
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #0d1b2a, #030508);
             background-color: var(--dark-bg);
-            background-image: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.1), transparent 50%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 40px 20px;
+            overflow-x: hidden;
+            position: relative;
         }
 
+        /* --- BUBBLES SYSTEM --- */
+        .bubbles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,112,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-up 15s infinite ease-in;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translateY(-50vh) translateX(30px) scale(1.1); }
+            100% { transform: translateY(-120vh) translateX(-20px) scale(1.5); opacity: 0; }
+        }
+
+        /* --- CONTAINER --- */
         .coupons-container {
             width: 100%;
             max-width: 650px;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            padding: 45px;
+            background: var(--card-bg);
+            backdrop-filter: blur(30px);
+            padding: 50px 45px;
             border-radius: 40px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            animation: containerReveal 0.8s var(--transition);
+        }
+
+        @keyframes containerReveal {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .coupons-title {
             text-align: center;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
-            margin-bottom: 10px;
-            background: linear-gradient(to bottom, #fff, var(--text-dim));
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #fff, #00d4ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1.5px;
         }
 
         .coupons-subtitle {
             text-align: center;
             color: var(--text-dim);
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             font-size: 16px;
+            font-weight: 500;
         }
 
         .coupon-box {
-            padding: 25px;
-            border-radius: 24px;
-            margin-bottom: 20px;
+            padding: 30px;
+            border-radius: 30px;
+            margin-bottom: 25px;
             position: relative;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.03);
             overflow: hidden;
             display: block;
             text-decoration: none;
@@ -79,52 +121,63 @@
         }
 
         .coupon-box:hover {
-            transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.07);
             border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         /* States */
-        .coupon-box.active { border-left: 6px solid var(--success); }
-        .coupon-box.used { border-left: 6px solid #4b5563; opacity: 0.6; }
-        .coupon-box.expired { border-left: 6px solid var(--warning); }
+        .coupon-box.active { border-left: 8px solid var(--success); }
+        .coupon-box.used { border-left: 8px solid #4b5563; opacity: 0.5; }
+        .coupon-box.expired { border-left: 8px solid var(--warning); }
 
-        .coupon-box h3 { font-size: 19px; margin-bottom: 8px; font-weight: 700; }
+        .coupon-box h3 { font-size: 20px; margin-bottom: 10px; font-weight: 800; }
         .coupon-box.active h3 { color: var(--success); }
         .coupon-box.expired h3 { color: var(--warning); }
 
-        .coupon-box p { color: var(--text-dim); font-size: 15px; margin-bottom: 15px; line-height: 1.5; }
+        .coupon-box p { color: var(--text-dim); font-size: 15px; margin-bottom: 18px; line-height: 1.6; }
 
         .coupon-box small {
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             color: var(--primary);
+            background: rgba(0, 112, 255, 0.1);
+            padding: 6px 14px;
+            border-radius: 100px;
         }
 
         .coupon-status {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 6px 12px;
-            border-radius: 10px;
+            top: 25px;
+            right: 25px;
+            padding: 8px 16px;
+            border-radius: 12px;
             font-size: 11px;
-            font-weight: 800;
+            font-weight: 900;
             text-transform: uppercase;
+            letter-spacing: 1px;
             background: var(--error);
             color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
-        .coupon-status.expired { background: var(--warning); color: var(--dark-bg); }
+        .coupon-status.expired { 
+            background: var(--warning); 
+            color: var(--dark-bg);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
 
         .no-coupons {
             text-align: center;
-            padding: 40px;
+            padding: 60px 40px;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 24px;
+            border-radius: 30px;
             color: var(--text-dim);
-            border: 1px dashed var(--glass-border);
+            font-weight: 600;
+            border: 2px dashed var(--glass-border);
         }
 
         .back-btn {
@@ -132,26 +185,37 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            margin-top: 35px;
-            padding: 18px;
+            margin-top: 40px;
+            padding: 20px;
             background: var(--white);
             color: var(--dark-bg);
             font-weight: 800;
-            border-radius: 20px;
+            border-radius: 24px;
             text-decoration: none;
-            transition: 0.3s;
+            transition: var(--transition);
             font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .back-btn:hover {
             background: var(--primary);
             color: var(--white);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 112, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px var(--primary-glow);
+        }
+
+        @media (max-width: 480px) {
+            .coupons-container { padding: 40px 20px; }
+            .coupons-title { font-size: 28px; }
+            .coupon-box { padding: 25px; }
+            .coupon-status { top: 15px; right: 15px; font-size: 10px; }
         }
     </style>
 </head>
 <body>
+
+<div class="bubbles-container" id="bubbles-container"></div>
 
 <div class="coupons-container">
 
@@ -191,6 +255,25 @@
     <a href="/en/updates-menu-en" class="back-btn">← Back to Updates Menu</a>
 
 </div>
+
+<script>
+    function createBubbles() {
+        const container = document.getElementById('bubbles-container');
+        const bubbleCount = 12;
+        for (let i = 0; i < bubbleCount; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 60 + 20 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.animationDuration = Math.random() * 8 + 10 + 's';
+            bubble.style.animationDelay = Math.random() * 7 + 's';
+            container.appendChild(bubble);
+        }
+    }
+    createBubbles();
+</script>
 
 </body>
 </html>

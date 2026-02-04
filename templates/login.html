@@ -21,6 +21,7 @@
             --input-bg: rgba(255, 255, 255, 0.05);
             --white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.6);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,8 +35,9 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 20px;
-            overflow: hidden;
+            padding: 40px 20px; /* Αυξημένο padding για άνεση στο scroll */
+            overflow-x: hidden; /* Επιτρέπει το κάθετο scroll, κλειδώνει το οριζόντιο */
+            position: relative;
         }
 
         /* --- Bubbles Background --- */
@@ -56,7 +58,7 @@
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
             position: relative;
             z-index: 2;
-            animation: containerEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: containerEntrance 0.8s var(--transition);
         }
 
         @keyframes containerEntrance {

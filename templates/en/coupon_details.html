@@ -5,64 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coupon Details – ARISTON</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
-            --dark-bg: #030508;
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --dark-bg: #0a1118;
+            --card-bg: rgba(255, 255, 255, 0.06);
             --white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background-color: var(--dark-bg);
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #0d1b2a, #030508);
+            background-color: var(--dark-bg);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            margin: 0;
             padding: 20px;
+            overflow: hidden;
+            position: relative;
         }
 
+        /* --- BUBBLES SYSTEM --- */
+        .bubbles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,112,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-up 15s infinite ease-in;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translateY(-50vh) translateX(30px) scale(1.1); }
+            100% { transform: translateY(-120vh) translateX(-20px) scale(1.5); opacity: 0; }
+        }
+
+        /* --- CONTAINER --- */
         .details-container {
             max-width: 500px;
             width: 100%;
             background: var(--card-bg);
-            padding: 40px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            backdrop-filter: blur(30px);
+            padding: 50px 40px;
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
             text-align: center;
+            animation: containerReveal 0.8s var(--transition);
+        }
+
+        @keyframes containerReveal {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .details-title {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 800;
             background: linear-gradient(to right, #fff, var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 25px;
+            letter-spacing: -1px;
         }
 
         .badge {
             display: inline-block;
-            padding: 6px 16px;
+            padding: 8px 20px;
             border-radius: 100px;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
+            letter-spacing: 1.5px;
+            margin-bottom: 35px;
         }
 
         .used-badge {
-            background: rgba(255, 68, 68, 0.15);
+            background: rgba(255, 68, 68, 0.1);
             color: #ff4444;
             border: 1px solid rgba(255, 68, 68, 0.3);
         }
@@ -74,58 +120,82 @@
         }
 
         .active-badge {
-            background: rgba(0, 212, 255, 0.15);
+            background: rgba(0, 212, 255, 0.1);
             color: var(--secondary);
-            border: 1px solid var(--secondary);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
         }
 
         .detail-row {
             margin-bottom: 20px;
             text-align: left;
-            background: rgba(255, 255, 255, 0.02);
-            padding: 15px 20px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 22px;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+
+        .detail-row:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: scale(1.02);
+            border-color: var(--primary);
         }
 
         .label {
             display: block;
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             color: var(--secondary);
-            margin-bottom: 4px;
-            font-weight: 700;
+            margin-bottom: 6px;
+            font-weight: 800;
         }
 
         .value {
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--white);
         }
 
         .amount-value {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 800;
+            color: var(--white);
         }
 
         .back-link {
-            display: inline-block;
-            margin-top: 30px;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 35px;
             color: var(--text-dim);
             text-decoration: none;
             font-size: 14px;
-            font-weight: 600;
-            transition: 0.3s;
+            font-weight: 700;
+            transition: var(--transition);
+            padding: 10px 20px;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
         }
 
         .back-link:hover {
             color: var(--white);
+            background: rgba(255, 255, 255, 0.08);
             transform: translateX(-5px);
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 480px) {
+            .details-container { padding: 40px 20px; }
+            .details-title { font-size: 24px; }
+            .amount-value { font-size: 24px; }
         }
     </style>
 </head>
 <body>
+
+<div class="bubbles-container" id="bubbles-container"></div>
 
 <div class="details-container">
     <div class="details-title">{{ coupon.title }}</div>
@@ -140,7 +210,7 @@
         <div class="badge active-badge">Active Coupon</div>
     {% endif %}
 
-    <div class="detail-row" style="border-left: 4px solid var(--secondary);">
+    <div class="detail-row" style="border-left: 5px solid var(--primary); background: rgba(0, 112, 255, 0.05);">
         <span class="label">Discount Amount</span>
         <div class="value amount-value">{{ "%.2f"|format(coupon.amount) }}€</div>
     </div>
@@ -150,7 +220,7 @@
         <div class="value">{{ coupon.description }}</div>
     </div>
 
-    <div style="display: flex; gap: 10px;">
+    <div style="display: flex; gap: 15px;">
         <div class="detail-row" style="flex: 1;">
             <span class="label">Start Date</span>
             <div class="value">{{ coupon.start_date.strftime('%d/%m/%Y') }}</div>
@@ -162,7 +232,7 @@
     </div>
 
     {% if coupon.used %}
-    <div class="detail-row">
+    <div class="detail-row" style="border-left: 5px solid #ff4444;">
         <span class="label">Used On</span>
         <div class="value">{{ coupon.used_at.strftime('%d/%m/%Y') }}</div>
     </div>
@@ -170,6 +240,25 @@
 
     <a href="/en/coupons" class="back-link">← Back to coupons</a>
 </div>
+
+<script>
+    function createBubbles() {
+        const container = document.getElementById('bubbles-container');
+        const bubbleCount = 10;
+        for (let i = 0; i < bubbleCount; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 60 + 20 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.animationDuration = Math.random() * 8 + 10 + 's';
+            bubble.style.animationDelay = Math.random() * 7 + 's';
+            container.appendChild(bubble);
+        }
+    }
+    createBubbles();
+</script>
 
 </body>
 </html>

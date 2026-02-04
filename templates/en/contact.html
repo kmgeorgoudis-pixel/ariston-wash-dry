@@ -15,18 +15,19 @@
             --primary: #0070ff;
             --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
-            --dark-bg: #030508;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --input-bg: rgba(255, 255, 255, 0.05);
+            --dark-bg: #0a1118;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --input-bg: rgba(255, 255, 255, 0.07);
             --white: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.7);
-            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --text-dim: rgba(255, 255, 255, 0.8);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #0d1b2a, #030508);
             background-color: var(--dark-bg);
             color: var(--white);
             line-height: 1.7;
@@ -39,13 +40,13 @@
 
         /* --- Header & Nav --- */
         header {
-            background: rgba(3, 5, 8, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(0, 112, 255, 0.3);
         }
 
         .store-notice {
@@ -61,27 +62,27 @@
 
         .logo { font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 12px; }
         .logo span { background: linear-gradient(to right, #fff, var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
+        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary)); }
 
-        .main-nav { border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(255, 255, 255, 0.02); }
+        .main-nav { border-top: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 112, 255, 0.05); }
         .nav-links { display: flex; justify-content: center; align-items: center; gap: 30px; padding: 12px 5%; }
-        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: 0.3s; opacity: 0.6; }
-        .nav-links a:hover { opacity: 1; color: var(--secondary); }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; opacity: 0.8; }
+        .nav-links a:hover { opacity: 1; color: var(--secondary); text-shadow: 0 0 10px var(--primary); }
 
         /* User Menu */
         .user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .user-avatar { width: 32px; height: 32px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; }
+        .user-avatar { width: 32px; height: 32px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--primary); }
         .user-dropdown { 
-            position: absolute; top: 100%; right: 0; width: 220px; background: #0a0c10; 
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; 
-            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: absolute; top: 100%; right: 0; width: 220px; background: #ffffff; 
+            border: 1px solid var(--primary); border-radius: 12px; padding: 10px; 
+            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,112,255,0.3);
         }
         .user-menu:hover .user-dropdown { display: flex; }
-        .user-dropdown a { padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
-        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff); color: white !important; font-weight: 700 !important; }
-        .logout { color: #ff4444 !important; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; }
+        .user-dropdown a { color: #030508 !important; padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
+        .user-dropdown a:hover { background: #f0f7ff; }
+        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff) !important; color: white !important; font-weight: 700 !important; }
+        .logout { color: #ff4444 !important; border-top: 1px solid #eee !important; margin-top: 5px; }
         
-        /* Auth Button */
         .auth-btn {
             background: #ffffff !important;
             color: #030508 !important; 
@@ -92,49 +93,61 @@
             text-decoration: none;
             transition: transform 0.3s ease, background 0.3s ease;
             display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,112,255,0.2);
         }
-        .auth-btn:hover {
-            transform: scale(1.05);
-            background: #f0f0f0 !important;
-        }
+        .auth-btn:hover { transform: scale(1.05); background: #f0f0f0 !important; }
 
         .hamburger { display: none; color: white; font-size: 1.8rem; cursor: pointer; }
+
+        /* --- Content Styling --- */
+        .page-title { padding: 220px 5% 60px; text-align: center; background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.2), transparent 70%); }
+        .page-title h1 { font-size: clamp(2.5rem, 6vw, 3.5rem); margin-bottom: 15px; letter-spacing: -1px; text-shadow: 0 0 20px rgba(0,112,255,0.3); }
+        
+        .contact-box, .contact-form, .success-box {
+            max-width: 900px; margin: 0 auto 40px; padding: 45px;
+            background: var(--card-bg); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 32px;
+            position: relative; z-index: 2;
+        }
+
+        .map-container { 
+            max-width: 900px; margin: 40px auto; border-radius: 32px; overflow: hidden; 
+            border: 2px solid rgba(0, 112, 255, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            position: relative; z-index: 2;
+        }
+
+        input, textarea {
+            width: 100%; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1);
+            padding: 18px; border-radius: 16px; color: white; font-family: inherit; transition: 0.3s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--secondary); background: rgba(255,255,255,0.1); box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); }
+
+        .submit-btn {
+            width: 100%; padding: 20px; border-radius: 18px; border: none;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white; font-weight: 800; font-size: 1.2rem; cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px var(--primary-glow);
+        }
+        .submit-btn:hover { transform: translateY(-5px) scale(1.02); filter: brightness(1.1); }
+
+        /* Bubbles */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.5), rgba(0,112,255,0.1)); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.5; } to { transform: translateY(-10vh); opacity: 0; } }
+
+        footer { padding: 80px 5% 40px; text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); background: #030508; position: relative; z-index: 2; }
+        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.85rem; font-weight: 600; }
 
         @media (max-width: 768px) {
             .hamburger { display: block; margin-left: auto; padding: 10px; }
             .nav-links {
                 display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
-                background: rgba(3, 5, 8, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
+                background: rgba(10, 17, 24, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
             }
             .nav-links.active { display: flex; }
+            .contact-box, .contact-form { padding: 30px 20px; margin: 0 15px 30px; }
         }
-
-        /* --- Content Sections --- */
-        .page-title { padding: 220px 5% 60px; text-align: center; background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.15), transparent 70%); }
-        .page-title h1 { font-size: clamp(2.5rem, 6vw, 3.5rem); margin-bottom: 15px; letter-spacing: -1px; }
-
-        .contact-box, .contact-form, .success-box {
-            max-width: 900px; margin: 0 auto 40px; padding: 40px;
-            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px;
-        }
-
-        .map-container { max-width: 900px; margin: 40px auto; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-
-        input, textarea {
-            width: 100%; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px; border-radius: 12px; color: white; font-family: inherit; transition: 0.3s;
-        }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary); background: rgba(255,255,255,0.08); box-shadow: 0 0 15px var(--primary-glow); }
-
-        .submit-btn {
-            width: 100%; padding: 18px; border-radius: 15px; border: none;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.4s;
-        }
-        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--primary-glow); filter: brightness(1.1); }
-
-        footer { padding: 60px 5% 30px; text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
-        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -148,7 +161,6 @@
         </div>
         <div class="hamburger" id="hamburger-btn">☰</div>
     </div>
-
     <nav class="main-nav">
         <div class="nav-links" id="nav-menu">
             <a href="/en">Home</a>
@@ -161,7 +173,7 @@
             {% if current_user.is_authenticated %}
             <div class="user-menu" id="user-menu-toggle">
                 <div class="user-avatar">{{ current_user.fullname[0]|upper }}</div>
-                <span class="user-hint" style="font-size: 0.8rem; opacity: 0.7;">Member Area</span>
+                <span class="user-hint" style="font-size: 0.8rem; opacity: 0.9;">Member Area</span>
 
                 <div class="user-dropdown" id="user-dropdown-menu">
                     <a href="/en/settings-menu">Settings</a>
@@ -178,105 +190,117 @@
     </nav>
 </header>
 
+<div class="bubbles-container" id="bubbles"></div>
+
 <section class="page-title reveal">
     <h1>💙 Contact Us</h1>
-    <p>We are always happy to assist you! If you have any questions about our services, machines, or pricing, please reach out to us.</p>
+    <p style="color: var(--text-dim); max-width: 800px; margin: 0 auto;">We are always happy to assist you! If you have any questions about our services, machines, or pricing, please reach out to us.</p>
 </section>
 
 <div class="contact-box reveal">
-    <h2 style="color: var(--secondary); margin-bottom: 20px;">📍 Contact Information</h2>
-    <p><strong>📍Address:</strong><br> 10 Dervenakion, Vathy, Samos 83100</p>
-    <p><strong>📞Phone:</strong><br>+30 6948897391 | +30 6944615574 | +30 698 759 8416</p>
-    <p><strong>📩Email:</strong><br>info@aristonwashdry.gr | aristonwashing@gmail.com</p>
-    <p><strong>🕛Opening Hours:</strong><br> Daily 07:00 – 23:00</p>
-    <p><strong>📌Location:</strong><br> Ariston Wash & Dry is in the center of Vathy. Easy access on foot or by car, parking available nearby.</p>
+    <h2 style="color: var(--secondary); margin-bottom: 25px; font-weight: 800;">📍 Contact Information</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+        <div>
+            <p><strong>📍Address:</strong><br> 10 Dervenakion, Vathy, Samos 83100</p>
+            <p style="margin-top: 15px;"><strong>📞Phone:</strong><br>+30 6948897391<br>+30 6944615574<br>+30 698 759 8416</p>
+        </div>
+        <div>
+            <p><strong>📩Email:</strong><br>info@aristonwashdry.gr<br>aristonwashing@gmail.com</p>
+            <p style="margin-top: 15px;"><strong>📌Opening Hours:</strong><br>Daily 07:00 – 23:00</p>
+        </div>
+    </div>
+    <p style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+        <strong>📌Location:</strong> Ariston Wash & Dry is in the center of Vathy. Easy access on foot or by car, parking available nearby.
+    </p>
 </div>
 
 <div class="map-container reveal">
     <iframe 
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3156.9110753066144!2d26.974914175785863!3d37.75694467198941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14be0d68f700030d%3A0xc47e307736340263!2zzpTOtc-BzrLOtc69zrHOus6vz4nOvSAxMCwgzqPOrM68zr_PgiA4MzEgMDA!5e0!3m2!1sel!2sgr!4v1715421234567!5m2!1sel!2sgr" 
         width="100%" 
-        height="400" 
-        style="border:0; filter: invert(90%) hue-rotate(180deg) opacity(0.8);" 
+        height="450" 
+        style="border:0; filter: invert(90%) hue-rotate(180deg) brightness(0.8) contrast(1.2);" 
         allowfullscreen="" 
-        loading="lazy" 
-        referrerpolicy="no-referrer-when-downgrade">
+        loading="lazy">
     </iframe>
 </div>
 
 <div id="form-container" class="reveal">
     <div class="contact-form" id="contact-form">
-        <h2 style="color: var(--secondary); margin-bottom: 20px;">📩 Contact Form</h2>
-        <p style="margin-bottom: 30px; color: var(--text-dim);">Fill out the form and our team will get back to you promptly.</p>
+        <h2 style="color: var(--secondary); margin-bottom: 20px; font-weight: 800;">📩 Contact Form</h2>
+        <p style="margin-bottom: 35px; color: var(--text-dim);">Fill out the form and our team will get back to you promptly.</p>
 
         <form id="contactForm">
             {% if current_user.is_authenticated %}
-            <p style="margin-bottom:20px; font-size:14px; color:var(--secondary);">
-                You are logged in as <strong>{{ current_user.fullname }}</strong> ({{ current_user.email }}).
-            </p>
+                <div style="background: rgba(0, 112, 255, 0.1); padding: 15px; border-radius: 12px; border: 1px solid var(--primary); margin-bottom: 25px;">
+                    <p style="font-size:14px; color:var(--secondary); margin: 0;">
+                        You are logged in as <strong>{{ current_user.fullname }}</strong> ({{ current_user.email }}).
+                    </p>
+                </div>
             {% else %}
-            <div class="form-field">
-                <label>Full Name *</label>
-                <input type="text" name="name" required>
-            </div>
-            <div class="form-field">
-                <label>Email or Phone *</label>
-                <input type="text" name="email" required>
-            </div>
+                <div class="form-field" style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 700;">Full Name *</label>
+                    <input type="text" name="name" required placeholder="Your name">
+                </div>
+                <div class="form-field" style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 700;">Email or Phone *</label>
+                    <input type="text" name="email" required placeholder="Contact info">
+                </div>
             {% endif %}
 
-            <div class="form-field">
-                <label>Subject / Reason *</label>
-                <input type="text" name="subject" required>
+            <div class="form-field" style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 700;">Subject / Reason *</label>
+                <input type="text" name="subject" required placeholder="How can we help?">
             </div>
-            <div class="form-field">
-                <label>Message *</label>
-                <textarea name="message" rows="5" required></textarea>
+            <div class="form-field" style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 700;">Message *</label>
+                <textarea name="message" rows="5" required placeholder="Write your message here..."></textarea>
             </div>
 
-            <button class="submit-btn" type="submit">Send</button>
-            <p style="font-size: 11px; color: #666; margin-top: 15px; text-align: center;">
-                By submitting the form, you accept the <a href="/en/privacy" target="_blank" style="color: var(--text-dim);">Privacy Policy</a>.
+            <button class="submit-btn" type="submit">Send Message</button>
+            <p style="font-size: 11px; opacity: 0.5; margin-top: 20px; text-align: center;">
+                By submitting the form, you accept the <a href="/en/privacy" style="color: var(--white); text-decoration: underline;">Privacy Policy</a>.
             </p>
         </form>
     </div>
 
     <div class="success-box" id="success-box" style="display:none; text-align: center;">
-        <h2 style="color: #00ff7f;">✔ Message sent successfully</h2>
+        <div style="font-size: 4rem; margin-bottom: 20px;">✔</div>
+        <h2 style="color: #00ff7f; font-weight: 800;">Message Sent Successfully</h2>
         <p>The ARISTON Wash & Dry team has received your request and will contact you shortly.</p>
-        <button onclick="resetForm()" class="submit-btn" style="margin-top:25px; width:auto; padding: 12px 40px;">New Form</button>
+        <button onclick="resetForm()" class="submit-btn" style="margin-top:30px; width:auto; padding: 12px 50px;">New Form</button>
     </div>
 </div>
 
 <footer>
     © 2026 Ariston Wash & Dry — All Rights Reserved<br>
-    Website designed & developed by Konstantinos Georgoudis
+    Website designed & developed by <strong>Konstantinos Georgoudis</strong>
     <br><br>
     <a href="/en/terms">Terms of Use</a> | <a href="/en/privacy">Privacy Policy</a> | <a href="/en/cookies">Cookies Policy</a>
 </footer>
 
 <script>
-    // Reveal Animations
-    function reveal() {
-        var reveals = document.querySelectorAll(".reveal");
-        for (var i = 0; i < reveals.length; i++) {
-            var windowHeight = window.innerHeight;
-            var elementTop = reveals[i].getBoundingClientRect().top;
-            if (elementTop < windowHeight - 100) {
-                reveals[i].classList.add("active");
-            }
-        }
-    }
-    window.addEventListener("scroll", reveal);
-    window.addEventListener("load", reveal);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Form Handle
+    const btn = document.getElementById('hamburger-btn');
+    const menu = document.getElementById('nav-menu');
+    btn.onclick = (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('active');
+    };
+
     document.getElementById("contactForm").addEventListener("submit", async function(e) {
         e.preventDefault();
         const formData = new FormData(this);
         await fetch("/en/contact", { method: "POST", body: formData });
         document.getElementById("contact-form").style.display = "none";
         document.getElementById("success-box").style.display = "block";
+        window.scrollTo({ top: document.getElementById("form-container").offsetTop - 150, behavior: 'smooth' });
     });
 
     function resetForm() {
@@ -285,18 +309,8 @@
         document.getElementById("contactForm").reset();
     }
 
-    // Hamburger Mobile
-    const btn = document.getElementById('hamburger-btn');
-    const menu = document.getElementById('nav-menu');
-    btn.onclick = (e) => {
-        e.stopPropagation();
-        menu.classList.toggle('active');
-    };
-
-    // Fix for user menu on mobile
     const userToggle = document.getElementById('user-menu-toggle');
     const userDropdown = document.getElementById('user-dropdown-menu');
-
     if (userToggle) {
         userToggle.onclick = (e) => {
             if (window.innerWidth <= 900) {
@@ -307,12 +321,27 @@
         };
     }
 
-    document.addEventListener('click', () => {
+    document.onclick = () => {
         if (window.innerWidth <= 900) {
             if(userDropdown) userDropdown.style.display = 'none';
-            menu.classList.remove('active');
+            if(menu) menu.classList.remove('active');
         }
-    });
+    };
+
+    function createBubble() {
+        const container = document.getElementById('bubbles');
+        if(!container) return;
+        const bubble = document.createElement('div');
+        const size = Math.random() * 60 + 15 + 'px';
+        bubble.className = 'bubble';
+        bubble.style.width = size;
+        bubble.style.height = size;
+        bubble.style.left = Math.random() * 100 + 'vw';
+        bubble.style.animationDuration = Math.random() * 4 + 6 + 's';
+        container.appendChild(bubble);
+        setTimeout(() => bubble.remove(), 8000);
+    }
+    setInterval(createBubble, 500);
 </script>
 
 </body>
