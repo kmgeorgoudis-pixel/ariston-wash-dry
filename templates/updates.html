@@ -13,9 +13,10 @@
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.3);
             --secondary: #00d4ff;
             --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
+            --glass: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(255, 255, 255, 0.08);
             --white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.6);
@@ -26,132 +27,156 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.1), transparent 50%);
+            background: radial-gradient(circle at 50% 0%, #0d1b2a 0%, #030508 100%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 40px 20px;
+            overflow-x: hidden;
         }
+
+        /* --- Bubbles Background System --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), rgba(0,112,255,0.05)); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.2; } to { transform: translateY(-10vh); opacity: 0; } }
 
         .updates-container {
             width: 100%;
             max-width: 650px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
-            padding: 45px;
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            padding: 50px 40px;
             border-radius: 40px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
-            animation: fadeIn 0.6s ease-out;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .updates-title {
             text-align: center;
-            font-size: 32px;
+            font-size: 34px;
             font-weight: 800;
-            margin-bottom: 10px;
-            background: linear-gradient(to bottom, #fff, var(--text-dim));
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .updates-subtitle {
             text-align: center;
             color: var(--text-dim);
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             font-size: 16px;
+            font-weight: 500;
         }
 
         .update-box {
             background: rgba(255, 255, 255, 0.02);
-            padding: 25px;
-            border-radius: 24px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary);
-            transition: 0.3s;
-            border-top: 1px solid var(--glass-border);
-            border-right: 1px solid var(--glass-border);
-            border-bottom: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 28px;
+            margin-bottom: 25px;
+            border: 1px solid var(--glass-border);
+            border-left: 5px solid var(--primary);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .update-box:hover {
             background: rgba(255, 255, 255, 0.05);
-            transform: scale(1.02);
+            transform: translateY(-5px) scale(1.01);
+            border-color: rgba(0, 112, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
 
         .update-box h3 {
-            font-size: 19px;
+            font-size: 20px;
             color: var(--white);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .update-box p {
             color: var(--text-dim);
             font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            line-height: 1.7;
+            margin-bottom: 18px;
         }
 
         .update-box small {
-            display: block;
-            color: var(--primary);
-            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--secondary);
+            font-weight: 800;
             font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
+            background: rgba(0, 212, 255, 0.08);
+            padding: 6px 14px;
+            border-radius: 10px;
         }
 
         .no-updates {
             text-align: center;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 24px;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 30px;
             color: var(--text-dim);
             font-size: 16px;
-            border: 1px dashed var(--glass-border);
+            border: 2px dashed var(--glass-border);
+            font-style: italic;
         }
 
         .back-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
-            margin-top: 35px;
-            padding: 18px;
+            margin-top: 20px;
+            padding: 20px;
             background: var(--white);
             color: var(--dark-bg);
             font-weight: 800;
-            border-radius: 20px;
+            border-radius: 22px;
             text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 15px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .back-btn:hover {
             background: var(--primary);
             color: var(--white);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 112, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px var(--primary-glow);
         }
 
         @media (max-width: 480px) {
-            .updates-container { padding: 30px 20px; }
+            .updates-container { padding: 40px 20px; border-radius: 30px; }
             .updates-title { font-size: 26px; }
+            .update-box { padding: 22px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="bubbles-container" id="bubbles"></div>
 
     <div class="updates-container">
 
@@ -163,7 +188,10 @@
                 <div class="update-box">
                     <h3>{{ ann.title }}</h3>
                     <p>{{ ann.description }}</p>
-                    <small>{{ ann.date.strftime("%d/%m/%Y %H:%M") }}</small>
+                    <small>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        {{ ann.date.strftime("%d/%m/%Y %H:%M") }}
+                    </small>
                 </div>
             {% endfor %}
         {% else %}
@@ -172,9 +200,28 @@
             </div>
         {% endif %}
 
-        <a href="/updates-menu" class="back-btn">← Επιστροφή στις Ενημερώσεις</a>
+        <a href="/updates-menu" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Επιστροφή στις Ενημερώσεις
+        </a>
 
     </div>
+
+    <script>
+        function createBubble() {
+            const container = document.getElementById('bubbles');
+            const bubble = document.createElement('div');
+            const size = Math.random() * 50 + 15 + 'px';
+            bubble.className = 'bubble';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + 'vw';
+            bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
+            container.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 10000);
+        }
+        setInterval(createBubble, 550);
+    </script>
 
 </body>
 </html>

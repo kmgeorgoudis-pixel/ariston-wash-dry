@@ -13,9 +13,10 @@
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.3);
             --secondary: #00d4ff;
             --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
+            --glass: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(255, 255, 255, 0.08);
             --white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.6);
@@ -26,27 +27,34 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(0, 112, 255, 0.1), transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(0, 212, 255, 0.1), transparent 40%);
+            background: radial-gradient(circle at 0% 0%, #0d1b2a 0%, #030508 100%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            overflow: hidden;
         }
+
+        /* --- Bubbles Background System --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), rgba(0,112,255,0.05)); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.2; } to { transform: translateY(-10vh); opacity: 0; } }
 
         .menu-container {
             width: 100%;
             max-width: 600px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             padding: 50px 40px;
             border-radius: 40px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
-            animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes slideUp {
@@ -61,28 +69,34 @@
             color: var(--text-dim);
             text-decoration: none;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 35px;
             transition: 0.3s;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .back-home:hover {
             color: var(--white);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             transform: translateX(-5px);
+            border-color: var(--primary);
         }
 
         .menu-title {
             font-size: 32px;
             font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--secondary));
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 40px;
             text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .menu-grid {
@@ -97,35 +111,23 @@
             justify-content: space-between;
             width: 100%;
             padding: 24px 30px;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--glass-border);
             color: var(--white);
             text-decoration: none;
-            border-radius: 24px;
+            border-radius: 28px;
             font-size: 18px;
             font-weight: 700;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
-        }
-
-        .menu-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            opacity: 0;
-            transition: 0.4s;
-            z-index: 0;
         }
 
         .menu-btn:hover {
             transform: translateY(-5px) scale(1.02);
-            border-color: var(--secondary);
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
             box-shadow: 0 20px 40px rgba(0, 112, 255, 0.2);
         }
-
-        .menu-btn:hover::before { opacity: 0.1; }
 
         .btn-content {
             display: flex;
@@ -136,27 +138,31 @@
         }
 
         .icon-box {
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            width: 55px;
+            height: 55px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--secondary);
-            transition: 0.3s;
+            transition: 0.4s;
         }
 
         .menu-btn:hover .icon-box {
             background: var(--primary);
             color: white;
-            transform: rotate(-10deg);
+            transform: rotate(-10deg) scale(1.1);
+            box-shadow: 0 0 20px var(--primary-glow);
+            border-color: transparent;
         }
 
         .arrow-icon {
-            opacity: 0.3;
+            opacity: 0.2;
             transition: 0.3s;
             transform: translateX(-10px);
+            color: var(--secondary);
         }
 
         .menu-btn:hover .arrow-icon {
@@ -165,45 +171,65 @@
         }
 
         @media (max-width: 480px) {
-            .menu-container { padding: 40px 20px; }
-            .menu-btn { padding: 20px; }
+            .menu-container { padding: 40px 20px; border-radius: 30px; }
+            .menu-btn { padding: 20px; border-radius: 22px; font-size: 16px; }
+            .icon-box { width: 45px; height: 45px; }
+            .menu-title { font-size: 26px; }
         }
     </style>
 </head>
 <body>
 
-<div class="menu-container">
+    <div class="bubbles-container" id="bubbles"></div>
 
-    <a href="/" class="back-home">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        Αρχική
-    </a>
+    <div class="menu-container">
 
-    <h1 class="menu-title">Ενημερώσεις</h1>
-
-    <div class="menu-grid">
-        <a class="menu-btn" href="/updates">
-            <div class="btn-content">
-                <div class="icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                </div>
-                Ενημερώσεις Μελών
-            </div>
-            <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <a href="/" class="back-home">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Αρχική
         </a>
 
-        <a class="menu-btn" href="/coupons">
-            <div class="btn-content">
-                <div class="icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line><line x1="7" y1="15" x2="7.01" y2="15"></line><line x1="12" y1="15" x2="12.01" y2="15"></line></svg>
+        <h1 class="menu-title">Ενημερώσεις</h1>
+
+        <div class="menu-grid">
+            <a class="menu-btn" href="/updates">
+                <div class="btn-content">
+                    <div class="icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </div>
+                    Ενημερώσεις Μελών
                 </div>
-                Κουπόνια & Προσφορές
-            </div>
-            <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </a>
+                <svg class="arrow-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+
+            <a class="menu-btn" href="/coupons">
+                <div class="btn-content">
+                    <div class="icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line><line x1="7" y1="15" x2="7.01" y2="15"></line><line x1="12" y1="15" x2="12.01" y2="15"></line></svg>
+                    </div>
+                    Κουπόνια & Προσφορές
+                </div>
+                <svg class="arrow-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+        </div>
+
     </div>
 
-</div>
+    <script>
+        function createBubble() {
+            const container = document.getElementById('bubbles');
+            const bubble = document.createElement('div');
+            const size = Math.random() * 50 + 15 + 'px';
+            bubble.className = 'bubble';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + 'vw';
+            bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
+            container.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 10000);
+        }
+        setInterval(createBubble, 550);
+    </script>
 
 </body>
 </html>

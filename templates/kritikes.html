@@ -6,26 +6,26 @@
     <title>Κριτικές – ARISTON Wash & Dry</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     
-<style>
+    <style>
         :root {
             --primary: #0070ff;
             --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
-            --dark-bg: #030508;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --input-bg: rgba(255, 255, 255, 0.05);
+            --dark-bg: #0a1118;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --input-bg: rgba(255, 255, 255, 0.07);
             --white: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.7);
-            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --text-dim: rgba(255, 255, 255, 0.8);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #0d1b2a, #030508);
             background-color: var(--dark-bg);
             color: var(--white);
             line-height: 1.7;
@@ -45,13 +45,13 @@
 
         /* --- Header & Nav --- */
         header {
-            background: rgba(3, 5, 8, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(0, 112, 255, 0.3);
         }
 
         .store-notice {
@@ -88,11 +88,11 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
+        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary)); }
 
         .main-nav {
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 112, 255, 0.05);
         }
 
         .nav-links {
@@ -106,84 +106,103 @@
         .nav-links a {
             color: var(--white);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.9rem;
             transition: 0.3s;
-            opacity: 0.6;
+            opacity: 0.8;
         }
 
-        .nav-links a:hover { opacity: 1; color: var(--secondary); }
+        .nav-links a:hover { opacity: 1; color: var(--secondary); text-shadow: 0 0 10px var(--primary); }
 
-        /* User Menu & Dropdown */
+        /* User Menu */
         .user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .user-avatar { width: 32px; height: 32px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: white; }
-        .user-hint { font-size: 0.8rem; opacity: 0.7; color: white; }
+        .user-avatar { width: 32px; height: 32px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--primary); }
+        .user-hint { font-size: 0.8rem; opacity: 0.9; color: white; }
         .user-dropdown { 
-            position: absolute; top: 100%; right: 0; width: 220px; background: #0a0c10; 
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; 
-            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            position: absolute; top: 100%; right: 0; width: 220px; background: #ffffff; 
+            border: 1px solid var(--primary); border-radius: 12px; padding: 10px; 
+            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,112,255,0.3); 
         }
         .user-menu:hover .user-dropdown { display: flex; }
-        .user-dropdown a { padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
-        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff); color: white !important; font-weight: 700 !important; }
-        .logout { color: #ff4444 !important; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; }
-        .nav-btn { background: var(--white); color: var(--dark-bg) !important; padding: 6px 18px; border-radius: 100px; font-weight: 700 !important; opacity: 1 !important; text-decoration: none; }
+        .user-dropdown a { color: #030508 !important; padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
+        .user-dropdown a:hover { background: #f0f7ff; }
+        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff) !important; color: white !important; font-weight: 700 !important; }
+        .logout { color: #ff4444 !important; border-top: 1px solid #eee !important; margin-top: 5px; }
+
+        .auth-btn {
+            background: #ffffff !important;
+            color: #030508 !important; 
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-weight: 800 !important;
+            opacity: 1 !important;
+            text-decoration: none;
+            transition: transform 0.3s ease, background 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,112,255,0.2);
+        }
+        .auth-btn:hover { transform: scale(1.05); background: #f0f0f0 !important; }
 
         /* --- Page Title --- */
         .page-title {
             padding: 180px 5% 60px;
             text-align: center;
-            background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.15), transparent 70%);
+            background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.2), transparent 70%);
         }
-        .page-title h1 { font-size: clamp(2.5rem, 6vw, 3.5rem); margin-bottom: 15px; letter-spacing: -1px; }
-        .page-title p { color: var(--text-dim); }
+        .page-title h1 { font-size: clamp(2.5rem, 6vw, 3.5rem); margin-bottom: 15px; letter-spacing: -1px; text-shadow: 0 0 20px rgba(0,112,255,0.3); }
+        .page-title p { color: var(--text-dim); font-size: 1.1rem; }
 
-        /* --- Photo Block (Intro) --- */
+        /* --- Intro Block --- */
         .photo-blocks { padding: 0 5%; max-width: 900px; margin: 0 auto 60px; }
         .photo-block {
-            display: flex; gap: 30px; background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.08); border-radius: 24px;
-            padding: 30px; align-items: center;
+            display: flex; gap: 40px; background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 32px;
+            padding: 40px; align-items: center; transition: var(--transition);
         }
-        .photo-block img { width: 120px; height: 120px; border-radius: 20px; object-fit: cover; }
-        .photo-block-text h3 { color: var(--secondary); margin-bottom: 5px; }
+        .photo-block:hover { border-color: var(--secondary); transform: translateY(-5px); }
+        .photo-block img { width: 140px; height: 140px; border-radius: 24px; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
+        .photo-block-text h3 { color: var(--secondary); margin-bottom: 10px; font-size: 1.8rem; }
 
         /* --- Form Style --- */
         .google-form {
-            max-width: 800px; margin: 0 auto 100px; padding: 60px 5%;
-            background: var(--card-bg); border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
+            max-width: 850px; margin: 0 auto 100px; padding: 60px 5%;
+            background: var(--card-bg); backdrop-filter: blur(20px);
+            border-radius: 40px; border: 1px solid rgba(0, 112, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
-        .google-form h2 { text-align: center; margin-bottom: 10px; font-size: 1.8rem; }
-        .google-form p { text-align: center; color: var(--text-dim); margin-bottom: 40px; font-size: 0.95rem; }
-        .anonymous { color: var(--secondary) !important; font-weight: 600; }
+        .google-form h2 { text-align: center; margin-bottom: 10px; font-size: 2rem; font-weight: 800; }
+        .google-form p { text-align: center; color: var(--text-dim); margin-bottom: 40px; }
+        .anonymous { color: var(--secondary) !important; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
 
         .form-field { margin-bottom: 35px; }
-        .form-field label { display: block; margin-bottom: 15px; font-weight: 600; color: var(--white); }
+        .form-field label { display: block; margin-bottom: 15px; font-weight: 700; color: var(--white); font-size: 1.05rem; }
 
         /* Star Rating */
-        .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 10px; }
+        .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 15px; }
         .star-rating input { display: none; }
-        .star-rating label { font-size: 2.5rem; color: rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; margin: 0; }
+        .star-rating label { font-size: 3rem; color: rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; margin: 0; }
         .star-rating label:hover, .star-rating label:hover ~ label,
-        .star-rating input:checked ~ label { color: #ffcc00; text-shadow: 0 0 15px rgba(255, 204, 0, 0.5); }
+        .star-rating input:checked ~ label { color: #ffcc00; text-shadow: 0 0 20px rgba(255, 204, 0, 0.6); }
 
         /* Horizontal Options (1-5) */
-        .horizontal-options { display: flex; justify-content: space-between; gap: 10px; }
+        .horizontal-options { display: flex; justify-content: space-between; gap: 12px; }
         .horizontal-options label {
-            flex: 1; background: var(--input-bg); padding: 15px; border-radius: 12px;
-            text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
+            flex: 1; background: var(--input-bg); padding: 18px; border-radius: 16px;
+            text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s ease;
         }
         .horizontal-options input { display: none; }
-        .horizontal-options label:has(input:checked) { background: var(--primary); border-color: var(--white); transform: scale(1.05); }
-        .option-number { display: block; font-weight: 800; font-size: 1.2rem; }
+        .horizontal-options label:hover { background: rgba(255,255,255,0.1); }
+        .horizontal-options label:has(input:checked) { background: var(--primary); border-color: var(--white); transform: scale(1.05); box-shadow: 0 0 20px var(--primary-glow); }
+        .option-number { display: block; font-weight: 800; font-size: 1.3rem; }
 
-        /* --- ΔΙΟΡΘΩΜΕΝΑ INPUTS & DROPDOWNS --- */
+        /* Inputs & Dropdowns */
         select, textarea, input[type="text"] {
             width: 100%; 
             background: var(--input-bg); 
             border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px; 
-            border-radius: 12px; 
+            padding: 18px; 
+            border-radius: 16px; 
             color: white; 
             font-family: inherit; 
             font-size: 1rem; 
@@ -192,48 +211,45 @@
             cursor: pointer;
         }
 
-        /* Φόντο για τις επιλογές μέσα στα Select */
-        select option {
-            background-color: #0a0c10; 
-            color: white;
-        }
-
-        /* Custom βέλος για τα dropdowns */
+        select option { background-color: #0d1b2a; color: white; }
         select {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 15px center;
+            background-position: right 20px center;
             background-size: 18px;
         }
 
         select:focus, textarea:focus, input[type="text"]:focus { 
             outline: none; 
-            border-color: var(--primary); 
-            background-color: rgba(255,255,255,0.08); 
-            box-shadow: 0 0 15px var(--primary-glow);
+            border-color: var(--secondary); 
+            background-color: rgba(255,255,255,0.1); 
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
         }
 
-        textarea { height: 100px; resize: vertical; }
+        textarea { height: 120px; resize: vertical; }
 
         .submit-btn {
-            width: 100%; padding: 18px; border-radius: 15px; border: none;
+            width: 100%; padding: 20px; border-radius: 18px; border: none;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white; font-weight: 800; font-size: 1.1rem; cursor: pointer;
-            transition: 0.4s; margin-top: 20px;
+            color: white; font-weight: 800; font-size: 1.2rem; cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-top: 20px;
+            box-shadow: 0 10px 30px var(--primary-glow);
         }
-        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--primary-glow); filter: brightness(1.1); }
+        .submit-btn:hover { transform: translateY(-5px) scale(1.02); filter: brightness(1.1); }
 
-        .thankyou { padding: 40px; border-radius: 30px; background: rgba(0, 255, 127, 0.05); border: 1px solid rgba(0, 255, 127, 0.2); }
+        .thankyou { padding: 50px; border-radius: 32px; background: rgba(0, 255, 127, 0.08); border: 1px solid rgba(0, 255, 127, 0.3); }
 
         /* --- Bubbles --- */
         .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), transparent); border-radius: 50%; animation: floatUp linear forwards; }
-        @keyframes floatUp { from { transform: translateY(100vh); opacity: 0; } 50% { opacity: 0.4; } to { transform: translateY(-10vh); opacity: 0; } }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.5), rgba(0,112,255,0.1)); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.5; } to { transform: translateY(-10vh); opacity: 0; } }
 
-        /* --- Contact --- */
-        .contact { padding: 80px 10%; background: #f4f7f6; color: #000; text-align: center; border-radius: 60px 60px 0 0; }
-        footer { padding: 60px 10% 30px; background: var(--dark-bg); text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
-        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.8rem; }
+        /* --- Contact & Footer --- */
+        .contact { padding: 80px 10%; background: #ffffff; color: #030508; text-align: center; border-radius: 60px 60px 0 0; }
+        .contact h3 { color: var(--primary); font-size: 2.2rem; font-weight: 800; margin-bottom: 20px; }
+        
+        footer { padding: 60px 10% 30px; background: #030508; text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
+        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.85rem; font-weight: 600; }
 
         .hamburger { display: none; color: white; font-size: 1.8rem; cursor: pointer; }
 
@@ -241,44 +257,13 @@
             .hamburger { display: block; margin-left: auto; padding: 10px; }
             .nav-links {
                 display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
-                background: rgba(3, 5, 8, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
+                background: rgba(10, 17, 24, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
             }
             .nav-links.active { display: flex; }
             .horizontal-options { flex-wrap: wrap; }
-            .horizontal-options label { flex: 1 1 40%; }
+            .horizontal-options label { flex: 1 1 45%; }
             .photo-block { flex-direction: column; text-align: center; }
         }
-        .auth-btn {
-    background: #ffffff !important;
-    color: #030508 !important; /
-    padding: 8px 20px;
-    border-radius: 100px;
-    font-weight: 800 !important;
-    opacity: 1 !important;
-    text-decoration: none;
-    transition: transform 0.3s ease;
-    display: inline-block;
-}
-
-.auth-btn:hover {
-    transform: scale(1.05);
-}
-.auth-btn {
-    background: #ffffff !important;
-    color: #030508 !important; 
-    padding: 8px 20px;
-    border-radius: 100px;
-    font-weight: 800 !important;
-    opacity: 1 !important;
-    text-decoration: none;
-    transition: transform 0.3s ease, background 0.3s ease;
-    display: inline-block;
-}
-
-.auth-btn:hover {
-    transform: scale(1.05); /* Αυτό δίνει το εφέ κίνησης που έχουν οι Ειδικές Υπηρεσίες */
-    background: #f0f0f0 !important;
-}
     </style>
 </head>
 <body>
@@ -315,7 +300,7 @@
                 </div>
             </div>
             {% else %}
-           <a href="/auth_choice" class="auth-btn" style="background:white; color:black !important; opacity:1;">Εγγραφή / Σύνδεση</a>
+            <a href="/auth_choice" class="auth-btn">Εγγραφή / Σύνδεση</a>
             {% endif %}
         </div>
     </nav>
@@ -429,13 +414,13 @@
         </div>
 
         <button class="submit-btn" type="submit">Υποβολή</button>
-        <p style="font-size: 11px; margin-top: 15px;">Με την υποβολή της φόρμας, αποδέχεστε την <a href="/privacy" target="_blank" style="color:var(--secondary)">Πολιτική Απορρήτου</a>.</p>
+        <p style="font-size: 11px; margin-top: 15px; opacity: 0.6;">Με την υποβολή της φόρμας, αποδέχεστε την <a href="/privacy" target="_blank" style="color:var(--secondary)">Πολιτική Απορρήτου</a>.</p>
     </form>
 
     <div id="thankYouMessage" class="thankyou" style="display:none; text-align:center;">
-        <h2>Ευχαριστούμε!</h2>
+        <h2 style="color: #00ff7f;">Ευχαριστούμε!</h2>
         <p>✅ Η άποψή σας είναι πολύτιμη και μας βοηθά να βελτιωνόμαστε.</p>
-        <button onclick="location.reload()" class="submit-btn" style="width: auto; padding: 10px 30px;">Νέα απάντηση</button>
+        <button onclick="location.reload()" class="submit-btn" style="width: auto; padding: 12px 40px;">Νέα απάντηση</button>
     </div>
 </section>
 
@@ -443,9 +428,7 @@
     <section class="contact reveal">
         <h3>Επικοινωνία</h3>
         <p>📍 Δερβενακίων 10, Βαθύ, Σάμος 83100</p>
-        
         <p>📞 6948897391 | 6944615574 | 6987598416</p>
-        
         <p>📧 info@aristonwashdry.gr</p>
         <p>📧 aristonwashing@gmail.com</p>
     </section>
@@ -453,13 +436,12 @@
 
 <footer>
     © 2026 Ariston Wash & Dry — All Rights Reserved<br>
-    Website designed & developed by Konstantinos Georgoudis
+    Website designed & developed by <strong>Konstantinos Georgoudis</strong>
     <br><br>
     <a href="/terms">Όροι Χρήσης</a> | <a href="/privacy">Πολιτική Απορρήτου</a> | <a href="/cookies">Πολιτική Cookies</a>
 </footer>
 
 <script>
-    // Reveal Observer
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) entry.target.classList.add('active');
@@ -467,7 +449,6 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Form Logic
     const wantContact = document.getElementById("wantContact");
     const contactInfoBlock = document.getElementById("contactInfoBlock");
     const contactInfoInput = document.getElementById("contactInfo");
@@ -496,7 +477,6 @@
         });
     });
 
-    // 2. Hamburger Mobile (Κύριο Μενού)
     const btn = document.getElementById('hamburger-btn');
     const menu = document.getElementById('nav-menu');
     btn.onclick = (e) => {
@@ -504,23 +484,18 @@
         menu.classList.toggle('active');
     };
 
-    // 3. ΔΙΟΡΘΩΣΗ ΓΙΑ ΤΟ USER MENU ΣΤΟ ΚΙΝΗΤΟ
     const userToggle = document.getElementById('user-menu-toggle');
     const userDropdown = document.getElementById('user-dropdown-menu');
-
     if (userToggle) {
         userToggle.addEventListener('click', function(e) {
-            // Αν είμαστε σε κινητό (πλάτος κάτω από 900px)
             if (window.innerWidth <= 900) {
                 e.stopPropagation();
-                // Εναλλαγή εμφάνισης (αντί για hover)
                 const isVisible = userDropdown.style.display === 'flex';
                 userDropdown.style.display = isVisible ? 'none' : 'flex';
             }
         });
     }
 
-    // Κλείσιμο των μενού αν ο χρήστης κάνει κλικ οπουδήποτε αλλού στην οθόνη
     document.addEventListener('click', () => {
         if (window.innerWidth <= 900) {
             if(userDropdown) userDropdown.style.display = 'none';
@@ -528,20 +503,19 @@
         }
     });
 
-    // Bubbles
     function createBubble() {
         const container = document.getElementById('bubbles');
         const bubble = document.createElement('div');
-        const size = Math.random() * 60 + 10 + 'px';
+        const size = Math.random() * 60 + 15 + 'px';
         bubble.className = 'bubble';
         bubble.style.width = size;
         bubble.style.height = size;
         bubble.style.left = Math.random() * 100 + 'vw';
-        bubble.style.animationDuration = Math.random() * 4 + 6 + 's';
+        bubble.style.animationDuration = Math.random() * 4 + 5 + 's';
         container.appendChild(bubble);
-        setTimeout(() => bubble.remove(), 8000);
+        setTimeout(() => bubble.remove(), 7000);
     }
-    setInterval(createBubble, 600);
+    setInterval(createBubble, 500);
 </script>
 
 </body>

@@ -6,112 +6,148 @@
     <title>Επαλήθευση Κωδικού – ARISTON Wash & Dry</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            background: #f5f7fa;
-            font-family: Arial, sans-serif;
+        :root {
+            --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.3);
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --success: #00e676;
+            --error: #ff1744;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            background: radial-gradient(circle at 0% 0%, #0d1b2a 0%, #030508 100%);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* --- Bubbles Background --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), rgba(0,112,255,0.05)); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.2; } to { transform: translateY(-10vh); opacity: 0; } }
+
         .verify-container {
+            width: 100%;
             max-width: 450px;
-            margin: 60px auto;
-            background: #ffffff;
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            padding: 50px 40px;
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 2;
+            animation: formReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes formReveal {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .verify-title {
             text-align: center;
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
-            color: #0d47a1;
-            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .verify-subtitle {
             text-align: center;
-            color: #555;
-            margin-bottom: 25px;
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 35px;
+            line-height: 1.5;
         }
 
-        .form-field {
-            margin-bottom: 20px;
-        }
+        .form-field { margin-bottom: 25px; }
 
         .form-field input {
             width: 100%;
-            padding: 14px;
-            border: 1px solid #cfd8dc;
-            border-radius: 12px;
-            font-size: 16px;
-            background: #fafbfc;
-            transition: 0.25s;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 18px;
+            border-radius: 20px;
+            color: var(--white);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            transition: all 0.4s;
+            text-align: center;
         }
 
         .form-field input:focus {
-            border-color: #0d47a1;
-            box-shadow: 0 0 8px rgba(13,71,161,0.25);
-            background: #ffffff;
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 25px var(--primary-glow);
         }
 
         .submit-btn {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), #0050ff);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
+            border-radius: 22px;
+            font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
-            transition: 0.25s;
-            margin-top: 10px;
+            transition: 0.4s;
+            box-shadow: 0 15px 35px rgba(0, 112, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(13,71,161,0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 112, 255, 0.4);
         }
 
-        /* Flash Component */
         .flash-box {
-            padding: 14px 18px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            animation: fadeIn 0.35s ease-out;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-            border-left: 6px solid;
+            padding: 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px solid transparent;
         }
+        .flash-box.success { background: rgba(0, 230, 118, 0.1); color: var(--success); border-color: rgba(0, 230, 118, 0.2); }
+        .flash-box.error, .flash-box.danger { background: rgba(255, 23, 68, 0.1); color: var(--error); border-color: rgba(255, 23, 68, 0.2); }
 
-        .flash-box.success {
-            background: #e3f2fd;
-            color: #0d47a1;
-            border-color: #0d47a1;
-        }
-
-        .flash-box.error,
-        .flash-box.danger {
-            background: #ffebee;
-            color: #c62828;
-            border-color: #c62828;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-6px); }
-            to { opacity: 1; transform: translateY(0); }
+        @media (max-width: 480px) {
+            .verify-container { padding: 40px 25px; }
         }
     </style>
 </head>
 <body>
-
+    <div class="bubbles-container" id="bubbles"></div>
     <div class="verify-container">
-
-        <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
@@ -123,23 +159,29 @@
         {% endwith %}
 
         <div class="verify-title">Επαλήθευση Κωδικού</div>
-
-        <!-- Σταθερό μήνυμα -->
-        <div class="verify-subtitle">
-            Ο 6ψήφιος κωδικός στάλθηκε στο email σας.
-        </div>
+        <div class="verify-subtitle">Ο 6ψήφιος κωδικός στάλθηκε στο email σας.</div>
 
         <form action="/verify-code" method="POST">
-
             <div class="form-field">
-                <input type="text" name="code" maxlength="6" placeholder="6ψήφιος κωδικός" required>
+                <input type="text" name="code" maxlength="6" placeholder="000000" required>
             </div>
-
             <button class="submit-btn" type="submit">Επαλήθευση</button>
-
         </form>
-
     </div>
 
+    <script>
+        function createBubble() {
+            const container = document.getElementById('bubbles');
+            const bubble = document.createElement('div');
+            const size = Math.random() * 50 + 15 + 'px';
+            bubble.className = 'bubble';
+            bubble.style.width = size; bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + 'vw';
+            bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
+            container.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 10000);
+        }
+        setInterval(createBubble, 550);
+    </script>
 </body>
 </html>

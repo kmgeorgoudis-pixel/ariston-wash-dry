@@ -6,7 +6,6 @@
     <title>Ειδικές Υπηρεσίες – ARISTON Wash & Dry</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
@@ -14,10 +13,10 @@
             --primary: #0070ff;
             --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
-            --dark-bg: #030508;
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --dark-bg: #0a1118;
+            --card-bg: rgba(255, 255, 255, 0.06);
             --white: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.7);
+            --text-dim: rgba(255, 255, 255, 0.8);
             --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -25,6 +24,7 @@
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #0d1b2a, #030508);
             background-color: var(--dark-bg);
             color: var(--white);
             line-height: 1.7;
@@ -44,13 +44,13 @@
 
         /* --- Header & Nav --- */
         header {
-            background: rgba(3, 5, 8, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(0, 112, 255, 0.3);
         }
 
         .store-notice {
@@ -88,11 +88,11 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
+        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary)); }
 
         .main-nav {
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 112, 255, 0.05);
         }
 
         .nav-links {
@@ -108,102 +108,118 @@
         .nav-links a {
             color: var(--white);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.9rem;
             transition: 0.3s;
-            opacity: 0.6;
+            opacity: 0.8;
         }
 
-        .nav-links a:hover { opacity: 1; color: var(--secondary); }
+        .nav-links a:hover { opacity: 1; color: var(--secondary); text-shadow: 0 0 10px var(--primary); }
 
         /* User Menu & Dropdown */
         .user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .user-avatar { width: 32px; height: 32px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: white; }
-        .user-hint { font-size: 0.8rem; opacity: 0.7; color: white; }
+        .user-avatar { width: 32px; height: 32px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--primary); }
+        .user-hint { font-size: 0.8rem; opacity: 0.9; color: white; }
         .user-dropdown { 
-            position: absolute; top: 100%; right: 0; width: 220px; background: #0a0c10; 
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; 
-            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            position: absolute; top: 100%; right: 0; width: 220px; background: #ffffff; 
+            border: 1px solid var(--primary); border-radius: 12px; padding: 10px; 
+            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,112,255,0.3); 
         }
         .user-menu:hover .user-dropdown { display: flex; }
-        .user-dropdown a { padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
-        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff); color: white !important; font-weight: 700 !important; }
-        .logout { color: #ff4444 !important; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; }
+        .user-dropdown a { color: #030508 !important; padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
+        .user-dropdown a:hover { background: #f0f7ff; }
+        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff) !important; color: white !important; font-weight: 700 !important; }
+        .logout { color: #ff4444 !important; border-top: 1px solid #eee !important; margin-top: 5px; }
 
-        .nav-btn { background: var(--white); color: var(--dark-bg) !important; padding: 6px 18px; border-radius: 100px; font-weight: 700 !important; opacity: 1 !important; text-decoration: none; }
+        .auth-btn { 
+            background: var(--white); 
+            color: var(--primary) !important; 
+            padding: 8px 20px; 
+            border-radius: 100px; 
+            font-weight: 800 !important; 
+            opacity: 1 !important; 
+            text-decoration: none; 
+            box-shadow: 0 4px 15px rgba(0,112,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        .auth-btn:hover { transform: scale(1.05); }
 
         /* --- Page Title --- */
         .page-title {
             padding: 180px 5% 60px;
             text-align: center;
-            background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.15), transparent 70%);
+            background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.2), transparent 70%);
         }
-        .page-title h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 20px; letter-spacing: -1px; }
-        .page-title p { color: var(--text-dim); max-width: 800px; margin: 0 auto 15px; }
+        .page-title h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 20px; letter-spacing: -1px; text-shadow: 0 0 20px rgba(0,112,255,0.3); }
+        .page-title p { color: var(--text-dim); max-width: 800px; margin: 0 auto 15px; font-size: 1.15rem; }
 
         /* --- Blocks --- */
         .photo-blocks {
             padding: 40px 5% 100px;
-            max-width: 1100px;
+            max-width: 1150px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 50px;
         }
 
         .photo-block {
             display: flex;
-            gap: 40px;
+            gap: 50px;
             background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 32px;
-            padding: 40px;
+            padding: 45px;
             transition: var(--transition);
             align-items: center;
         }
 
         .photo-block:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            background: rgba(255,255,255,0.05);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transform: translateY(-8px);
+            border-color: var(--secondary);
+            background: rgba(0, 112, 255, 0.08);
+            box-shadow: 0 25px 50px rgba(0,112,255,0.2);
         }
 
         .photo-block img {
-            width: 300px;
-            height: 300px;
-            border-radius: 20px;
+            width: 320px;
+            height: 320px;
+            border-radius: 24px;
             object-fit: cover;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: 0.6s;
         }
+        .photo-block:hover img { border-color: var(--secondary); transform: scale(1.02); }
 
         .photo-block-text h3 {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             color: var(--secondary);
-            font-size: 1.8rem;
+            font-size: 2rem;
+            font-weight: 800;
             letter-spacing: -0.5px;
         }
 
         .photo-block-text p {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             color: var(--text-dim);
-            font-size: 1.05rem;
-            line-height: 1.6;
+            font-size: 1.1rem;
+            line-height: 1.7;
         }
 
-        .photo-block-text strong { color: var(--white); }
+        .photo-block-text strong { color: var(--white); text-shadow: 0 0 5px rgba(255,255,255,0.2); }
 
         /* --- Bubbles --- */
         .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), transparent); border-radius: 50%; animation: floatUp linear forwards; }
-        @keyframes floatUp { from { transform: translateY(100vh); opacity: 0; } 50% { opacity: 0.4; } to { transform: translateY(-10vh); opacity: 0; } }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.6), rgba(0,112,255,0.2)); border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.5; } to { transform: translateY(-10vh); opacity: 0; } }
 
         /* --- Contact --- */
-        .contact { padding: 80px 10%; background: #f4f7f6; color: #000; text-align: center; border-radius: 60px 60px 0 0; }
-        .contact h3 { margin-bottom: 20px; color: var(--primary); font-size: 2rem; }
+        .contact { padding: 80px 10%; background: #ffffff; color: #030508; text-align: center; border-radius: 60px 60px 0 0; border-top: 1px solid #eee; }
+        .contact h3 { margin-bottom: 20px; color: var(--primary); font-size: 2.2rem; font-weight: 800; }
         
-        footer { padding: 60px 10% 30px; background: var(--dark-bg); text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
-        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.8rem; }
+        footer { padding: 60px 10% 30px; background: #030508; text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
+        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.85rem; font-weight: 600; }
 
         /* --- Mobile --- */
         .hamburger { display: none; color: white; font-size: 1.8rem; cursor: pointer; }
@@ -212,28 +228,13 @@
             .hamburger { display: block; margin-left: auto; padding: 10px; }
             .nav-links {
                 display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
-                background: rgba(3, 5, 8, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
+                background: rgba(10, 17, 24, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
             }
             .nav-links.active { display: flex; }
-            .photo-block { flex-direction: column; text-align: center; padding: 30px 20px; }
-            .photo-block img { width: 100%; height: auto; max-width: 400px; }
-            .photo-block-text h3 { font-size: 1.4rem; }
+            .photo-block { flex-direction: column; text-align: center; padding: 35px 25px; }
+            .photo-block img { width: 100%; height: auto; max-width: 350px; }
+            .photo-block-text h3 { font-size: 1.6rem; }
         }
-        .auth-btn {
-    background: #ffffff !important;
-    color: #030508 !important; 
-    padding: 8px 20px;
-    border-radius: 100px;
-    font-weight: 800 !important;
-    opacity: 1 !important;
-    text-decoration: none;
-    transition: transform 0.3s ease;
-    display: inline-block;
-}
-
-.auth-btn:hover {
-    transform: scale(1.05);
-}
     </style>
 </head>
 <body>
@@ -274,7 +275,7 @@
                 </div>
             </div>
             {% else %}
-            <a href="/auth_choice" class="auth-btn" style="background:white; color:black !important; opacity:1;">Εγγραφή / Σύνδεση</a>
+            <a href="/auth_choice" class="auth-btn">Εγγραφή / Σύνδεση</a>
             {% endif %}
         </div>
     </nav>
@@ -319,9 +320,7 @@
     <section class="contact reveal">
         <h3>Επικοινωνία</h3>
         <p>📍 Δερβενακίων 10, Βαθύ, Σάμος 83100</p>
-        
         <p>📞 6948897391 | 6944615574 | 6987598416</p>
-        
         <p>📧 info@aristonwashdry.gr</p>
         <p>📧 aristonwashing@gmail.com</p>
     </section>
@@ -329,13 +328,12 @@
 
 <footer>
     © 2026 Ariston Wash & Dry — All Rights Reserved<br>
-    Website designed & developed by Konstantinos Georgoudis
+    Website designed & developed by <strong>Konstantinos Georgoudis</strong>
     <br><br>
     <a href="/terms">Όροι Χρήσης</a> | <a href="/privacy">Πολιτική Απορρήτου</a> | <a href="/cookies">Πολιτική Cookies</a>
 </footer>
 
 <script>
-    // Reveal Observer
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) entry.target.classList.add('active');
@@ -343,7 +341,6 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // 2. Hamburger Mobile (Κύριο Μενού)
     const btn = document.getElementById('hamburger-btn');
     const menu = document.getElementById('nav-menu');
     btn.onclick = (e) => {
@@ -351,23 +348,18 @@
         menu.classList.toggle('active');
     };
 
-    // 3. ΔΙΟΡΘΩΣΗ ΓΙΑ ΤΟ USER MENU ΣΤΟ ΚΙΝΗΤΟ
     const userToggle = document.getElementById('user-menu-toggle');
     const userDropdown = document.getElementById('user-dropdown-menu');
-
     if (userToggle) {
         userToggle.addEventListener('click', function(e) {
-            // Αν είμαστε σε κινητό (πλάτος κάτω από 900px)
             if (window.innerWidth <= 900) {
                 e.stopPropagation();
-                // Εναλλαγή εμφάνισης (αντί για hover)
                 const isVisible = userDropdown.style.display === 'flex';
                 userDropdown.style.display = isVisible ? 'none' : 'flex';
             }
         });
     }
 
-    // Κλείσιμο των μενού αν ο χρήστης κάνει κλικ οπουδήποτε αλλού στην οθόνη
     document.addEventListener('click', () => {
         if (window.innerWidth <= 900) {
             if(userDropdown) userDropdown.style.display = 'none';
@@ -375,20 +367,19 @@
         }
     });
 
-    // Bubbles
     function createBubble() {
         const container = document.getElementById('bubbles');
         const bubble = document.createElement('div');
-        const size = Math.random() * 60 + 10 + 'px';
+        const size = Math.random() * 60 + 15 + 'px';
         bubble.className = 'bubble';
         bubble.style.width = size;
         bubble.style.height = size;
         bubble.style.left = Math.random() * 100 + 'vw';
-        bubble.style.animationDuration = Math.random() * 4 + 6 + 's';
+        bubble.style.animationDuration = Math.random() * 4 + 5 + 's';
         container.appendChild(bubble);
-        setTimeout(() => bubble.remove(), 8000);
+        setTimeout(() => bubble.remove(), 7000);
     }
-    setInterval(createBubble, 600);
+    setInterval(createBubble, 500);
 </script>
 
 </body>

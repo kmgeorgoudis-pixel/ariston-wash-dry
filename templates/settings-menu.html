@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ρυθμίσεις – ARISTON Wash & Dry</title>
+    <title>Στοιχεία Σύνδεσης – ARISTON Wash & Dry</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,10 +13,11 @@
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.3);
             --secondary: #00d4ff;
             --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
-            --danger: #ff4444;
+            --glass: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.6);
         }
@@ -26,71 +27,82 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(0, 112, 255, 0.08), transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(0, 212, 255, 0.05), transparent 40%);
+            background: radial-gradient(circle at 0% 0%, #0d1b2a 0%, #030508 100%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            overflow: hidden;
         }
 
-        .settings-container {
+        /* --- Bubbles Background System --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), rgba(0,112,255,0.05)); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.2; } to { transform: translateY(-10vh); opacity: 0; } }
+
+        .menu-container {
             width: 100%;
             max-width: 500px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
-            padding: 45px 35px;
-            border-radius: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            padding: 50px 35px;
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: settingsReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 2;
+            animation: containerReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes settingsReveal {
+        @keyframes containerReveal {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .back-home {
+        .back-settings {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             color: var(--text-dim);
             text-decoration: none;
             font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            padding: 8px 16px;
+            font-weight: 700;
+            margin-bottom: 35px;
+            padding: 10px 20px;
             border-radius: 100px;
-            background: rgba(255, 255, 255, 0.05);
-            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .back-home:hover {
+        .back-settings:hover {
             color: var(--white);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 112, 255, 0.1);
+            border-color: var(--primary);
             transform: translateX(-5px);
         }
 
         .menu-title {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--secondary));
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .settings-group {
+        .menu-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
         }
 
         .menu-btn {
@@ -98,97 +110,88 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            padding: 18px 25px;
-            background: rgba(255, 255, 255, 0.04);
+            padding: 22px 28px;
+            background: rgba(255, 255, 255, 0.02);
             color: var(--white);
             text-decoration: none;
-            border-radius: 20px;
+            border-radius: 24px;
             font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--glass-border);
         }
 
         .menu-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
             border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
         }
 
         .menu-btn::after {
             content: "→";
-            font-size: 18px;
-            opacity: 0.5;
+            font-size: 20px;
+            opacity: 0.4;
             transition: 0.3s;
+            color: var(--secondary);
         }
 
         .menu-btn:hover::after {
             opacity: 1;
-            transform: translateX(5px);
-            color: var(--secondary);
-        }
-
-        /* Danger Zone Section */
-        .danger-zone {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .danger-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: rgba(255, 68, 68, 0.6);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 700;
-            padding: 12px 20px;
-            border-radius: 14px;
-            transition: 0.3s;
-            border: 1px solid transparent;
-        }
-
-        .danger-item:hover {
-            color: var(--danger);
-            background: rgba(255, 68, 68, 0.08);
-            border-color: rgba(255, 68, 68, 0.2);
+            transform: translateX(8px);
         }
 
         @media (max-width: 480px) {
-            .settings-container { padding: 35px 20px; }
+            .menu-container { padding: 40px 25px; border-radius: 30px; }
+            .menu-title { font-size: 22px; }
+            .menu-btn { padding: 18px 22px; }
         }
     </style>
 </head>
 <body>
 
-<div class="settings-container">
-    <a href="/" class="back-home">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        Πίσω στην Αρχική
+<div class="bubbles-container" id="bubbles"></div>
+
+<div class="menu-container">
+
+    <a href="/settings-menu" class="back-settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Επιστροφή στις Ρυθμίσεις
     </a>
 
-    <div class="menu-title">Ρυθμίσεις</div>
+    <div class="menu-title">Στοιχεία Σύνδεσης</div>
 
-    <div class="settings-group">
-        <a class="menu-btn" href="/member-info">
-            Πληροφορίες Μέλους
+    <div class="menu-group">
+        <a class="menu-btn" href="/change-name">
+            Αλλαγή Ονόματος
         </a>
         
-        <a class="menu-btn" href="/account-settings">
-            Στοιχεία Σύνδεσης
+        <a class="menu-btn" href="/change-email">
+            Αλλαγή Email
         </a>
-
-        </div>
-
-    <div class="danger-zone">
-        <a href="/delete-account" class="danger-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-            Οριστική Διαγραφή Προφίλ
+        
+        <a class="menu-btn" href="/change-password">
+            Αλλαγή Κωδικού
         </a>
     </div>
+
 </div>
+
+<script>
+    function createBubble() {
+        const container = document.getElementById('bubbles');
+        const bubble = document.createElement('div');
+        const size = Math.random() * 50 + 15 + 'px';
+        bubble.className = 'bubble';
+        bubble.style.width = size;
+        bubble.style.height = size;
+        bubble.style.left = Math.random() * 100 + 'vw';
+        bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
+        container.appendChild(bubble);
+        setTimeout(() => bubble.remove(), 10000);
+    }
+    setInterval(createBubble, 500);
+</script>
 
 </body>
 </html>

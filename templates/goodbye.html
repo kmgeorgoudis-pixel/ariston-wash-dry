@@ -15,10 +15,11 @@
             --primary: #0070ff;
             --secondary: #00d4ff;
             --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
+            --glass: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(255, 255, 255, 0.08);
             --white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.6);
+            --success: #00e676;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,8 +27,7 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 112, 255, 0.08), transparent 70%);
+            background: radial-gradient(circle at 50% 50%, #0d1b2a 0%, #030508 100%);
             color: var(--white);
             display: flex;
             align-items: center;
@@ -37,108 +37,133 @@
             overflow: hidden;
         }
 
+        /* --- Bubbles Background System --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), rgba(0,112,255,0.05)); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.2; } to { transform: translateY(-10vh); opacity: 0; } }
+
         .goodbye-container {
             width: 100%;
             max-width: 550px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             padding: 60px 40px;
             border-radius: 40px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
             text-align: center;
             position: relative;
-            animation: containerEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 2;
+            animation: containerEntry 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes containerEntry {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            from { opacity: 0; transform: scale(0.9) translateY(40px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* Διακοσμητικό Icon */
+        /* Διακοσμητικό Icon με Pulse Animation */
         .check-icon {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background: rgba(0, 112, 255, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            color: var(--primary);
-            border: 1px solid rgba(0, 112, 255, 0.2);
+            margin: 0 auto 35px;
+            color: var(--secondary);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 112, 255, 0.2);
+            animation: pulseIcon 2s infinite;
+        }
+
+        @keyframes pulseIcon {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 112, 255, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(0, 112, 255, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 112, 255, 0); }
         }
 
         .goodbye-title {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
-            background: linear-gradient(to bottom, #fff, var(--text-dim));
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             letter-spacing: -1px;
+            text-transform: uppercase;
         }
 
         .goodbye-text {
             font-size: 17px;
             color: var(--text-dim);
-            margin-bottom: 40px;
+            margin-bottom: 25px;
             line-height: 1.8;
         }
 
-        .goodbye-text strong {
-            color: var(--white);
-            font-weight: 600;
+        /* GDPR / Security Section */
+        .gdpr-info {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            font-size: 14px;
+            color: var(--text-dim);
+            animation: fadeInDelay 1.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInDelay {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gdpr-info strong {
+            color: var(--secondary);
+            font-weight: 700;
         }
 
         .home-btn {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 18px 35px;
-            background: var(--white);
-            color: var(--dark-bg);
+            gap: 12px;
+            padding: 20px 45px;
+            background: linear-gradient(135deg, var(--primary), #0050ff);
+            color: var(--white);
             font-size: 16px;
-            font-weight: 700;
-            border-radius: 20px;
+            font-weight: 800;
+            border-radius: 25px;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 35px rgba(0, 112, 255, 0.3);
         }
 
         .home-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.1);
-            background: var(--secondary);
-            color: var(--white);
-        }
-
-        /* Διακριτικό background εφέ */
-        .goodbye-container::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 100px;
-            height: 100px;
-            background: var(--primary);
-            filter: blur(80px);
-            opacity: 0.2;
-            z-index: -1;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(0, 112, 255, 0.5);
+            filter: brightness(1.1);
         }
 
         @media (max-width: 480px) {
-            .goodbye-container { padding: 40px 20px; }
-            .goodbye-title { font-size: 26px; }
+            .goodbye-container { padding: 50px 25px; border-radius: 30px; }
+            .goodbye-title { font-size: 28px; }
+            .home-btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
+    <div class="bubbles-container" id="bubbles"></div>
+
     <div class="goodbye-container">
         
         <div class="check-icon">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
             </svg>
@@ -151,12 +176,33 @@
             Ήταν χαρά μας να σας εξυπηρετήσουμε και ελπίζουμε να σας ξαναδούμε στο μέλλον.
         </p>
 
+        <div class="gdpr-info">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 8px; color: var(--secondary);"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <p>Σύμφωνα με την <strong>Πολιτική Απορρήτου</strong> μας, όλα τα προσωπικά σας δεδομένα και τα στοιχεία σύνδεσης έχουν διαγραφεί πλήρως από τους διακομιστές μας (Servers) και τη βάση δεδομένων μας.</p>
+        </div>
+
         <a href="/" class="home-btn">
             Επιστροφή στην Αρχική
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
 
     </div>
+
+    <script>
+        function createBubble() {
+            const container = document.getElementById('bubbles');
+            const bubble = document.createElement('div');
+            const size = Math.random() * 50 + 15 + 'px';
+            bubble.className = 'bubble';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + 'vw';
+            bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
+            container.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 10000);
+        }
+        setInterval(createBubble, 550);
+    </script>
 
 </body>
 </html>

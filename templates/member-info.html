@@ -13,9 +13,10 @@
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
             --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
+            --glass: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(255, 255, 255, 0.08);
             --white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.6);
@@ -26,99 +27,117 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 50% -10%, rgba(0, 112, 255, 0.15), transparent 40%),
-                radial-gradient(circle at 0% 100%, rgba(0, 212, 255, 0.05), transparent 30%);
+            background: radial-gradient(circle at 0% 0%, #0d1b2a 0%, #030508 100%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
         }
+
+        /* --- Bubbles Background System --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), rgba(0,112,255,0.05)); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.2; } to { transform: translateY(-10vh); opacity: 0; } }
 
         .member-container {
             width: 100%;
             max-width: 550px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
-            padding: 45px 35px;
-            border-radius: 32px;
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            padding: 50px 35px;
+            border-radius: 40px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 2;
+            animation: containerReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+        @keyframes containerReveal {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .member-title {
             text-align: center;
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--secondary));
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .member-subtitle {
             text-align: center;
             font-size: 14px;
             color: var(--text-dim);
-            margin-bottom: 40px;
+            margin-bottom: 45px;
+            font-weight: 500;
         }
 
         .info-block {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 25px;
-            margin-bottom: 20px;
-            transition: 0.3s;
+            border-radius: 28px;
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .info-block:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--primary);
+            transform: translateY(-5px);
         }
 
         .info-block h3 {
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             color: var(--secondary);
-            margin-bottom: 18px;
-            font-weight: 700;
+            margin-bottom: 20px;
+            font-weight: 800;
         }
 
         .info-block p {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             font-size: 15px;
             color: var(--white);
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
+
+        .info-block p:last-child { margin-bottom: 0; }
 
         .info-block p strong {
             color: var(--text-dim);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .stats-box {
-            background: linear-gradient(135deg, rgba(0, 112, 255, 0.1), rgba(0, 212, 255, 0.05));
-            padding: 20px;
-            border-radius: 20px;
-            margin-top: 15px;
+            background: linear-gradient(135deg, rgba(0, 112, 255, 0.15), rgba(0, 212, 255, 0.05));
+            padding: 22px;
+            border-radius: 22px;
+            margin-top: 20px;
             border-left: 4px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .stats-box p {
-            margin: 8px 0;
+            margin: 10px 0;
             font-size: 14px;
             color: #d1e5ff;
             font-weight: 600;
             justify-content: flex-start;
-            gap: 10px;
+            gap: 12px;
         }
 
         .back-btn {
@@ -126,32 +145,37 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.03);
             color: var(--white);
             border: 1px solid var(--glass-border);
-            border-radius: 18px;
+            border-radius: 20px;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            margin-top: 30px;
-            transition: 0.3s;
+            margin-top: 35px;
+            transition: 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .back-btn:hover {
             background: var(--white);
             color: var(--dark-bg);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
         @media (max-width: 480px) {
-            .member-container { padding: 30px 20px; }
-            .info-block p { flex-direction: column; gap: 4px; }
+            .member-container { padding: 40px 20px; }
+            .info-block p { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .info-block { padding: 20px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="bubbles-container" id="bubbles"></div>
 
     <div class="member-container">
 
@@ -178,6 +202,22 @@
         <a href="/settings-menu" class="back-btn">Επιστροφή στις Ρυθμίσεις</a>
 
     </div>
+
+    <script>
+        function createBubble() {
+            const container = document.getElementById('bubbles');
+            const bubble = document.createElement('div');
+            const size = Math.random() * 50 + 15 + 'px';
+            bubble.className = 'bubble';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + 'vw';
+            bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
+            container.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 10000);
+        }
+        setInterval(createBubble, 500);
+    </script>
 
 </body>
 </html>
