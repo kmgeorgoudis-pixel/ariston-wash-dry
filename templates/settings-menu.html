@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Στοιχεία Σύνδεσης – ARISTON Wash & Dry</title>
+    <title>Ρυθμίσεις – ARISTON Wash & Dry</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,11 +13,12 @@
     <style>
         :root {
             --primary: #0070ff;
-            --primary-glow: rgba(0, 112, 255, 0.3);
+            --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
             --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.02);
+            --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
+            --danger: #ff4444;
             --white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.6);
         }
@@ -27,7 +28,7 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            background: radial-gradient(circle at 0% 0%, #0d1b2a 0%, #030508 100%);
+            background: radial-gradient(circle at 50% 50%, #0d1b2a 0%, #030508 100%);
             color: var(--white);
             display: flex;
             align-items: center;
@@ -37,33 +38,33 @@
             overflow: hidden;
         }
 
-        /* --- Bubbles Background System --- */
+        /* --- Bubbles Background --- */
         .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.3), rgba(0,112,255,0.05)); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; animation: floatUp linear forwards; }
-        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.2; } to { transform: translateY(-10vh); opacity: 0; } }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.4), rgba(0,112,255,0.1)); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.3; } to { transform: translateY(-10vh); opacity: 0; } }
 
-        .menu-container {
+        .settings-card {
             width: 100%;
-            max-width: 500px;
+            max-width: 480px;
             background: var(--glass);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
-            padding: 50px 35px;
+            padding: 50px 40px;
             border-radius: 40px;
             border: 1px solid var(--glass-border);
             text-align: center;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
             position: relative;
             z-index: 2;
-            animation: containerReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: cardFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes containerReveal {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .back-settings {
+        .nav-back {
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -71,80 +72,109 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 700;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
             padding: 10px 20px;
             border-radius: 100px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: 0.4s;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .back-settings:hover {
+        .nav-back:hover {
             color: var(--white);
-            background: rgba(0, 112, 255, 0.1);
-            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
             transform: translateX(-5px);
+            border-color: var(--secondary);
         }
 
-        .menu-title {
-            font-size: 28px;
+        .title-gradient {
+            font-size: 32px;
             font-weight: 800;
-            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #ffffff 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 40px;
-            letter-spacing: 1px;
+            letter-spacing: -0.5px;
             text-transform: uppercase;
         }
 
-        .menu-group {
+        .settings-list {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
 
-        .menu-btn {
+        .option-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            padding: 22px 28px;
-            background: rgba(255, 255, 255, 0.02);
+            padding: 22px 30px;
+            background: rgba(255, 255, 255, 0.03);
             color: var(--white);
             text-decoration: none;
             border-radius: 24px;
             font-size: 16px;
             font-weight: 700;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s ease;
             border: 1px solid var(--glass-border);
         }
 
-        .menu-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.07);
             border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 112, 255, 0.15);
         }
 
-        .menu-btn::after {
-            content: "→";
+        .arrow-icon {
             font-size: 20px;
-            opacity: 0.4;
-            transition: 0.3s;
             color: var(--secondary);
+            opacity: 0.4;
+            transition: 0.4s;
         }
 
-        .menu-btn:hover::after {
+        .option-item:hover .arrow-icon {
             opacity: 1;
             transform: translateX(8px);
         }
 
-        @media (max-width: 480px) {
-            .menu-container { padding: 40px 25px; border-radius: 30px; }
-            .menu-title { font-size: 22px; }
-            .menu-btn { padding: 18px 22px; }
+        .danger-section {
+            margin-top: 50px;
+            padding-top: 35px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .btn-delete {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 68, 68, 0.6);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 800;
+            padding: 14px 28px;
+            border-radius: 100px;
+            transition: 0.3s;
+            border: 1px solid rgba(255, 68, 68, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-delete:hover {
+            color: #ffffff;
+            background: var(--danger);
+            border-color: var(--danger);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 68, 68, 0.2);
+        }
+
+        @media (max-width: 500px) {
+            .settings-card { padding: 40px 25px; border-radius: 30px; }
+            .title-gradient { font-size: 26px; }
+            .option-item { padding: 18px 22px; }
         }
     </style>
 </head>
@@ -152,29 +182,32 @@
 
 <div class="bubbles-container" id="bubbles"></div>
 
-<div class="menu-container">
-
-    <a href="/settings-menu" class="back-settings">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        Επιστροφή στις Ρυθμίσεις
+<div class="settings-card">
+    <a href="/" class="nav-back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Αρχική
     </a>
 
-    <div class="menu-title">Στοιχεία Σύνδεσης</div>
+    <h1 class="title-gradient">Ρυθμίσεις</h1>
 
-    <div class="menu-group">
-        <a class="menu-btn" href="/change-name">
-            Αλλαγή Ονόματος
+    <div class="settings-list">
+        <a class="option-item" href="/member-info">
+            <span>Πληροφορίες Μέλους</span>
+            <div class="arrow-icon">→</div>
         </a>
         
-        <a class="menu-btn" href="/change-email">
-            Αλλαγή Email
-        </a>
-        
-        <a class="menu-btn" href="/change-password">
-            Αλλαγή Κωδικού
+        <a class="option-item" href="/account-settings">
+            <span>Στοιχεία Σύνδεσης</span>
+            <div class="arrow-icon">→</div>
         </a>
     </div>
 
+    <div class="danger-section">
+        <a href="/delete-account" class="btn-delete">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            Διαγραφή Λογαριασμού
+        </a>
+    </div>
 </div>
 
 <script>
@@ -190,7 +223,7 @@
         container.appendChild(bubble);
         setTimeout(() => bubble.remove(), 10000);
     }
-    setInterval(createBubble, 500);
+    setInterval(createBubble, 600);
 </script>
 
 </body>

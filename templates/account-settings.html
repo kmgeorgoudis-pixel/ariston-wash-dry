@@ -13,6 +13,7 @@
     <style>
         :root {
             --primary: #0070ff;
+            --primary-glow: rgba(0, 112, 255, 0.4);
             --secondary: #00d4ff;
             --dark-bg: #030508;
             --glass: rgba(255, 255, 255, 0.03);
@@ -26,71 +27,82 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(0, 112, 255, 0.08), transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(0, 212, 255, 0.05), transparent 40%);
+            background: radial-gradient(circle at 50% 50%, #0d1b2a 0%, #030508 100%);
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            overflow: hidden;
         }
+
+        /* --- Bubbles Background --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.4), rgba(0,112,255,0.1)); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; animation: floatUp linear forwards; }
+        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.3; } to { transform: translateY(-10vh); opacity: 0; } }
 
         .menu-container {
             width: 100%;
             max-width: 500px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             padding: 45px 35px;
-            border-radius: 32px;
+            border-radius: 40px;
             border: 1px solid var(--glass-border);
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: containerReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            position: relative;
+            z-index: 2;
+            animation: containerReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes containerReveal {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .back-settings {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             color: var(--text-dim);
             text-decoration: none;
             font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            padding: 8px 16px;
+            font-weight: 700;
+            margin-bottom: 35px;
+            padding: 10px 20px;
             border-radius: 100px;
             background: rgba(255, 255, 255, 0.05);
-            transition: 0.3s;
+            border: 1px solid var(--glass-border);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .back-settings:hover {
             color: var(--white);
             background: rgba(255, 255, 255, 0.1);
             transform: translateX(-5px);
+            border-color: var(--secondary);
         }
 
         .menu-title {
             font-size: 26px;
             font-weight: 800;
-            background: linear-gradient(to right, #fff, var(--secondary));
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 35px;
-            letter-spacing: 1px;
+            margin-bottom: 40px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
         }
 
         .menu-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 18px;
         }
 
         .menu-btn {
@@ -98,51 +110,53 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            padding: 18px 25px;
-            background: rgba(255, 255, 255, 0.04);
+            padding: 22px 30px;
+            background: rgba(255, 255, 255, 0.03);
             color: var(--white);
             text-decoration: none;
-            border-radius: 20px;
+            border-radius: 24px;
             font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: 700;
+            transition: all 0.4s ease;
             border: 1px solid var(--glass-border);
         }
 
         .menu-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.07);
             border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 112, 255, 0.15);
         }
 
-        /* Icon styling for the buttons */
         .menu-btn::after {
             content: "→";
-            font-size: 18px;
-            opacity: 0.5;
-            transition: 0.3s;
+            font-size: 20px;
+            opacity: 0.4;
+            transition: 0.4s;
             color: var(--secondary);
         }
 
         .menu-btn:hover::after {
             opacity: 1;
-            transform: translateX(5px);
+            transform: translateX(8px);
         }
 
         @media (max-width: 480px) {
-            .menu-container { padding: 35px 20px; }
+            .menu-container { padding: 40px 20px; border-radius: 30px; }
             .menu-title { font-size: 22px; }
+            .menu-btn { padding: 18px 22px; }
         }
     </style>
 </head>
 <body>
 
+<div class="bubbles-container" id="bubbles"></div>
+
 <div class="menu-container">
 
     <a href="/settings-menu" class="back-settings">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        Επιστροφή στις Ρυθμίσεις
+        Επιστροφή
     </a>
 
     <div class="menu-title">Στοιχεία Σύνδεσης</div>
@@ -162,6 +176,22 @@
     </div>
 
 </div>
+
+<script>
+    function createBubble() {
+        const container = document.getElementById('bubbles');
+        const bubble = document.createElement('div');
+        const size = Math.random() * 50 + 10 + 'px';
+        bubble.className = 'bubble';
+        bubble.style.width = size;
+        bubble.style.height = size;
+        bubble.style.left = Math.random() * 100 + 'vw';
+        bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
+        container.appendChild(bubble);
+        setTimeout(() => bubble.remove(), 10000);
+    }
+    setInterval(createBubble, 600);
+</script>
 
 </body>
 </html>
