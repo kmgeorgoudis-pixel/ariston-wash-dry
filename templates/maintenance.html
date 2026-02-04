@@ -31,11 +31,13 @@
                 radial-gradient(at 0% 0%, rgba(13, 71, 161, 0.3) 0, transparent 50%),
                 radial-gradient(at 100% 0%, rgba(30, 58, 138, 0.3) 0, transparent 50%),
                 radial-gradient(at 50% 100%, rgba(2, 6, 23, 1) 0, transparent 100%);
+            background-attachment: fixed; /* Κρατάει το φόντο σταθερό καθώς σκρολάρεις */
             color: var(--text-main);
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            overflow-y: auto; /* ΕΠΙΤΡΕΠΕΙ ΤΟ SCROLL */
+            padding: 20px 0; /* Δίνει λίγο "αέρα" πάνω-κάτω στα κινητά */
         }
 
         .stars {
