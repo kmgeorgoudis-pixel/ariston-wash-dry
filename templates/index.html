@@ -252,22 +252,21 @@
     </div>
     
     <div class="header-top">
-    <a href="https://aristonwashdry.gr" style="text-decoration: none; color: inherit; display: inline-block;">
+    <a href="https://aristonwashdry.gr" class="logo-link">
         <div class="logo">
             <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
             ARISTON <span>Wash & Dry</span>
         </div>
     </a>
-    </div>
-        
-        <div class="right-actions">
-            <div class="language-switcher">
-                <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά"></a>
-                <a href="{{ url_for('en_index') }}"><img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English"></a>
-            </div>
-            <div class="hamburger" id="hamburger-btn">☰</div>
+    
+    <div class="right-actions">
+        <div class="language-switcher">
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/gr-flag.png') }}" alt="Ελληνικά"></a>
+            <a href="{{ url_for('en_index') }}"><img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English"></a>
         </div>
+        <div class="hamburger" id="hamburger-btn">☰</div>
     </div>
+</div>
 
     <nav class="main-nav">
         <div class="nav-links" id="nav-menu">
