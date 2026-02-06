@@ -135,6 +135,56 @@
             line-height: 1.5;
         }
 
+        /* Countdown Style */
+        .countdown-container {
+            margin-bottom: 30px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+        .countdown-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #60a5fa;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .time-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 15px var(--primary-glow);
+        }
+        .time-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        .opening-date {
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            animation: glowText 2s infinite alternate;
+        }
+        @keyframes glowText {
+            from { text-shadow: 0 0 5px rgba(0, 242, 255, 0.2); }
+            to { text-shadow: 0 0 15px rgba(0, 242, 255, 0.6); }
+        }
+
         .card {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 20px;
@@ -320,6 +370,29 @@
         Βελτιώνουμε την εμπειρία σου. Για λίγο η πρόσβαση είναι περιορισμένη.
     </div>
 
+    <div class="countdown-container">
+        <div class="countdown-label">Επίσημο Άνοιγμα Ιστοσελίδας σε:</div>
+        <div class="timer" id="countdown-timer">
+            <div class="time-box">
+                <span class="time-value" id="days">00</span>
+                <span class="time-label">Ημέρες</span>
+            </div>
+            <div class="time-box">
+                <span class="time-value" id="hours">00</span>
+                <span class="time-label">Ώρες</span>
+            </div>
+            <div class="time-box">
+                <span class="time-value" id="minutes">00</span>
+                <span class="time-label">Λεπτά</span>
+            </div>
+            <div class="time-box">
+                <span class="time-value" id="seconds">00</span>
+                <span class="time-label">Δευτ.</span>
+            </div>
+        </div>
+        <div class="opening-date">Σάββατο, 7 Φεβρουαρίου 2026 @ 11:00</div>
+    </div>
+
     <div class="card">
         <div class="floating-icon">🛠️</div>
 
@@ -378,6 +451,29 @@
             container.appendChild(star);
         }
     })();
+
+    // Αντίστροφη Μέτρηση
+    const openingDate = new Date("Feb 7, 2026 11:00:00").getTime();
+
+    const countdownUpdate = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = openingDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+        document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+        document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+        document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+
+        if (distance < 0) {
+            clearInterval(countdownUpdate);
+            document.querySelector(".countdown-container").innerHTML = "<div class='opening-date' style='font-size: 20px;'>ΕΙΜΑΣΤΕ ΑΝΟΙΧΤΑ!</div>";
+        }
+    }, 1000);
 
     document.getElementById('refreshLink').addEventListener('click', () => location.reload());
 </script>
