@@ -16,6 +16,25 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 from email.message import EmailMessage
+from functools import wraps
+from flask import redirect, session, flash
+from models import User
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user_id = session.get("user_id")
+        if not user_id:
+            flash("Πρέπει να συνδεθείς.", "warning")
+            return redirect("/login")
+
+        user = User.query.get(user_id)
+        if not user or not user.is_admin:
+            flash("Δεν έχεις δικαιώματα Admin.", "danger")
+            return redirect("/")
+
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def register_user(fullname, email, password, confirm):
