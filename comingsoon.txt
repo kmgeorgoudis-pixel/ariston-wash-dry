@@ -146,3 +146,7 @@ https://aristonwashdry.gr/lock-secret-ARISTON-987654321
 
 
 
+admin url
+https://aristonwashdry.gr/secret-admin-register/ARISTON-SECRET-ADMIN-987654321
+
+
