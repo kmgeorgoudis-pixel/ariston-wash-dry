@@ -1668,9 +1668,59 @@ def remove_user_admin(user_id):
 
     flash("Αφαιρέθηκαν τα δικαιώματα Admin.", "warning")
     return redirect(f"/admin/users/{user_id}")
-@app.route("/secret-admin-register/" + SECRET_ADMIN_CODE, methods=["GET"])
-def secret_admin_register_form():
-    return render_template("secret_admin_register.html")
+SECRET_ADMIN_CODE = "987654321Ariston!"
+
+@app.route("/secret-admin-register", methods=["GET", "POST"])
+def secret_admin_register():
+    show_form = False
+
+    # Πρώτο βήμα: έλεγχος μυστικού κωδικού
+    if request.method == "POST":
+        # Αν έρχεται το πεδίο "code" → είμαστε στο βήμα του κωδικού
+        if "code" in request.form:
+            code = request.form.get("code")
+            if code == SECRET_ADMIN_CODE:
+                session["admin_register_allowed"] = True
+                show_form = True
+            else:
+                flash("Λάθος μυστικός κωδικός.", "danger")
+
+        # Αν έρχεται fullname → είμαστε στο βήμα της εγγραφής
+        elif "fullname" in request.form:
+            if not session.get("admin_register_allowed"):
+                return redirect("/secret-admin-register")
+
+            fullname = request.form.get("fullname")
+            email = request.form.get("email")
+            password = request.form.get("password")
+
+            existing = User.query.filter_by(email=email).first()
+            if existing:
+                flash("Το email υπάρχει ήδη.", "danger")
+                return redirect("/secret-admin-register")
+
+            hashed = generate_password_hash(password)
+
+            user = User(
+                fullname=fullname,
+                email=email,
+                password=hashed,
+                is_admin=True
+            )
+
+            db.session.add(user)
+            db.session.commit()
+
+            session.pop("admin_register_allowed", None)
+
+            flash("Ο Admin λογαριασμός δημιουργήθηκε. Συνδεθείτε.", "success")
+            return redirect("/login")
+
+    # Αν έχει ήδη περάσει τον κωδικό σε προηγούμενο POST
+    if session.get("admin_register_allowed"):
+        show_form = True
+
+    return render_template("secret_admin_register.html", show_form=show_form)
 @app.route("/secret-admin-register/" + SECRET_ADMIN_CODE, methods=["POST"])
 def secret_admin_register_submit():
     fullname = request.form.get("fullname")
