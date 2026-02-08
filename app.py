@@ -23,13 +23,11 @@ from flask import redirect, session, flash
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user_id = session.get("user_id")
-        if not user_id:
+        if not current_user.is_authenticated:
             flash("Πρέπει να συνδεθείς.", "warning")
             return redirect("/login")
 
-        user = User.query.get(user_id)
-        if not user or not user.is_admin:
+        if not current_user.is_admin:
             flash("Δεν έχεις δικαιώματα Admin.", "danger")
             return redirect("/")
 
