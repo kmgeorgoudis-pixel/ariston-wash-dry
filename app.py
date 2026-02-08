@@ -1595,6 +1595,51 @@ def delete_review_site(review_id):
     db.session.commit()
 
     return redirect("/admin/reviews_site")
+def send_admin_promotion_email(user):
+    body = f"""
+Αγαπητέ/ή {user.fullname},
+
+Σας ενημερώνουμε ότι ο λογαριασμός σας στο ARISTON Wash & Dry
+έχει αναβαθμιστεί και πλέον διαθέτετε δικαιώματα Διαχειριστή (Admin).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔐 ΝΕΑ ΔΙΚΑΙΩΜΑΤΑ
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Πρόσβαση στο Admin Panel
+• Διαχείριση χρηστών
+• Αποστολή κουπονιών
+• Αποστολή ανακοινώσεων
+• Προβολή στατιστικών
+
+Η αλλαγή πραγματοποιήθηκε με επιτυχία.
+
+Με εκτίμηση,
+Η ομάδα του ARISTON Wash & Dry
+https://aristonwashdry.gr
+"""
+    send_email(user.email, "Έχετε γίνει Διαχειριστής (Admin)", body)
+
+
+
+def send_admin_removal_email(user):
+    body = f"""
+Αγαπητέ/ή {user.fullname},
+
+Σας ενημερώνουμε ότι ο λογαριασμός σας στο ARISTON Wash & Dry
+δεν διαθέτει πλέον δικαιώματα Διαχειριστή (Admin).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+ℹ ΤΡΕΧΟΥΣΑ ΚΑΤΑΣΤΑΣΗ
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Ο λογαριασμός σας παραμένει ενεργός
+• Μπορείτε να συνεχίσετε να χρησιμοποιείτε όλες τις υπηρεσίες
+• Απλώς δεν έχετε πλέον πρόσβαση στο Admin Panel
+
+Με εκτίμηση,
+Η ομάδα του ARISTON Wash & Dry
+https://aristonwashdry.gr
+"""
+    send_email(user.email, "Αφαίρεση Δικαιωμάτων Admin", body)
 @app.route("/admin/users/<int:user_id>/make_admin", methods=["POST"])
 @login_required
 @admin_required
@@ -1602,6 +1647,10 @@ def make_user_admin(user_id):
     user = User.query.get_or_404(user_id)
     user.is_admin = True
     db.session.commit()
+
+    # Στέλνουμε email προαγωγής
+    send_admin_promotion_email(user)
+
     flash("Ο χρήστης έγινε Admin.", "success")
     return redirect(f"/admin/users/{user_id}")
 
@@ -1613,6 +1662,10 @@ def remove_user_admin(user_id):
     user = User.query.get_or_404(user_id)
     user.is_admin = False
     db.session.commit()
+
+    # Στέλνουμε email αφαίρεσης admin
+    send_admin_removal_email(user)
+
     flash("Αφαιρέθηκαν τα δικαιώματα Admin.", "warning")
     return redirect(f"/admin/users/{user_id}")
 
