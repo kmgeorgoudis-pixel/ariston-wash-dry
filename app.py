@@ -1670,57 +1670,50 @@ def remove_user_admin(user_id):
     return redirect(f"/admin/users/{user_id}")
 SECRET_ADMIN_CODE = "987654321Ariston!"
 
-@app.route("/secret-admin-register", methods=["GET", "POST"])
+SECRET_ADMIN_CODE = "987654321Ariston!"
+
+@app.route("/super-secret-admin-register-ARISTON-983274982374982374982374982374", methods=["GET", "POST"])
 def secret_admin_register():
-    show_form = False
+    # Αν δεν έχει σταλεί ακόμα σωστός κωδικός → δείξε το πρώτο βήμα
+    if request.method == "GET":
+        return render_template("secret_admin_register.html", step="code")
 
-    # Πρώτο βήμα: έλεγχος μυστικού κωδικού
-    if request.method == "POST":
-        # Αν έρχεται το πεδίο "code" → είμαστε στο βήμα του κωδικού
-        if "code" in request.form:
-            code = request.form.get("code")
-            if code == SECRET_ADMIN_CODE:
-                session["admin_register_allowed"] = True
-                show_form = True
-            else:
-                flash("Λάθος μυστικός κωδικός.", "danger")
+    # POST: Έλεγχος αν είμαστε στο βήμα του κωδικού
+    if request.form.get("step") == "code":
+        code = request.form.get("code")
 
-        # Αν έρχεται fullname → είμαστε στο βήμα της εγγραφής
-        elif "fullname" in request.form:
-            if not session.get("admin_register_allowed"):
-                return redirect("/secret-admin-register")
+        if code != SECRET_ADMIN_CODE:
+            flash("Λάθος μυστικός κωδικός.", "danger")
+            return render_template("secret_admin_register.html", step="code")
 
-            fullname = request.form.get("fullname")
-            email = request.form.get("email")
-            password = request.form.get("password")
+        # Αν ο κωδικός είναι σωστός → δείξε τη φόρμα εγγραφής
+        return render_template("secret_admin_register.html", step="form")
 
-            existing = User.query.filter_by(email=email).first()
-            if existing:
-                flash("Το email υπάρχει ήδη.", "danger")
-                return redirect("/secret-admin-register")
+    # POST: Βήμα εγγραφής admin
+    if request.form.get("step") == "form":
+        fullname = request.form.get("fullname")
+        email = request.form.get("email")
+        password = request.form.get("password")
 
-            hashed = generate_password_hash(password)
+        existing = User.query.filter_by(email=email).first()
+        if existing:
+            flash("Το email υπάρχει ήδη.", "danger")
+            return render_template("secret_admin_register.html", step="form")
 
-            user = User(
-                fullname=fullname,
-                email=email,
-                password=hashed,
-                is_admin=True
-            )
+        hashed = generate_password_hash(password)
 
-            db.session.add(user)
-            db.session.commit()
+        user = User(
+            fullname=fullname,
+            email=email,
+            password=hashed,
+            is_admin=True
+        )
 
-            session.pop("admin_register_allowed", None)
+        db.session.add(user)
+        db.session.commit()
 
-            flash("Ο Admin λογαριασμός δημιουργήθηκε. Συνδεθείτε.", "success")
-            return redirect("/login")
-
-    # Αν έχει ήδη περάσει τον κωδικό σε προηγούμενο POST
-    if session.get("admin_register_allowed"):
-        show_form = True
-
-    return render_template("secret_admin_register.html", show_form=show_form)
+        flash("Ο Admin λογαριασμός δημιουργήθηκε. Συνδεθείτε.", "success")
+        return redirect("/login")
 @app.route("/secret-admin-register/" + SECRET_ADMIN_CODE, methods=["POST"])
 def secret_admin_register_submit():
     fullname = request.form.get("fullname")
