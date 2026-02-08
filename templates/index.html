@@ -242,10 +242,72 @@
             .info-section { grid-template-columns: 1fr; padding: 60px 5%; }
             .hero { padding-top: 140px; }
         }
+        /* Cookie Banner Style */
+        .cookie-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+.cookie-btn {
+    padding: 10px 25px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+}
+.btn-accept {
+    background: var(--primary);
+    color: white;
+}
+.btn-reject {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.cookie-btn:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+.cookie-banner {
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 90%; 
+    max-width: 600px; 
+    background: rgba(10, 17, 24, 0.95);
+    backdrop-filter: blur(15px); 
+    border: 1px solid var(--primary);
+    padding: 20px; 
+    border-radius: 20px; 
+    z-index: 10001;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp { 
+    from { transform: translate(-50%, 100%); opacity: 0; } 
+    to { transform: translate(-50%, 0); opacity: 1; } 
+}
     </style>
 </head>
 <body>
-
+<div id="cookie-banner" class="cookie-banner">
+    <p style="font-size: 0.9rem; color: var(--white);">
+        Χρησιμοποιούμε cookies για να διασφαλίσουμε την ορθή λειτουργία της ιστοσελίδας. 
+        Μπορείτε να επιλέξετε αν τα αποδέχεστε. 
+        <a href="https://aristonwashdry.gr/cookies" style="color: var(--secondary); text-decoration: underline;">Μάθε Περισσότερα</a>
+    </p>
+    <div class="cookie-actions">
+        <button class="cookie-btn btn-accept" onclick="closeCookieBanner('accepted')">ΑΠΟΔΟΧΗ</button>
+        <button class="cookie-btn btn-reject" onclick="closeCookieBanner('rejected')">ΑΠΟΡΡΙΨΗ</button>
+    </div>
+</div>
 <header>
     <div class="store-notice">
         ΤΟ ΚΑΤΑΣΤΗΜΑ ΜΑΣ ΔΕΝ ΕΙΝΑΙ ΑΝΟΙΧΤΟ ΑΚΟΜΑ — ΣΥΝΤΟΜΑ ΚΟΝΤΑ ΣΑΣ!
@@ -374,6 +436,7 @@
     <a href="/terms">Όροι Χρήσης</a> | <a href="/privacy">Πολιτική Απορρήτου</a> | <a href="/cookies">Πολιτική Cookies</a>
 </footer>
 
+
 <script>
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -437,6 +500,25 @@
             setTimeout(() => banner.remove(), 800);
         }, 7000);
     }
+    function closeCookieBanner(choice) {
+    const banner = document.getElementById('cookie-banner');
+    banner.style.transition = "0.5s";
+    banner.style.opacity = "0";
+    banner.style.transform = "translate(-50%, 20px)";
+    
+    // Αποθήκευση της επιλογής (είτε accept είτε reject) για να μην ξαναβγεί το banner
+    localStorage.setItem('cookieChoice', choice);
+    
+    setTimeout(() => banner.remove(), 500);
+}
+
+// Έλεγχος κατά το φόρτωμα αν ο χρήστης έχει ήδη κάνει κάποια επιλογή
+window.addEventListener('load', function() {
+    if(localStorage.getItem('cookieChoice')) {
+        const banner = document.getElementById('cookie-banner');
+        if(banner) banner.remove();
+    }
+});
 </script>
 
 </body>
