@@ -1578,7 +1578,26 @@ def delete_review_site(review_id):
     db.session.commit()
 
     return redirect("/admin/reviews_site")
+@app.route("/admin/users/<int:user_id>/make_admin", methods=["POST"])
+@login_required
+@admin_required
+def make_user_admin(user_id):
+    user = User.query.get_or_404(user_id)
+    user.is_admin = True
+    db.session.commit()
+    flash("Ο χρήστης έγινε Admin.", "success")
+    return redirect(f"/admin/users/{user_id}")
 
+
+@app.route("/admin/users/<int:user_id>/remove_admin", methods=["POST"])
+@login_required
+@admin_required
+def remove_user_admin(user_id):
+    user = User.query.get_or_404(user_id)
+    user.is_admin = False
+    db.session.commit()
+    flash("Αφαιρέθηκαν τα δικαιώματα Admin.", "warning")
+    return redirect(f"/admin/users/{user_id}")
 
 
 

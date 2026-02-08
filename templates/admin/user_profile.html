@@ -57,6 +57,23 @@
            style="padding:10px 14px; border-radius:10px; background:#fef3c7; color:#92400e; text-decoration:none;">
             Αποστολή Ανακοίνωσης
         </a>
+        {% if not user.is_admin %}
+<form action="/admin/users/{{ user.id }}/make_admin" method="POST"
+      onsubmit="return confirm('Να γίνει Admin ο χρήστης;');">
+    <button type="submit"
+        style="padding:10px 14px; border:none; border-radius:10px; background:#dbeafe; color:#1e3a8a; cursor:pointer;">
+        Κάνε Admin
+    </button>
+</form>
+{% else %}
+<form action="/admin/users/{{ user.id }}/remove_admin" method="POST"
+      onsubmit="return confirm('Αφαίρεση δικαιωμάτων Admin;');">
+    <button type="submit"
+        style="padding:10px 14px; border:none; border-radius:10px; background:#fee2e2; color:#b91c1c; cursor:pointer;">
+        Αφαίρεση Admin
+    </button>
+</form>
+{% endif %}
 
     </div>
 </div>
