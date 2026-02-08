@@ -18,7 +18,7 @@ from email.mime.text import MIMEText
 from email.message import EmailMessage
 from functools import wraps
 from flask import redirect, session, flash
-from models import User
+
 
 def admin_required(f):
     @wraps(f)
