@@ -117,7 +117,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.04em;
-            padding-right: 80px; /* Χώρος για τις σημαίες σε desktop */
+            padding-right: 80px; 
         }
 
         .subtitle {
@@ -488,10 +488,10 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         let isValid = true;
 
-        // Καθαρισμός προηγούμενων λαθών
+        
         document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
 
-        // Έλεγχος υποχρεωτικών πεδίων
+        
         requiredGroups.forEach((name) => {
             const group = form.querySelectorAll(`input[name="${name}"]`);
             const errorEl = form.querySelector(`[data-error-for="${name}"]`);
@@ -511,13 +511,13 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Animation κουμπιού
+        
         const submitBtn = form.querySelector('.btn-primary');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = "Αποστολή...";
         submitBtn.disabled = true;
 
-        // ΣΥΛΛΟΓΗ ΚΑΙ ΑΠΟΣΤΟΛΗ ΔΕΔΟΜΕΝΩΝ ΣΤΗΝ PYTHON
+        
         const formData = new FormData(form);
 
         fetch("/site-review", {
@@ -532,7 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(data => {
             if (data.status === "ok") {
-                // Εμφάνιση επιτυχίας
+                
                 overlay.style.display = "flex";
                 form.reset();
             } else {
@@ -544,7 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Αποτυχία σύνδεσης με τον διακομιστή.");
         })
         .finally(() => {
-            // Επαναφορά κουμπιού
+            
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
         });
