@@ -54,11 +54,18 @@ def register_user(fullname, email, password, confirm):
 app = Flask(__name__, template_folder="templates", static_folder="templates")
 app.secret_key = "supersecretkey123"
 
-# === SQLAlchemy Init ===
+# 1. Πρώτα οι ρυθμίσεις
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# 2. Μετά το initialization της βάσης
 init_db(app)
 migrate = Migrate(app, db)
+
+# 3. ΤΕΛΕΥΤΑΙΟ το create_all() για να ξέρει ΠΟΥ και ΤΙ να φτιάξει
+with app.app_context():
+    db.create_all()
+    print("Οι πίνακες δημιουργήθηκαν με επιτυχία!")
 
 # === Login Manager ===
 login_manager = LoginManager()
