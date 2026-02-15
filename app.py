@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, flash, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from email.header import Header
@@ -26,43 +27,48 @@ def admin_required(f):
         if not current_user.is_authenticated:
             flash("Πρέπει να συνδεθείς.", "warning")
             return redirect("/login")
-
         if not current_user.is_admin:
             flash("Δεν έχεις δικαιώματα Admin.", "danger")
             return redirect("/")
-
         return f(*args, **kwargs)
     return decorated_function
 
-
+# === REGISTER FUNCTION ===
 def register_user(fullname, email, password, confirm):
     if password != confirm:
         return "Οι κωδικοί δεν ταιριάζουν."
-
     existing = User.query.filter_by(email=email).first()
     if existing:
         return "Το email υπάρχει ήδη."
-
     hashed = generate_password_hash(password)
-
     user = User(fullname=fullname, email=email, password=hashed)
     db.session.add(user)
     db.session.commit()
-
     return "OK"
 
 app = Flask(__name__, template_folder="templates", static_folder="templates")
 app.secret_key = "supersecretkey123"
 
-# 1. Πρώτα οι ρυθμίσεις
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+# ==========================================
+# 1. ΡΥΘΜΙΣΕΙΣ ΒΑΣΗΣ (PERSISTENT DISK)
+# ==========================================
+# Ελέγχουμε αν υπάρχει ο φάκελος /data (που ορίσαμε στο Render Disk)
+if os.path.exists("/data"):
+    # Χρήση του μόνιμου Disk
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////data/users.db"
+    print("RUNNING ON RENDER - PERSISTENT DISK ENABLED")
+else:
+    # Τοπική χρήση στο PC σου
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+    print("RUNNING LOCALLY - LOCAL SQLITE ENABLED")
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # 2. Μετά το initialization της βάσης
 init_db(app)
 migrate = Migrate(app, db)
 
-# 3. ΤΕΛΕΥΤΑΙΟ το create_all() για να ξέρει ΠΟΥ και ΤΙ να φτιάξει
+# 3. ΤΕΛΕΥΤΑΙΟ το create_all()
 with app.app_context():
     db.create_all()
     print("Οι πίνακες δημιουργήθηκαν με επιτυχία!")
@@ -71,6 +77,10 @@ with app.app_context():
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 def send_coupon_email(user, coupon):
     body = f"""
@@ -139,7 +149,7 @@ def lock_secret():
 from email.message import EmailMessage
 
 import requests
-import os
+
 
 def send_email(to, subject, body):
     print("=== USING RESEND SEND_EMAIL ===")
