@@ -187,6 +187,130 @@
             .nav-links.active { display: flex; }
             .contact-box, .contact-form { padding: 30px 20px; margin: 0 15px 30px; }
         }
+        
+        
+.admin-container {
+    max-width: 750px; /* Από 900 το πήγαμε 750 */
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.admin-support-card {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 112, 255, 0.15);
+    border-radius: 24px; /* Πιο μικρή γωνία */
+    padding: 20px 25px; /* Λιγότερο padding */
+    transition: all 0.4s ease;
+}
+
+.admin-support-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--secondary);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.admin-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Μικρότερο κενό */
+    position: relative;
+    z-index: 2;
+}
+
+.admin-support-icon {
+    flex-shrink: 0;
+    width: 55px; /* Από 70 σε 55 */
+    height: 55px;
+    background: rgba(0, 112, 255, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem; /* Πιο μικρό emoji */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-text-section h4 {
+    color: var(--white);
+    font-size: 1rem; /* Από 1.2 σε 1.0 */
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.admin-text-section p {
+    font-size: 0.85rem; /* Από 0.95 σε 0.85 */
+    color: var(--text-dim);
+    line-height: 1.5;
+}
+
+.support-links-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.support-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 15px; /* Πιο slim κουμπιά */
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: 0.3s;
+}
+
+.support-link .text {
+    color: var(--white);
+    font-weight: 600;
+    font-size: 0.8rem; /* Πιο μικρά γράμματα στα links */
+}
+
+.support-link:hover {
+    background: rgba(0, 112, 255, 0.2);
+    border-color: var(--secondary);
+}
+
+.card-glow {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 100px;
+    height: 100px;
+    background: var(--primary);
+    filter: blur(60px);
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+/* Responsive για κινητά */
+@media (max-width: 600px) {
+    .admin-content-wrapper {
+        flex-direction: column;
+        text-align: center;
+    }
+    .support-links-grid {
+        justify-content: center;
+    }
+}
+/* Responsive για κινητά */
+@media (max-width: 768px) {
+    .admin-content-wrapper {
+        flex-direction: column;
+        text-align: center;
+    }
+    .support-links-grid {
+        justify-content: center;
+    }
+    .admin-support-card {
+        padding: 30px 20px;
+    }
+}
     </style>
 </head>
 <body>
@@ -248,14 +372,69 @@
 
 <div class="contact-box reveal">
     <h2 style="color: var(--secondary); margin-bottom: 25px; font-weight: 800;">📍 Στοιχεία Επικοινωνίας</h2>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
+        
         <div>
-            <p><strong>📍Διεύθυνση:</strong><br> Δερβενακίων 10 , Βαθύ, Σάμος 83100</p>
-            <p style="margin-top: 15px;"><strong>📞Τηλέφωνα:</strong><br>+30 6948897391<br>+30 6944615574<br>+30 698 759 8416</p>
+            <p style="margin-bottom: 15px;"><strong>📍 Διεύθυνση:</strong><br> 
+               <span style="opacity: 0.9;">Δερβενακίων 10, Βαθύ, Σάμος 83100</span>
+            </p>
+            
+            <p style="margin-bottom: 10px;"><strong>📞 Τηλέφωνα:</strong></p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="tel:+306948897391" class="support-link" style="width: fit-content;">
+                    <span class="text">📱 +30 694 889 7391</span>
+                </a>
+                <a href="tel:+306944615574" class="support-link" style="width: fit-content;">
+                    <span class="text">📱 +30 694 461 5574</span>
+                </a>
+                <a href="tel:+306987598416" class="support-link" style="width: fit-content;">
+                    <span class="text">📱 +30 698 759 8416</span>
+                </a>
+            </div>
         </div>
+
         <div>
-            <p><strong>📩Email:</strong><br>info@aristonwashdry.gr<br>aristonwashing@gmail.com</p>
-            <p style="margin-top: 15px;"><strong>📌Ώρες λειτουργίας:</strong><br>Καθημερινά 07:00 – 23:00</p>
+            <p style="margin-bottom: 10px;"><strong>📩 Email:</strong></p>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                <a href="mailto:info@aristonwashdry.gr" class="support-link" style="width: fit-content;">
+                    <span class="text">📧 info@aristonwashdry.gr</span>
+                </a>
+                <a href="mailto:aristonwashing@gmail.com" class="support-link" style="width: fit-content;">
+                    <span class="text">📧 aristonwashing@gmail.com</span>
+                </a>
+            </div>
+
+            <p><strong>📌 Ώρες λειτουργίας:</strong><br>
+               <span style="color: var(--secondary); font-weight: 600;">Καθημερινά 07:00 – 23:00</span>
+            </p>
+        </div>
+
+    </div>
+</div>
+<div class="admin-container reveal">
+    <div class="admin-support-card">
+        <div class="card-glow"></div>
+
+        <div class="admin-content-wrapper">
+            <div class="admin-support-icon">🔒</div>
+            
+            <div class="admin-text-section">
+                <h4>Υποστήριξη Μελών & Διαχείριση</h4>
+                <p>
+                    Για ζητήματα που αφορούν τον <span>λογαριασμό</span> σας, την εξαργύρωση <span>κουπονιών</span> ή τεχνική υποστήριξη της πλατφόρμας, η ομάδα διαχείρισης είναι στη διάθεσή σας:
+                </p>
+                
+                <div class="support-links-grid">
+                    <a href="tel:+306987598416" class="support-link">
+                        <span class="icon">📱</span>
+                        <span class="text">+30 698 759 8416</span>
+                    </a>
+                    <a href="mailto:georgoudisk@aristonwashdry.gr" class="support-link">
+                        <span class="icon">📧</span>
+                        <span class="text">georgoudisk@aristonwashdry.gr</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
