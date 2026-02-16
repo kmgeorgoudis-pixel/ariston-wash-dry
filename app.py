@@ -631,7 +631,8 @@ def admin_users():
         query = query.filter(
             db.or_(
                 User.email.ilike(search_like),
-                User.fullname.ilike(search_like)  # αν έχεις πεδίο name
+                User.fullname.ilike(search_like),
+                User.id.cast(db.String).ilike(search_like)  # Προσθήκη αναζήτησης με ID
             )
         )
 
