@@ -434,7 +434,7 @@
 </div>
 
 <script>
-    // Δημιουργία αστεριών με διαφορετικά μεγέθη και ταχύτητες
+    
     (function createStars() {
         const container = document.getElementById('stars');
         const count = 60;
@@ -452,7 +452,7 @@
         }
     })();
 
-    // Αντίστροφη Μέτρηση
+    
     const openingDate = new Date("Feb 7, 2026 11:00:00").getTime();
 
     const countdownUpdate = setInterval(function() {
@@ -471,7 +471,7 @@
 
         if (distance < 0) {
             clearInterval(countdownUpdate);
-            document.querySelector(".countdown-container").innerHTML = "<div class='opening-date' style='font-size: 20px;'>ΕΙΜΑΣΤΕ ΑΝΟΙΧΤΑ!</div>";
+            document.querySelector(".countdown-container").innerHTML = "<div class='opening-date' style='font-size: 20px;'>Η ΙΣΤΟΣΕΛΙΔΑ ΕΙΝΑΙ ΕΝΕΡΓΗ!!</div>";
         }
     }, 1000);
 
