@@ -4,102 +4,118 @@
 {% set active_page = 'users' %}
 
 {% block header_title %}
-Μέλη
+Μέλη Κοινότητας
 {% endblock %}
 
 {% block content %}
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-    <div style="font-size:15px; color:#4b5563;">
-        Συνολικά μέλη: <strong>{{ users|length }}</strong>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; flex-wrap:wrap; gap:15px;">
+    <div style="background: #fff; padding: 10px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e5e7eb;">
+        <span style="color:#64748b; font-size:14px;">Συνολικά εγγεγραμμένα μέλη:</span>
+        <strong style="font-size:18px; color:#0f172a; margin-left:5px;">{{ users|length }}</strong>
     </div>
 
-    <form method="GET" action="/admin/users" style="display:flex; gap:8px; align-items:center;">
-        <input
-            type="text"
-            name="search"
-            value="{{ search }}"
-            placeholder="Αναζήτηση με email ή όνομα ή id..."
-            style="padding:8px 10px; border-radius:8px; border:1px solid #d1d5db; font-size:14px; min-width:220px;"
-        >
+    <form method="GET" action="/admin/users" style="display:flex; gap:10px; align-items:center; background: #fff; padding: 6px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e5e7eb;">
+        <div style="position:relative;">
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="ID, Email ή Όνομα..."
+                style="padding:10px 15px; border-radius:8px; border:1px solid #f1f5f9; background:#f8fafc; font-size:14px; min-width:260px; outline:none; transition: border-color 0.3s;"
+                onfocus="this.style.borderColor='#0d47a1'"
+                onblur="this.style.borderColor='#f1f5f9'"
+            >
+        </div>
         <button
             type="submit"
-            style="padding:8px 14px; border:none; border-radius:8px; background:#0d47a1; color:#fff; font-size:14px; cursor:pointer;">
+            style="padding:10px 20px; border:none; border-radius:8px; background:#0d47a1; color:#fff; font-size:14px; font-weight:600; cursor:pointer; transition: opacity 0.3s;"
+            onmouseover="this.style.opacity='0.9'"
+            onmouseout="this.style.opacity='1'">
             Αναζήτηση
         </button>
     </form>
 </div>
 
-<div style="overflow-x:auto;">
-    <table style="width:100%; border-collapse:collapse; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 4px 16px rgba(15,23,42,0.06);">
-        <thead style="background:#e5e7eb; font-size:13px; text-align:left; color:#374151;">
-            <tr>
-                <th style="padding:10px 12px;">ID</th>
-                <th style="padding:10px 12px;">Όνομα</th>
-                <th style="padding:10px 12px;">Email</th>
-                <th style="padding:10px 12px;">Ημ. Εγγραφής</th>
-                <th style="padding:10px 12px;">Admin</th>
-                <th style="padding:10px 12px;">Ενέργειες</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% if users %}
-            {% for user in users %}
-            <tr style="font-size:14px; border-top:1px solid #e5e7eb;">
-                <td style="padding:9px 12px; color:#4b5563;">{{ user.id }}</td>
-                <td style="padding:9px 12px;">
-    <a href="/admin/users/{{ user.id }}"
-       style="color:#0d47a1; font-weight:600; text-decoration:none;">
-        {{ user.fullname or "-" }}
-    </a>
-</td>
-                <td style="padding:9px 12px; color:#1d4ed8;">{{ user.email }}</td>
-                <td style="padding:9px 12px; color:#6b7280;">
-                    {{ user.created_at.strftime('%d/%m/%Y') if user.created_at else '-' }}
-                </td>
-                <td style="padding:9px 12px; color:#6b7280;">
-                    {% if user.is_admin %}
-                        <span style="padding:2px 8px; border-radius:999px; background:#0d47a1; color:#fff; font-size:12px;">
-                            Admin
-                        </span>
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
-                <td style="padding:9px 12px;">
-                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                        <!-- Οριστική διαγραφή -->
-                        <form action="/admin/users/{{ user.id }}/delete" method="POST" onsubmit="return confirm('Οριστική διαγραφή χρήστη;');">
-                            <button type="submit"
-                                style="padding:6px 10px; border:none; border-radius:8px; font-size:12px; cursor:pointer; background:#fee2e2; color:#b91c1c;">
-                                Διαγραφή
-                            </button>
-                        </form>
+<div style="background:#fff; border-radius:16px; box-shadow:0 10px 25px rgba(15,23,42,0.08); border: 1px solid #e5e7eb; overflow:hidden;">
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; text-align:left;">
+            <thead style="background:#f8fafc; border-bottom:2px solid #f1f5f9;">
+                <tr>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700;">ID</th>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700;">Στοιχεία Μέλους</th>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700;">Ημ. Εγγραφής</th>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700;">Ρόλος</th>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700; text-align:right;">Ενέργειες</th>
+                </tr>
+            </thead>
+            <tbody style="color:#334155;">
+            {% if users %}
+                {% for user in users %}
+                <tr style="border-bottom:1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.background='#fcfdfe'" onmouseout="this.style.background='transparent'">
+                    <td style="padding:16px 20px;">
+                        <span style="font-family:monospace; background:#f1f5f9; padding:4px 8px; border-radius:6px; color:#475569; font-weight:600;">#{{ user.id }}</span>
+                    </td>
+                    <td style="padding:16px 20px;">
+                        <div style="display:flex; flex-direction:column;">
+                            <a href="/admin/users/{{ user.id }}" style="color:#0d47a1; font-weight:700; text-decoration:none; font-size:15px; margin-bottom:2px;">
+                                {{ user.fullname or "Χωρίς Όνομα" }}
+                            </a>
+                            <span style="font-size:13px; color:#64748b;">{{ user.email }}</span>
+                        </div>
+                    </td>
+                    <td style="padding:16px 20px; font-size:14px; color:#64748b;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            📅 {{ user.created_at.strftime('%d/%m/%Y') if user.created_at else '-' }}
+                        </div>
+                    </td>
+                    <td style="padding:16px 20px;">
+                        {% if user.is_admin %}
+                            <span style="padding:4px 10px; border-radius:6px; background:#e0e7ff; color:#4338ca; font-size:11px; font-weight:700; text-transform:uppercase;">
+                                Administrator
+                            </span>
+                        {% else %}
+                            <span style="padding:4px 10px; border-radius:6px; background:#f1f5f9; color:#64748b; font-size:11px; font-weight:700; text-transform:uppercase;">
+                                User
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:16px 20px;">
+                        <div style="display:flex; justify-content:flex-end; gap:8px;">
+                            <a href="/admin/users/{{ user.id }}/coupon" title="Προσθήκη Κουπονιού"
+                               style="height:34px; width:34px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:#f0f9ff; color:#0369a1; text-decoration:none; transition: 0.2s;"
+                               onmouseover="this.style.background='#bae6fd'" onmouseout="this.style.background='#f0f9ff'">
+                                🎫
+                            </a>
 
-                        <!-- Προσθήκη κουπονιού -->
-                        <a href="/admin/users/{{ user.id }}/coupon"
-                           style="padding:6px 10px; border-radius:8px; font-size:12px; text-decoration:none; background:#e0f2fe; color:#0369a1;">
-                            Κουπόνι
-                        </a>
+                            <a href="/admin/users/{{ user.id }}/announcement" title="Αποστολή Ανακοίνωσης"
+                               style="height:34px; width:34px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:#fffbeb; color:#92400e; text-decoration:none; transition: 0.2s;"
+                               onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='#fffbeb'">
+                                📢
+                            </a>
 
-                        <!-- Αποστολή ανακοίνωσης -->
-                        <a href="/admin/users/{{ user.id }}/announcement"
-                           style="padding:6px 10px; border-radius:8px; font-size:12px; text-decoration:none; background:#fef3c7; color:#92400e;">
-                            Ανακοίνωση
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        {% else %}
-            <tr>
-                <td colspan="6" style="padding:14px 12px; text-align:center; font-size:14px; color:#6b7280;">
-                    Δεν βρέθηκαν μέλη με τα τρέχοντα κριτήρια.
-                </td>
-            </tr>
-        {% endif %}
-        </tbody>
-    </table>
+                            <form action="/admin/users/{{ user.id }}/delete" method="POST" onsubmit="return confirm('Προσοχή! Οριστική διαγραφή χρήστη;');" style="margin:0;">
+                                <button type="submit" title="Οριστική Διαγραφή"
+                                    style="height:34px; width:34px; border:none; display:flex; align-items:center; justify-content:center; border-radius:8px; background:#fef2f2; color:#b91c1c; cursor:pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fef2f2'">
+                                    🗑️
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5" style="padding:40px; text-align:center; color:#64748b; font-size:15px;">
+                        <div style="margin-bottom:10px; font-size:24px;">🔍</div>
+                        Δεν βρέθηκαν μέλη που να ταιριάζουν στην αναζήτησή σας.
+                    </td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% endblock %}

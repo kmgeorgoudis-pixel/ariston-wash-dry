@@ -6,13 +6,26 @@
     <title>ARISTON Admin – {% block title %}{% endblock %}</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --sidebar-bg: #020617;
+            --main-bg: #f8fafc;
+            --primary: #0d47a1;
+            --accent: #2563eb;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--main-bg);
+            color: var(--text-main);
         }
 
         .admin-wrapper {
@@ -22,40 +35,50 @@
 
         /* SIDEBAR */
         .admin-sidebar {
-            width: 260px;
-            background: #020617;
-            color: #e5e7eb;
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: #f8fafc;
             display: flex;
             flex-direction: column;
-            padding: 20px 18px;
-            box-shadow: 4px 0 18px rgba(0,0,0,0.45);
+            padding: 24px 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            z-index: 100;
         }
 
         .admin-logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding-left: 10px;
         }
 
         .admin-logo img {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         .admin-logo-text {
             font-size: 18px;
             font-weight: 800;
-            letter-spacing: 0.5px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .admin-section-title {
-            font-size: 13px;
+            font-size: 11px;
             text-transform: uppercase;
-            color: #6b7280;
-            margin: 18px 0 8px;
-            padding-left: 4px;
+            color: #475569;
+            margin: 24px 0 10px;
+            padding-left: 12px;
+            letter-spacing: 1.5px;
+            font-weight: 700;
         }
 
         .admin-menu {
@@ -64,152 +87,125 @@
             margin: 0;
         }
 
-        .admin-menu li {
-            margin-bottom: 6px;
-        }
+        .admin-menu li { margin-bottom: 4px; }
 
         .admin-link {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 10px;
-            color: #e5e7eb;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: #94a3b8;
             text-decoration: none;
             font-size: 14px;
-            transition: 0.2s;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .admin-link span.icon {
-            width: 22px;
-            text-align: center;
-            font-size: 15px;
+            font-size: 18px;
+            filter: grayscale(1);
+            transition: 0.3s;
         }
 
         .admin-link:hover {
-            background: #111827;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
         }
 
+        .admin-link:hover span.icon { filter: grayscale(0); }
+
         .admin-link.active {
-            background: linear-gradient(135deg, #0d47a1, #2563eb);
-            box-shadow: 0 0 0 1px rgba(59,130,246,0.5);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.4);
         }
 
-        .admin-link.active span,
-        .admin-link.active {
-            color: #f9fafb;
-        }
+        .admin-link.active span.icon { filter: grayscale(0); }
 
         .admin-footer {
             margin-top: auto;
             font-size: 12px;
-            color: #6b7280;
-            padding-top: 15px;
-            border-top: 1px solid #1f2937;
+            color: #475569;
+            padding: 20px 10px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
         /* MAIN AREA */
         .admin-main {
             flex: 1;
-            background: #f3f4f6;
-            padding: 20px 28px;
+            padding: 30px 40px;
+            max-width: 1600px;
         }
 
         .admin-topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 35px;
         }
 
         .admin-top-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #111827;
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
         }
 
         .admin-top-user {
-            font-size: 14px;
-            color: #4b5563;
-        }
-
-        .admin-card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 16px;
-            margin-top: 10px;
-        }
-
-        .admin-card {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 4px 16px rgba(15,23,42,0.08);
-        }
-
-        .admin-card-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 6px;
-        }
-
-        .admin-card-text {
+            background: #fff;
+            padding: 8px 16px;
+            border-radius: 100px;
             font-size: 13px;
-            color: #6b7280;
+            font-weight: 600;
+            color: var(--text-muted);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
         }
 
-        /* Flash (αν το χρειαστείς εδώ) */
+        /* Flash Messages */
         .flash-box {
-            padding: 10px 14px;
-            border-radius: 10px;
+            padding: 14px 20px;
+            border-radius: 14px;
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border-left: 5px solid;
-            background: #eff6ff;
-            color: #1d4ed8;
-            border-color: #1d4ed8;
+            margin-bottom: 20px;
+            animation: slideDown 0.4s ease-out;
+            border: 1px solid #bae6fd;
+            background: #f0f9ff;
+            color: #0369a1;
         }
 
-        .flash-box.danger,
-        .flash-box.error {
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .flash-box.danger, .flash-box.error {
             background: #fef2f2;
             color: #b91c1c;
-            border-color: #b91c1c;
+            border-color: #fecaca;
         }
 
-        @media (max-width: 900px) {
-            .admin-sidebar {
-                width: 220px;
-            }
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .admin-sidebar { width: 240px; }
+            .admin-main { padding: 25px; }
         }
 
-        @media (max-width: 720px) {
-            .admin-wrapper {
-                flex-direction: column;
-            }
-
+        @media (max-width: 768px) {
+            .admin-wrapper { flex-direction: column; }
             .admin-sidebar {
                 width: 100%;
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 12px 10px;
+                height: auto;
+                position: relative;
+                padding: 15px;
             }
-
-            .admin-section-title {
-                display: none;
-            }
-
-            .admin-menu {
-                display: flex;
-                gap: 4px;
-            }
-
-            .admin-footer {
-                display: none;
-            }
+            .admin-logo { margin-bottom: 15px; }
+            .admin-menu { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; }
+            .admin-menu li { margin-bottom: 0; flex-shrink: 0; }
+            .admin-section-title, .admin-footer { display: none; }
+            .admin-link { padding: 8px 12px; }
         }
     </style>
 
@@ -219,11 +215,10 @@
 
 <div class="admin-wrapper">
 
-    <!-- SIDEBAR -->
     <aside class="admin-sidebar">
         <div class="admin-logo">
             <img src="{{ url_for('static', filename='images/logo3.png') }}" alt="ARISTON">
-            <div class="admin-logo-text">ARISTON Admin</div>
+            <div class="admin-logo-text">ARISTON <span style="font-weight:400; font-size: 14px; opacity: 0.8;">Admin</span></div>
         </div>
 
         <div class="admin-section-title">Πίνακας ελέγχου</div>
@@ -265,24 +260,23 @@
             <li>
                 <a href="/admin/messages" class="admin-link {% if active_page == 'messages' %}active{% endif %}">
                     <span class="icon">✉️</span>
-                    <span>Φόρμες Επικοινωνίας</span>
+                    <span>Μηνύματα</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/bulk-email" class="admin-link {% if active_page == 'bulk_email' %}active{% endif %}">
                     <span class="icon">📨</span>
-                    <span>Μαζική Αποστολή Email</span>
+                    <span>Email Marketing</span>
                 </a>
-</li>
+            </li>
         </ul>
 
         <div class="admin-footer">
-            Συνδεδεμένος ως admin<br>
-            <a href="/logout" style="color:#9ca3af; text-decoration:none;">Αποσύνδεση</a>
+            <div style="margin-bottom: 8px;">Σύνδεση: <strong>Admin</strong></div>
+            <a href="/logout" style="color:#ef4444; text-decoration:none; font-weight:700;">🚪 Έξοδος</a>
         </div>
     </aside>
 
-    <!-- MAIN -->
     <main class="admin-main">
 
         <div class="admin-topbar">
@@ -290,7 +284,7 @@
                 {% block header_title %}{% endblock %}
             </div>
             <div class="admin-top-user">
-                {{ current_user.email }}
+                👤 {{ current_user.email }}
             </div>
         </div>
 
