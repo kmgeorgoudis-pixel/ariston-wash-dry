@@ -248,6 +248,25 @@
             .pricing-grid { grid-template-columns: 1fr; }
             .page-title { padding-top: 140px; }
         }
+        .price-placeholder {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(90deg, rgba(0,112,255,0.1) 25%, rgba(0,212,255,0.2) 50%, rgba(0,112,255,0.1) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: var(--white);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
     </style>
 </head>
 <body>
@@ -308,13 +327,15 @@
 <section class="pricing-section reveal">
     <div class="pricing-header">
         <h2>🧺 Washing Prices</h2>
-        <p>Clean & fresh in less than 1 hour</p>
+        <p style="color: var(--secondary); font-weight: bold;">Clean & fresh in less than 1 hour</p>
     </div>
 
     <div class="pricing-grid">
         <div class="pricing-card">
             <div class="pricing-badge">10 kg</div>
-            <div class="pricing-price">--- €</div>
+            <div class="pricing-price">
+                <div class="price-placeholder">Price Reveal Soon</div>
+            </div>
             <div class="pricing-subtitle">Perfect for small loads</div>
             <ul class="pricing-list">
                 <li>👕 8–10 shirts</li>
@@ -327,7 +348,9 @@
 
         <div class="pricing-card">
             <div class="pricing-badge badge-highlight">15 kg</div>
-            <div class="pricing-price">--- €</div>
+            <div class="pricing-price">
+                <div class="price-placeholder">Price Reveal Soon</div>
+            </div>
             <div class="pricing-subtitle">Ideal for families</div>
             <ul class="pricing-list">
                 <li>👕 12–15 shirts</li>
@@ -338,31 +361,35 @@
             <div class="pricing-tagline">Full family loads, sheets & quilts.</div>
         </div>
     </div>
-    <p class="note">Note: Do not fill the washing machine above ~80% — leave space for proper cleaning.</p>
+    <p class="note"><strong>Note:</strong> Do not fill the washing machine above ~80% — leave space for proper cleaning.</p>
 </section>
 
 <section class="pricing-section reveal">
     <div class="pricing-header">
         <h2>💨 Dryer Prices</h2>
-        <p>Price per 15-minute cycle</p>
+        <p style="color: var(--secondary); font-weight: bold;">Price per 15-minute cycle</p>
     </div>
 
     <div class="pricing-grid small">
         <div class="pricing-card">
             <div class="pricing-badge">15 kg Dryer</div>
-            <div class="pricing-price">--- €</div>
+            <div class="pricing-price">
+                <div class="price-placeholder">Price Reveal Soon</div>
+            </div>
             <div class="pricing-subtitle">per 15 minutes</div>
             <div class="pricing-tagline">Ideal for normal laundry loads.</div>
         </div>
 
         <div class="pricing-card">
             <div class="pricing-badge badge-highlight">18 kg Dryer</div>
-            <div class="pricing-price">--- €</div>
+            <div class="pricing-price">
+                <div class="price-placeholder">Price Reveal Soon</div>
+            </div>
             <div class="pricing-subtitle">per 15 minutes</div>
             <div class="pricing-tagline">Perfect for quilts, blankets & large loads.</div>
         </div>
     </div>
-    <p class="note">You can add extra drying time if needed. Prices are per 15-minute cycle.After the first cycle.</p>
+    <p class="note">You can add extra drying time if needed. Prices are per 15-minute cycle after the first cycle.</p>
 </section>
 
 <a href="https://aristonwashdry.gr/en/contact" style="text-decoration: none; color: inherit;">

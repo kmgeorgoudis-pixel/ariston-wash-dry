@@ -228,6 +228,25 @@
             }
             .nav-links.active { display: flex; }
         }
+        .price-placeholder {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(90deg, rgba(0,112,255,0.1) 25%, rgba(0,212,255,0.2) 50%, rgba(0,112,255,0.1) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: var(--white);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
         
     </style>
 </head>
@@ -277,15 +296,6 @@
 
 <div class="bubbles-container" id="bubbles"></div>
 
-<section class="page-title reveal">
-    <h1>Τιμοκατάλογος</h1>
-    <p>Καθαρά ρούχα, εύκολα και οικονομικά!</p>
-    <p>Στο Ariston Wash & Dry πλένετε και στεγνώνετε ό,τι χρειάζεστε γρήγορα, απλά και φθηνά.</p>
-    <p>Διαλέξτε το μέγεθος πλυντηρίου που ταιριάζει στις ανάγκες σας και αφήστε τα υπόλοιπα σε εμάς!</p>
-    <p>Είτε έχετε λίγα ρούχα είτε ολόκληρη οικογενειακή πλύση, εδώ θα βρείτε το πλυντήριο που σας ταιριάζει.</p>
-    <p>Ρίξτε τα ρούχα, επιλέξτε πρόγραμμα, πατήστε Start — τόσο απλά!</p>
-</section>
-
 <section class="pricing-section reveal">
     <div class="pricing-header">
         <h2>🧺 Τιμοκατάλογος — Πλύσιμο</h2>
@@ -295,7 +305,9 @@
     <div class="pricing-grid">
         <div class="pricing-card">
             <div class="pricing-badge">10 κιλών</div>
-            <div class="pricing-price">--- €</div>
+            <div class="pricing-price">
+                <div class="price-placeholder">Η τιμή θα αποκαλυφθεί σύντομα</div>
+            </div>
             <div class="pricing-subtitle">Ιδανικό για μικρές πλύσεις</div>
             <ul class="pricing-list">
                 <li>👕 8–10 μπλούζες</li>
@@ -308,7 +320,9 @@
 
         <div class="pricing-card">
             <div class="pricing-badge badge-highlight">15 κιλών</div>
-            <div class="pricing-price">--- €</div>
+            <div class="pricing-price">
+                <div class="price-placeholder">Η τιμή θα αποκαλυφθεί σύντομα</div>
+            </div>
             <div class="pricing-subtitle">Ιδανικό για οικογένειες</div>
             <ul class="pricing-list">
                 <li>👕 12–15 μπλούζες</li>
@@ -331,19 +345,23 @@
     <div class="pricing-grid small">
         <div class="pricing-card">
             <div class="pricing-badge">15 κιλών</div>
-            <div class="pricing-price">--- €</div>
+            <div class="pricing-price">
+                <div class="price-placeholder">Η τιμή θα αποκαλυφθεί σύντομα</div>
+            </div>
             <div class="pricing-subtitle">ανά 15 λεπτά</div>
             <div class="pricing-tagline">Ιδανικό για κανονικές πλύσεις ρούχων.</div>
         </div>
 
         <div class="pricing-card">
             <div class="pricing-badge badge-highlight">18 κιλών</div>
-            <div class="pricing-price">--- €</div>
+            <div class="pricing-price">
+                <div class="price-placeholder">Η τιμή θα αποκαλυφθεί σύντομα</div>
+            </div>
             <div class="pricing-subtitle">ανά 15 λεπτά</div>
             <div class="pricing-tagline">Ιδανικό για παπλώματα & μεγάλες ποσότητες.</div>
         </div>
     </div>
-    <p class="note">Μπορείτε να προσθέσετε επιπλέον χρόνο στέγνωσης αν χρειάζεται.Μόλις τελειώσει ο πρώτος κύκλος.</p>
+    <p class="note">Μπορείτε να προσθέσετε επιπλέον χρόνο στέγνωσης αν χρειάζεται. Μόλις τελειώσει ο πρώτος κύκλος.</p>
 </section>
 
 <a href="https://aristonwashdry.gr/epikoinonia" style="text-decoration: none; color: inherit;">
