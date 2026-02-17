@@ -200,13 +200,42 @@
             </div>
         </div>
 
+        <div class="info-block" style="text-align: center;">
+            <h3>Ψηφιακή Ταυτότητα Μέλους</h3>
+            <div id="qrcode-container" style="background: white; padding: 20px; border-radius: 20px; display: inline-block; position: relative; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <div id="qrcode"></div>
+                <img src="{{ url_for('static', filename='images/logo3.png') }}" 
+                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: white; border-radius: 5px; padding: 2px;">
+            </div>
+            <p style="justify-content: center; font-size: 12px; margin-top: 15px; color: var(--secondary);">
+                SCAN FOR LIVE MEMBER INFO
+            </p>
+        </div>
+
         <a href="/settings-menu" class="back-btn">Επιστροφή στις Ρυθμίσεις</a>
 
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
     <script>
+        // 1. Δημιουργία QR Code
+        const qrcodeElement = document.getElementById("qrcode");
+        if (qrcodeElement) {
+            new QRCode(qrcodeElement, {
+                text: window.location.href, 
+                width: 180,
+                height: 180,
+                colorDark: "#0070ff", 
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // 2. Σύστημα για τις φυσαλίδες
         function createBubble() {
             const container = document.getElementById('bubbles');
+            if (!container) return;
             const bubble = document.createElement('div');
             const size = Math.random() * 50 + 15 + 'px';
             bubble.className = 'bubble';
@@ -219,6 +248,5 @@
         }
         setInterval(createBubble, 500);
     </script>
-
 </body>
 </html>
