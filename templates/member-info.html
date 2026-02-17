@@ -223,7 +223,8 @@
         const qrcodeElement = document.getElementById("qrcode");
         if (qrcodeElement) {
             new QRCode(qrcodeElement, {
-                text: window.location.href, 
+                
+                text: window.location.origin + "/card/{{ current_user.id }}", 
                 width: 180,
                 height: 180,
                 colorDark: "#0070ff", 

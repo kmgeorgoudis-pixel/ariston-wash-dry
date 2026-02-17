@@ -1760,6 +1760,20 @@ def secret_admin_register_submit():
 
     flash("Ο λογαριασμός δημιουργήθηκε. Συνδεθείτε για να μπείτε ως Admin.", "success")
     return redirect("/login")
+@app.route('/card/<int:user_id>')
+def public_card(user_id):
+    # Δεν χρειάζεται import User εδώ, το έχεις κάνει ήδη πάνω-πάνω στο app.py
+    from datetime import datetime
+    
+    # Ψάχνουμε τον χρήστη στη βάση δεδομένων
+    user = User.query.get_or_404(user_id)
+    
+    # Υπολογισμός ημερών (Σημερινή ημερομηνία - Ημερομηνία εγγραφής)
+    delta = datetime.utcnow() - user.created_at
+    days_member = delta.days
+    
+    # Επιστρέφει το template της κάρτας με τα στοιχεία
+    return render_template('public_card.html', user=user, days_member=days_member)
 
 
 
