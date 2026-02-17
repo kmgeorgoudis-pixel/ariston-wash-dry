@@ -219,12 +219,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <script>
-        // 1. Δημιουργία QR Code
+        
         const qrcodeElement = document.getElementById("qrcode");
         if (qrcodeElement) {
             new QRCode(qrcodeElement, {
                 
-                text: window.location.origin + "/card/{{ current_user.id }}", 
+                text: window.location.origin + "/card/{{ current_user.id }}/{{ token }}", 
                 width: 180,
                 height: 180,
                 colorDark: "#0070ff", 
@@ -233,7 +233,7 @@
             });
         }
 
-        // 2. Σύστημα για τις φυσαλίδες
+        
         function createBubble() {
             const container = document.getElementById('bubbles');
             if (!container) return;

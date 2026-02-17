@@ -187,58 +187,57 @@
 
 <script>
     function generateQR() {
-        const canvas = document.getElementById('qrcode-canvas');
-        const logo = new Image();
-        
-        
-        logo.src = "{{ url_for('static', filename='images/logo3.png') }}";
-
-        
-        logo.onload = function() {
-            const qr = new QRious({
-                element: canvas,
-                value: window.location.origin + "/en/card/{{ current_user.id }}",
-                size: 200, 
-                level: 'H',
-                foreground: '#0070ff'
-            });
-
-            const ctx = canvas.getContext('2d');
-            const size = canvas.width;
-            const logoSize = 50; 
-            const center = size / 2;
-
-            
-            ctx.fillStyle = "white";
-            ctx.beginPath();
-            ctx.arc(center, center, logoSize / 1.6, 0, 2 * Math.PI);
-            ctx.fill();
-
-            
-            ctx.drawImage(
-                logo, 
-                center - logoSize / 2, 
-                center - logoSize / 2, 
-                logoSize, 
-                logoSize
-            );
-        };
-        
-       
-        logo.onerror = function() {
-            console.error("Η εικόνα logo3.png δεν βρέθηκε στο static/images/");
-            const qr = new QRious({
-                element: canvas,
-                value: window.location.origin + "/en/card/{{ current_user.id }}",
-                size: 200,
-                level: 'M',
-                foreground: '#0070ff'
-            });
-        };
-    }
-
+    const canvas = document.getElementById('qrcode-canvas');
+    const logo = new Image();
     
-    generateQR();
+    
+    logo.src = "{{ url_for('static', filename='images/logo3.png') }}";
+
+    logo.onload = function() {
+        const qr = new QRious({
+            element: canvas,
+            
+            value: window.location.origin + "/en/card/{{ current_user.id }}/{{ token }}",
+            size: 200, 
+            level: 'H', // Υψηλό επίπεδο για να αντέχει το logo στη μέση
+            foreground: '#0070ff'
+        });
+
+        const ctx = canvas.getContext('2d');
+        const size = canvas.width;
+        const logoSize = 50; 
+        const center = size / 2;
+
+        
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.arc(center, center, logoSize / 1.6, 0, 2 * Math.PI);
+        ctx.fill();
+
+        
+        ctx.drawImage(
+            logo, 
+            center - logoSize / 2, 
+            center - logoSize / 2, 
+            logoSize, 
+            logoSize
+        );
+    };
+    
+    logo.onerror = function() {
+        console.error("Η εικόνα logo3.png δεν βρέθηκε στο static/images/");
+        const qr = new QRious({
+            element: canvas,
+            
+            value: window.location.origin + "/en/card/{{ current_user.id }}/{{ token }}",
+            size: 200,
+            level: 'M',
+            foreground: '#0070ff'
+        });
+    };
+}
+
+generateQR();
 
     // Bubbles Animation
     function createBubbles() {

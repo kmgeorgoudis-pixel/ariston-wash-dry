@@ -19,6 +19,13 @@ from email.mime.text import MIMEText
 from email.message import EmailMessage
 from functools import wraps
 from flask import redirect, session, flash
+import hashlib
+
+def get_secure_hash(user_id):
+    # Αυτό το "αλάτι" κάνει το link μοναδικό για το δικό σου site
+    salt = "ARISTON_WASH_DRY_2026_SECRET" 
+    # Δημιουργεί ένα μοναδικό κείμενο από το ID
+    return hashlib.sha256(f"{user_id}{salt}".encode()).hexdigest()[:16]
 
 
 def admin_required(f):
@@ -1314,9 +1321,10 @@ def settings_menu():
 @app.route("/member-info")
 @login_required
 def member_info():
-    from datetime import datetime
     days_member = (datetime.now() - current_user.created_at).days
-    return render_template("member-info.html", days_member=days_member)
+    # Δημιουργία token για τον τρέχοντα χρήστη
+    token = get_secure_hash(current_user.id)
+    return render_template("member-info.html", days_member=days_member, token=token)
 
 from datetime import datetime, timedelta
 from flask import render_template, request, redirect, flash
@@ -1760,19 +1768,16 @@ def secret_admin_register_submit():
 
     flash("Ο λογαριασμός δημιουργήθηκε. Συνδεθείτε για να μπείτε ως Admin.", "success")
     return redirect("/login")
-@app.route('/card/<int:user_id>')
-def public_card(user_id):
-    # Δεν χρειάζεται import User εδώ, το έχεις κάνει ήδη πάνω-πάνω στο app.py
-    from datetime import datetime
-    
-    # Ψάχνουμε τον χρήστη στη βάση δεδομένων
+@app.route('/card/<int:user_id>/<token>')
+def public_card(user_id, token):
+    # Έλεγχος αν το token είναι σωστό
+    if token != get_secure_hash(user_id):
+        return "Invalid Link", 403
+        
     user = User.query.get_or_404(user_id)
-    
-    # Υπολογισμός ημερών (Σημερινή ημερομηνία - Ημερομηνία εγγραφής)
     delta = datetime.utcnow() - user.created_at
     days_member = delta.days
     
-    # Επιστρέφει το template της κάρτας με τα στοιχεία
     return render_template('public_card.html', user=user, days_member=days_member)
 
 
@@ -2061,9 +2066,10 @@ def reset_password_en():
 @app.route("/en/member-info")
 @login_required
 def member_info_en():
-    from datetime import datetime
     days_member = (datetime.now() - current_user.created_at).days
-    return render_template("en/member-info.html", days_member=days_member)
+    # Δημιουργία token για τον τρέχοντα χρήστη
+    token = get_secure_hash(current_user.id)
+    return render_template("en/member-info.html", days_member=days_member, token=token)
 @app.route("/en/account-settings")
 @login_required
 def account_settings_en():
@@ -2294,17 +2300,16 @@ def site_review_en():
             return jsonify({"status": "error", "message": str(e)}), 500
 
     return render_template("en/sitereview.html")
-@app.route('/en/card/<int:user_id>')
-def public_card_en(user_id):
-    from datetime import datetime
-    
+@app.route('/en/card/<int:user_id>/<token>')
+def public_card_en(user_id, token):
+    # Έλεγχος αν το token είναι σωστό
+    if token != get_secure_hash(user_id):
+        return "Invalid Link", 403
+        
     user = User.query.get_or_404(user_id)
-    
-    # Υπολογισμός ημερών
     delta = datetime.utcnow() - user.created_at
     days_member = delta.days
     
-    # ΠΡΟΣΟΧΗ: Εδώ καλούμε το public_card_en.html
     return render_template('en/public_card_en.html', user=user, days_member=days_member)
 
 
