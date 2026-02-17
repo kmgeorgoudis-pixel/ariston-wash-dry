@@ -2305,7 +2305,7 @@ def public_card_en(user_id):
     days_member = delta.days
     
     # ΠΡΟΣΟΧΗ: Εδώ καλούμε το public_card_en.html
-    return render_template('public_card_en.html', user=user, days_member=days_member)
+    return render_template('en/public_card_en.html', user=user, days_member=days_member)
 
 
 
