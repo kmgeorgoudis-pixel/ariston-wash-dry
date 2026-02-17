@@ -2294,6 +2294,18 @@ def site_review_en():
             return jsonify({"status": "error", "message": str(e)}), 500
 
     return render_template("en/sitereview.html")
+@app.route('/en/card/<int:user_id>')
+def public_card_en(user_id):
+    from datetime import datetime
+    
+    user = User.query.get_or_404(user_id)
+    
+    # Υπολογισμός ημερών
+    delta = datetime.utcnow() - user.created_at
+    days_member = delta.days
+    
+    # ΠΡΟΣΟΧΗ: Εδώ καλούμε το public_card_en.html
+    return render_template('public_card_en.html', user=user, days_member=days_member)
 
 
 

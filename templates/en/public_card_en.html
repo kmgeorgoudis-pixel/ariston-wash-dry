@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +57,6 @@
         .info-item span { display: block; font-size: 9px; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
         .info-item b { font-size: 18px; color: #fff; }
 
-        /* Full width item για την ημερομηνία */
         .info-full {
             grid-column: span 2;
             padding-top: 15px;
@@ -78,27 +77,28 @@
             <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo">
             <div class="name">{{ user.fullname }}</div>
             <div class="email-display">{{ user.email }}</div>
-            <div class="member-status">ΠΙΣΤΟΠΟΙΗΜΕΝΟ ΜΕΛΟΣ</div>
+            <div class="member-status">VERIFIED MEMBER</div>
             
             <div class="info-grid">
                 <div class="info-item">
-                    <span>ID ΜΕΛΟΥΣ</span>
+                    <span>MEMBER ID</span>
                     <b>#{{ user.id }}</b>
                 </div>
                 <div class="info-item">
-                    <span>ΗΜΕΡΕΣ ΔΡΑΣΤΗΡΙΟΣ</span>
+                    <span>DAYS ACTIVE</span>
                     <b>{{ days_member }}</b>
                 </div>
                 <div class="info-item info-full">
-                    <span>Ημερομηνία Εγγραφής</span>
+                    <span>Registration Date</span>
                     <b>{{ user.created_at.strftime('%d/%m/%Y') }}</b>
                 </div>
             </div>
             
             <div class="verified">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                Ενεργό Προφίλ ARISTON
+                Active ARISTON Profile
             </div>
         </div>
     </div>
 </body>
+</html>
