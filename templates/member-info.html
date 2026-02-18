@@ -212,10 +212,16 @@
             </p>
         </div>
 
+        {% if current_user.email in ['georgoudisk@aristonwashdry.gr', 'admin@admin.gr', 'info@aristonwashdry.gr'] %}
+            <a href="/get-my-backup-db-2026-xyz" class="back-btn" style="background: #ffc107; color: #000; border: none; margin-top: 10px; margin-bottom: -15px;">
+                📥 Κατέβασμα Backup
+            </a>
+        {% endif %}
+
         <a href="/settings-menu" class="back-btn">Επιστροφή στις Ρυθμίσεις</a>
 
-    </div>
-
+    </div> 
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <script>

@@ -1781,12 +1781,19 @@ def public_card(user_id, token):
     return render_template('public_card.html', user=user, days_member=days_member)
 from flask import send_from_directory, abort
 
-@app.route("/get-my-backup-db-2026-xyz") # Άλλαξε το "xyz" με κάτι δικό σου
+@app.route("/get-my-backup-db-2026-xyz") # Κράτα το δικό σου μυστικό URL αντί για το "xyz"
 @login_required
 def download_db():
-    # Μόνο ο χρήστης με το δικό σου email μπορεί να την κατεβάσει
-    if current_user.email != 'georgoudisk@aristonwashdry.gr':
-        abort(403) # Απαγόρευση πρόσβασης
+    # Η λίστα με τα emails που επιτρέπεται να κατεβάσουν τη βάση
+    allowed_emails = [
+        'georgoudisk@aristonwashdry.gr',
+        'admin@admin.gr',
+        'info@aristonwashdry.gr'
+    ]
+    
+    # Έλεγχος αν ο τρέχων χρήστης είναι στη λίστα
+    if current_user.email not in allowed_emails:
+        abort(403) # Αν δεν είναι, απαγόρευση πρόσβασης
         
     directory = "/data" if os.path.exists("/data") else "."
     try:
