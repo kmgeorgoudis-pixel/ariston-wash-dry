@@ -600,13 +600,13 @@ professional laundry Samos
     banner.style.opacity = "0";
     banner.style.transform = "translate(-50%, 20px)";
     
-    // Αποθήκευση της επιλογής (είτε accept είτε reject) για να μην ξαναβγεί το banner
+    
     localStorage.setItem('cookieChoice', choice);
     
     setTimeout(() => banner.remove(), 500);
 }
 
-// Έλεγχος κατά το φόρτωμα αν ο χρήστης έχει ήδη κάνει κάποια επιλογή
+
 window.addEventListener('load', function() {
     if(localStorage.getItem('cookieChoice')) {
         const banner = document.getElementById('cookie-banner');

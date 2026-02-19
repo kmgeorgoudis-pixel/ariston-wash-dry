@@ -1,3 +1,3 @@
 git add .
-git commit -m " add logout bttn 1  "
+git commit -m " add bttn in privacy page  "
 git push

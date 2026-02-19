@@ -208,7 +208,16 @@
     displaying basic member details (such as Full Name,Email,Registration Date and Member ID). 
     The user bears sole responsibility for maintaining the confidentiality 
     of their card's link and for preventing its sharing with unauthorized individuals.
-    <p><em>Note: If you do not wish to have an active Digital Member Card (QR Code), you can send an email to <strong>georgoudisk@aristonwashdry.gr</strong> with the subject: "I do not wish to have a QR code" stating your account email, and we will proceed with its deactivation.</em></p>
+    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 15px; border: 1px dashed var(--glass-border);">
+    <p style="font-size: 14px; margin-bottom: 15px;">
+        <em>Note: If you do not wish to have an active Digital Member Card (QR Code), click the button below to notify us automatically.</em>
+    </p>
+    
+    <a href="mailto:georgoudisk@aristonwashdry.gr?subject=QR Code Deactivation Request&body=I do not wish to have a QR code. My account email is: {{ current_user.email }}" 
+       style="display: inline-block; padding: 10px 20px; background: #dc3545; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 13px; transition: 0.3s;">
+        📧 Request QR Deactivation
+    </a>
+</div>
 </p>
 
     <div class="legal-footer-note">
