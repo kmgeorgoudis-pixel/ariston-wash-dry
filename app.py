@@ -130,28 +130,7 @@ https://aristonwashdry.gr
 
 from flask import session, request
 
-MAINTENANCE_MODE = False
-ACCESS_CODE = "the@code@is9!8!7!4!5!6!3!2!1!ARISTON_Wash_Dry"
 
-@app.before_request
-def maintenance_lock():
-    if MAINTENANCE_MODE:
-        # Αν έχει βάλει σωστό κωδικό → πλήρης πρόσβαση
-        if session.get("access_granted") == True:
-            return
-
-        # Αν πάει στη σελίδα εισαγωγής κωδικού → επιτρέπεται
-        if request.path == "/access":
-            return
-
-        # Αλλιώς → δείξε maintenance page
-        return render_template("maintenance.html"), 503
-@app.route("/lock-secret-ARISTON-987654321")
-def lock_secret():
-    global MAINTENANCE_MODE
-    MAINTENANCE_MODE = True
-    session["access_granted"] = False
-    return "🔒 Το site κλειδώθηκε ξανά με επιτυχία."
 
 
 from email.message import EmailMessage
