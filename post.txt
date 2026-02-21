@@ -1,3 +1,3 @@
 git add .
-git commit -m " remove close tab  "
+git commit -m " qr del and add 1  "
 git push

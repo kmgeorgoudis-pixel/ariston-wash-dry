@@ -1879,6 +1879,47 @@ def download_db():
         return send_from_directory(directory, "users.db", as_attachment=True)
     except FileNotFoundError:
         return "Το αρχείο της βάσης δεν βρέθηκε.", 404
+@app.route("/admin/users/<int:user_id>/toggle_card", methods=["POST"])
+@login_required
+@admin_required
+def toggle_card(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    # Αντιστροφή της κατάστασης χρησιμοποιώντας το qr_enabled
+    user.qr_enabled = not user.qr_enabled
+    db.session.commit()
+    
+    status_text = "ενεργοποιήθηκε" if user.qr_enabled else "απενεργοποιήθηκε"
+    
+    if user.qr_enabled:
+        subject = "Ενεργοποίηση Ψηφιακής Κάρτας Μέλους - ARISTON Wash & Dry"
+        body = f"""
+        Αγαπητέ/ή {user.fullname},<br><br>
+        Σας ενημερώνουμε ότι η <b>ψηφιακή κάρτα μέλους</b> σας στο ARISTON Wash & Dry έχει ενεργοποιηθεί με επιτυχία.<br><br>
+        Μπορείτε πλέον να έχετε πρόσβαση στην κάρτα σας και στα προνόμια που αυτή παρέχει, μέσα από το προφίλ σας στην ιστοσελίδα μας.<br><br>
+        Είμαστε στη διάθεσή σας για οποιαδήποτε πληροφορία.<br><br>
+        Με εκτίμηση,<br>
+        <b>ARISTON Wash & Dry</b>
+        """
+    else:
+        subject = "Ενημέρωση Απενεργοποίησης Ψηφιακής Κάρτας - ARISTON Wash & Dry"
+        body = f"""
+        Αγαπητέ/ή {user.fullname},<br><br>
+        Σας ενημερώνουμε ότι, κατόπιν σχετικού αιτήματος, η <b>ψηφιακή κάρτα μέλους</b> σας στο ARISTON Wash & Dry έχει απενεργοποιηθεί.<br><br>
+        Σε περίπτωση που επιθυμείτε την εκ νέου ενεργοποίηση της κάρτας σας στο μέλλον, παρακαλούμε επικοινωνήστε μαζί μας.<br><br>
+        Με εκτίμηση,<br>
+        <b>ARISTON Wash & Dry</b>
+        """
+
+    try:
+        if user.email:
+            send_email(user.email, subject, body)
+            flash(f"Η κάρτα {status_text} επιτυχώς και εστάλη η σχετική ενημέρωση.", "success")
+    except Exception as e:
+        print(f"📧 Email Error: {e}")
+        flash(f"Η κάρτα {status_text}, αλλά η αποστολή του email απέτυχε.", "warning")
+
+    return redirect(f"/admin/users/{user.id}")
 
 
 
