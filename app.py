@@ -1263,6 +1263,12 @@ def send_usage_email(user, coupon, spent_amount, is_full):
         Γεια σας {user.fullname},<br><br>
         Σας ενημερώνουμε ότι το κουπόνι σας "<b>{coupon.title}</b>" χρησιμοποιήθηκε εξ ολοκλήρου.<br><br>
         Σας ευχαριστούμε που μας προτιμάτε!
+        Με εκτίμηση,
+        Η ομάδα του Ariston Wash & Dry
+        https://aristonwashdry.gr
+
+        <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
         """
     else:
         body = f"""
@@ -1270,6 +1276,12 @@ def send_usage_email(user, coupon, spent_amount, is_full):
         Μόλις χρησιμοποιήσατε <b>{spent_amount}€</b> από το κουπόνι σας "<b>{coupon.title}</b>".<br><br>
         Το νέο σας υπόλοιπο είναι: <b>{coupon.amount}€</b><br><br>
         Μπορείτε να δείτε τα κουπόνια σας εδώ: <a href="https://aristonwashdry.gr/coupons">https://aristonwashdry.gr/coupons</a>
+        Με εκτίμηση,
+        Η ομάδα του Ariston Wash & Dry
+        https://aristonwashdry.gr
+
+        <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
         """
     
     # Καλούμε τη ΔΙΚΗ ΣΟΥ send_email που έχεις ήδη στο app.py
