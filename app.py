@@ -1899,7 +1899,11 @@ def toggle_card(user_id):
         Μπορείτε πλέον να έχετε πρόσβαση στην κάρτα σας και στα προνόμια που αυτή παρέχει, μέσα από το προφίλ σας στην ιστοσελίδα μας.<br><br>
         Είμαστε στη διάθεσή σας για οποιαδήποτε πληροφορία.<br><br>
         Με εκτίμηση,<br>
-        <b>ARISTON Wash & Dry</b>
+        <b>ARISTON Wash & Dry</b><br>
+        https://aristonwashdry.gr/
+        <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
+
         """
     else:
         subject = "Ενημέρωση Απενεργοποίησης Ψηφιακής Κάρτας - ARISTON Wash & Dry"
@@ -1908,7 +1912,11 @@ def toggle_card(user_id):
         Σας ενημερώνουμε ότι, κατόπιν σχετικού αιτήματος, η <b>ψηφιακή κάρτα μέλους</b> σας στο ARISTON Wash & Dry έχει απενεργοποιηθεί.<br><br>
         Σε περίπτωση που επιθυμείτε την εκ νέου ενεργοποίηση της κάρτας σας στο μέλλον, παρακαλούμε επικοινωνήστε μαζί μας.<br><br>
         Με εκτίμηση,<br>
-        <b>ARISTON Wash & Dry</b>
+        <b>ARISTON Wash & Dry</b><br>
+        https://aristonwashdry.gr/
+        <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
+
+
         """
 
     try:
