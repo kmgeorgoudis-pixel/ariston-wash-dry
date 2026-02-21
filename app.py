@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
-from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage, Score
+from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage, Score, Verification
 import random
 import smtplib
 import time
@@ -1940,6 +1940,118 @@ def toggle_card(user_id):
         flash(f"Η κάρτα {status_text}, αλλά η αποστολή του email απέτυχε.", "warning")
 
     return redirect(f"/admin/users/{user.id}")
+from datetime import datetime
+
+@app.route('/verify-account', methods=['GET', 'POST'])
+def verify_account():
+    # Χειροκίνητος έλεγχος αντί για @login_required
+    if not current_user.is_authenticated:
+        return redirect(url_for('verify_login')) # Τον στέλνουμε στην ΕΙΔΙΚΗ φόρμα
+
+    # Υπολογισμός ημερών
+    delta = datetime.utcnow() - current_user.created_at
+    days_member = delta.days
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        message = request.form.get('message')
+        
+        new_verify = Verification(
+            user_id=current_user.id,
+            title=title,
+            message=message
+        )
+        db.session.add(new_verify)
+        db.session.commit()
+        return render_template('verification_success.html')
+
+    return render_template('verify_form.html', days_member=days_member)
+@app.route('/admin/verifications')
+@admin_required
+def admin_verifications():
+    # Παίρνουμε όλα τα αιτήματα ταξινομημένα κατά ημερομηνία
+    verifications = Verification.query.order_by(Verification.created_at.desc()).all()
+    return render_template('admin/admin_verifications.html', 
+                           verifications=verifications, 
+                           active_page='verifications')
+
+@app.route('/admin/delete-verification/<int:id>')
+@admin_required
+def delete_verification(id):
+    verify_request = Verification.query.get_or_404(id)
+    db.session.delete(verify_request)
+    db.session.commit()
+    return redirect(url_for('admin_verifications'))
+# === 1. TO ΕΙΔΙΚΟ LOGIN (ΒΗΜΑ 1) ===
+@app.route('/verify-login', methods=['GET', 'POST'])
+def verify_login():
+    if current_user.is_authenticated:
+        return redirect(url_for('verify_account'))
+
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+
+        if user and check_password_hash(user.password, password):
+            # Παραγωγή 6ψήφιου κωδικού
+            otp_code = str(random.randint(100000, 999999))
+            
+            # Αποθήκευση στη βάση (στο πεδίο reset_code που ήδη έχεις)
+            user.reset_code = otp_code
+            db.session.commit()
+
+            # Προετοιμασία Email
+            subject = "Κωδικός Ασφαλείας - ARISTON Wash & Dry"
+            email_body = f"""
+            <h3>Επαλήθευση Ταυτότητας</h3>
+            <p>Αγαπητέ/ή {user.fullname},</p>
+            <p>Χρησιμοποιήστε τον παρακάτω κωδικό για να συνδεθείτε στην υπηρεσία επιβεβαίωσης:</p>
+            <h2 style="color: #0d47a1; background: #f1f5f9; padding: 10px; display: inline-block; border-radius: 8px;">{otp_code}</h2>
+            <p>Αν δεν ζητήσατε εσείς αυτόν τον κωδικό, παρακαλούμε αγνοήστε αυτό το μήνυμα.</p>
+            <br>
+            <p>Με εκτίμηση,<br>Η ομάδα του ARISTON Wash & Dry</p>
+            """
+            
+            # Αποστολή με τη δική σου συνάρτηση send_email
+            send_email(user.email, subject, email_body)
+
+            # Κρατάμε το ID στο session για το επόμενο βήμα
+            session['temp_verify_user_id'] = user.id
+            return redirect(url_for('verify_code_page'))
+        else:
+            flash('Λανθασμένα στοιχεία σύνδεσης.', 'danger')
+
+    return render_template('verify_login_form.html')
+
+
+# === 2. Η ΣΕΛΙΔΑ ΕΙΣΑΓΩΓΗΣ ΚΩΔΙΚΟΥ (ΒΗΜΑ 2) ===
+@app.route('/verify-code-page', methods=['GET', 'POST'])
+def verify_code_page():
+    # Αν δεν υπάρχει temp_id στο session, τον γυρνάμε πίσω
+    user_id = session.get('temp_verify_user_id')
+    if not user_id:
+        return redirect(url_for('verify_login'))
+
+    if request.method == 'POST':
+        entered_code = request.form.get('code')
+        user = User.query.get(user_id)
+
+        if user and user.reset_code == entered_code:
+            # Σωστός κωδικός! 
+            user.reset_code = None  # Καθαρίζουμε τον κωδικό
+            db.session.commit()
+            
+            # Κάνουμε το επίσημο login του χρήστη
+            login_user(user)
+            session.pop('temp_verify_user_id') # Καθαρίζουμε το session
+            
+            flash('Η ταυτοποίηση ολοκληρώθηκε με επιτυχία.', 'success')
+            return redirect(url_for('verify_account'))
+        else:
+            flash('Ο κωδικός που εισάγατε είναι λάθος.', 'danger')
+
+    return render_template('verify_enter_code.html')
 
 
 

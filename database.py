@@ -89,6 +89,22 @@ class User(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(120))
     qr_enabled = db.Column(db.Boolean, default=True)
+class Verification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    
+    title = db.Column(db.String(120), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), default='Pending')
+    
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Σύνδεση με τον User για να παίρνουμε εύκολα username/email
+    user = db.relationship("User", backref="verifications")
+
+    def __repr__(self):
+        return f"<Verification {self.id} for User {self.user_id}>"
+
     
 
 

@@ -1,3 +1,3 @@
 git add .
-git commit -m " thank you mail  "
+git commit -m " ticket 1  "
 git push
