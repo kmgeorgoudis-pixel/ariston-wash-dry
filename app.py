@@ -1770,15 +1770,20 @@ def secret_admin_register_submit():
     return redirect("/login")
 @app.route('/card/<int:user_id>/<token>')
 def public_card(user_id, token):
-    # Έλεγχος αν το token είναι σωστό
     if token != get_secure_hash(user_id):
         return "Invalid Link", 403
         
     user = User.query.get_or_404(user_id)
+    
+    # ΕΛΕΓΧΟΣ: Αν είναι απενεργοποιημένη η κάρτα
+    if not user.qr_enabled:
+        return "Αυτή η κάρτα μέλους έχει απενεργοποιηθεί από τον κάτοχο.", 403
+
     delta = datetime.utcnow() - user.created_at
     days_member = delta.days
-    
     return render_template('public_card.html', user=user, days_member=days_member)
+
+# Κάνε το ίδιο και για το αγγλικό route (/en/card/...)
 from flask import send_from_directory, abort
 
 @app.route("/get-my-backup-db-2026-xyz") # Κράτα το δικό σου μυστικό URL αντί για το "xyz"
@@ -2328,6 +2333,11 @@ def public_card_en(user_id, token):
         return "Invalid Link", 403
         
     user = User.query.get_or_404(user_id)
+    
+    # ΕΛΕΓΧΟΣ: Αν η κάρτα είναι απενεργοποιημένη
+    if not user.qr_enabled:
+        return "This digital membership card has been deactivated by the owner.", 403
+
     delta = datetime.utcnow() - user.created_at
     days_member = delta.days
     

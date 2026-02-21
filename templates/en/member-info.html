@@ -174,14 +174,23 @@
         </div>
 
         <div class="info-block" style="text-align: center;">
-            <h3>Digital Member Card</h3>
-            <div style="display: flex; justify-content: center; margin: 20px 0; padding: 15px; background: white; border-radius: 20px; width: fit-content; margin-left: auto; margin-right: auto; box-shadow: 0 0 20px var(--primary-glow);">
-                <canvas id="qrcode-canvas"></canvas>
-            </div>
-            <p style="font-size: 12px; color: var(--text-dim); font-weight: 600;">Scan to view your verified public profile</p>
+    {% if current_user.qr_enabled %}
+        <h3>Digital Member Card</h3>
+        <div style="display: flex; justify-content: center; margin: 20px 0; padding: 15px; background: white; border-radius: 20px; width: fit-content; margin-left: auto; margin-right: auto; box-shadow: 0 0 20px var(--primary-glow);">
+            <canvas id="qrcode-canvas"></canvas>
         </div>
+        <p style="font-size: 12px; color: var(--text-dim); font-weight: 600;">Scan to view your verified public profile</p>
+    {% else %}
+        <div style="padding: 20px; border: 2px dashed #ff4444; border-radius: 20px; margin: 20px 0;">
+            <h3 style="color: #ff4444;">Card Deactivated</h3>
+            <p style="font-size: 14px; color: var(--text-dim);">
+                You have opted out of using the Digital Member Card. 
+                To reactivate, please contact the store.
+            </p>
+        </div>
+    {% endif %}
 
-        <a href="/en/settings-menu" class="back-btn">Back to Settings</a>
+    <a href="/en/settings-menu" class="back-btn">Back to Settings</a>
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
