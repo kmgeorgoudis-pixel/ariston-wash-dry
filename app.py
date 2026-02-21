@@ -1274,6 +1274,62 @@ def logout():
 def updates_menu():
     return render_template("updates-menu.html")
 
+def send_usage_email(user, coupon, spent_amount, is_full):
+    """Στέλνει email ενημέρωσης για τη χρήση του κουπονιού"""
+    from flask_mail import Message
+    subject = "Ενημέρωση Χρήσης Κουπονιού - Ariston Wash & Dry"
+    
+    if is_full:
+        body = f"""
+        Γεια σας {user.fullname},
+        
+        Σας ενημερώνουμε ότι το κουπόνι σας "{coupon.title}" χρησιμοποιήθηκε εξ ολοκλήρου.
+        
+        Σας ευχαριστούμε που μας προτιμάτε!
+        """
+    else:
+        body = f"""
+        Γεια σας {user.fullname},
+        
+        Μόλις χρησιμοποιήσατε {spent_amount}€ από το κουπόνι σας "{coupon.title}".
+        
+        Το νέο σας υπόλοιπο είναι: {coupon.amount}€
+        
+        Μπορείτε να δείτε την κάρτα σας εδώ: https://ariston-wash-dry.onrender.com/card/{user.id}
+        """
+    
+    msg = Message(subject, recipients=[user.email])
+    msg.body = body
+    mail.send(msg)
+
+def send_coupons_background(users, title, description, amount, start_date, end_date):
+    with app.app_context():
+        count = 0
+        for user in users:
+            try:
+                # Δημιουργία κουπονιού με αρχικό και τρέχον ποσό ίδιο
+                coupon = Coupon(
+                    user_id=user.id,
+                    title=title,
+                    description=description,
+                    amount=amount,
+                    original_amount=amount,
+                    start_date=start_date,
+                    end_date=end_date
+                )
+                db.session.add(coupon)
+                db.session.commit() # Commit εδώ για να πάρει ID το κουπόνι πριν το email
+                
+                send_coupon_email(user, coupon)
+                
+                count += 1
+                if count % 2 == 0: 
+                    time.sleep(1)
+            except Exception as e:
+                print(f"❌ Error sending coupon to user {user.id}: {e}")
+                db.session.rollback()
+                continue
+
 @app.route("/admin/coupon/<int:id>/use", methods=["POST"])
 @login_required
 def admin_use_coupon(id):
@@ -1284,10 +1340,47 @@ def admin_use_coupon(id):
     if not coupon:
         return redirect("/admin/users")
 
-    coupon.used = True
-    coupon.used_at = datetime.utcnow()
+    user = User.query.get(coupon.user_id)
+    action = request.form.get("action") 
+    spent_raw = request.form.get("spent_amount")
+    
+    # Backup σιγουριάς: αν δεν έχει original_amount, το ορίζουμε τώρα
+    if not coupon.original_amount:
+        coupon.original_amount = coupon.amount
+
+    spent_for_email = 0
+    is_full = False
+
+    if action == "full":
+        spent_for_email = coupon.amount
+        is_full = True
+        coupon.used = True
+        coupon.used_at = datetime.utcnow()
+        coupon.amount = 0
+    
+    elif action == "partial" and spent_raw:
+        try:
+            spent_amount = float(spent_raw)
+            spent_for_email = spent_amount
+            if spent_amount >= coupon.amount:
+                is_full = True
+                coupon.used = True
+                coupon.used_at = datetime.utcnow()
+                coupon.amount = 0
+            else:
+                coupon.amount -= spent_amount
+                # remains used = False
+        except ValueError:
+            return redirect(f"/admin/users/{coupon.user_id}")
 
     db.session.commit()
+
+    # Αποστολή Email ενημέρωσης
+    if user and user.email:
+        try:
+            send_usage_email(user, coupon, spent_for_email, is_full)
+        except Exception as e:
+            print(f"📧 Email failed: {e}")
 
     return redirect(f"/admin/users/{coupon.user_id}")
 @app.route("/updates")

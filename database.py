@@ -58,6 +58,7 @@ class Coupon(db.Model):
     title = db.Column(db.String(100))
     description = db.Column(db.Text)
     amount = db.Column(db.Float)
+    original_amount = db.Column(db.Float)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
     used = db.Column(db.Boolean, default=False)

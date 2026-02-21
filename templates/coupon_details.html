@@ -187,9 +187,16 @@
         {% endif %}
 
         <div class="detail-row" style="border-left: 5px solid var(--secondary); background: rgba(0, 212, 255, 0.03);">
-            <span class="label">Ποσό Έκπτωσης</span>
+            <span class="label">Υπόλοιπο Ποσού</span>
             <div class="value amount-value">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="color:var(--secondary)"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                
+                {% if coupon.original_amount and coupon.original_amount > coupon.amount %}
+                    <span style="text-decoration: line-through; color: var(--text-dim); font-size: 18px; margin-right: 5px;">
+                        {{ "%.2f"|format(coupon.original_amount) }}€
+                    </span>
+                {% endif %}
+                
                 {{ "%.2f"|format(coupon.amount) }}€
             </div>
         </div>
@@ -212,8 +219,13 @@
 
         {% if coupon.used %}
         <div class="detail-row" style="border-left: 5px solid var(--error);">
-            <span class="label">Ημερομηνία Χρήσης</span>
+            <span class="label">Ημερομηνία Ολικής Χρήσης</span>
             <div class="value">{{ coupon.used_at.strftime('%d/%m/%Y') }}</div>
+        </div>
+        {% elif coupon.original_amount and coupon.original_amount > coupon.amount %}
+        <div class="detail-row" style="border-left: 5px solid var(--success); background: rgba(0, 255, 136, 0.02);">
+            <span class="label">Κατάσταση</span>
+            <div class="value">Το κουπόνι παραμένει ενεργό με το παραπάνω υπόλοιπο.</div>
         </div>
         {% endif %}
 
