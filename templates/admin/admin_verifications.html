@@ -17,8 +17,8 @@
             border: none;
         }
         .badge-pending { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-        .user-link { color: #007bff; text-decoration: none; font-weight: 600; }
-        .user-link:hover { color: #0056b3; text-decoration: underline; }
+        .user-link { color: #0d47a1; text-decoration: none; font-weight: 600; }
+        .user-link:hover { color: #007bff; text-decoration: underline; }
         .table thead { background: #f1f5f9; }
     </style>
 </head>
@@ -62,7 +62,7 @@
                                     <small class="text-muted">{{ v.created_at.strftime('%H:%M') }}</small>
                                 </td>
                                 <td>
-                                    <a href="/admin/user/{{ v.users_id }}" class="user-link">
+                                    <a href="/admin/users/{{ v.user.id }}" class="user-link">
                                         <i class="fas fa-user-circle me-1"></i>{{ v.user.fullname }}
                                     </a>
                                     <br>
