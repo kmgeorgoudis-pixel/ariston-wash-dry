@@ -742,6 +742,17 @@ def admin_coupon_submit(user_id):
 # ============================
 #  ΜΑΖΙΚΗ ΑΠΟΣΤΟΛΗ ΚΟΥΠΟΝΙΩΝ (με φίλτρα)
 # ============================
+@app.route('/admin/announcements/delete_all', methods=['POST'])
+def delete_all_announcements():
+    # Εδώ υποθέτω ότι το μοντέλο σου λέγεται Announcement
+    try:
+        Announcement.query.delete()
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(f"Σφάλμα κατά τη διαγραφή: {e}")
+        
+    return redirect('/admin/announcements')
 @app.route("/admin/coupons/send_filtered", methods=["POST"])
 @login_required
 def admin_send_coupons_filtered():

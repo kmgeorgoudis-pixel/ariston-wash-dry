@@ -1,19 +1,22 @@
-{% extends "admin/layout.html" %}
-
-{% block title %}Ανακοινώσεις που έχουν σταλεί{% endblock %}
-{% set active_page = 'announcements' %}
-
-{% block header_title %}
-📄 Ανακοινώσεις που έχουν σταλεί
-{% endblock %}
-
 {% block content %}
 
 <div class="admin-card">
-    <div class="admin-card-title">Σύνολο ανακοινώσεων: {{ announcements|length }}</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <div class="admin-card-title">Σύνολο ανακοινώσεων: {{ announcements|length }}</div>
+        
+        {% if announcements|length > 0 %}
+        <form method="POST" action="/admin/announcements/delete_all" onsubmit="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις ΟΛΕΣ τις ανακοινώσεις;');">
+            <button type="submit" style="padding:10px 15px; background:#dc2626; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">
+                🗑️ Διαγραφή Όλων
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
 
     {% for ann in announcements %}
-        <div class="admin-card" style="margin-top:15px;">
+        <div class="admin-card" style="margin-top:15px; border-left: 4px solid #3b82f6;">
             <div class="admin-card-title">{{ ann.title }}</div>
             <div style="color:#555; margin-bottom:8px;">{{ ann.description }}</div>
             <div style="font-size:12px; color:#777;">
@@ -21,11 +24,13 @@
             </div>
 
             <form method="POST" action="/admin/announcement/{{ ann.id }}/delete" style="margin-top:10px;">
-                <button style="padding:8px 12px; background:#dc2626; color:white; border:none; border-radius:8px; cursor:pointer;">
+                <button style="padding:8px 12px; background:#6b7280; color:white; border:none; border-radius:8px; cursor:pointer; font-size: 11px;">
                     Διαγραφή
                 </button>
             </form>
         </div>
+    {% else %}
+        <p style="text-align:center; color:#777;">Δεν υπάρχουν ανακοινώσεις.</p>
     {% endfor %}
 </div>
 
