@@ -15,6 +15,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage, Score
 import random
 import smtplib
+import time
 from email.mime.text import MIMEText
 from email.message import EmailMessage
 from functools import wraps
@@ -1275,32 +1276,25 @@ def updates_menu():
     return render_template("updates-menu.html")
 
 def send_usage_email(user, coupon, spent_amount, is_full):
-    """Στέλνει email ενημέρωσης για τη χρήση του κουπονιού"""
-    from flask_mail import Message
-    subject = "Ενημέρωση Χρήσης Κουπονιού - Ariston Wash & Dry"
+    """Στέλνει email ενημέρωσης για τη χρήση του κουπονιού μέσω Resend"""
+    subject = "Ενημέρωση Χρήσης Κουπονιού - ARISTON Wash & Dry"
     
     if is_full:
         body = f"""
-        Γεια σας {user.fullname},
-        
-        Σας ενημερώνουμε ότι το κουπόνι σας "{coupon.title}" χρησιμοποιήθηκε εξ ολοκλήρου.
-        
+        Γεια σας {user.fullname},<br><br>
+        Σας ενημερώνουμε ότι το κουπόνι σας "<b>{coupon.title}</b>" χρησιμοποιήθηκε εξ ολοκλήρου.<br><br>
         Σας ευχαριστούμε που μας προτιμάτε!
         """
     else:
         body = f"""
-        Γεια σας {user.fullname},
-        
-        Μόλις χρησιμοποιήσατε {spent_amount}€ από το κουπόνι σας "{coupon.title}".
-        
-        Το νέο σας υπόλοιπο είναι: {coupon.amount}€
-        
-        Μπορείτε να δείτε την κάρτα σας εδώ: https://ariston-wash-dry.onrender.com/card/{user.id}
+        Γεια σας {user.fullname},<br><br>
+        Μόλις χρησιμοποιήσατε <b>{spent_amount}€</b> από το κουπόνι σας "<b>{coupon.title}</b>".<br><br>
+        Το νέο σας υπόλοιπο είναι: <b>{coupon.amount}€</b><br><br>
+        Μπορείτε να δείτε τα κουπόνια σας εδώ: <a href="https://aristonwashdry.gr/coupons">https://aristonwashdry.gr/coupons</a>
         """
     
-    msg = Message(subject, recipients=[user.email])
-    msg.body = body
-    mail.send(msg)
+    # Καλούμε τη ΔΙΚΗ ΣΟΥ send_email που έχεις ήδη στο app.py
+    send_email(user.email, subject, body)
 
 def send_coupons_background(users, title, description, amount, start_date, end_date):
     with app.app_context():
@@ -1332,20 +1326,16 @@ def send_coupons_background(users, title, description, amount, start_date, end_d
 
 @app.route("/admin/coupon/<int:id>/use", methods=["POST"])
 @login_required
+@admin_required
 def admin_use_coupon(id):
-    if not current_user.is_admin:
-        return redirect("/")
-
-    coupon = Coupon.query.get(id)
-    if not coupon:
-        return redirect("/admin/users")
-
+    coupon = Coupon.query.get_or_404(id)
     user = User.query.get(coupon.user_id)
+    
     action = request.form.get("action") 
     spent_raw = request.form.get("spent_amount")
     
-    # Backup σιγουριάς: αν δεν έχει original_amount, το ορίζουμε τώρα
-    if not coupon.original_amount:
+    # Backup σιγουριάς για το original_amount
+    if not coupon.original_amount or coupon.original_amount == 0:
         coupon.original_amount = coupon.amount
 
     spent_for_email = 0
@@ -1369,19 +1359,20 @@ def admin_use_coupon(id):
                 coupon.amount = 0
             else:
                 coupon.amount -= spent_amount
-                # remains used = False
         except ValueError:
+            flash("Μη έγκυρο ποσό.", "danger")
             return redirect(f"/admin/users/{coupon.user_id}")
 
     db.session.commit()
 
-    # Αποστολή Email ενημέρωσης
+    # Αποστολή Email ενημέρωσης μέσω της νέας send_usage_email
     if user and user.email:
         try:
             send_usage_email(user, coupon, spent_for_email, is_full)
         except Exception as e:
             print(f"📧 Email failed: {e}")
 
+    flash("Η χρήση του κουπονιού καταχωρήθηκε.", "success")
     return redirect(f"/admin/users/{coupon.user_id}")
 @app.route("/updates")
 @login_required
