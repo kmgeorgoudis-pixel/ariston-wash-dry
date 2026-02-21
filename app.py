@@ -1,5 +1,5 @@
 import os
-ffrom flask import Flask, render_template, request, redirect, flash, session, jsonify, url_for
+from flask import Flask, render_template, request, redirect, flash, session, jsonify, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from email.header import Header
 from database import db, init_db
