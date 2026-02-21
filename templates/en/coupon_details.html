@@ -32,11 +32,12 @@
             background-color: var(--dark-bg);
             color: var(--white);
             display: flex;
-            align-items: center;
+            align-items: flex-start; 
             justify-content: center;
             min-height: 100vh;
-            padding: 20px;
-            overflow: hidden;
+            padding: 40px 20px; 
+            overflow-y: auto;   
+            overflow-x: hidden; 
             position: relative;
         }
 
@@ -45,7 +46,7 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 0;
-            overflow: hidden;
+            overflow: hidden; 
             pointer-events: none;
         }
 
@@ -68,6 +69,7 @@
 
         /* --- CONTAINER --- */
         .details-container {
+            margin: auto 0;
             max-width: 500px;
             width: 100%;
             background: var(--card-bg);
