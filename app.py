@@ -1148,6 +1148,7 @@ def admin_dashboard():
         total_announcements=total_announcements,
         total_reviews=total_reviews,
         total_messages=total_messages,
+        total_verifications=total_verifications)
         active_page="dashboard"
     )
 @app.route("/forgot-password", methods=["GET", "POST"])
