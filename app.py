@@ -1140,6 +1140,7 @@ def admin_dashboard():
     total_announcements = Announcement.query.count()
     total_reviews = Review.query.count()
     total_messages = ContactMessage.query.count()
+    total_verifications = Verification.query.count() # Προσθέσαμε αυτό για να μην βγάζει NameError
 
     return render_template(
         "admin/dashboard.html",
@@ -1148,7 +1149,7 @@ def admin_dashboard():
         total_announcements=total_announcements,
         total_reviews=total_reviews,
         total_messages=total_messages,
-        total_verifications=total_verifications)
+        total_verifications=total_verifications,
         active_page="dashboard"
     )
 @app.route("/forgot-password", methods=["GET", "POST"])
