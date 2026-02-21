@@ -2,14 +2,24 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Διαχείριση Επιβεβαιώσεων</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .sidebar { height: 100vh; background: #212529; color: white; padding-top: 20px; }
-        .main-content { padding: 30px; background: #f8f9fa; min-height: 100vh; }
-        .table-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .badge-pending { background: #ffc107; color: #000; }
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .main-content { padding: 30px; min-height: 100vh; }
+        .table-card { 
+            background: white; 
+            border-radius: 15px; 
+            padding: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: none;
+        }
+        .badge-pending { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .user-link { color: #007bff; text-decoration: none; font-weight: 600; }
+        .user-link:hover { color: #0056b3; text-decoration: underline; }
+        .table thead { background: #f1f5f9; }
     </style>
 </head>
 <body>
@@ -18,46 +28,76 @@
     <div class="row">
         <div class="col-12 main-content">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3><i class="fas fa-clipboard-check me-2 text-primary"></i>Αιτήματα Επιβεβαίωσης</h3>
-                <a href="/admin" class="btn btn-outline-secondary">Πίσω στο Dashboard</a>
+                <div>
+                    <h3 class="fw-bold mb-0">
+                        <i class="fas fa-user-check me-2 text-primary"></i>Αιτήματα Επιβεβαίωσης
+                    </h3>
+                    <p class="text-muted small">Διαχείριση και έλεγχος ταυτοποίησης μελών</p>
+                </div>
+                <a href="/admin" class="btn btn-outline-dark">
+                    <i class="fas fa-arrow-left me-1"></i> Πίσω στο Dashboard
+                </a>
             </div>
 
             <div class="table-card">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Ημερομηνία</th>
-                            <th>Χρήστης</th>
-                            <th>Τίτλος Αιτήματος</th>
-                            <th>Ενέργειες</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for v in verifications %}
-                        <tr>
-                            <td>#{{ v.id }}</td>
-                            <td>{{ v.created_at }}</td>
-                            <td>
-                                <strong>{{ v.username }}</strong><br>
-                                <small class="text-muted">{{ v.email }}</small>
-                            </td>
-                            <td><span class="badge badge-pending">Εκκρεμεί</span> {{ v.title }}</td>
-                            <td>
-                                <a href="/admin/user/{{ v.user_id }}" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-external-link-alt"></i> View Member
-                                </a>
-                                <button class="btn btn-sm btn-dark" onclick="alert('Περιεχόμενο: {{ v.message }}')">
-                                    <i class="fas fa-eye"></i> Read
-                                </button>
-                                <a href="/admin/delete-verification/{{ v.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Διαγραφή αιτήματος;')">
-    <i class="fas fa-trash"></i>
-</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th class="border-0">ID</th>
+                                <th class="border-0">Ημερομηνία</th>
+                                <th class="border-0">Χρήστης (Link)</th>
+                                <th class="border-0">Τίτλος Αιτήματος</th>
+                                <th class="border-0 text-end">Ενέργειες</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for v in verifications %}
+                            <tr>
+                                <td class="text-muted">#{{ v.id }}</td>
+                                <td>
+                                    <small class="fw-bold">
+                                        {{ v.created_at.strftime('%d/%m/%Y') }}
+                                    </small><br>
+                                    <small class="text-muted">{{ v.created_at.strftime('%H:%M') }}</small>
+                                </td>
+                                <td>
+                                    <a href="/admin/user/{{ v.user_id }}" class="user-link">
+                                        <i class="fas fa-user-circle me-1"></i>{{ v.user.fullname }}
+                                    </a>
+                                    <br>
+                                    <small class="text-muted">{{ v.user.email }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge badge-pending mb-1">Εκκρεμεί</span><br>
+                                    <strong>{{ v.title }}</strong>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-dark" 
+                                                onclick="alert('Μήνυμα από {{ v.user.fullname }}:\n\n{{ v.message|replace("\'", "\\\'")|replace("\n", " ") }}')">
+                                            <i class="fas fa-eye me-1"></i> Read
+                                        </button>
+                                        
+                                        <a href="/admin/delete-verification/{{ v.id }}" 
+                                           class="btn btn-sm btn-danger" 
+                                           onclick="return confirm('Οριστική διαγραφή αιτήματος;')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="fas fa-inbox fa-3x mb-3"></i><br>
+                                    Δεν υπάρχουν εκκρεμή αιτήματα επιβεβαίωσης.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
