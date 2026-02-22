@@ -9,3 +9,4 @@ itsdangerous
 Jinja2
 Werkzeug
 requests
+xhtml2pdf

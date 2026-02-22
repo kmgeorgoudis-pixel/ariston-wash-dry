@@ -2054,6 +2054,30 @@ def verify_code_page():
             flash('Ο κωδικός που εισάγατε είναι λάθος.', 'danger')
 
     return render_template('verify_enter_code.html')
+from xhtml2pdf import pisa
+from io import BytesIO
+from flask import make_response, render_template
+
+@app.route('/admin/export-pdf/<int:v_id>')
+@login_required
+def export_verification_pdf(v_id):
+    if not current_user.is_admin:
+        return redirect(url_safe_to_home)
+        
+    v = VerificationRequest.query.get_or_404(v_id)
+    
+    # Το HTML template για το PDF
+    html_content = render_template('admin/pdf_template.html', v=v)
+    
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html_content.encode("UTF-8")), result)
+    
+    if not pdf.err:
+        response = make_response(result.getvalue())
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'attachment; filename=Verification_{v.id}.pdf'
+        return response
+    return "Error generating PDF", 500
 
 
 
