@@ -2054,9 +2054,8 @@ def verify_code_page():
             flash('Ο κωδικός που εισάγατε είναι λάθος.', 'danger')
 
     return render_template('verify_enter_code.html')
-from xhtml2pdf import pisa
-from io import BytesIO
-from flask import make_response, render_template
+from fpdf import FPDF
+from flask import make_response
 
 @app.route('/admin/export-pdf/<int:v_id>')
 @login_required
@@ -2064,25 +2063,67 @@ def export_verification_pdf(v_id):
     if not current_user.is_admin:
         return redirect(url_for('home'))
         
-    # Χρήση του σωστού Model name: Verification
     v = Verification.query.get_or_404(v_id)
     
-    # Φορτώνει το template που μου έστειλες
-    html_content = render_template('admin/pdf_template.html', v=v)
+    pdf = FPDF()
+    pdf.add_page()
     
-    result = BytesIO()
-    # Μετατροπή του HTML σε PDF
-    pisa_status = pisa.CreatePDF(BytesIO(html_content.encode("UTF-8")), dest=result)
+    # Header - Μπλε γραμμή πάνω
+    pdf.set_draw_color(13, 71, 161)
+    pdf.set_line_width(1)
+    pdf.line(10, 25, 200, 25)
+
+    # Logo & Company Info
+    pdf.set_font("Helvetica", "B", 20)
+    pdf.set_text_color(13, 71, 161)
+    pdf.cell(100, 10, "ARISTON Wash & Dry", ln=0)
     
-    if not pisa_status.err:
-        response = make_response(result.getvalue())
-        response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = f'attachment; filename=Verification_{v.id}.pdf'
-        return response
-        
-    return "Error generating PDF", 500
-
-
+    pdf.set_font("Helvetica", "", 9)
+    pdf.set_text_color(50, 50, 50)
+    pdf.cell(90, 5, "Konstantinos Georgoudis", ln=1, align='R')
+    pdf.cell(190, 5, "info@aristonwashdry.gr", ln=1, align='R')
+    pdf.cell(190, 5, "+30 6987598416", ln=1, align='R')
+    
+    pdf.ln(20)
+    
+    # Title
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(0, 10, "VERIFICATION RECEIPT", ln=1, align='C')
+    pdf.ln(5)
+    
+    # Info Section
+    pdf.set_fill_color(245, 245, 245)
+    pdf.set_font("Helvetica", "B", 11)
+    pdf.cell(0, 10, f" Request Details: #{v.id}", ln=1, fill=True)
+    pdf.set_font("Helvetica", "", 10)
+    pdf.cell(0, 8, f" Date: {v.created_at.strftime('%d/%m/%Y %H:%M')}", ln=1)
+    pdf.cell(0, 8, f" Member: {v.user.fullname} (ID: #{v.user.id})", ln=1)
+    pdf.ln(5)
+    
+    # Content Section
+    pdf.set_font("Helvetica", "B", 11)
+    pdf.cell(0, 10, f" Subject: {v.title}", ln=1)
+    pdf.set_font("Helvetica", "", 10)
+    pdf.multi_cell(0, 8, f" Message content: {v.message}")
+    pdf.ln(10)
+    
+    # Status
+    pdf.set_fill_color(227, 242, 253)
+    pdf.set_font("Helvetica", "B", 11)
+    pdf.cell(0, 10, " Status: COMPLETED / VERIFIED", ln=1, fill=True)
+    
+    # Signature
+    pdf.ln(20)
+    pdf.set_font("Helvetica", "", 11)
+    pdf.cell(0, 10, "Best Regards,", ln=1)
+    pdf.set_font("Helvetica", "B", 11)
+    pdf.cell(0, 10, "Konstantinos Georgoudis", ln=1)
+    
+    response = make_response(pdf.output(dest='S'))
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=Verification_{v.id}.pdf'
+    return response
 
 
 
