@@ -2056,8 +2056,24 @@ def verify_code_page():
     return render_template('verify_enter_code.html')
 
 
+
 from fpdf import FPDF
 from flask import make_response
+
+def latin_safe(text):
+    """ Μετατρέπει ελληνικούς χαρακτήρες σε λατινικούς για να μην κρασάρει το PDF """
+    if not text: return ""
+    greek_map = {
+        'Α': 'A', 'Β': 'B', 'Γ': 'G', 'Δ': 'D', 'Ε': 'E', 'Ζ': 'Z', 'Η': 'H', 'Θ': 'Th',
+        'Ι': 'I', 'Κ': 'K', 'Λ': 'L', 'Μ': 'M', 'Ν': 'N', 'Ξ': 'X', 'Ο': 'O', 'Π': 'P',
+        'Ρ': 'R', 'Σ': 'S', 'Τ': 'T', 'Υ': 'Y', 'Φ': 'F', 'Χ': 'Ch', 'Ψ': 'Ps', 'Ω': 'O',
+        'α': 'a', 'β': 'b', 'γ': 'g', 'δ': 'd', 'ε': 'e', 'ζ': 'z', 'η': 'h', 'θ': 'th',
+        'ι': 'i', 'κ': 'k', 'λ': 'l', 'μ': 'm', 'ν': 'n', 'ξ': 'x', 'ο': 'o', 'π': 'p',
+        'ρ': 'r', 'σ': 's', 'τ': 't', 'υ': 'y', 'φ': 'f', 'χ': 'ch', 'ψ': 'ps', 'ω': 'o',
+        'ς': 's', 'ί': 'i', 'ή': 'e', 'ά': 'a', 'έ': 'e', 'ώ': 'o', 'ύ': 'u', 'ό': 'o'
+    }
+    safe_text = "".join(greek_map.get(c, c) for c in str(text))
+    return safe_text.encode('ascii', 'ignore').decode('ascii')
 
 @app.route('/admin/export-pdf/<int:v_id>')
 @login_required
@@ -2067,34 +2083,33 @@ def export_verification_pdf(v_id):
         
     v = Verification.query.get_or_404(v_id)
     
-    # Δημιουργία PDF (A4)
+    # Ρυθμίσεις PDF
     pdf = FPDF(orientation='P', unit='mm', format='A4')
     pdf.add_page()
     
-    # --- Paths & Colors ---
+    # Χρώματα Ariston
     blue_dark = (13, 71, 161)
-    blue_light = (230, 240, 255)
-    text_gray = (60, 60, 60)
-    # ΠΡΟΣΟΧΗ: Επιβεβαίωσε αν το όνομα είναι 1new.png ή 1.new.png
+    blue_light = (235, 245, 255)
+    text_main = (40, 40, 40)
     logo_path = os.path.join(app.root_path, 'templates', 'images', '1new.png')
 
-    # --- 1. ΕΞΩΤΕΡΙΚΟ ΠΛΑΙΣΙΟ (Για επίσημο look) ---
-    pdf.set_draw_color(200, 200, 200)
-    pdf.rect(5, 5, 200, 287) 
+    # 1. Background Border (Επίσημο look)
+    pdf.set_draw_color(220, 220, 220)
+    pdf.rect(5, 5, 200, 287)
 
-    # --- 2. HEADER BANNER ---
+    # 2. Header Banner
     pdf.set_fill_color(*blue_dark)
-    pdf.rect(5, 5, 200, 42, 'F') 
+    pdf.rect(5, 5, 200, 45, 'F') 
     
-    # Προσθήκη Λογοτύπου
+    # Logo
     if os.path.exists(logo_path):
         pdf.image(logo_path, 12, 10, 35) 
     
-    # Στοιχεία Εταιρείας (Δεξιά στο Banner)
+    # Εταιρικά Στοιχεία (Σταθερά Αγγλικά - No crash)
     pdf.set_font("Helvetica", "B", 10)
     pdf.set_text_color(255, 255, 255)
     pdf.set_xy(100, 10)
-    info_text = (
+    header_info = (
         "ARISTON WASH & DRY\n"
         "Konstantinos Georgoudis\n"
         "info@aristonwashdry.gr\n"
@@ -2102,96 +2117,93 @@ def export_verification_pdf(v_id):
         "Tel: +30 6987598416\n"
         "www.aristonwashdry.gr"
     )
-    pdf.multi_cell(95, 5, info_text, align='R')
+    pdf.multi_cell(95, 5, header_info, align='R')
 
-    # --- 3. ΤΙΤΛΟΣ ΕΓΓΡΑΦΟΥ ---
+    # 3. Τίτλος Πιστοποιητικού
     pdf.set_y(60)
-    pdf.set_font("Helvetica", "B", 20)
+    pdf.set_font("Helvetica", "B", 22)
     pdf.set_text_color(*blue_dark)
-    pdf.cell(0, 10, "ELECTRONIC VERIFICATION CERTIFICATE", ln=1, align='C')
-    
+    pdf.cell(0, 15, "VERIFICATION CERTIFICATE", ln=1, align='C')
     pdf.set_draw_color(*blue_dark)
-    pdf.set_line_width(1)
-    pdf.line(60, 72, 150, 72)
-    pdf.ln(15)
-
-    # --- 4. ΣΤΟΙΧΕΙΑ ΕΠΑΛΗΘΕΥΣΗΣ (Box) ---
-    pdf.set_fill_color(*blue_light)
-    pdf.set_font("Helvetica", "B", 12)
-    pdf.set_text_color(0, 0, 0)
-    pdf.cell(0, 10, "  IDENTIFICATION DETAILS", ln=1, fill=True)
-    
-    pdf.set_font("Helvetica", "", 11)
-    pdf.set_text_color(*text_gray)
-    pdf.ln(3)
-    
-    # Στοιχεία σε στήλες
-    details = [
-        ("Reference ID:", f"#{v.id}"),
-        ("Issue Date:", v.created_at.strftime('%d %B %Y, %H:%M')),
-        ("Verified Member:", v.user.fullname.upper()),
-        ("Member ID:", f"USER-ID-{v.user_id}")
-    ]
-    
-    for label, value in details:
-        pdf.set_x(15)
-        pdf.set_font("Helvetica", "B", 10)
-        pdf.cell(40, 8, label)
-        pdf.set_font("Helvetica", "", 10)
-        pdf.cell(0, 8, value, ln=1)
-    
+    pdf.set_line_width(0.8)
+    pdf.line(65, 75, 145, 75)
     pdf.ln(10)
 
-    # --- 5. ΚΥΡΙΩΣ ΠΕΡΙΕΧΟΜΕΝΟ ---
-    pdf.set_draw_color(220, 220, 220)
-    pdf.set_line_width(0.2)
+    # 4. Identification Box (Με latin_safe)
+    pdf.set_fill_color(*blue_light)
+    pdf.set_font("Helvetica", "B", 12)
+    pdf.set_text_color(*blue_dark)
+    pdf.cell(0, 10, "  IDENTIFICATION DETAILS", ln=1, fill=True)
+    
+    pdf.set_font("Helvetica", "", 10)
+    pdf.set_text_color(*text_main)
+    pdf.ln(4)
+    
+    # Λεπτομέρειες με μετατροπή ελληνικών
+    items = [
+        ("Reference ID:", f"#{v.id}"),
+        ("Date & Time:", v.created_at.strftime('%d %B %Y, %H:%M')),
+        ("Verified Member:", latin_safe(v.user.fullname).upper()),
+        ("System ID:", f"UID-{v.user_id}")
+    ]
+    
+    for label, val in items:
+        pdf.set_x(15)
+        pdf.set_font("Helvetica", "B", 10)
+        pdf.cell(40, 7, label)
+        pdf.set_font("Helvetica", "", 10)
+        pdf.cell(0, 7, val, ln=1)
+
+    # 5. Message Content
+    pdf.ln(10)
+    pdf.set_draw_color(230, 230, 230)
     pdf.line(15, pdf.get_y(), 195, pdf.get_y())
     pdf.ln(5)
     
     pdf.set_font("Helvetica", "B", 12)
     pdf.set_text_color(0, 0, 0)
-    pdf.cell(0, 10, f"Subject: {v.title}", ln=1)
+    pdf.cell(0, 10, f"Subject: {latin_safe(v.title)}", ln=1)
     
     pdf.set_font("Helvetica", "", 11)
-    pdf.set_text_color(*text_gray)
-    pdf.multi_cell(0, 7, f"Statement of Verification:\n{v.message}")
-    
-    pdf.ln(20)
+    pdf.set_text_color(*text_main)
+    pdf.write(7, "Verification Content:\n")
+    pdf.set_x(15)
+    pdf.multi_cell(180, 7, latin_safe(v.message))
 
-    # --- 6. ΕΠΙΣΗΜΗ ΚΑΤΑΣΤΑΣΗ ---
-    pdf.set_fill_color(235, 255, 235) # Light Greenish for success
-    pdf.set_draw_color(40, 167, 69)
-    pdf.set_font("Helvetica", "B", 13)
+    # 6. Official Status Stamp
+    pdf.ln(15)
+    pdf.set_fill_color(235, 255, 235) # Light green
+    pdf.set_draw_color(40, 167, 69) # Green border
+    pdf.set_font("Helvetica", "B", 12)
     pdf.set_text_color(40, 167, 69)
-    pdf.cell(0, 15, "    STATUS: AUTHENTICATED & VERIFIED", border=1, ln=1, fill=True)
+    pdf.cell(0, 14, "    STATUS: ELECTRONICALLY AUDITED & VERIFIED", border=1, ln=1, fill=True)
 
-    # --- 7. ΥΠΟΓΡΑΦΗ ΔΙΑΧΕΙΡΙΣΤΗ ---
-    pdf.set_y(-70)
+    # 7. Signature Section
+    pdf.set_y(-65)
     pdf.set_font("Helvetica", "B", 11)
     pdf.set_text_color(0, 0, 0)
     pdf.cell(0, 7, "Authorized by:", ln=1, align='R')
-    pdf.ln(5)
-    # Εδώ μπορείς να βάλεις και μια εικόνα υπογραφής αν έχεις
+    pdf.ln(2)
     pdf.set_font("Helvetica", "B", 12)
     pdf.cell(0, 6, "Konstantinos Georgoudis  ", ln=1, align='R')
     pdf.set_font("Helvetica", "", 10)
-    pdf.cell(0, 5, "Administrator, ARISTON Wash & Dry  ", ln=1, align='R')
+    pdf.set_text_color(*text_main)
+    pdf.cell(0, 5, "Founder & Administrator, ARISTON Wash & Dry  ", ln=1, align='R')
     pdf.set_text_color(*blue_dark)
     pdf.cell(0, 5, "georgoudisk@aristonwashdry.gr  ", ln=1, align='R')
 
-    # --- 8. FOOTER ---
+    # 8. Footer
     pdf.set_y(-20)
     pdf.set_font("Helvetica", "I", 8)
     pdf.set_text_color(150, 150, 150)
     pdf.line(15, 278, 195, 278)
-    footer_text = "This document is an official record of ARISTON Wash & Dry. Any unauthorized alteration renders it void."
-    pdf.cell(0, 10, footer_text, align='C')
+    pdf.cell(0, 10, "This certificate is an automated digital record of ARISTON Wash & Dry system operations.", align='C')
 
-    # Τελική εξαγωγή
+    # Output
     pdf_output = bytes(pdf.output())
     response = make_response(pdf_output)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename=Verification_Certificate_{v.id}.pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=Verification_{v.id}.pdf'
     return response
 
 
