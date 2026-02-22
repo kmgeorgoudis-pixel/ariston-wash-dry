@@ -2054,8 +2054,9 @@ def verify_code_page():
             flash('Ο κωδικός που εισάγατε είναι λάθος.', 'danger')
 
     return render_template('verify_enter_code.html')
-from fpdf import FPDF
-from flask import make_response
+from xhtml2pdf import pisa
+from io import BytesIO
+from flask import make_response, render_template
 
 @app.route('/admin/export-pdf/<int:v_id>')
 @login_required
@@ -2063,42 +2064,23 @@ def export_verification_pdf(v_id):
     if not current_user.is_admin:
         return redirect(url_for('home'))
         
-    v = VerificationRequest.query.get_or_404(v_id)
+    # Χρήση του σωστού Model name: Verification
+    v = Verification.query.get_or_404(v_id)
     
-    pdf = FPDF()
-    pdf.add_page()
+    # Φορτώνει το template που μου έστειλες
+    html_content = render_template('admin/pdf_template.html', v=v)
     
-    # Προσθήκη γραμματοσειράς που υποστηρίζει Ελληνικά (Arial-like)
-    pdf.set_font("Helvetica", "B", 16)
+    result = BytesIO()
+    # Μετατροπή του HTML σε PDF
+    pisa_status = pisa.CreatePDF(BytesIO(html_content.encode("UTF-8")), dest=result)
     
-    # Header
-    pdf.cell(0, 10, "ARISTON Wash & Dry", ln=True)
-    pdf.set_font("Helvetica", "", 10)
-    pdf.cell(0, 5, "aristonwashdry.gr", ln=True)
-    pdf.cell(0, 5, "Konstantinos Georgoudis | info@aristonwashdry.gr", ln=True)
-    pdf.ln(10)
-    
-    # Title
-    pdf.set_font("Helvetica", "B", 14)
-    pdf.cell(0, 10, f"Verification Receipt #{v.id}", ln=True, align='C')
-    pdf.ln(5)
-    
-    # Content
-    pdf.set_font("Helvetica", "", 12)
-    pdf.cell(0, 10, f"Member: {v.user.fullname}", ln=True)
-    pdf.cell(0, 10, f"Date: {v.created_at.strftime('%d/%m/%Y')}", ln=True)
-    pdf.cell(0, 10, f"Subject: {v.title}", ln=True)
-    pdf.ln(5)
-    
-    pdf.multi_cell(0, 10, f"Message: {v.message}")
-    
-    pdf.ln(20)
-    pdf.cell(0, 10, "Status: COMPLETED", ln=True)
-    
-    response = make_response(pdf.output(dest='S'))
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename=Verification_{v.id}.pdf'
-    return response
+    if not pisa_status.err:
+        response = make_response(result.getvalue())
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'attachment; filename=Verification_{v.id}.pdf'
+        return response
+        
+    return "Error generating PDF", 500
 
 
 

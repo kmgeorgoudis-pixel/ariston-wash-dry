@@ -9,4 +9,5 @@ itsdangerous
 Jinja2
 Werkzeug
 requests
-fpdf2
+xhtml2pdf==0.2.11
+html5lib==1.1
