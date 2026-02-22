@@ -2215,7 +2215,6 @@ def admin_transfer_coupon(user_id):
         return redirect(url_for('home'))
     
     sender = User.query.get_or_404(user_id)
-    # Παίρνουμε μόνο τα ενεργά κουπόνια που έχουν υπόλοιπο
     coupons = Coupon.query.filter_by(user_id=sender.id, used=False).filter(Coupon.amount > 0).all()
 
     if request.method == 'POST':
@@ -2223,7 +2222,6 @@ def admin_transfer_coupon(user_id):
         recipient_email = request.form.get('recipient_email').strip().lower()
         amount_str = request.form.get('amount')
         
-        # Έλεγχος εγκυρότητας ποσού
         try:
             amount = float(amount_str)
         except ValueError:
@@ -2237,22 +2235,17 @@ def admin_transfer_coupon(user_id):
             flash(f'Σφάλμα: Ο παραλήπτης {recipient_email} δεν βρέθηκε.', 'danger')
             return redirect(request.url)
 
-        if amount <= 0:
-            flash('Το ποσό πρέπει να είναι θετικό.', 'warning')
-            return redirect(request.url)
-
-        if selected_coupon.amount < amount:
-            flash(f'Ανεπαρκές υπόλοιπο κουπονιού ({selected_coupon.amount}€).', 'danger')
+        if amount <= 0 or selected_coupon.amount < amount:
+            flash(f'Πρόβλημα με το ποσό ή το υπόλοιπο.', 'danger')
             return redirect(request.url)
 
         try:
-            # 1. Ενημέρωση κουπονιού Αποστολέα
+            # 1. Βάση Δεδομένων
             selected_coupon.amount -= amount
             if selected_coupon.amount <= 0.01:
                 selected_coupon.used = True
                 selected_coupon.used_at = datetime.utcnow()
             
-            # 2. Δημιουργία νέου κουπονιού στον Παραλήπτη
             new_coupon = Coupon(
                 user_id=recipient.id,
                 title=f"ΜΕΤΑΦΟΡΑ ΑΠΟ {sender.fullname.upper() if sender.fullname else 'USER'}",
@@ -2266,41 +2259,42 @@ def admin_transfer_coupon(user_id):
             db.session.add(new_coupon)
             db.session.commit()
 
-            # 3. Αποστολή Email Ειδοποίησης
-            send_transfer_notification(recipient.email, sender.fullname or sender.email, amount)
+            # 2. Email (Περνάμε 4 στοιχεία τώρα)
+            send_transfer_notification(recipient.email, recipient.fullname, sender.fullname or sender.email, amount)
 
-            flash(f'Η μεταφορά {amount}€ στον λογαριασμό {recipient.email} ολοκληρώθηκε!', 'success')
+            flash(f'Η μεταφορά {amount}€ ολοκληρώθηκε!', 'success')
             return redirect(url_for('admin_user_profile', user_id=sender.id))
             
         except Exception as e:
             db.session.rollback()
-            flash('Παρουσιάστηκε σφάλμα κατά την εγγραφή στη βάση.', 'danger')
+            flash('Σφάλμα κατά την εγγραφή στη βάση.', 'danger')
 
     return render_template('admin/transfer_form.html', user=sender, coupons=coupons)
 
-def send_transfer_notification(email, sender_info, amount):
+def send_transfer_notification(email, recipient_name, sender_info, amount):
     subject = "Λάβατε ένα δώρο! - ARISTON Wash & Dry"
+    display_name = recipient_name if recipient_name else "Πελάτη"
+    
     content = f"""
     <div style="font-family: 'Segoe UI', Arial, sans-serif; border: 1px solid #0d47a1; padding: 25px; border-radius: 10px; max-width: 600px;">
         <h2 style="color: #0d47a1; margin-top: 0;">ARISTON Wash & Dry</h2>
-        <p style="font-size: 16px;">Αξιότιμε/η πελάτη,</p>
+        <p style="font-size: 16px;">Αξιότιμε/η <b>{display_name}</b>,</p>
         <p style="font-size: 15px;">Σας ενημερώνουμε ότι μόλις πιστώθηκε στον λογαριασμό σας ένα νέο κουπόνι αξίας <b>{amount:.2f}€</b>.</p>
         <p style="background-color: #f0fdf4; padding: 10px; border-radius: 5px; border-left: 5px solid #166534;">
             Η μεταφορά πραγματοποιήθηκε από: <b>{sender_info}</b>
         </p>
         <p style="font-size: 15px;">Μπορείτε να δείτε το νέο σας υπόλοιπο συνδεόμενοι στο προφίλ σας στην ιστοσελίδα μας.</p>
         <div style="text-align: center; margin-top: 25px;">
-            <a href="https://aristonwashdry.gr/profile" style="background-color: #0d47a1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Είσοδος στο Προφίλ</a>
+            <a href="https://aristonwashdry.gr/coupons" style="background-color: #0d47a1; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Δείτε τα Κουπόνια σας</a>
         </div>
         <hr style="margin-top: 30px; border: 0; border-top: 1px solid #eee;">
         <p style="font-size: 12px; color: #777; text-align: center;">Το παρόν αποτελεί αυτοματοποιημένη επιβεβαίωση της ARISTON Wash & Dry.</p>
     </div>
     """
-    # ΔΙΟΡΘΩΣΗ: Χρησιμοποιούμε τη send_email που δουλεύει ήδη στο verify_login
     try:
         send_email(email, subject, content)
     except Exception as e:
-        print(f"Email failed but transfer complete: {e}")
+        print(f"Email error: {e}")
 
 
 #####AGGLIKA####
