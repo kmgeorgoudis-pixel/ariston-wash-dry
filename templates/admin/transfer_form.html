@@ -1,0 +1,49 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Μεταφορά Ποσού{% endblock %}
+
+{% block content %}
+<div class="admin-card" style="max-width: 600px; margin: 0 auto; padding: 30px;">
+    <div class="admin-card-title" style="font-size: 20px; color: #0d47a1; border-bottom: 2px solid #0d47a1; padding-bottom: 10px;">
+        🔄 Νέα Μεταφορά Ποσού
+    </div>
+    
+    <div style="margin-top: 15px; font-size: 14px; color: #555;">
+        Αποστολέας: <strong>{{ user.fullname or user.email }}</strong>
+    </div>
+
+    <form method="POST" style="margin-top: 25px;">
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 8px;">Επιλέξτε Κουπόνι Αποστολέα:</label>
+            <select name="coupon_id" required style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px;">
+                {% for c in coupons %}
+                    <option value="{{ c.id }}">
+                        {{ c.title }} (Διαθέσιμο: {{ "%.2f"|format(c.amount) }}€)
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 8px;">Email Παραλήπτη (Μέλους):</label>
+            <input type="email" name="recipient_email" required placeholder="π.χ. info@example.gr" 
+                   style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px;">
+        </div>
+
+        <div style="margin-bottom: 25px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 8px;">Ποσό προς Μεταφορά (€):</label>
+            <input type="number" name="amount" step="0.01" min="0.01" required placeholder="0.00"
+                   style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px;">
+        </div>
+
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <button type="submit" style="background: #0d47a1; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 2;">
+                Εκτέλεση Μεταφοράς
+            </button>
+            <a href="/admin/users/{{ user.id }}" style="flex: 1; text-align: center; color: #666; text-decoration: none; font-size: 14px;">
+                Ακύρωση
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

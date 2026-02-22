@@ -64,6 +64,10 @@
     </button>
 </form>
 {% endif %}
+<a href="/admin/users/{{ user.id }}/transfer"
+   style="padding:10px 14px; border-radius:10px; background:#f0fdf4; color:#166534; text-decoration:none;">
+    Μεταφορά Ποσού
+</a>
         {% if not user.is_admin %}
         <form action="/admin/users/{{ user.id }}/make_admin" method="POST"
               onsubmit="return confirm('Να γίνει Admin ο χρήστης;');">
