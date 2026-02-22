@@ -2120,12 +2120,12 @@ def export_verification_pdf(v_id):
     pdf.set_font("Helvetica", "B", 11)
     pdf.cell(0, 10, "Konstantinos Georgoudis", ln=1)
     
-    response = make_response(pdf.output(dest='S'))
+    # Διόρθωση των bytes και των κενών (indents)
+    pdf_output = bytes(pdf.output()) 
+    response = make_response(pdf_output)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename=Verification_{v.id}.pdf'
     return response
-
-
 
 
 
