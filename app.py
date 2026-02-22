@@ -2296,9 +2296,11 @@ def send_transfer_notification(email, sender_info, amount):
         <p style="font-size: 12px; color: #777; text-align: center;">Το παρόν αποτελεί αυτοματοποιημένη επιβεβαίωση της ARISTON Wash & Dry.</p>
     </div>
     """
-    # Εδώ χρησιμοποιείς τη δική σου συνάρτηση αποστολής (Resend ή άλλη)
-    send_resend_email(email, subject, content)
-
+    # ΔΙΟΡΘΩΣΗ: Χρησιμοποιούμε τη send_email που δουλεύει ήδη στο verify_login
+    try:
+        send_email(email, subject, content)
+    except Exception as e:
+        print(f"Email failed but transfer complete: {e}")
 
 
 #####AGGLIKA####
