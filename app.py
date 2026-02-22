@@ -2054,6 +2054,8 @@ def verify_code_page():
             flash('Ο κωδικός που εισάγατε είναι λάθος.', 'danger')
 
     return render_template('verify_enter_code.html')
+
+
 from fpdf import FPDF
 from flask import make_response
 
@@ -2065,66 +2067,131 @@ def export_verification_pdf(v_id):
         
     v = Verification.query.get_or_404(v_id)
     
-    pdf = FPDF()
+    # Δημιουργία PDF (A4)
+    pdf = FPDF(orientation='P', unit='mm', format='A4')
     pdf.add_page()
     
-    # Header - Μπλε γραμμή πάνω
-    pdf.set_draw_color(13, 71, 161)
-    pdf.set_line_width(1)
-    pdf.line(10, 25, 200, 25)
+    # --- Paths & Colors ---
+    blue_dark = (13, 71, 161)
+    blue_light = (230, 240, 255)
+    text_gray = (60, 60, 60)
+    # ΠΡΟΣΟΧΗ: Επιβεβαίωσε αν το όνομα είναι 1new.png ή 1.new.png
+    logo_path = os.path.join(app.root_path, 'templates', 'images', '1new.png')
 
-    # Logo & Company Info
+    # --- 1. ΕΞΩΤΕΡΙΚΟ ΠΛΑΙΣΙΟ (Για επίσημο look) ---
+    pdf.set_draw_color(200, 200, 200)
+    pdf.rect(5, 5, 200, 287) 
+
+    # --- 2. HEADER BANNER ---
+    pdf.set_fill_color(*blue_dark)
+    pdf.rect(5, 5, 200, 42, 'F') 
+    
+    # Προσθήκη Λογοτύπου
+    if os.path.exists(logo_path):
+        pdf.image(logo_path, 12, 10, 35) 
+    
+    # Στοιχεία Εταιρείας (Δεξιά στο Banner)
+    pdf.set_font("Helvetica", "B", 10)
+    pdf.set_text_color(255, 255, 255)
+    pdf.set_xy(100, 10)
+    info_text = (
+        "ARISTON WASH & DRY\n"
+        "Konstantinos Georgoudis\n"
+        "info@aristonwashdry.gr\n"
+        "georgoudisk@aristonwashdry.gr\n"
+        "Tel: +30 6987598416\n"
+        "www.aristonwashdry.gr"
+    )
+    pdf.multi_cell(95, 5, info_text, align='R')
+
+    # --- 3. ΤΙΤΛΟΣ ΕΓΓΡΑΦΟΥ ---
+    pdf.set_y(60)
     pdf.set_font("Helvetica", "B", 20)
-    pdf.set_text_color(13, 71, 161)
-    pdf.cell(100, 10, "ARISTON Wash & Dry", ln=0)
+    pdf.set_text_color(*blue_dark)
+    pdf.cell(0, 10, "ELECTRONIC VERIFICATION CERTIFICATE", ln=1, align='C')
     
-    pdf.set_font("Helvetica", "", 9)
-    pdf.set_text_color(50, 50, 50)
-    pdf.cell(90, 5, "Konstantinos Georgoudis", ln=1, align='R')
-    pdf.cell(190, 5, "info@aristonwashdry.gr", ln=1, align='R')
-    pdf.cell(190, 5, "+30 6987598416", ln=1, align='R')
-    
-    pdf.ln(20)
-    
-    # Title
-    pdf.set_font("Helvetica", "B", 14)
+    pdf.set_draw_color(*blue_dark)
+    pdf.set_line_width(1)
+    pdf.line(60, 72, 150, 72)
+    pdf.ln(15)
+
+    # --- 4. ΣΤΟΙΧΕΙΑ ΕΠΑΛΗΘΕΥΣΗΣ (Box) ---
+    pdf.set_fill_color(*blue_light)
+    pdf.set_font("Helvetica", "B", 12)
     pdf.set_text_color(0, 0, 0)
-    pdf.cell(0, 10, "VERIFICATION RECEIPT", ln=1, align='C')
-    pdf.ln(5)
+    pdf.cell(0, 10, "  IDENTIFICATION DETAILS", ln=1, fill=True)
     
-    # Info Section
-    pdf.set_fill_color(245, 245, 245)
-    pdf.set_font("Helvetica", "B", 11)
-    pdf.cell(0, 10, f" Request Details: #{v.id}", ln=1, fill=True)
-    pdf.set_font("Helvetica", "", 10)
-    pdf.cell(0, 8, f" Date: {v.created_at.strftime('%d/%m/%Y %H:%M')}", ln=1)
-    pdf.cell(0, 8, f" Member: {v.user.fullname} (ID: #{v.user.id})", ln=1)
-    pdf.ln(5)
-    
-    # Content Section
-    pdf.set_font("Helvetica", "B", 11)
-    pdf.cell(0, 10, f" Subject: {v.title}", ln=1)
-    pdf.set_font("Helvetica", "", 10)
-    pdf.multi_cell(0, 8, f" Message content: {v.message}")
-    pdf.ln(10)
-    
-    # Status
-    pdf.set_fill_color(227, 242, 253)
-    pdf.set_font("Helvetica", "B", 11)
-    pdf.cell(0, 10, " Status: COMPLETED / VERIFIED", ln=1, fill=True)
-    
-    # Signature
-    pdf.ln(20)
     pdf.set_font("Helvetica", "", 11)
-    pdf.cell(0, 10, "Best Regards,", ln=1)
-    pdf.set_font("Helvetica", "B", 11)
-    pdf.cell(0, 10, "Konstantinos Georgoudis", ln=1)
+    pdf.set_text_color(*text_gray)
+    pdf.ln(3)
     
-    # Διόρθωση των bytes και των κενών (indents)
-    pdf_output = bytes(pdf.output()) 
+    # Στοιχεία σε στήλες
+    details = [
+        ("Reference ID:", f"#{v.id}"),
+        ("Issue Date:", v.created_at.strftime('%d %B %Y, %H:%M')),
+        ("Verified Member:", v.user.fullname.upper()),
+        ("Member ID:", f"USER-ID-{v.user_id}")
+    ]
+    
+    for label, value in details:
+        pdf.set_x(15)
+        pdf.set_font("Helvetica", "B", 10)
+        pdf.cell(40, 8, label)
+        pdf.set_font("Helvetica", "", 10)
+        pdf.cell(0, 8, value, ln=1)
+    
+    pdf.ln(10)
+
+    # --- 5. ΚΥΡΙΩΣ ΠΕΡΙΕΧΟΜΕΝΟ ---
+    pdf.set_draw_color(220, 220, 220)
+    pdf.set_line_width(0.2)
+    pdf.line(15, pdf.get_y(), 195, pdf.get_y())
+    pdf.ln(5)
+    
+    pdf.set_font("Helvetica", "B", 12)
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(0, 10, f"Subject: {v.title}", ln=1)
+    
+    pdf.set_font("Helvetica", "", 11)
+    pdf.set_text_color(*text_gray)
+    pdf.multi_cell(0, 7, f"Statement of Verification:\n{v.message}")
+    
+    pdf.ln(20)
+
+    # --- 6. ΕΠΙΣΗΜΗ ΚΑΤΑΣΤΑΣΗ ---
+    pdf.set_fill_color(235, 255, 235) # Light Greenish for success
+    pdf.set_draw_color(40, 167, 69)
+    pdf.set_font("Helvetica", "B", 13)
+    pdf.set_text_color(40, 167, 69)
+    pdf.cell(0, 15, "    STATUS: AUTHENTICATED & VERIFIED", border=1, ln=1, fill=True)
+
+    # --- 7. ΥΠΟΓΡΑΦΗ ΔΙΑΧΕΙΡΙΣΤΗ ---
+    pdf.set_y(-70)
+    pdf.set_font("Helvetica", "B", 11)
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(0, 7, "Authorized by:", ln=1, align='R')
+    pdf.ln(5)
+    # Εδώ μπορείς να βάλεις και μια εικόνα υπογραφής αν έχεις
+    pdf.set_font("Helvetica", "B", 12)
+    pdf.cell(0, 6, "Konstantinos Georgoudis  ", ln=1, align='R')
+    pdf.set_font("Helvetica", "", 10)
+    pdf.cell(0, 5, "Administrator, ARISTON Wash & Dry  ", ln=1, align='R')
+    pdf.set_text_color(*blue_dark)
+    pdf.cell(0, 5, "georgoudisk@aristonwashdry.gr  ", ln=1, align='R')
+
+    # --- 8. FOOTER ---
+    pdf.set_y(-20)
+    pdf.set_font("Helvetica", "I", 8)
+    pdf.set_text_color(150, 150, 150)
+    pdf.line(15, 278, 195, 278)
+    footer_text = "This document is an official record of ARISTON Wash & Dry. Any unauthorized alteration renders it void."
+    pdf.cell(0, 10, footer_text, align='C')
+
+    # Τελική εξαγωγή
+    pdf_output = bytes(pdf.output())
     response = make_response(pdf_output)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename=Verification_{v.id}.pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=Verification_Certificate_{v.id}.pdf'
     return response
 
 
