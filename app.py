@@ -2293,15 +2293,7 @@ def view_announcement(ann_id):
     ann = Announcement.query.filter_by(id=ann_id, user_id=current_user.id).first_or_404()
     # Εδώ βεβαιώσου ότι το αρχείο λέγεται announcement_detail.html
     return render_template('announcement_detail.html', ann=ann)
-from flask import Flask, render_template, send_from_directory
 
-# ΑΥΤΟ ΕΙΝΑΙ ΤΟ ΚΛΕΙΔΙ ΓΙΑ ΤΙΣ ΦΩΤΟΓΡΑΦΙΕΣ
-@app.route('/imagess/<path:filename>')
-def serve_flyer_images(filename):
-    return send_from_directory('imagess', filename)
-@app.route('/flyer')
-def view_flyer():
-    return render_template('flyer.html')
 
 
 
@@ -2845,9 +2837,7 @@ def view_announcement_en(ann_id):
     return render_template('en/announcement_detail_en.html', ann=ann)
 
 
-@app.route('/en/flyer')
-def view_flyer_en():
-    return render_template('flyer_en.html')
+
 
 
 
