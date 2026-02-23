@@ -2298,6 +2298,13 @@ def view_flyer():
     # Η Flask ψάχνει αυτόματα μέσα στον φάκελο templates
     # οπότε ορίζουμε τη διαδρομή ξεκινώντας από τον φάκελο flyer
     return render_template('flyer.html')
+from flask import send_from_directory
+
+@app.route('/imagess/<path:filename>')
+def serve_flyer_images(filename):
+    # Αυτό λέει στη Flask: "Όταν κάποιος ζητάει κάτι από το /imagess/, 
+    # πήγαινε και βρες το στον φάκελο imagess του project"
+    return send_from_directory('imagess', filename)
 
 
 
