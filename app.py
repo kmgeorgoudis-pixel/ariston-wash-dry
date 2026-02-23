@@ -2297,7 +2297,7 @@ def view_announcement(ann_id):
 def view_flyer():
     # Η Flask ψάχνει αυτόματα μέσα στον φάκελο templates
     # οπότε ορίζουμε τη διαδρομή ξεκινώντας από τον φάκελο flyer
-    return render_template('flyer/flyer.html')
+    return render_template('flyer.html')
 
 
 
@@ -2841,7 +2841,7 @@ def view_announcement_en(ann_id):
     return render_template('en/announcement_detail_en.html', ann=ann)
 @app.route('/en/flyer')
 def view_flyer_en():
-    return render_template('flyer/flyer_en.html')
+    return render_template('flyer_en.html')
 
 
 
