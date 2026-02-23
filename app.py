@@ -1376,15 +1376,6 @@ def updates():
     ).order_by(Announcement.id.desc()).all()
 
     return render_template("updates.html", announcements=announcements)
-@app.route("/announcement/<int:announcement_id>")
-@login_required
-def announcement_view(announcement_id):
-    announcement = Announcement.query.filter(
-        (Announcement.id == announcement_id) &
-        ((Announcement.user_id == None) | (Announcement.user_id == current_user.id))
-    ).first_or_404()
-
-    return render_template("announcement_view.html", announcement=announcement)
 
 
 
@@ -2298,8 +2289,9 @@ def send_transfer_notification(email, recipient_name, sender_info, amount):
 @app.route('/announcement/<int:ann_id>')
 @login_required
 def view_announcement(ann_id):
-    # Παίρνουμε την ανακοίνωση, αλλά ελέγχουμε να ανήκει στον χρήστη ή να είναι γενική
+    # Παίρνουμε την ανακοίνωση, ελέγχοντας αν ανήκει στον χρήστη
     ann = Announcement.query.filter_by(id=ann_id, user_id=current_user.id).first_or_404()
+    # Εδώ βεβαιώσου ότι το αρχείο λέγεται announcement_detail.html
     return render_template('announcement_detail.html', ann=ann)
 
 #####AGGLIKA####
@@ -2831,11 +2823,14 @@ def public_card_en(user_id, token):
     days_member = delta.days
     
     return render_template('en/public_card_en.html', user=user, days_member=days_member)
+
+
 @app.route('/en/announcement/<int:ann_id>')
 @login_required
 def view_announcement_en(ann_id):
-    # Αναζήτηση ανακοίνωσης που ανήκει στον χρήστη
+    # Αναζήτηση ανακοίνωσης για τον χρήστη (English version)
     ann = Announcement.query.filter_by(id=ann_id, user_id=current_user.id).first_or_404()
+    # Εδώ βεβαιώσου ότι το αρχείο λέγεται en/announcement_detail_en.html
     return render_template('en/announcement_detail_en.html', ann=ann)
 
 
