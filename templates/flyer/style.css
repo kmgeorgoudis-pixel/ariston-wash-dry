@@ -1,0 +1,105 @@
+:root {
+    --blue: #004a99;
+    --dark: #002d5a;
+    --light-blue: #eef6ff;
+    --accent: #ffd700;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+
+body { background: #444; padding: 40px 0; display: flex; flex-direction: column; align-items: center; gap: 40px; }
+
+.flyer-page { 
+    width: 210mm; height: 297mm; background: white; 
+    position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column;
+}
+
+/* Header */
+.main-header { 
+    background: var(--blue); color: white; padding: 30px 40px; 
+    display: flex; align-items: center; gap: 30px;
+    border-bottom: 8px solid var(--accent);
+}
+.main-logo { width: 180px; background: white; padding: 10px; border-radius: 10px; }
+.header-text h1 { font-size: 28px; font-weight: 900; line-height: 1; }
+.header-text p { letter-spacing: 2px; font-weight: 600; font-size: 14px; color: var(--accent); }
+
+/* Welcome Section */
+.welcome-section { padding: 25px 40px; background: var(--light-blue); }
+.blue-title { color: var(--blue); font-weight: 900; font-size: 18px; margin-bottom: 10px; }
+.welcome-section p { line-height: 1.5; font-size: 14px; color: #333; text-align: justify; }
+
+/* Store Photo */
+.store-photo-container {
+    width: calc(100% - 80px);
+    margin: 15px auto;
+    height: 180px;
+    overflow: hidden;
+    border-radius: 15px;
+    border: 3px solid var(--blue);
+}
+.store-img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Features Grid */
+.features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 40px; }
+.feature-card { border: 1px solid #eee; padding: 15px; border-radius: 10px; }
+.feature-card i { font-size: 24px; color: var(--blue); margin-bottom: 10px; }
+.feature-card h4 { font-size: 14px; color: var(--dark); border-bottom: 2px solid var(--blue); margin-bottom: 8px; }
+.feature-card p { font-size: 12px; line-height: 1.4; color: #555; }
+
+/* B2B Section */
+.b2b-pro { margin: 15px 40px; border: 2px solid var(--blue); border-radius: 15px; overflow: hidden; }
+.section-tag { background: var(--blue); color: white; padding: 8px; font-weight: 800; text-align: center; font-size: 14px; }
+.b2b-content { display: flex; padding: 15px; gap: 15px; align-items: center; }
+.b2b-img { width: 60px; }
+.b2b-text p { font-size: 13px; line-height: 1.4; }
+.bullets { margin-top: 10px; display: flex; gap: 15px; font-size: 11px; font-weight: 700; color: var(--blue); }
+
+/* Pricing Page */
+.price-header { padding: 30px 40px; border-bottom: 2px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+.mini-logo { height: 80px; }
+.price-header h2 { color: var(--blue); font-weight: 900; font-size: 22px; }
+
+.pricing-wrap { padding: 10px 40px; }
+.category-header { background: var(--dark); color: white; padding: 10px 15px; font-weight: 800; margin: 15px 0; border-radius: 5px; font-size: 14px; }
+.price-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+.p-main h4 { font-size: 15px; color: var(--blue); }
+.p-main p { font-size: 11px; color: #666; }
+.p-amt { font-size: 18px; font-weight: 900; }
+
+.dryer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.dry-card { background: var(--light-blue); padding: 15px; border-radius: 10px; text-align: center; }
+.dry-card h5 { color: var(--blue); font-size: 14px; }
+
+/* Tips & Motto */
+.pro-tips { margin: 15px 40px; padding: 20px; border: 2px dashed var(--blue); border-radius: 12px; background: #fffdf0; }
+.pro-tips h4 { color: #d4a017; font-size: 14px; margin-bottom: 5px; }
+.tips-list { list-style: none; }
+.tips-list li { position: relative; padding-left: 20px; font-size: 12px; margin-bottom: 5px; }
+.tips-list li::before { content: "•"; color: var(--blue); font-weight: bold; position: absolute; left: 0; }
+
+.final-motto { padding: 40px; text-align: center; }
+.final-motto p { font-size: 18px; }
+.final-motto strong { font-size: 32px; color: var(--blue); display: block; margin-top: 5px; }
+
+/* Footers & QR ROW */
+.footer-front, .footer-back { margin-top: auto; background: var(--blue); color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+
+.qr-row-4 { 
+    display: flex; 
+    gap: 8px; 
+    background: white; 
+    padding: 8px; 
+    border-radius: 8px; 
+}
+.qr-item { text-align: center; }
+.qr-item img { width: 100px; height: 100px; display: block; }
+.qr-item span { font-size: 7px; font-weight: 800; color: var(--blue); display: block; margin-top: 2px; }
+
+.info-footer { font-size: 13px; line-height: 2.5; }
+
+@media print {
+    body { padding: 0; background: white; }
+    .flyer-page { box-shadow: none; page-break-after: always; }
+}
