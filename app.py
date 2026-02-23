@@ -2295,7 +2295,12 @@ def send_transfer_notification(email, recipient_name, sender_info, amount):
         send_email(email, subject, content)
     except Exception as e:
         print(f"Email error: {e}")
-
+@app.route('/announcement/<int:ann_id>')
+@login_required
+def view_announcement(ann_id):
+    # Παίρνουμε την ανακοίνωση, αλλά ελέγχουμε να ανήκει στον χρήστη ή να είναι γενική
+    ann = Announcement.query.filter_by(id=ann_id, user_id=current_user.id).first_or_404()
+    return render_template('announcement_detail.html', ann=ann)
 
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
@@ -2826,6 +2831,12 @@ def public_card_en(user_id, token):
     days_member = delta.days
     
     return render_template('en/public_card_en.html', user=user, days_member=days_member)
+@app.route('/en/announcement/<int:ann_id>')
+@login_required
+def view_announcement_en(ann_id):
+    # Αναζήτηση ανακοίνωσης που ανήκει στον χρήστη
+    ann = Announcement.query.filter_by(id=ann_id, user_id=current_user.id).first_or_404()
+    return render_template('en/announcement_detail_en.html', ann=ann)
 
 
 

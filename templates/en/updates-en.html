@@ -221,11 +221,15 @@
 
         {% if announcements %}
             {% for ann in announcements %}
-                <div class="update-box">
-                    <h3>{{ ann.title }}</h3>
-                    <p>{{ ann.description }}</p>
-                    <small>{{ ann.date.strftime("%d/%m/%Y %H:%M") }}</small>
-                </div>
+                <a href="{{ url_for('view_announcement_en', ann_id=ann.id) }}" style="text-decoration: none; color: inherit; display: block;">
+                    <div class="update-box">
+                        <h3>{{ ann.title }}</h3>
+                        <p>{{ ann.description[:120] }}...</p> <small>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 5px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            VIEW FULL UPDATE — {{ ann.date.strftime("%d/%m/%Y") }}
+                        </small>
+                    </div>
+                </a>
             {% endfor %}
         {% else %}
             <div class="no-updates">

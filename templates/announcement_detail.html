@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ann.title }} – ARISTON Wash & Dry</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d47a1;
+            --secondary: #00d4ff;
+            --dark-bg: #030508;
+            --glass: rgba(255, 255, 255, 0.03);
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #0d1b2a 0%, #030508 100%);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .full-ann-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            padding: 50px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+
+        .date-badge {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--secondary);
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 40px;
+            white-space: pre-wrap; /* Για να κρατάει τα κενά/αλλαγές γραμμής */
+        }
+
+        .back-btn {
+            background: var(--white);
+            color: var(--dark-bg);
+            padding: 15px 30px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="full-ann-container">
+        <div class="date-badge">📅 {{ ann.date.strftime("%d/%m/%Y %H:%M") }}</div>
+        <h1>{{ ann.title }}</h1>
+        <div class="content">
+            {{ ann.description }}
+        </div>
+        <hr style="opacity: 0.1; margin-bottom: 30px;">
+        <a href="/updates" class="back-btn">
+            ← Επιστροφή στις Ενημερώσεις
+        </a>
+    </div>
+</body>
+</html>
