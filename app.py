@@ -2294,6 +2294,10 @@ def view_announcement(ann_id):
     ann = Announcement.query.filter_by(id=ann_id, user_id=current_user.id).first_or_404()
     # Εδώ βεβαιώσου ότι το αρχείο λέγεται announcement_detail.html
     return render_template('announcement_detail.html', ann=ann)
+@app.route('/smart-ai')
+@login_required
+def smart_ai():
+    return render_template('ai_concierge.html')
 
 
 
@@ -2837,7 +2841,10 @@ def view_announcement_en(ann_id):
     ann = Announcement.query.filter_by(id=ann_id, user_id=current_user.id).first_or_404()
     # Εδώ βεβαιώσου ότι το αρχείο λέγεται en/announcement_detail_en.html
     return render_template('en/announcement_detail_en.html', ann=ann)
-
+@app.route('/en/smart-ai')
+def smart_ai_en():
+    # Προσέχουμε να συμπεριλάβουμε το 'en/' στη διαδρομή του template
+    return render_template('en/ai_concierge_en.html')
 
 
 

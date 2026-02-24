@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium AI Concierge | ARISTON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-bright: #f9e272;
+            --dark-bg: #050a12;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at top, #1a2a44 0%, #050a12 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Luxury Header */
+        .premium-header {
+            width: 100%;
+            padding: 50px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .premium-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .logo-container img {
+            width: 120px;
+            filter: brightness(1.2);
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .premium-header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 35px;
+            margin: 0;
+            letter-spacing: 6px;
+            color: var(--gold);
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .premium-header p {
+            font-weight: 300;
+            letter-spacing: 4px;
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Chat Frame Styling */
+        .chat-wrapper {
+            position: relative;
+            margin: 40px 0;
+            padding: 10px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .chat-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            border-radius: 32px;
+            background: linear-gradient(135deg, var(--gold), transparent, var(--gold));
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        zapier-interfaces-chatbot-embed {
+            border-radius: 20px;
+            overflow: hidden;
+            background: transparent !important;
+        }
+
+        /* Navigation Buttons */
+        .nav-footer {
+            margin-top: auto;
+            padding-bottom: 40px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-premium {
+            text-decoration: none;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 12px 25px;
+            border: 1px solid var(--gold);
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+        }
+
+        .btn-premium:hover {
+            background: var(--gold);
+            color: black;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .premium-header h1 { font-size: 24px; }
+            zapier-interfaces-chatbot-embed { width: 90vw !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="premium-header">
+        <div class="logo-container">
+            <img src="/static/images/1new.png" onerror="this.src='/templates/images/1new.png'" alt="Ariston Logo">
+        </div>
+        <h1>Ariston Smart</h1>
+        <p>Μια Premium Εμπειρία AI Concierge</p>
+    </header>
+
+    <div class="chat-wrapper">
+        <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
+        <zapier-interfaces-chatbot-embed 
+            is-popup='false' 
+            chatbot-id='cmm12pccl003829fwq40ucyug' 
+            height='650px' 
+            width='480px'>
+        </zapier-interfaces-chatbot-embed>
+    </div>
+
+    <div class="nav-footer">
+        <a href="/" class="btn-premium">
+            <i class="fas fa-chevron-left"></i> Αρχική Σελίδα
+        </a>
+        <a href="/en/smart-ai" class="btn-premium">
+            <i class="fas fa-globe"></i> English Version
+        </a>
+    </div>
+
+    <div style="font-size: 10px; opacity: 0.4; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase;">
+        Σχεδιασμένο αποκλειστικά για το Ariston Wash & Dry
+    </div>
+
+</body>
+</html>
