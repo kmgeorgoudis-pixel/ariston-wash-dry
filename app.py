@@ -2842,6 +2842,7 @@ def view_announcement_en(ann_id):
     # Εδώ βεβαιώσου ότι το αρχείο λέγεται en/announcement_detail_en.html
     return render_template('en/announcement_detail_en.html', ann=ann)
 @app.route('/en/smart-ai')
+@login_required
 def smart_ai_en():
     # Προσέχουμε να συμπεριλάβουμε το 'en/' στη διαδρομή του template
     return render_template('en/ai_concierge_en.html')
