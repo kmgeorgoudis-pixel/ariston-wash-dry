@@ -1471,6 +1471,7 @@ https://aristonwashdry.gr/
 
     # 7) 🔥 Σβήνουμε όλες τις ανακοινώσεις του χρήστη
     Announcement.query.filter_by(user_id=user_id).delete()
+    Verification.query.filter_by(user_id=user_id).delete()
 
     # 8) 🔥 Τώρα σβήνουμε τον χρήστη
     user = User.query.get(user_id)
@@ -2730,6 +2731,7 @@ Your data is used solely for the operation of the service and is not shared with
     # 5) Delete user data
     Coupon.query.filter_by(user_id=user_id).delete()
     Announcement.query.filter_by(user_id=user_id).delete()
+    Verification.query.filter_by(user_id=user_id).delete()
     user = User.query.get(user_id)
     db.session.delete(user)
     db.session.commit()
