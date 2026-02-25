@@ -32,7 +32,6 @@
     }
 
     function onScanSuccess(decodedText) {
-        // Παύση scanner για να μην ξαναχτυπήσει αμέσως
         html5QrCode.pause();
         
         fetch('/api/verify-qr', {
@@ -51,8 +50,8 @@
                         <p style="font-size: 18px; font-weight: 700; color: var(--primary); margin: 10px 0;">${data.fullname}</p>
                         <p style="color: var(--text-muted);">Θέλετε να δείτε τις πληροφορίες μέλους;</p>
                         <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-                            <a href="/admin/user/${data.user_id}" class="admin-link active" style="padding: 12px 30px; width: 80px; text-align: center;">ΝΑΙ</a>
-                            <button onclick="resetScanner()" class="admin-link" style="padding: 12px 30px; width: 80px; background: #94a3b8; color: white; border: none; cursor: pointer;">ΟΧΙ</button>
+                            <a href="/admin/users/${data.user_id}" class="admin-link active" style="padding: 12px 30px; width: 80px; text-align: center; text-decoration: none; border-radius: 10px; background: var(--primary); color: white;">ΝΑΙ</a>
+                            <button onclick="resetScanner()" class="admin-link" style="padding: 12px 30px; width: 80px; background: #94a3b8; color: white; border: none; border-radius: 10px; cursor: pointer;">ΟΧΙ</button>
                         </div>
                     </div>
                 `;
@@ -63,7 +62,7 @@
                         <div style="font-size: 50px; color: #ef4444; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i></div>
                         <h3 style="margin:0; color: #991b1b;">ΔΕΝ ΒΡΕΘΗΚΑΝ ΣΤΟΙΧΕΙΑ</h3>
                         <p style="color: #b91c1c;">Η κάρτα είναι άκυρη ή άγνωστη.</p>
-                        <button onclick="resetScanner()" class="admin-link active" style="margin-top: 15px; background: #ef4444; border:none;">Προσπάθεια Ξανά</button>
+                        <button onclick="resetScanner()" class="admin-link active" style="margin-top: 15px; background: #ef4444; border:none; padding: 10px 20px; color: white; border-radius: 10px; cursor: pointer;">Προσπάθεια Ξανά</button>
                     </div>
                 `;
             }
