@@ -2298,6 +2298,37 @@ def view_announcement(ann_id):
 @login_required
 def smart_ai():
     return render_template('ai_concierge.html')
+import re
+
+@app.route('/api/verify-qr', methods=['POST'])
+@login_required
+def verify_qr():
+    if not current_user.is_admin:
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 403
+
+    data = request.json
+    scanned_text = data.get('qr_code', '') # Αυτό θα είναι όλο το URL: https://aristonwashdry.gr/card/5/token
+
+    # Χρησιμοποιούμε Regular Expression για να βρούμε το ID και το Token μέσα από το URL
+    # Ψάχνουμε το μοτίβο /card/ΑΡΙΘΜΟΣ/TOKEN
+    match = re.search(r'/card/(\d+)/([\w\d]+)', scanned_text)
+    
+    if match:
+        user_id = int(match.group(1))
+        token = match.group(2)
+
+        # Επαλήθευση αν το token είναι σωστό για αυτό το ID
+        if token == get_secure_hash(user_id):
+            user = User.query.get(user_id)
+            if user:
+                return jsonify({
+                    'status': 'success',
+                    'fullname': user.fullname,
+                    'user_id': user.id
+                })
+    
+    # Αν φτάσει εδώ, σημαίνει ότι είτε το token ήταν λάθος είτε το QR άσχετο
+    return jsonify({'status': 'error', 'message': 'Invalid Card'})
 
 
 
