@@ -2329,7 +2329,44 @@ def verify_qr():
     
     # Αν φτάσει εδώ, σημαίνει ότι είτε το token ήταν λάθος είτε το QR άσχετο
     return jsonify({'status': 'error', 'message': 'Invalid Card'})
+@app.route('/admin/qr-scanner')
+@login_required
+def admin_qr_scanner():
+    # Έλεγχος αν ο χρήστης είναι πράγματι admin
+    if not current_user.is_admin:
+        return redirect(url_for('index'))
+    
+    # ΠΡΟΣΟΧΗ: Βεβαιώσου ότι το αρχείο υπάρχει στο templates/admin/qr_scanner.html
+    return render_template('admin/qr_scanner.html', active_page='qr_scanner')
 
+@app.route('/api/verify-qr', methods=['POST'])
+@login_required
+def verify_qr():
+    if not current_user.is_admin:
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 403
+
+    data = request.json
+    scanned_text = data.get('qr_code', '')
+
+    # Το Regex που αναλύει το URL της κάρτας
+    import re
+    match = re.search(r'/card/(\d+)/([\w\d]+)', scanned_text)
+    
+    if match:
+        user_id = int(match.group(1))
+        token = match.group(2)
+
+        # Χρησιμοποιούμε τη συνάρτηση που ήδη έχεις για το token
+        if token == get_secure_hash(user_id):
+            user = User.query.get(user_id)
+            if user:
+                return jsonify({
+                    'status': 'success',
+                    'fullname': user.fullname,
+                    'user_id': user.id
+                })
+    
+    return jsonify({'status': 'error', 'message': 'Invalid Card'})
 
 
 
