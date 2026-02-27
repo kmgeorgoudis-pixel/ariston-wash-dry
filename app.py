@@ -2351,13 +2351,13 @@ def lucky_wheel():
     return render_template('wheel.html', can_spin=can_spin, username=user.fullname)
 
 @app.route('/spin-result', methods=['POST'])
+@login_required # <--- Πρόσθεσε αυτό!
 def spin_result():
-    if 'user_id' not in session:
-        return jsonify({'error': 'Unauthorized'}), 401
-        
-    user = User.query.get(session['user_id'])
+    # Χρησιμοποιούμε current_user
+    user = current_user
     now = datetime.utcnow()
     
+    # Έλεγχος αν επιτρέπεται το spin
     if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
         return jsonify({'error': 'Already spun'}), 400
         
@@ -2369,14 +2369,13 @@ def spin_result():
     
     # --- ΝΕΟ: Αποθήκευση κέρδους στη βάση ---
     user.last_spin_date = now
-    user.last_spin_prize = result # <--- ΠΡΕΠΕΙ ΝΑ ΥΠΑΡΧΕΙ ΣΤΟ MODELS.PY
+    user.last_spin_prize = result 
     db.session.commit()
     
     # Υπολογισμός μοίρας (Angle)
     final_angle = random.randint(0, 359)
     
     return jsonify({'prize': result, 'angle': final_angle})
-
 @app.route('/admin/wheel-results')
 @login_required # <--- Ή @admin_required
 def admin_wheel_results():
