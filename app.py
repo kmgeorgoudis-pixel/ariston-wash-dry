@@ -2334,6 +2334,73 @@ def verify_qr():
                 })
     
     return jsonify({'status': 'error', 'message': 'Invalid Card'})
+@app.route('/lucky-wheel')
+def lucky_wheel():
+    if 'user_id' not in session:
+        flash("Πρέπει να συνδεθείτε για να παίξετε!", "danger")
+        return redirect(url_for('login'))
+        
+    user = User.query.get(session['user_id'])
+    
+    now = datetime.utcnow()
+    can_spin = True
+    if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
+        can_spin = False
+        
+    return render_template('wheel.html', can_spin=can_spin, username=user.fullname)
+
+@app.route('/spin-result', methods=['POST'])
+def spin_result():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+        
+    user = User.query.get(session['user_id'])
+    now = datetime.utcnow()
+    
+    if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
+        return jsonify({'error': 'Already spun'}), 400
+        
+    # 🎰 Λογική: 50 τμήματα, 5 δώρα + 45 "Τίποτα" (0)
+    prizes = [5, 7, 10, 15, 20] + ([0] * 45)
+    random.shuffle(prizes) # Ανακάτεμα
+    
+    result = random.choice(prizes)
+    
+    # --- ΝΕΟ: Αποθήκευση κέρδους στη βάση ---
+    user.last_spin_date = now
+    user.last_spin_prize = result # <--- ΠΡΕΠΕΙ ΝΑ ΥΠΑΡΧΕΙ ΣΤΟ MODELS.PY
+    db.session.commit()
+    
+    # Υπολογισμός μοίρας (Angle)
+    final_angle = random.randint(0, 359)
+    
+    return jsonify({'prize': result, 'angle': final_angle})
+
+@app.route('/admin/wheel-results')
+@login_required # <--- Ή @admin_required
+def admin_wheel_results():
+    users_who_spun = User.query.filter(User.last_spin_date.isnot(None))\
+                               .order_by(User.last_spin_date.desc()).all()
+    
+
+    return render_template('admin/wheel_results.html', users=users_who_spun, active_page='wheel')
+
+
+
+@app.route('/admin/delete-spin/<int:user_id>', methods=['POST'])
+@login_required 
+def delete_spin(user_id):
+    user = User.query.get(user_id)
+    if user:
+        # Μηδενίζουμε τα δεδομένα του τροχού για τον χρήστη
+        user.last_spin_date = None
+        user.last_spin_prize = 0
+        db.session.commit()
+        flash(f"Η εγγραφή του χρήστη {user.fullname} διαγράφηκε επιτυχώς!", "success")
+    else:
+        flash("Ο χρήστης δεν βρέθηκε.", "danger")
+        
+    return redirect(url_for('admin_wheel_results'))
 
 
 #####AGGLIKA####

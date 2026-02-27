@@ -89,6 +89,8 @@ class User(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(120))
     qr_enabled = db.Column(db.Boolean, default=True)
+    last_spin_date = db.Column(db.DateTime, nullable=True)
+    last_spin_prize = db.Column(db.Integer, default=0)
 class Verification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)

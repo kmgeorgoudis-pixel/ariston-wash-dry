@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}Αποτελέσματα Τροχού{% endblock %}
+
+{% block header_title %}🎡 Αποτελέσματα Τυχερού Τροχού{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm" style="border-radius: 16px; border: none; background-color: #fff; box-shadow: var(--card-shadow) !important;">
+    <div class="card-body p-4">
+        
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" style="color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif;">
+                <thead style="border-bottom: 2px solid #e2e8f0;">
+                    <tr>
+                        <th style="color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; padding: 15px;">Μέλος</th>
+                        <th style="color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; padding: 15px;">Email</th>
+                        <th style="color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; padding: 15px;">Ημερομηνία</th>
+                        <th style="color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; padding: 15px; text-align: center;">Κέρδος</th>
+                        <th style="color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; padding: 15px; text-align: center;">Ενέργεια</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="font-weight: 600; padding: 15px;">{{ user.fullname }}</td>
+                        <td style="color: var(--text-muted); padding: 15px;">{{ user.email }}</td>
+                        <td style="color: var(--text-muted); padding: 15px;">
+                            {{ user.last_spin_date.strftime('%d/%m/%Y, %H:%M') }}
+                        </td>
+                        <td class="text-center" style="padding: 15px;">
+                            {% if user.last_spin_prize > 0 %}
+                                <span class="badge" style="background: linear-gradient(135deg, #22c55e, #16a34a); padding: 8px 12px; border-radius: 8px; font-size: 14px; font-weight: 700; color: white;">
+                                    🎉 {{ user.last_spin_prize }}€
+                                </span>
+                            {% else %}
+                                <span class="badge" style="background-color: #e2e8f0; color: var(--text-muted); padding: 8px 12px; border-radius: 8px; font-size: 14px;">
+                                    ❌ Τίποτα
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center" style="padding: 15px;">
+                            <form action="{{ url_for('delete_spin', user_id=user.id) }}" method="POST" onsubmit="return confirm('Είστε σίγουρος ότι θέλετε να διαγράψετε αυτό το αποτέλεσμα;');">
+                                <button type="submit" class="btn btn-sm" style="background-color: #fee2e2; color: #ef4444; border-radius: 8px; font-weight: 600; padding: 6px 12px; font-size: 13px; border: none;">
+                                    🗑️ Διαγραφή
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

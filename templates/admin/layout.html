@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARISTON Admin – {% block title %}{% endblock %}</title>
+    <title>ARISTON Panel – {% block title %}{% endblock %}</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --sidebar-bg: #020617;
-            --main-bg: #f8fafc;
-            --primary: #0d47a1;
-            --accent: #2563eb;
-            --text-main: #1e293b;
+            --sidebar-bg: #0f172a; /* Slate 900 */
+            --main-bg: #f1f5f9; /* Slate 100 */
+            --card-bg: #ffffff;
+            --primary: #2563eb; /* Blue 600 */
+            --primary-hover: #1d4ed8;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --card-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+            --sidebar-text: #cbd5e1;
+            --sidebar-hover: #1e293b;
+            --flash-info: #e0f2fe;
+            --flash-info-text: #075985;
+            --flash-danger: #fee2e2;
+            --flash-danger-text: #991b1b;
         }
 
         body {
             margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--main-bg);
             color: var(--text-main);
+            font-size: 14px;
         }
 
         .admin-wrapper {
@@ -33,14 +40,14 @@
             min-height: 100vh;
         }
 
-        /* SIDEBAR */
+        /* --- SIDEBAR --- */
         .admin-sidebar {
-            width: 280px;
+            width: 260px;
             background: var(--sidebar-bg);
-            color: #f8fafc;
+            color: var(--sidebar-text);
             display: flex;
             flex-direction: column;
-            padding: 24px 20px;
+            padding: 20px 15px;
             position: sticky;
             top: 0;
             height: 100vh;
@@ -50,34 +57,31 @@
         .admin-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 40px;
-            padding-left: 10px;
+            gap: 10px;
+            margin-bottom: 35px;
+            padding: 0 10px;
         }
 
         .admin-logo img {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
         }
 
         .admin-logo-text {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 800;
+            color: #fff;
             letter-spacing: -0.5px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .admin-section-title {
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             color: #475569;
-            margin: 24px 0 10px;
+            margin: 20px 0 8px;
             padding-left: 12px;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             font-weight: 700;
         }
 
@@ -87,125 +91,107 @@
             margin: 0;
         }
 
-        .admin-menu li { margin-bottom: 4px; }
+        .admin-menu li { margin-bottom: 2px; }
 
         .admin-link {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 14px;
-            border-radius: 12px;
-            color: #94a3b8;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--sidebar-text);
             text-decoration: none;
-            font-size: 14px;
             font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
 
         .admin-link span.icon {
-            font-size: 18px;
-            filter: grayscale(1);
-            transition: 0.3s;
+            font-size: 16px;
+            opacity: 0.7;
+            transition: all 0.2s ease;
         }
 
         .admin-link:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--sidebar-hover);
             color: #fff;
         }
 
-        .admin-link:hover span.icon { filter: grayscale(0); }
+        .admin-link:hover span.icon { opacity: 1; transform: scale(1.1); }
 
         .admin-link.active {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: rgba(37, 99, 235, 0.15);
             color: #fff;
-            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.4);
+            font-weight: 600;
         }
 
-        .admin-link.active span.icon { filter: grayscale(0); }
+        .admin-link.active span.icon { opacity: 1; }
 
         .admin-footer {
             margin-top: auto;
             font-size: 12px;
-            color: #475569;
-            padding: 20px 10px 0;
+            color: #64748b;
+            padding: 15px 10px;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* MAIN AREA */
+        /* --- MAIN AREA --- */
         .admin-main {
             flex: 1;
-            padding: 30px 40px;
-            max-width: 1600px;
+            padding: 25px 30px;
         }
 
         .admin-topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .admin-top-title {
-            font-size: 26px;
-            font-weight: 800;
-            color: #0f172a;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-main);
             letter-spacing: -0.5px;
         }
 
         .admin-top-user {
-            background: #fff;
-            padding: 8px 16px;
-            border-radius: 100px;
+            background: var(--main-bg);
+            padding: 6px 14px;
+            border-radius: 50px;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-muted);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
             border: 1px solid #e2e8f0;
         }
 
         /* Flash Messages */
         .flash-box {
-            padding: 14px 20px;
-            border-radius: 14px;
-            font-size: 14px;
-            font-weight: 600;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
             margin-bottom: 20px;
-            animation: slideDown 0.4s ease-out;
-            border: 1px solid #bae6fd;
-            background: #f0f9ff;
-            color: #0369a1;
+            animation: fadeIn 0.3s ease-in;
         }
+        .flash-box:not(.danger):not(.error) { background: var(--flash-info); color: var(--flash-info-text); border: 1px solid #bae6fd; }
+        .flash-box.danger, .flash-box.error { background: var(--flash-danger); color: var(--flash-danger-text); border: 1px solid #fecaca; }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .flash-box.danger, .flash-box.error {
-            background: #fef2f2;
-            color: #b91c1c;
-            border-color: #fecaca;
-        }
-
-        /* RESPONSIVE */
+        /* Responsive */
         @media (max-width: 1024px) {
-            .admin-sidebar { width: 240px; }
-            .admin-main { padding: 25px; }
-        }
-
-        @media (max-width: 768px) {
-            .admin-wrapper { flex-direction: column; }
-            .admin-sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                padding: 15px;
-            }
-            .admin-logo { margin-bottom: 15px; }
-            .admin-menu { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; }
-            .admin-menu li { margin-bottom: 0; flex-shrink: 0; }
-            .admin-section-title, .admin-footer { display: none; }
-            .admin-link { padding: 8px 12px; }
+            .admin-sidebar { width: 60px; padding: 15px 5px; }
+            .admin-logo-text, .admin-section-title, .admin-link span:not(.icon), .admin-footer { display: none; }
+            .admin-logo { padding: 0; justify-content: center; }
+            .admin-link { justify-content: center; padding: 10px; }
+            .admin-main { padding: 15px; }
         }
     </style>
 
@@ -217,56 +203,62 @@
 
     <aside class="admin-sidebar">
         <div class="admin-logo">
-            <img src="{{ url_for('static', filename='images/logo3.png') }}" alt="ARISTON">
-            <div class="admin-logo-text">ARISTON <span style="font-weight:400; font-size: 14px; opacity: 0.8;">Admin</span></div>
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" alt="A">
+            <div class="admin-logo-text">ARISTON</div>
         </div>
 
-        <div class="admin-section-title">Πίνακας ελέγχου</div>
+        <div class="admin-section-title">Main</div>
         <ul class="admin-menu">
             <li>
                 <a href="/admin" class="admin-link {% if active_page == 'dashboard' %}active{% endif %}">
-                    <span class="icon">🏠</span>
-                    <span>Επισκόπηση</span>
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
                 </a>
             </li>
         </ul>
 
-        <div class="admin-section-title">Διαχείριση</div>
+        <div class="admin-section-title">Management</div>
         <ul class="admin-menu">
             <li>
-                <a href="/admin/qr-scanner" class="admin-link {% if active_page == 'qr_scanner' %}active{% endif %}" style="border: 1px solid rgba(37, 99, 235, 0.2);">
+                <a href="/admin/qr-scanner" class="admin-link {% if active_page == 'qr_scanner' %}active{% endif %}">
                     <span class="icon">📷</span>
-                    <span style="font-weight: 700; color: #60a5fa;">QR Scanner Μελών</span>
+                    <span>QR Scanner</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/users" class="admin-link {% if active_page == 'users' %}active{% endif %}">
                     <span class="icon">👥</span>
-                    <span>Μέλη</span>
+                    <span>Members</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/wheel-results" class="admin-link {% if active_page == 'wheel' %}active{% endif %}">
+                    <span class="icon">🎡</span>
+                    <span>Lucky Wheel</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/coupons" class="admin-link {% if active_page == 'coupons' %}active{% endif %}">
                     <span class="icon">🎟️</span>
-                    <span>Κουπόνια</span>
+                    <span>Coupons</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/announcements2" class="admin-link {% if active_page == 'announcements' %}active{% endif %}">
                     <span class="icon">📢</span>
-                    <span>Ανακοινώσεις</span>
+                    <span>Announcements</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/reviews" class="admin-link {% if active_page == 'reviews' %}active{% endif %}">
                     <span class="icon">⭐</span>
-                    <span>Κριτικές</span>
+                    <span>Reviews</span>
                 </a>
             </li>
             <li>
                 <a href="/admin/messages" class="admin-link {% if active_page == 'messages' %}active{% endif %}">
                     <span class="icon">✉️</span>
-                    <span>Μηνύματα</span>
+                    <span>Messages</span>
                 </a>
             </li>
             <li>
@@ -278,19 +270,18 @@
             <li>
                 <a href="/admin/verifications" class="admin-link {% if active_page == 'verifications' %}active{% endif %}">
                     <span class="icon">🛡️</span>
-                    <span>Επαληθεύσεις</span>
+                    <span>Verifications</span>
                 </a>
             </li>
         </ul>
 
         <div class="admin-footer">
-            <div style="margin-bottom: 8px;">Σύνδεση: <strong>Admin</strong></div>
-            <a href="/logout" style="color:#ef4444; text-decoration:none; font-weight:700;">🚪 Έξοδος</a>
+            <div style="margin-bottom: 5px;">Logged in as: <strong>Admin</strong></div>
+            <a href="/logout" style="color:#ef4444; text-decoration:none; font-weight:600;">🚪 Logout</a>
         </div>
     </aside>
 
     <main class="admin-main">
-
         <div class="admin-topbar">
             <div class="admin-top-title">
                 {% block header_title %}{% endblock %}
@@ -311,7 +302,6 @@
         {% endwith %}
 
         {% block content %}{% endblock %}
-
     </main>
 </div>
 
