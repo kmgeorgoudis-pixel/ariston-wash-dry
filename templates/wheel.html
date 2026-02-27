@@ -11,83 +11,101 @@
             color: white;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
+        }
+
+        /* Banner Οδηγιών */
+        .instruction-banner {
+            background-color: rgba(100, 255, 218, 0.1);
+            border: 2px solid #64ffda;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px;
+            max-width: 700px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+            position: relative;
+        }
+
+        .instruction-banner h5 {
+            color: #64ffda;
+            font-weight: bold;
+        }
+
+        .instruction-banner p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Κουμπί Κλεισίματος */
+        .close-banner-btn {
+            background: linear-gradient(45deg, #64ffda, #1ae6b4);
+            border: none;
+            color: #0a192f;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .close-banner-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
         }
 
         .main-container {
             text-align: center;
             padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .wheel-container {
             position: relative;
-            width: 350px;
-            height: 350px;
+            width: 380px;
+            height: 380px;
             margin: 0 auto;
         }
 
-        
-        #wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 8px solid #fff;
-            box-shadow: 0 0 40px rgba(100, 255, 218, 0.4);
-            position: relative;
-            overflow: hidden;
-            transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            /* Χρώματα τμημάτων */
-            background: conic-gradient(
-                #fca311 0deg 36deg,
-                #64ffda 36deg 72deg,
-                #fca311 72deg 108deg,
-                #64ffda 108deg 144deg,
-                #fca311 144deg 180deg,
-                #64ffda 180deg 216deg,
-                #fca311 216deg 252deg,
-                #64ffda 252deg 288deg,
-                #fca311 288deg 324deg,
-                #64ffda 324deg 360deg
-            );
-        }
-
-        
+        /* Pointer - Βέλος */
         .pointer {
             position: absolute;
             top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 40px;
-            height: 40px;
-            background-color: #ff5400;
-            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #ff5400;
             z-index: 10;
-            border: 3px solid white;
+            filter: drop-shadow(0 0 5px rgba(255, 84, 0, 0.7));
         }
 
-        
-        .wheel-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            background: #0a192f;
+        #wheel-canvas {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            border: 4px solid #fff;
-            z-index: 5;
+            border: 8px solid #fff;
+            box-shadow: 0 0 40px rgba(100, 255, 218, 0.3);
+            transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
         }
 
         #spin-button {
             margin-top: 40px;
             background: linear-gradient(45deg, #ff5400, #fca311);
             border: none;
-            padding: 15px 50px;
-            font-size: 24px;
+            padding: 15px 60px;
+            font-size: 26px;
             font-weight: bold;
             border-radius: 50px;
             color: white;
@@ -100,7 +118,7 @@
 
         #spin-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(255, 84, 0, 0.6);
+            box-shadow: 0 8px 25px rgba(255, 84, 0, 0.6);
         }
 
         #spin-button:disabled {
@@ -118,6 +136,7 @@
             text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
             opacity: 0;
             transition: opacity 0.5s;
+            max-width: 600px;
         }
 
         .result-message.show {
@@ -129,19 +148,27 @@
 </head>
 <body>
 
+<div id="instructionBanner" class="instruction-banner">
+    <h5>💡 Οδηγίες Παιχνιδιού</h5>
+    <p>Μπορείτε να γυρίσετε τον τροχό <strong>μία φορά κάθε 7 ημέρες</strong>. <br>
+    Τα δώρα φτάνουν έως και τα <strong>20€</strong>! <br>
+    Εάν κερδίσετε, η ομάδα του <strong>ARISTON Wash & Dry</strong> θα ενημερωθεί αυτόματα. <br>
+    Παρακαλούμε βγείτε από τη σελίδα και εμείς θα επικοινωνήσουμε μαζί σας μέσω email (στο email που χρησιμοποιήσατε για την εγγραφή σας) για την παραλαβή του ποσού.</p>
+    <button class="close-banner-btn" onclick="closeBanner()">OK, το κατάλαβα!</button>
+</div>
+
 <div class="main-container">
     <h1 class="mb-5">Ariston <span style="color: #64ffda;">Fortune</span></h1>
     
     <div class="wheel-container">
         <div class="pointer"></div>
-        <div class="wheel-center"></div>
-        <div id="wheel"></div>
+        <canvas id="wheel-canvas" width="400" height="400"></canvas>
     </div>
     
     {% if can_spin %}
         <button id="spin-button" onclick="spinWheel()">SPIN</button>
     {% else %}
-        <div class="alert alert-warning mt-4 fs-5" style="max-width: 400px; margin: 30px auto;">
+        <div class="alert alert-warning mt-4 fs-5" style="max-width: 500px;">
             Έχεις ήδη παίξει αυτή την εβδομάδα! Επίστρεψε την επόμενη.
         </div>
     {% endif %}
@@ -150,8 +177,44 @@
 </div>
 
 <script>
+    
+    function closeBanner() {
+        document.getElementById('instructionBanner').style.display = 'none';
+    }
+
+    
+    const canvas = document.getElementById('wheel-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    
+    const displayPrizes = [5, 0, 10, 0, 20, 0, 15, 0, 7, 0]; 
+    const colors = ['#fca311', '#0a192f', '#64ffda', '#0a192f', '#fca311', '#0a192f', '#64ffda', '#0a192f', '#fca311', '#0a192f'];
+    const segments = displayPrizes.length;
+    const arc = Math.PI / (segments / 2);
+
+    function drawWheel() {
+        for (let i = 0; i < segments; i++) {
+            const angle = i * arc;
+            ctx.beginPath();
+            ctx.fillStyle = colors[i];
+            ctx.moveTo(200, 200);
+            ctx.arc(200, 200, 200, angle, angle + arc, false);
+            ctx.lineTo(200, 200);
+            ctx.fill();
+            
+            
+            ctx.save();
+            ctx.fillStyle = (colors[i] === '#0a192f') ? 'white' : '#0a192f';
+            ctx.font = 'bold 24px Arial';
+            ctx.translate(200 + Math.cos(angle + arc / 2) * 130, 200 + Math.sin(angle + arc / 2) * 130);
+            ctx.rotate(angle + arc / 2 + Math.PI / 2);
+            ctx.fillText(displayPrizes[i] > 0 ? displayPrizes[i] + '€' : '💔', -ctx.measureText(displayPrizes[i] > 0 ? displayPrizes[i] + '€' : '💔').width / 2, 0);
+            ctx.restore();
+        }
+    }
+    drawWheel();
+
     function spinWheel() {
-        const wheel = document.getElementById('wheel');
         const button = document.getElementById('spin-button');
         const resultText = document.getElementById('result-text');
 
@@ -170,19 +233,17 @@
 
             
             const randomExtra = Math.floor(Math.random() * 360);
-            const totalRotation = (360 * 10) + data.angle + randomExtra;
-            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            const totalRotation = (360 * 15) + data.angle + randomExtra;
+            canvas.style.transform = `rotate(${totalRotation}deg)`;
 
-            
             setTimeout(() => {
+                
                 const message = data.prize > 0 ? 
-                    `🎉 ΣΥΓΧΑΡΗΤΗΡΙΑ! Κέρδισες ${data.prize}€!` : 
+                    `🎉 ΣΥΓΧΑΡΗΤΗΡΙΑ! Κέρδισες ${data.prize}€! Η ομάδα μας θα επικοινωνήσει μαζί σου!` : 
                     `😢 Κρίμα! Δοκίμασε την επόμενη εβδομάδα!`;
                 
                 resultText.innerText = message;
                 resultText.classList.add('show');
-                
-                
             }, 5000); 
         });
     }
