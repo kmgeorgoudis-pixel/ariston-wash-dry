@@ -2,134 +2,185 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ariston Fortune Wheel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: radial-gradient(circle, #0a192f 0%, #020c1b 100%);
+            background: linear-gradient(135deg, #020c1b 0%, #0a192f 100%);
             color: white;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
         }
 
-        .wheel-wrapper {
-            position: relative;
+        .main-container {
             text-align: center;
+            padding: 20px;
         }
 
-        /* Ο Τροχός - 50 τμήματα */
-        #wheel {
+        .wheel-container {
+            position: relative;
             width: 350px;
             height: 350px;
-            border-radius: 50%;
-            border: 10px solid #64ffda;
-            position: relative;
-            transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            box-shadow: 0 0 30px rgba(100, 255, 218, 0.5);
-            background: conic-gradient(
-                #fca311 0deg 7.2deg, 
-                #0a192f 7.2deg 14.4deg, 
-                #fca311 14.4deg 21.6deg
-                
-                   
-            );
+            margin: 0 auto;
         }
+
         
         #wheel {
-            background: repeating-conic-gradient(
-                from 0deg,
-                #64ffda 0deg 3.6deg,
-                #0a192f 3.6deg 7.2deg
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid #fff;
+            box-shadow: 0 0 40px rgba(100, 255, 218, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            /* Χρώματα τμημάτων */
+            background: conic-gradient(
+                #fca311 0deg 36deg,
+                #64ffda 36deg 72deg,
+                #fca311 72deg 108deg,
+                #64ffda 108deg 144deg,
+                #fca311 144deg 180deg,
+                #64ffda 180deg 216deg,
+                #fca311 216deg 252deg,
+                #64ffda 252deg 288deg,
+                #fca311 288deg 324deg,
+                #64ffda 324deg 360deg
             );
         }
 
+        
         .pointer {
             position: absolute;
-            top: -25px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid #ff5400;
+            width: 40px;
+            height: 40px;
+            background-color: #ff5400;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
             z-index: 10;
+            border: 3px solid white;
+        }
+
+        
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #0a192f;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            z-index: 5;
         }
 
         #spin-button {
-            margin-top: 50px;
-            background: linear-gradient(45deg, #fca311, #ff5400);
+            margin-top: 40px;
+            background: linear-gradient(45deg, #ff5400, #fca311);
             border: none;
-            padding: 15px 40px;
-            font-size: 22px;
+            padding: 15px 50px;
+            font-size: 24px;
             font-weight: bold;
             border-radius: 50px;
             color: white;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(252, 163, 17, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 84, 0, 0.4);
+        }
+
+        #spin-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 84, 0, 0.6);
         }
 
         #spin-button:disabled {
             background: #555;
             cursor: not-allowed;
+            transform: none;
             box-shadow: none;
         }
-        
+
+        .result-message {
+            margin-top: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #64ffda;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .result-message.show {
+            opacity: 1;
+        }
+
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="wheel-wrapper">
-    <h2 class="mb-4">Ariston <span style="color: #64ffda;">Fortune</span></h2>
+<div class="main-container">
+    <h1 class="mb-5">Ariston <span style="color: #64ffda;">Fortune</span></h1>
     
-    <div style="position: relative; display: inline-block;">
+    <div class="wheel-container">
         <div class="pointer"></div>
+        <div class="wheel-center"></div>
         <div id="wheel"></div>
     </div>
-    
-    <br>
     
     {% if can_spin %}
         <button id="spin-button" onclick="spinWheel()">SPIN</button>
     {% else %}
-        <div class="alert alert-warning mt-4">Έχεις ήδη παίξει αυτή την εβδομάδα!</div>
+        <div class="alert alert-warning mt-4 fs-5" style="max-width: 400px; margin: 30px auto;">
+            Έχεις ήδη παίξει αυτή την εβδομάδα! Επίστρεψε την επόμενη.
+        </div>
     {% endif %}
 
-    <div id="result-area" class="hidden mt-4">
-        <h3 id="result-text" class="fw-bold"></h3>
-    </div>
+    <div id="result-text" class="result-message"></div>
 </div>
 
 <script>
     function spinWheel() {
         const wheel = document.getElementById('wheel');
         const button = document.getElementById('spin-button');
+        const resultText = document.getElementById('result-text');
+
         button.disabled = true;
+        resultText.classList.remove('show');
+        resultText.innerText = "Η τύχη σου γυρίζει...";
 
         fetch('/spin-result', {method: 'POST'})
         .then(response => response.json())
         .then(data => {
             if (data.error) {
                 alert(data.error);
+                button.disabled = false;
                 return;
             }
 
             
-            const totalRotation = (360 * 8) + data.angle;
+            const randomExtra = Math.floor(Math.random() * 360);
+            const totalRotation = (360 * 10) + data.angle + randomExtra;
             wheel.style.transform = `rotate(${totalRotation}deg)`;
 
+            
             setTimeout(() => {
                 const message = data.prize > 0 ? 
                     `🎉 ΣΥΓΧΑΡΗΤΗΡΙΑ! Κέρδισες ${data.prize}€!` : 
                     `😢 Κρίμα! Δοκίμασε την επόμενη εβδομάδα!`;
                 
-                document.getElementById('result-text').innerText = message;
-                document.getElementById('result-area').classList.remove('hidden');
+                resultText.innerText = message;
+                resultText.classList.add('show');
                 
                 
             }, 5000); 
