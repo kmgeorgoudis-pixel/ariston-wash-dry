@@ -2335,49 +2335,51 @@ def verify_qr():
     
     return jsonify({'status': 'error', 'message': 'Invalid Card'})
 @app.route('/lucky-wheel')
-@login_required # <--- Προσθήκη εδώ
+@login_required 
 def lucky_wheel():
-    # Δεν χρειάζεται πλέον ο έλεγχος if 'user_id' not in session:
     
-    # Χρησιμοποιούμε τον current_user από το flask_login
+    
+    
     user = current_user
     
     now = datetime.utcnow()
     can_spin = True
-    # Έλεγχος αν έχει ξαναπαίξει
+    
     if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
         can_spin = False
         
     return render_template('wheel.html', can_spin=can_spin, username=user.fullname)
 
 @app.route('/spin-result', methods=['POST'])
-@login_required # <--- Πρόσθεσε αυτό!
+@login_required 
 def spin_result():
-    # Χρησιμοποιούμε current_user
     user = current_user
     now = datetime.utcnow()
+    unlimited_spin_user = 'kmgeorgoudis@gmail.com'
     
-    # Έλεγχος αν επιτρέπεται το spin
-    if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
-        return jsonify({'error': 'Already spun'}), 400
+    
+    if user.email != unlimited_spin_user:
+        if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
+            return jsonify({'error': 'Already spun'}), 400
+    
         
-    # 🎰 Λογική: 50 τμήματα, 5 δώρα + 45 "Τίποτα" (0)
+    
     prizes = [5, 7, 10, 15, 20] + ([0] * 45)
-    random.shuffle(prizes) # Ανακάτεμα
+    random.shuffle(prizes)
     
     result = random.choice(prizes)
     
-    # --- ΝΕΟ: Αποθήκευση κέρδους στη βάση ---
+    
     user.last_spin_date = now
     user.last_spin_prize = result 
     db.session.commit()
     
-    # Υπολογισμός μοίρας (Angle)
+    
     final_angle = random.randint(0, 359)
     
     return jsonify({'prize': result, 'angle': final_angle})
 @app.route('/admin/wheel-results')
-@login_required # <--- Ή @admin_required
+@login_required 
 def admin_wheel_results():
     users_who_spun = User.query.filter(User.last_spin_date.isnot(None))\
                                .order_by(User.last_spin_date.desc()).all()
