@@ -2357,25 +2357,45 @@ def spin_result():
     now = datetime.utcnow()
     unlimited_spin_user = 'kmgeorgoudis@gmail.com'
     
-    
+    # 1. Έλεγχος περιορισμού (7 μέρες)
     if user.email != unlimited_spin_user:
         if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
             return jsonify({'error': 'Already spun'}), 400
     
-        
-    
+    # 2. Λογική Πιθανοτήτων (50 τμήματα συνολικά - 5 νικηφόρα, 45 χαμένα)
     prizes = [5, 7, 10, 15, 20] + ([0] * 45)
     random.shuffle(prizes)
-    
     result = random.choice(prizes)
     
-    
+    # 3. Αποθήκευση στη βάση
     user.last_spin_date = now
     user.last_spin_prize = result 
     db.session.commit()
     
+    # 4. Υπολογισμός Γωνίας (Συγχρονισμένος με τα 10 οπτικά τμήματα του Canvas)
+    # Πίνακας εμφανιζόμενων prizes στο JS: [5, 0, 10, 0, 20, 0, 15, 0, 7, 0]
     
-    final_angle = random.randint(0, 359)
+    if result == 5:
+        prize_index = 0
+    elif result == 10:
+        prize_index = 2
+    elif result == 20:
+        prize_index = 4
+    elif result == 15:
+        prize_index = 6
+    elif result == 7:
+        prize_index = 8
+    else: # result == 0 (Δεν κέρδισε)
+        # Επιλέγουμε τυχαία ένα από τα 5 χαμένα τμήματα (indices: 1, 3, 5, 7, 9)
+        prize_index = random.choice([1, 3, 5, 7, 9])
+        
+    # Υπολογισμός γωνίας: 360 μοίρες / 10 τμήματα = 36 μοίρες ανά τμήμα
+    angle_per_segment = 36
+    # Θέλουμε να σταματήσει στη μέση του τμήματος
+    target_angle = (prize_index * angle_per_segment) + (angle_per_segment / 2)
+    
+    # Μετατροπή για να λειτουργεί σωστά η περιστροφή CSS
+    final_angle = 360 - target_angle
     
     return jsonify({'prize': result, 'angle': final_angle})
 @app.route('/admin/wheel-results')

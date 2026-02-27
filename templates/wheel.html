@@ -177,7 +177,6 @@
 </div>
 
 <script>
-    
     function closeBanner() {
         document.getElementById('instructionBanner').style.display = 'none';
     }
@@ -185,8 +184,6 @@
     
     const canvas = document.getElementById('wheel-canvas');
     const ctx = canvas.getContext('2d');
-    
-    
     const displayPrizes = [5, 0, 10, 0, 20, 0, 15, 0, 7, 0]; 
     const colors = ['#fca311', '#0a192f', '#64ffda', '#0a192f', '#fca311', '#0a192f', '#64ffda', '#0a192f', '#fca311', '#0a192f'];
     const segments = displayPrizes.length;
@@ -202,7 +199,7 @@
             ctx.lineTo(200, 200);
             ctx.fill();
             
-            
+            // Κείμενο
             ctx.save();
             ctx.fillStyle = (colors[i] === '#0a192f') ? 'white' : '#0a192f';
             ctx.font = 'bold 24px Arial';
@@ -231,13 +228,12 @@
                 return;
             }
 
-            
-            const randomExtra = Math.floor(Math.random() * 360);
-            const totalRotation = (360 * 15) + data.angle + randomExtra;
+           
+            const spins = 10; 
+            const totalRotation = (360 * spins) + data.angle;
             canvas.style.transform = `rotate(${totalRotation}deg)`;
 
             setTimeout(() => {
-                
                 const message = data.prize > 0 ? 
                     `🎉 ΣΥΓΧΑΡΗΤΗΡΙΑ! Κέρδισες ${data.prize}€! Η ομάδα μας θα επικοινωνήσει μαζί σου!` : 
                     `😢 Κρίμα! Δοκίμασε την επόμενη εβδομάδα!`;
