@@ -2335,15 +2335,16 @@ def verify_qr():
     
     return jsonify({'status': 'error', 'message': 'Invalid Card'})
 @app.route('/lucky-wheel')
+@login_required # <--- Προσθήκη εδώ
 def lucky_wheel():
-    if 'user_id' not in session:
-        flash("Πρέπει να συνδεθείτε για να παίξετε!", "danger")
-        return redirect(url_for('login'))
-        
-    user = User.query.get(session['user_id'])
+    # Δεν χρειάζεται πλέον ο έλεγχος if 'user_id' not in session:
+    
+    # Χρησιμοποιούμε τον current_user από το flask_login
+    user = current_user
     
     now = datetime.utcnow()
     can_spin = True
+    # Έλεγχος αν έχει ξαναπαίξει
     if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
         can_spin = False
         
