@@ -2235,6 +2235,8 @@ def admin_transfer_coupon(user_id):
         coupon_id = request.form.get('coupon_id')
         recipient_email = request.form.get('recipient_email').strip().lower()
         amount_str = request.form.get('amount')
+        # Παίρνουμε τη νέα περιγραφή από το form
+        custom_description = request.form.get('description', '').strip()
         
         try:
             amount = float(amount_str)
@@ -2253,17 +2255,21 @@ def admin_transfer_coupon(user_id):
             flash(f'Πρόβλημα με το ποσό ή το υπόλοιπο.', 'danger')
             return redirect(request.url)
 
+        # ΛΟΓΙΚΗ ΠΕΡΙΓΡΑΦΗΣ: Αν το πεδίο είναι κενό, βάλε το default
+        final_description = custom_description if custom_description else f"Πιστωτικό υπόλοιπο κατόπιν μεταφοράς από τον χρήστη {sender.email}."
+
         try:
-            # 1. Βάση Δεδομένων
+            # 1. Ενημέρωση κουπονιού αποστολέα
             selected_coupon.amount -= amount
             if selected_coupon.amount <= 0.01:
                 selected_coupon.used = True
                 selected_coupon.used_at = datetime.utcnow()
             
+            # 2. Δημιουργία νέου κουπονιού στον παραλήπτη
             new_coupon = Coupon(
                 user_id=recipient.id,
                 title=f"ΜΕΤΑΦΟΡΑ ΑΠΟ {sender.fullname.upper() if sender.fullname else 'USER'}",
-                description=f"Πιστωτικό υπόλοιπο κατόπιν μεταφοράς από τον χρήστη {sender.email}.",
+                description=final_description, # Χρήση της νέας περιγραφής
                 amount=amount,
                 original_amount=amount,
                 start_date=selected_coupon.start_date,
@@ -2273,7 +2279,7 @@ def admin_transfer_coupon(user_id):
             db.session.add(new_coupon)
             db.session.commit()
 
-            # 2. Email (Περνάμε 4 στοιχεία τώρα)
+            # 3. Email Notification
             send_transfer_notification(recipient.email, recipient.fullname, sender.fullname or sender.email, amount)
 
             flash(f'Η μεταφορά {amount}€ ολοκληρώθηκε!', 'success')

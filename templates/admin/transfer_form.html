@@ -30,10 +30,16 @@
                    style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px;">
         </div>
 
-        <div style="margin-bottom: 25px;">
+        <div style="margin-bottom: 20px;">
             <label style="display: block; font-weight: bold; margin-bottom: 8px;">Ποσό προς Μεταφορά (€):</label>
             <input type="number" name="amount" step="0.01" min="0.01" required placeholder="0.00"
                    style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px;">
+        </div>
+
+        <div style="margin-bottom: 25px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 8px;">Περιγραφή (Προαιρετικά):</label>
+            <textarea name="description" rows="2" placeholder="Αφήστε κενό για την αυτόματη περιγραφή μεταφοράς..."
+                      style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; resize: vertical;"></textarea>
         </div>
 
         <div style="display: flex; gap: 15px; align-items: center;">
