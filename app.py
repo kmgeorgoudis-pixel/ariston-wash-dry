@@ -514,7 +514,8 @@ def register():
             <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🚀 Έξυπνη Εξυπηρέτηση & Διασκέδαση</h3>
             <ul>
                 <li><strong>Ariston AI Assistant:</strong> Ο δικός σου ψηφιακός βοηθός για κάθε απορία: <a href="https://aristonwashdry.gr/ai">aristonwashdry.gr/ai</a></li>
-                <li><strong>Ariston Game:</strong> Διασκέδασε και κέρδισε στον τροχό της τύχης: <a href="https://aristonwashdry.gr/game">aristonwashdry.gr/game</a></li>
+                <li><strong>Ariston Game:</strong> Διασκέδασε και παιξέ το παιχνίδι πιάσε τον λεκέ ίσως φτάσεις την κατάταξη TOP 10 : <a href="https://aristonwashdry.gr/game">aristonwashdry.gr/game</a></li>
+                <li> <strong>ΤΡΟΧΟΣ ΤΗΣ ΤΥΧΗΣ </strong> Μια φόρα την εβδομάδα γύρνα τον τυχέρο τροχό : <a href="https://aristonwashdry.gr/lucky-wheel">aristonwashdry.gr/lucky-wheel</a>  </li>
             </ul>
 
             <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🎁 Προνόμια & Δώρα</h3>
@@ -2603,7 +2604,8 @@ def register_en():
             <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🚀 Smart Service & Fun</h3>
             <ul>
                 <li><strong>Ariston AI Assistant:</strong> Your own digital assistant for any questions: <a href="https://aristonwashdry.gr/en/ai">aristonwashdry.gr/ai</a></li>
-                <li><strong>Ariston Game:</strong> Have fun and win at the Wheel of Fortune: <a href="https://aristonwashdry.gr/game">aristonwashdry.gr/game</a></li>
+                <li><strong>Ariston Game:</strong> Have fun and play the game (Catch the Stain!)Maybe you reach the TOP 10: <a href="https://aristonwashdry.gr/game">aristonwashdry.gr/game</a></li>
+                <li> <strong>ARISTON LUCKY WHEEL</strong> Ones a week spin the lucky wheel: <a href="https://aristonwashdry.gr/lucky-wheel">aristonwashdry.gr/lucky-wheel</a>  </li>
             </ul>
 
             <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🎁 Privileges & Gifts</h3>
