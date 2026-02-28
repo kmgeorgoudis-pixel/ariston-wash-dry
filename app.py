@@ -503,39 +503,60 @@ def register():
     result = register_user(fullname, email, password, confirm)
 
     if result == "OK":
-        # ===== EMAIL ΚΑΛΩΣΟΡΙΣΜΑΤΟΣ =====
+        # ===== EMAIL ΚΑΛΩΣΟΡΙΣΜΑΤΟΣ (HTML VERSION) =====
         body = f"""
-Αγαπητέ/ή {fullname},
+        <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <h2 style="color: #0056b3;">Καλωσόρισες στην οικογένεια του Ariston Wash & Dry! ✨</h2>
+            <p>Αγαπητέ/ή <strong>{fullname}</strong>,</p>
+            <p>Καλωσόρισες στην επίσημη κοινότητα του <strong>Ariston Wash & Dry</strong>! Η εγγραφή σου ολοκληρώθηκε με επιτυχία και πλέον έχεις πρόσβαση σε έναν κόσμο προνομίων και ψηφιακών ευκολιών.</p>
+            
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🚀 Έξυπνη Εξυπηρέτηση & Διασκέδαση</h3>
+            <ul>
+                <li><strong>Ariston AI Assistant:</strong> Ο δικός σου ψηφιακός βοηθός για κάθε απορία: <a href="https://aristonwashdry.gr/ai">aristonwashdry.gr/ai</a></li>
+                <li><strong>Ariston Game:</strong> Διασκέδασε και κέρδισε στον τροχό της τύχης: <a href="https://aristonwashdry.gr/game">aristonwashdry.gr/game</a></li>
+            </ul>
 
-Καλωσόρισες στην οικογένεια του Ariston Wash & Dry!
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🎁 Προνόμια & Δώρα</h3>
+            <ul>
+                <li><strong>Κουπόνια & Προσφορές:</strong> Δες τις εκπτώσεις σου ή δημιούργησε κουπόνια για να τα κάνεις <strong>δώρο</strong> σε αγαπημένα πρόσωπα: <a href="https://aristonwashdry.gr/updates-menu">aristonwashdry.gr/updates-menu</a></li>
+                <li><strong>Ψηφιακή Κάρτα Μέλους:</strong> Έχε πάντα μαζί σου τα στοιχεία μέλους σου: <a href="https://aristonwashdry.gr/member-info">aristonwashdry.gr/member-info</a></li>
+            </ul>
 
-Η εγγραφή σου ολοκληρώθηκε με επιτυχία και πλέον είσαι επίσημα μέλος της υπηρεσίας μας.
-Από σήμερα θα λαμβάνεις αποκλειστικές προσφορές, κουπόνια, εκπτώσεις και ενημερώσεις 
-για νέες υπηρεσίες που ετοιμάζουμε για τα μέλη μας.
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">⚙️ Διαχείριση Λογαριασμού</h3>
+            <ul>
+                <li><strong>Προσωπικά Στοιχεία:</strong> Διαχείριση και αλλαγή στοιχείων σύνδεσης: <a href="https://aristonwashdry.gr/settings-menu">aristonwashdry.gr/settings-menu</a></li>
+                <li><strong>Κατάργηση Προφίλ:</strong> Εάν επιθυμείς να διαγράψεις τον λογαριασμό σου: <a href="https://aristonwashdry.gr/delete-account">aristonwashdry.gr/delete-account</a></li>
+            </ul>
 
-Στόχος μας είναι να κάνουμε το πλύσιμο και το στέγνωμα των ρούχων σου πιο εύκολα, 
-πιο γρήγορα και πιο οικονομικά από ποτέ.
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">✍️ Η γνώμη σου μετράει</h3>
+            <p>
+                Πες μας πώς σου φαίνεται η ιστοσελίδα μας: <a href="https://aristonwashdry.gr/site-review">Site Review</a><br>
+                Αξιολόγησε την εμπειρία σου στο κατάστημα: <a href="https://aristonwashdry.gr/kritikes">Κριτική Καταστήματος</a>
+            </p>
 
-Σε ευχαριστούμε που μας εμπιστεύτηκες.
-Αν χρειαστείς οτιδήποτε, είμαστε πάντα δίπλα σου.
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">📞 Χρειάζεσαι βοήθεια;</h3>
+            <p>Μην διστάσεις να επικοινωνήσεις μαζί μας μέσω της φόρμας επικοινωνίας: <a href="https://aristonwashdry.gr/epikoinonia">aristonwashdry.gr/epikoinonia</a></p>
 
-Με εκτίμηση,
-Η ομάδα του Ariston Wash & Dry
-https://aristonwashdry.gr
+            <p style="margin-top: 25px;">Σε ευχαριστούμε που μας εμπιστεύτηκες!<br>
+            <strong>Με εκτίμηση,<br>Η ομάδα του Ariston Wash & Dry</strong></p>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+                    <img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto;">
+                </a>
+            </div>
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
-
-
-<hr>
-<p style='font-size: 12px; color: #666;'>
-Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
-<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
-Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
-και δεν κοινοποιούνται σε τρίτους.
-</p>
-"""
+            <hr style="border: 0; border-top: 1px solid #eee; margin-top: 30px;">
+            <p style='font-size: 12px; color: #666;'>
+                Το παρόν email στάλθηκε αυτόματα από το ARISTON Wash & Dry σύμφωνα με την 
+                <a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+                Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας.
+            </p>
+        </body>
+        </html>
+        """
         
-
         send_email(
             to=email,
             subject="Καλωσόρισες στο Ariston Wash & Dry",
@@ -2571,35 +2592,59 @@ def register_en():
     result = register_user(fullname, email, password, confirm)
 
     if result == "OK":
-        # Welcome email in English
+        # ===== WELCOME EMAIL (HTML VERSION - ENGLISH) =====
         body = f"""
-Dear {fullname},
+        <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <h2 style="color: #0056b3;">Welcome to the Ariston Wash & Dry family! ✨</h2>
+            <p>Dear <strong>{fullname}</strong>,</p>
+            <p>Welcome to the official <strong>Ariston Wash & Dry</strong> community! Your registration has been successfully completed, and you now have access to a world of privileges and digital conveniences.</p>
+            
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🚀 Smart Service & Fun</h3>
+            <ul>
+                <li><strong>Ariston AI Assistant:</strong> Your own digital assistant for any questions: <a href="https://aristonwashdry.gr/en/ai">aristonwashdry.gr/ai</a></li>
+                <li><strong>Ariston Game:</strong> Have fun and win at the Wheel of Fortune: <a href="https://aristonwashdry.gr/game">aristonwashdry.gr/game</a></li>
+            </ul>
 
-Welcome to the Ariston Wash & Dry family!
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🎁 Privileges & Gifts</h3>
+            <ul>
+                <li><strong>Coupons & Offers:</strong> View your current discounts or create coupons to **gift** them to your loved ones: <a href="https://aristonwashdry.gr/en/updates-menu-en">aristonwashdry.gr/updates-menu</a></li>
+                <li><strong>Digital Member Card:</strong> Always have your membership details with you: <a href="https://aristonwashdry.gr/en/member-info">aristonwashdry.gr/member-info</a></li>
+            </ul>
 
-Your registration has been successfully completed and you are now officially a member of our service.
-From today, you will receive exclusive offers, coupons, discounts, and updates 
-about new services we are preparing for our members.
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">⚙️ Account Management</h3>
+            <ul>
+                <li><strong>Personal Info:</strong> Manage and change your login details: <a href="https://aristonwashdry.gr/en/settings-menu">aristonwashdry.gr/settings-menu</a></li>
+                <li><strong>Delete Profile:</strong> If you wish to delete your account: <a href="https://aristonwashdry.gr/en/delete-account">aristonwashdry.gr/delete-account</a></li>
+            </ul>
 
-Our goal is to make your laundry experience easier, faster, and more affordable than ever.
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">✍️ Your Opinion Matters</h3>
+            <p>
+                Tell us what you think of our website: <a href="https://aristonwashdry.gr/en/site-review">Site Review</a><br>
+                Rate your in-store experience: <a href="https://aristonwashdry.gr/en/reviews">Store Review</a>
+            </p>
 
-Thank you for trusting us.
-If you need anything, we are always here for you.
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">📞 Need Help?</h3>
+            <p>Don't hesitate to contact us via our contact form: <a href="https://aristonwashdry.gr/en/contact">aristonwashdry.gr/epikoinonia</a></p>
 
-Best regards,
-The ARISTON Wash & Dry Team
+            <p style="margin-top: 25px;">Thank you for trusting us!<br>
+            <strong>Best regards,<br>The ARISTON Wash & Dry Team</strong></p>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+                    <img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto;">
+                </a>
+            </div>
 
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
-
-
-
-<hr>
-<p style='font-size: 12px; color: #666;'>
-This email was sent by ARISTON Wash & Dry in accordance with our 
-<a href="https://aristonwashdry.gr/en/privacy">Privacy Policy</a>. 
-Your data is used exclusively for service purposes and is not shared with third parties.
-</p>
-"""
+            <hr style="border: 0; border-top: 1px solid #eee; margin-top: 30px;">
+            <p style='font-size: 12px; color: #666;'>
+                This email was automatically sent by ARISTON Wash & Dry in accordance with our 
+                <a href="https://aristonwashdry.gr/en/privacy">Privacy Policy</a>. 
+                Your data is used exclusively for service purposes.
+            </p>
+        </body>
+        </html>
+        """
         
         send_email(
             to=email,
