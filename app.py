@@ -2452,7 +2452,74 @@ def delete_spin(user_id):
         
     return redirect(url_for('admin_wheel_results'))
 
+def send_ready_notification(email, full_name, selected_machine):
+    subject = "🧺 Τα ρούχα σας είναι έτοιμα! - Ariston Wash & Dry"
+    
+    content = f"""
+    <div style="background-color: #f9fafb; padding: 50px 20px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;">
+            
+            <div style="background-color: #004a99; height: 6px;"></div>
+            
+            <div style="padding: 40px 30px;">
+                <h2 style="color: #004a99; margin-bottom: 25px; font-size: 22px; text-align: center; letter-spacing: 1px;">ARISTON WASH & DRY</h2>
+                
+                <p style="font-size: 17px; color: #1f2937; margin-bottom: 20px;">Γεια σας <b>{full_name}</b>,</p>
+                
+                <p style="font-size: 15px; color: #4b5563; line-height: 1.6;">
+                    Θα θέλαμε να σας ενημερώσουμε ότι η πλύση/στέγνωμά σας ολοκληρώθηκε!
+                </p>
+                
+                <div style="margin: 30px 0; padding: 20px; background-color: #f0f7ff; border-radius: 10px; border-left: 4px solid #004a99;">
+                    <p style="margin: 0; font-size: 16px; color: #1e3a8a;">
+                        Τα ρούχα σας βρίσκονται στο: <br>
+                        <strong style="font-size: 20px; color: #004a99;">{selected_machine}</strong>
+                    </p>
+                </div>
+                
+                <p style="font-size: 14px; color: #6b7280; line-height: 1.6; font-style: italic;">
+                    Παρακαλούμε να προσέλθετε για την παραλαβή τους για την ασφάλεια των αντικειμένων σας αλλά και για να ελευθερωθεί το μηχάνημα για τον επόμενο χρήστη.
+                </p>
+                
+                <p style="margin-top: 30px; font-size: 15px; color: #1f2937;">
+                    Ευχαριστούμε,<br>
+                    <strong>Ariston Wash & Dry</strong>
+                </p>
+            </div>
+            
+            <div style="background-color: #f3f4f6; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+                <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                    📍 Δερβενακίων 10, Βαθύ, Σάμος | 📞 698 759 8416
+                </p>
+            </div>
+        </div>
+    </div>
+    """
+    try:
+        send_email(email, subject, content)
+    except Exception as e:
+        print(f"Email error: {e}")
+@app.route('/admin/users/<int:user_id>/ready-clothes', methods=['GET', 'POST'])
+@login_required
+def admin_ready_clothes(user_id):
+    if not current_user.is_admin:
+        return redirect(url_for('home'))
+    
+    user = User.query.get_or_404(user_id)
+    
+    if request.method == 'POST':
+        selected_machine = request.form.get('machine')
+        
+        try:
+            # Κλήση της συνάρτησης για το email
+            send_ready_notification(user.email, user.fullname, selected_machine)
+            
+            flash(f'Η ειδοποίηση στάλθηκε επιτυχώς στον χρήστη {user.fullname}', 'success')
+            return redirect(url_for('admin_users'))
+        except Exception as e:
+            flash(f'Σφάλμα: {str(e)}', 'danger')
 
+    return render_template('admin/ready_clothes_form.html', user=user)
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
