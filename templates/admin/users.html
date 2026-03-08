@@ -93,11 +93,7 @@
                                onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='#fffbeb'">
                                 📢
                             </a>
-                            <a href="/admin/users/{{ user.id }}/ready-clothes" title="Ειδοποίηση: Έτοιμα Ρούχα"
-                                style="height:34px; width:34px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:#f0fdf4; color:#166534; text-decoration:none; transition: 0.2s;"
-                                onmouseover="this.style.background='#dcfce7'" onmouseout="this.style.background='#f0fdf4'">
-                                👕
-                            </a>
+                            
 
                             <form action="/admin/users/{{ user.id }}/delete" method="POST" onsubmit="return confirm('Προσοχή! Οριστική διαγραφή χρήστη;');" style="margin:0;">
                                 <button type="submit" title="Οριστική Διαγραφή"
