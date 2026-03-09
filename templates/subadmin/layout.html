@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARISTON Sub-Admin – {% block title %}{% endblock %}</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --sidebar-bg: #1e293b; /* Slate 800 - Ελαφρώς διαφορετικό από το Admin για να ξεχωρίζει */
+            --main-bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --primary: #004a99; /* Το μπλε της Ariston */
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --sidebar-text: #cbd5e1;
+            --sidebar-hover: #334155;
+            --flash-info: #e0f2fe;
+            --flash-info-text: #075985;
+            --flash-danger: #fee2e2;
+            --flash-danger-text: #991b1b;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--main-bg);
+            color: var(--text-main);
+            font-size: 14px;
+        }
+
+        .admin-wrapper { display: flex; min-height: 100vh; }
+
+        /* --- SIDEBAR --- */
+        .admin-sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 15px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .admin-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 35px; padding: 0 10px; }
+        .admin-logo img { width: 38px; height: 38px; border-radius: 10px; }
+        .admin-logo-text { font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+
+        .admin-section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin: 20px 0 8px;
+            padding-left: 12px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .admin-menu { list-style: none; padding: 0; margin: 0; }
+        .admin-menu li { margin-bottom: 2px; }
+
+        .admin-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .admin-link span.icon { font-size: 16px; opacity: 0.7; }
+
+        .admin-link:hover { background: var(--sidebar-hover); color: #fff; }
+        .admin-link.active { background: rgba(0, 74, 153, 0.3); color: #fff; font-weight: 600; }
+
+        .admin-footer {
+            margin-top: auto;
+            font-size: 12px;
+            color: #94a3b8;
+            padding: 15px 10px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* --- MAIN AREA --- */
+        .admin-main { flex: 1; padding: 25px 30px; }
+        .admin-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .admin-top-title { font-size: 20px; font-weight: 700; color: var(--text-main); }
+        .admin-top-user {
+            background: var(--main-bg);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            color: var(--text-muted);
+            border: 1px solid #e2e8f0;
+        }
+
+        .flash-box { padding: 12px 18px; border-radius: 10px; font-size: 13px; margin-bottom: 20px; }
+        .flash-box:not(.danger) { background: var(--flash-info); color: var(--flash-info-text); }
+        .flash-box.danger { background: var(--flash-danger); color: var(--flash-danger-text); }
+
+        @media (max-width: 1024px) {
+            .admin-sidebar { width: 60px; padding: 15px 5px; }
+            .admin-logo-text, .admin-section-title, .admin-link span:not(.icon), .admin-footer { display: none; }
+            .admin-link { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="admin-wrapper">
+    <aside class="admin-sidebar">
+        <div class="admin-logo">
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" alt="A">
+            <div class="admin-logo-text">ARISTON SUB-PANEL</div>
+        </div>
+
+        <div class="admin-section-title">Κεντρικά</div>
+        <ul class="admin-menu">
+            <li>
+                <a href="/subadmin" class="admin-link {% if active_page == 'dashboard' %}active{% endif %}">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="admin-section-title">Διαχείριση</div>
+        <ul class="admin-menu">
+            <li>
+                <a href="/subadmin/users" class="admin-link {% if active_page == 'users' %}active{% endif %}">
+                    <span class="icon">👥</span>
+                    <span>Μέλη</span>
+                </a>
+            </li>
+            <li>
+                <a href="/subadmin/reviews" class="admin-link {% if active_page == 'reviews' %}active{% endif %}">
+                    <span class="icon">⭐</span>
+                    <span>Κριτικές</span>
+                </a>
+            </li>
+            <li>
+                <a href="/subadmin/messages" class="admin-link {% if active_page == 'messages' %}active{% endif %}">
+                    <span class="icon">✉️</span>
+                    <span>Μηνύματα</span>
+                </a>
+            </li>
+            <li>
+                <a href="/subadmin/bulk-email" class="admin-link {% if active_page == 'bulk_email' %}active{% endif %}">
+                    <span class="icon">📨</span>
+                    <span>Email Marketing</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="admin-footer">
+            <div style="margin-bottom: 5px;">Σύνδεση: <strong>Sub-Admin</strong></div>
+            <a href="/logout" style="color:#ef4444; text-decoration:none; font-weight:600;">🚪 Αποσύνδεση</a>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-topbar">
+            <div class="admin-top-title">{% block header_title %}{% endblock %}</div>
+            <div class="admin-top-user">👤 {{ current_user.email }}</div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-box {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+</body>
+</html>

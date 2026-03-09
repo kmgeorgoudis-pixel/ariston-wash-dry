@@ -1,0 +1,65 @@
+{% extends "subadmin/layout.html" %}
+
+{% block title %}Μηνύματα Επικοινωνίας{% endblock %}
+{% set active_page = 'messages' %}
+
+{% block header_title %}
+Εισερχόμενα Μηνύματα
+{% endblock %}
+
+{% block content %}
+
+<div style="background:#fff; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-bottom:20px; border:1px solid #e5e7eb;">
+    <div style="font-weight:700; color:#0f172a; font-size:16px;">📩 Διαχείριση Επικοινωνίας</div>
+    <p style="font-size:14px; color:#64748b; margin-top:5px;">
+        Εδώ μπορείτε να δείτε τα μηνύματα των πελατών. Για απάντηση, χρησιμοποιήστε το email ή το τηλέφωνο που παρέχεται σε κάθε μήνυμα.
+    </p>
+</div>
+
+<div style="background:#fff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05); border:1px solid #e5e7eb; overflow:hidden;">
+    <div style="background:#f8fafc; padding:15px 20px; border-bottom:1px solid #e5e7eb; font-weight:700; color:#475569; font-size:14px; text-transform:uppercase;">
+        Λίστα Μηνυμάτων
+    </div>
+
+    <div>
+        {% if messages %}
+            {% for m in messages %}
+                <div style="border-bottom:1px solid #f1f5f9; transition:0.2s; position:relative;" 
+                     onmouseover="this.style.background='#f8fafc'" 
+                     onmouseout="this.style.background='white'">
+                    
+                    <a href="/subadmin/messages/{{ m.id }}" style="text-decoration:none; color:inherit; display:block; padding:20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <div style="font-size:16px; font-weight:700; color:#004a99; margin-bottom:4px;">
+                                    {{ m.subject }}
+                                </div>
+                                <div style="font-size:14px; color:#334155; font-weight:500;">
+                                    Από: {{ m.name }}
+                                </div>
+                                <div style="font-size:13px; color:#64748b; margin-top:2px;">
+                                    📧 {{ m.email }}
+                                </div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-size:12px; color:#94a3b8; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
+                                    {{ m.created_at.strftime('%d/%m/%Y %H:%M') }}
+                                </div>
+                                <div style="margin-top:8px; color:#004a99; font-size:12px; font-weight:600;">
+                                    Προβολή →
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div style="padding:40px; text-align:center; color:#94a3b8;">
+                <div style="font-size:30px; margin-bottom:10px;">📭</div>
+                Δεν υπάρχουν νέα μηνύματα.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

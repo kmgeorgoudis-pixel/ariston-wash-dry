@@ -1,0 +1,98 @@
+{% extends "subadmin/layout.html" %}
+
+{% block title %}Μέλη{% endblock %}
+{% set active_page = 'users' %}
+
+{% block header_title %}
+Λίστα Μελών
+{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; flex-wrap:wrap; gap:15px;">
+    <div style="background: #fff; padding: 10px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e5e7eb;">
+        <span style="color:#64748b; font-size:14px;">Συνολικά εγγεγραμμένα μέλη:</span>
+        <strong style="font-size:18px; color:#0f172a; margin-left:5px;">{{ users|length }}</strong>
+    </div>
+
+    <form method="GET" action="/subadmin/users" style="display:flex; gap:10px; align-items:center; background: #fff; padding: 6px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e5e7eb;">
+        <div style="position:relative;">
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="ID, Email ή Όνομα..."
+                style="padding:10px 15px; border-radius:8px; border:1px solid #f1f5f9; background:#f8fafc; font-size:14px; min-width:260px; outline:none; transition: border-color 0.3s;"
+                onfocus="this.style.borderColor='#004a99'"
+                onblur="this.style.borderColor='#f1f5f9'"
+            >
+        </div>
+        <button
+            type="submit"
+            style="padding:10px 20px; border:none; border-radius:8px; background:#004a99; color:#fff; font-size:14px; font-weight:600; cursor:pointer; transition: opacity 0.3s;">
+            Αναζήτηση
+        </button>
+    </form>
+</div>
+
+<div style="background:#fff; border-radius:16px; box-shadow:0 10px 25px rgba(15,23,42,0.08); border: 1px solid #e5e7eb; overflow:hidden;">
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; text-align:left;">
+            <thead style="background:#f8fafc; border-bottom:2px solid #f1f5f9;">
+                <tr>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700;">ID</th>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700;">Στοιχεία Μέλους</th>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700;">Ημ. Εγγραφής</th>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700;">Ρόλος</th>
+                    <th style="padding:16px 20px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700; text-align:right;">Προβολή</th>
+                </tr>
+            </thead>
+            <tbody style="color:#334155;">
+            {% if users %}
+                {% for user in users %}
+                <tr style="border-bottom:1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.background='#fcfdfe'" onmouseout="this.style.background='transparent'">
+                    <td style="padding:16px 20px;">
+                        <span style="font-family:monospace; background:#f1f5f9; padding:4px 8px; border-radius:6px; color:#475569; font-weight:600;">#{{ user.id }}</span>
+                    </td>
+                    <td style="padding:16px 20px;">
+                        <div style="display:flex; flex-direction:column;">
+                            <a href="/subadmin/users/{{ user.id }}" style="color:#004a99; font-weight:700; text-decoration:none; font-size:15px; margin-bottom:2px;">
+                                {{ user.fullname or "Χωρίς Όνομα" }}
+                            </a>
+                            <span style="font-size:13px; color:#64748b;">{{ user.email }}</span>
+                        </div>
+                    </td>
+                    <td style="padding:16px 20px; font-size:14px; color:#64748b;">
+                        📅 {{ user.created_at.strftime('%d/%m/%Y') if user.created_at else '-' }}
+                    </td>
+                    <td style="padding:16px 20px;">
+                        {% if user.is_admin %}
+                            <span style="padding:4px 10px; border-radius:6px; background:#e0e7ff; color:#4338ca; font-size:11px; font-weight:700; text-transform:uppercase;">Admin</span>
+                        {% elif user.is_sub_admin %}
+                            <span style="padding:4px 10px; border-radius:6px; background:#f0f9ff; color:#0369a1; font-size:11px; font-weight:700; text-transform:uppercase;">Sub-Admin</span>
+                        {% else %}
+                            <span style="padding:4px 10px; border-radius:6px; background:#f1f5f9; color:#64748b; font-size:11px; font-weight:700; text-transform:uppercase;">User</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding:16px 20px; text-align:right;">
+                        <a href="/subadmin/users/{{ user.id }}" 
+                           style="display:inline-block; padding:6px 12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; color:#475569; text-decoration:none; font-size:12px; font-weight:600; transition: 0.2s;"
+                           onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
+                            Λεπτομέρειες
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5" style="padding:40px; text-align:center; color:#64748b;">
+                        Δεν βρέθηκαν μέλη.
+                    </td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "subadmin/layout.html" %}
+
+{% block title %}Κριτικές{% endblock %}
+{% set active_page = 'reviews' %}
+
+{% block header_title %}Κριτικές Χρηστών{% endblock %}
+
+{% block content %}
+<div style="background:#fff; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-bottom:20px; border:1px solid #e5e7eb;">
+    <div style="font-weight:700; color:#0f172a; margin-bottom:12px;">⭐ Φίλτρο Βαθμολογίας</div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <a href="/subadmin/reviews?rating=all" 
+           style="padding:8px 16px; border-radius:8px; text-decoration:none; font-size:14px; font-weight:600; 
+                  {% if rating_filter == 'all' %} background:#004a99; color:#fff; {% else %} background:#f1f5f9; color:#475569; {% endif %}">
+            Όλες
+        </a>
+        {% for r in [5,4,3,2,1] %}
+        <a href="/subadmin/reviews?rating={{ r }}" 
+           style="padding:8px 16px; border-radius:8px; text-decoration:none; font-size:14px; font-weight:600;
+                  {% if rating_filter == r|string %} background:#004a99; color:#fff; {% else %} background:#f1f5f9; color:#475569; {% endif %}">
+            {{ r }} ⭐
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div style="background:#fff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05); border:1px solid #e5e7eb; overflow:hidden;">
+    {% if reviews %}
+        {% for review in reviews %}
+            <a href="/subadmin/review/{{ review.id }}" 
+               style="display:block; padding:20px; border-bottom:1px solid #f1f5f9; text-decoration:none; color:inherit; transition:0.2s;"
+               onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+                
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <div style="font-weight:700; color:#0f172a;">{{ review.user.fullname or review.user.email }}</div>
+                        <div style="color:#f59e0b; margin:4px 0; font-size:14px;">
+                            {% for i in range(review.rating) %}⭐{% endfor %}
+                        </div>
+                        <div style="font-size:14px; color:#475569; margin-top:8px; line-height:1.4;">
+                            {{ review.comment|truncate(100) or "Χωρίς σχόλιο" }}
+                        </div>
+                    </div>
+                    <div style="font-size:12px; color:#94a3b8; white-space:nowrap;">
+                        {{ review.created_at.strftime('%d/%m/%Y') }}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <div style="padding:40px; text-align:center; color:#94a3b8;">Δεν βρέθηκαν κριτικές.</div>
+    {% endif %}
+</div>
+{% endblock %}

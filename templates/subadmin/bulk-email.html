@@ -1,0 +1,163 @@
+{% extends "subadmin/layout.html" %}
+
+{% block title %}Μαζική Αποστολή Email{% endblock %}
+{% set active_page = 'bulk_email' %}
+
+{% block header_title %}
+Μαζική Επικοινωνία
+{% endblock %}
+
+{% block content %}
+
+<div class="bulk-wrapper">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <span style="font-size: 40px;">✉️</span>
+        <h2 style="margin-top: 10px;">Μαζική Αποστολή Email</h2>
+        <p style="color: #64748b; font-size: 14px;">Στείλτε ενημερωτικό μήνυμα σε επιλεγμένα μέλη της κοινότητας.</p>
+    </div>
+
+    <form action="/subadmin/bulk-email/send" method="POST">
+
+        <label>Θέμα Email:</label>
+        <input type="text" name="subject" placeholder="π.χ. Νέο ωράριο καταστήματος" required>
+
+        <label>Μήνυμα:</label>
+        <textarea name="message" rows="6" placeholder="Γράψτε το περιεχόμενο του email εδώ..." required></textarea>
+
+        <label style="margin-top: 25px;">Επιλογή Παραληπτών:</label>
+
+        <div class="select-buttons">
+            <button type="button" id="select-all">✅ Επιλογή όλων</button>
+            <button type="button" id="clear-all">❌ Καθαρισμός</button>
+        </div>
+
+        <div class="user-list-box">
+            {% for user in users %}
+                <div class="user-item">
+                    <input type="checkbox" class="user-checkbox" name="selected_users" value="{{ user.id }}" id="user-{{ user.id }}">
+                    <label for="user-{{ user.id }}" style="margin:0; font-weight: normal; cursor:pointer;">
+                        <strong>{{ user.fullname or "Χωρίς Όνομα" }}</strong> 
+                        <span style="color: #64748b; font-size: 13px;">({{ user.email }})</span>
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" id="send-btn">🚀 Έναρξη Αποστολής</button>
+    </form>
+</div>
+
+<script>
+document.getElementById("select-all").addEventListener("click", function() {
+    document.querySelectorAll(".user-checkbox").forEach(cb => cb.checked = true);
+});
+
+document.getElementById("clear-all").addEventListener("click", function() {
+    document.querySelectorAll(".user-checkbox").forEach(cb => cb.checked = false);
+});
+
+// Απλή επιβεβαίωση πριν την αποστολή
+document.querySelector('form').addEventListener('submit', function(e) {
+    const selected = document.querySelectorAll('.user-checkbox:checked').length;
+    if (selected === 0) return;
+    
+    if (!confirm(`Πρόκειται να στείλετε email σε ${selected} χρήστες. Συνέχεια;`)) {
+        e.preventDefault();
+    }
+});
+</script>
+
+<style>
+.bulk-wrapper {
+    max-width: 700px;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.bulk-wrapper label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1e293b;
+}
+
+.bulk-wrapper input[type="text"],
+.bulk-wrapper textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #f1f5f9;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.2s;
+    background: #f8fafc;
+}
+
+.bulk-wrapper input[type="text"]:focus,
+.bulk-wrapper textarea:focus {
+    border-color: #004a99;
+    background: #fff;
+}
+
+.user-list-box {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 2px solid #f1f5f9;
+    padding: 10px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.user-item {
+    padding: 8px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-item:last-child { border-bottom: none; }
+
+.select-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.select-buttons button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#send-btn {
+    margin-top: 25px;
+    width: 100%;
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: 700;
+    background: #004a99;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#send-btn:hover {
+    background: #003366;
+    transform: translateY(-1px);
+}
+</style>
+{% endblock %}

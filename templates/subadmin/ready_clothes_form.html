@@ -1,0 +1,52 @@
+{% extends "subadmin/layout.html" %}
+
+{% block title %}Ειδοποίηση Έτοιμων Ρούχων{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+    
+    <div style="text-align: center; margin-bottom: 25px;">
+        <div style="font-size: 40px; margin-bottom: 10px;">👕</div>
+        <h2 style="color: #0f172a; margin: 0;">Ειδοποίηση Πελάτη</h2>
+        <p style="color: #64748b; margin-top: 5px;">Ενημέρωση μέλους: <strong>{{ user.fullname }}</strong></p>
+    </div>
+
+    <form method="POST">
+        <div style="margin-bottom: 25px;">
+            <label style="display: block; font-weight: 700; color: #334155; margin-bottom: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Επιλέξτε Μηχάνημα:
+            </label>
+            <select name="machine" required 
+                style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 2px solid #f1f5f9; background: #f8fafc; font-size: 16px; color: #1e293b; outline: none; transition: border-color 0.2s;"
+                onfocus="this.style.borderColor='#004a99'"
+                onblur="this.style.borderColor='#f1f5f9'">
+                <option value="" disabled selected>--- Επιλογή ---</option>
+                <optgroup label="Πλυντήρια">
+                    <option value="Πλυντήριο 1">Πλυντήριο 1</option>
+                    <option value="Πλυντήριο 2">Πλυντήριο 2</option>
+                    <option value="Πλυντήριο 3">Πλυντήριο 3</option>
+                </optgroup>
+                <optgroup label="Στεγνωτήρια">
+                    <option value="Στεγνωτήριο 4">Στεγνωτήριο 4</option>
+                    <option value="Στεγνωτήριο 5">Στεγνωτήριο 5</option>
+                    <option value="Στεγνωτήριο 6">Στεγνωτήριο 6</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <button type="submit" 
+                style="width: 100%; padding: 14px; border: none; border-radius: 10px; background: #004a99; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s;"
+                onmouseover="this.style.opacity='0.9'"
+                onmouseout="this.style.opacity='1'">
+                Αποστολή Ειδοποίησης
+            </button>
+            
+            <a href="/subadmin/users/{{ user.id }}" 
+                style="text-align: center; padding: 12px; color: #64748b; text-decoration: none; font-size: 14px; font-weight: 600;">
+                Ακύρωση / Επιστροφή στο προφίλ
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

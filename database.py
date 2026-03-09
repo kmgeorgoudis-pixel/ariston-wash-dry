@@ -87,6 +87,7 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     reset_code = db.Column(db.String(6), nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
+    is_sub_admin = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(120))
     qr_enabled = db.Column(db.Boolean, default=True)
     last_spin_date = db.Column(db.DateTime, nullable=True)

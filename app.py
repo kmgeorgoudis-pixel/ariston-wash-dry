@@ -476,6 +476,15 @@ def admin_messages():
 
     messages = ContactMessage.query.order_by(ContactMessage.created_at.desc()).all()
     return render_template("admin/messages.html", messages=messages)
+@app.route("/subadmin/messages")
+@login_required
+def subadmin_messages():
+    # Έλεγχος αν είναι Admin ή Sub-Admin
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return redirect("/")
+
+    messages = ContactMessage.query.order_by(ContactMessage.created_at.desc()).all()
+    return render_template("subadmin/messages.html", messages=messages)
 
 
 @app.route("/admin/coupons")
@@ -2528,6 +2537,149 @@ def admin_ready_clothes(user_id):
             flash(f'Σφάλμα: {str(e)}', 'danger')
 
     return render_template('admin/ready_clothes_form.html', user=user)
+###SUB-ADMIN###
+@app.route('/subadmin')
+@login_required
+def subadmin_dashboard():
+    # Έλεγχος αν είναι Admin ή Sub-Admin
+    if not (current_user.is_admin or getattr(current_user, 'is_sub_admin', False)):
+        return redirect(url_for('home'))
+        
+    return render_template('subadmin/dashboard.html', active_page='dashboard')
+@app.route('/subadmin')
+@login_required
+def subadmin_dashboard():
+    # Έλεγχος αν ο χρήστης είναι Admin ή Sub-Admin
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return redirect(url_for('home'))
+    
+    # Στατιστικά για το dashboard (μόνο αυτά που θέλουμε να βλέπει)
+    total_users = User.query.count()
+    total_reviews = Review.query.count()
+    total_messages = ContactMessage.query.count()
+    
+    return render_template('subadmin/dashboard.html', 
+                           total_users=total_users,
+                           total_reviews=total_reviews,
+                           total_messages=total_messages)
+@app.route('/subadmin/users')
+@login_required
+def subadmin_users():
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return redirect(url_for('home'))
+    
+    search = request.args.get('search', '')
+    if search:
+        # Αναζήτηση βάσει ID, Email ή Ονόματος
+        users = User.query.filter(
+            (User.id.like(f"%{search}%")) | 
+            (User.email.like(f"%{search}%")) | 
+            (User.fullname.like(f"%{search}%"))
+        ).all()
+    else:
+        users = User.query.all()
+        
+    return render_template('subadmin/users.html', users=users, search=search)
+@app.route('/subadmin/users/<int:user_id>/ready-clothes', methods=['GET', 'POST'])
+@login_required
+def subadmin_ready_clothes(user_id):
+    # Έλεγχος αν είναι Admin ή Sub-Admin
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return redirect(url_for('home'))
+    
+    user = User.query.get_or_404(user_id)
+    
+    if request.method == 'POST':
+        selected_machine = request.form.get('machine')
+        
+        try:
+            # Χρησιμοποιούμε την υπάρχουσα συνάρτηση send_ready_notification
+            send_ready_notification(user.email, user.fullname, selected_machine)
+            
+            flash(f'Η ειδοποίηση στάλθηκε επιτυχώς στον χρήστη {user.fullname}', 'success')
+            # Επιστροφή στη λίστα χρηστών του subadmin
+            return redirect(url_for('subadmin_users'))
+        except Exception as e:
+            flash(f'Σφάλμα κατά την αποστολή: {str(e)}', 'danger')
+
+    return render_template('subadmin/ready_clothes_form.html', user=user)
+@app.route("/subadmin/messages/<int:id>")
+@login_required
+def subadmin_message_view(id):
+    # Έλεγχος αν ο χρήστης είναι Admin ή Sub-Admin
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return redirect("/")
+
+    msg = ContactMessage.query.get_or_404(id)
+    # Χρησιμοποιούμε το νέο template για subadmin
+    return render_template("subadmin/message_view.html", m=msg)
+@app.route("/subadmin/bulk-email")
+@login_required
+def subadmin_bulk_email():
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return redirect("/")
+
+    users = User.query.all()
+    return render_template("subadmin/bulk-email.html", users=users, active_page="bulk_email")
+
+@app.route("/subadmin/bulk-email/send", methods=["POST"])
+@login_required
+def subadmin_send_bulk_email():
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return redirect("/")
+
+    subject = request.form.get("subject")
+    message = request.form.get("message")
+    selected_ids = request.form.getlist("selected_users")
+
+    if not selected_ids:
+        flash("Δεν επιλέχθηκαν χρήστες.", "danger")
+        return redirect(url_for('subadmin_bulk_email'))
+
+    users = User.query.filter(User.id.in_(selected_ids)).all()
+
+    # Χρησιμοποιούμε την ίδια background συνάρτηση που έχουμε ήδη ορίσει
+    threading.Thread(
+        target=send_bulk_email_background,
+        args=(users, subject, message),
+        daemon=True
+    ).start()
+
+    flash("Η αποστολή ξεκίνησε στο παρασκήνιο.", "success")
+    return redirect(url_for('subadmin_bulk_email'))
+@app.route("/subadmin/reviews")
+@login_required
+def subadmin_reviews():
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return redirect("/")
+
+    rating_filter = request.args.get("rating", "all")
+    query = Review.query.order_by(Review.created_at.desc())
+
+    if rating_filter != "all":
+        query = query.filter(Review.rating == int(rating_filter))
+
+    reviews = query.all()
+
+    return render_template(
+        "subadmin/reviews.html",
+        reviews=reviews,
+        rating_filter=rating_filter,
+        active_page="reviews"
+    )
+
+@app.route("/subadmin/review/<int:review_id>")
+@login_required
+def subadmin_review_detail(review_id):
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return redirect("/")
+
+    review = Review.query.get_or_404(review_id)
+    return render_template(
+        "subadmin/review_detail.html",
+        review=review,
+        active_page="reviews"
+    )
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")

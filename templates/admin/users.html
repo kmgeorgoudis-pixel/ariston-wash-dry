@@ -74,6 +74,10 @@
                             <span style="padding:4px 10px; border-radius:6px; background:#e0e7ff; color:#4338ca; font-size:11px; font-weight:700; text-transform:uppercase;">
                                 Administrator
                             </span>
+                        {% elif user.is_sub_admin %}
+                            <span style="padding:4px 10px; border-radius:6px; background:#f0f9ff; color:#0369a1; font-size:11px; font-weight:700; text-transform:uppercase;">
+                                Sub-Admin
+                            </span>
                         {% else %}
                             <span style="padding:4px 10px; border-radius:6px; background:#f1f5f9; color:#64748b; font-size:11px; font-weight:700; text-transform:uppercase;">
                                 User

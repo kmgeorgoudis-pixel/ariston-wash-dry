@@ -1,0 +1,51 @@
+{% extends "subadmin/layout.html" %}
+{% block title %}Λεπτομέρειες Μηνύματος{% endblock %}
+{% set active_page = 'messages' %}
+
+{% block header_title %}
+Λεπτομέρειες Μηνύματος
+{% endblock %}
+
+{% block content %}
+
+<div style="margin-bottom: 20px;">
+    <a href="/subadmin/messages" style="text-decoration:none; color:#64748b; font-size:14px;">← Επιστροφή στα Μηνύματα</a>
+</div>
+
+<div style="background:#fff; padding:30px; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.05); border:1px solid #e5e7eb;">
+    <div style="font-size:18px; font-weight:700; color:#0f172a; margin-bottom:20px; border-bottom:1px solid #f1f5f9; padding-bottom:15px;">
+        📩 Στοιχεία Επικοινωνίας
+    </div>
+
+    <div style="font-size:15px; color:#334155; line-height:1.8;">
+        <p><strong>Ημερομηνία:</strong> {{ m.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+
+        {% if m.user_id %}
+            <p><strong>Από μέλος:</strong> 
+                <a href="/subadmin/users/{{ m.user_id }}" style="color:#004a99; font-weight:600; text-decoration:none;">
+                    {{ m.name }} (Προβολή Προφίλ)
+                </a>
+            </p>
+        {% else %}
+            <p><strong>Από επισκέπτη:</strong> {{ m.name or "Χωρίς όνομα" }}</p>
+        {% endif %}
+
+        <p><strong>Email:</strong> <a href="mailto:{{ m.email }}" style="color:#004a99; text-decoration:none;">{{ m.email }}</a></p>
+        <p><strong>Θέμα:</strong> <span style="color:#0f172a; font-weight:600;">{{ m.subject }}</span></p>
+
+        <div style="margin-top:25px;">
+            <p><strong>Κείμενο Μηνύματος:</strong></p>
+            <div style="padding:20px; background:#f8fafc; border-radius:12px; border:1px solid #e2e8f0; color:#1e293b; white-space: pre-wrap; line-height:1.6;">
+                {{ m.message }}
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top:30px; display:flex; gap:10px;">
+        <a href="mailto:{{ m.email }}" style="background:#004a99; color:#fff; padding:12px 20px; border-radius:10px; text-decoration:none; font-weight:600; font-size:14px;">
+            📧 Απάντηση μέσω Email
+        </a>
+    </div>
+</div>
+
+{% endblock %}
