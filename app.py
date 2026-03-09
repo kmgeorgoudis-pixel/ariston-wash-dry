@@ -2680,6 +2680,14 @@ def subadmin_review_detail(review_id):
         review=review,
         active_page="reviews"
     )
+@app.route('/subadmin/users/<int:user_id>')
+@login_required
+def subadmin_user_view(user_id):
+    if not (current_user.is_admin or getattr(current_user, 'is_sub_admin', False)):
+        return redirect(url_for('home'))
+    
+    user = User.query.get_or_404(user_id)
+    return render_template('subadmin/user_profile.html', user=user)
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
