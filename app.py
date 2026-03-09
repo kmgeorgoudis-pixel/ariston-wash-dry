@@ -2688,6 +2688,36 @@ def subadmin_user_view(user_id):
     
     user = User.query.get_or_404(user_id)
     return render_template('subadmin/user_profile.html', user=user)
+# === SUB-ADMIN MANAGEMENT ===
+
+@app.route("/admin/users/<int:user_id>/make_sub_admin", methods=["POST"])
+@login_required
+def make_user_sub_admin(user_id):
+    if not current_user.is_admin:
+        flash("Δεν έχετε δικαίωμα για αυτή την ενέργεια.", "danger")
+        return redirect("/")
+        
+    user = User.query.get_or_404(user_id)
+    user.is_sub_admin = True
+    db.session.commit()
+
+    # (Προαιρετικά μπορείς να φτιάξεις και email εδώ στο μέλλον)
+    flash(f"Ο χρήστης {user.fullname} έγινε Sub-Admin.", "success")
+    return redirect(f"/admin/users/{user_id}")
+
+@app.route("/admin/users/<int:user_id>/remove_sub_admin", methods=["POST"])
+@login_required
+def remove_user_sub_admin(user_id):
+    if not current_user.is_admin:
+        flash("Δεν έχετε δικαίωμα για αυτή την ενέργεια.", "danger")
+        return redirect("/")
+
+    user = User.query.get_or_404(user_id)
+    user.is_sub_admin = False
+    db.session.commit()
+
+    flash(f"Αφαιρέθηκαν τα δικαιώματα Sub-Admin από τον χρήστη {user.fullname}.", "warning")
+    return redirect(f"/admin/users/{user_id}")
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
