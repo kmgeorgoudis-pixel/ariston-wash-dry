@@ -605,12 +605,18 @@ def login():
     # Αν ο χρήστης υπάρχει και ο κωδικός είναι σωστός
     login_user(user)
 
-    # ===== ADMIN REDIRECT =====
+    # ===== REDIRECTS ΑΝΑΛΟΓΑ ΜΕ ΤΟΝ ΡΟΛΟ =====
+    
+    # 1. Έλεγχος για Admin
     if user.is_admin:
         return redirect("/admin")
-    # ==========================
+    
+    # 2. Έλεγχος για Sub-Admin
+    # Χρησιμοποιούμε getattr για να αποφύγουμε σφάλμα αν η στήλη is_sub_admin δεν υπάρχει προσωρινά στη μνήμη
+    if getattr(user, 'is_sub_admin', False):
+        return redirect("/subadmin")
 
-    # Απλός χρήστης
+    # 3. Απλός χρήστης
     return redirect("/index")
 @app.route("/profile")
 @login_required
