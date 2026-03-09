@@ -2455,6 +2455,14 @@ def delete_spin(user_id):
 def send_ready_notification(email, full_name, selected_machine):
     subject = "🧺 Τα ρούχα σας είναι έτοιμα! - Ariston Wash & Dry"
     
+    # Δυναμικό κείμενο ανάλογα με το μηχάνημα
+    if "Πλυντήριο" in selected_machine:
+        action_text = "η πλύση σας ολοκληρώθηκε!"
+    elif "Στεγνωτήριο" in selected_machine:
+        action_text = "το στέγνωμά σας ολοκληρώθηκε!"
+    else:
+        action_text = "η διαδικασία ολοκληρώθηκε!" # Fallback
+
     content = f"""
     <div style="background-color: #f9fafb; padding: 50px 20px; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;">
@@ -2467,7 +2475,7 @@ def send_ready_notification(email, full_name, selected_machine):
                 <p style="font-size: 17px; color: #1f2937; margin-bottom: 20px;">Γεια σας <b>{full_name}</b>,</p>
                 
                 <p style="font-size: 15px; color: #4b5563; line-height: 1.6;">
-                    Θα θέλαμε να σας ενημερώσουμε ότι η πλύση/στέγνωμά σας ολοκληρώθηκε!
+                    Θα θέλαμε να σας ενημερώσουμε ότι {action_text}
                 </p>
                 
                 <div style="margin: 30px 0; padding: 20px; background-color: #f0f7ff; border-radius: 10px; border-left: 4px solid #004a99;">
