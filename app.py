@@ -2538,22 +2538,15 @@ def admin_ready_clothes(user_id):
 
     return render_template('admin/ready_clothes_form.html', user=user)
 ###SUB-ADMIN###
-@app.route('/subadmin')
-@login_required
-def subadmin_dashboard():
-    # Έλεγχος αν είναι Admin ή Sub-Admin
-    if not (current_user.is_admin or getattr(current_user, 'is_sub_admin', False)):
-        return redirect(url_for('home'))
-        
-    return render_template('subadmin/dashboard.html', active_page='dashboard')
+
 @app.route('/subadmin')
 @login_required
 def subadmin_dashboard():
     # Έλεγχος αν ο χρήστης είναι Admin ή Sub-Admin
-    if not (current_user.is_admin or current_user.is_sub_admin):
+    if not (current_user.is_admin or getattr(current_user, 'is_sub_admin', False)):
         return redirect(url_for('home'))
     
-    # Στατιστικά για το dashboard (μόνο αυτά που θέλουμε να βλέπει)
+    # Στατιστικά για το dashboard
     total_users = User.query.count()
     total_reviews = Review.query.count()
     total_messages = ContactMessage.query.count()
@@ -2561,7 +2554,8 @@ def subadmin_dashboard():
     return render_template('subadmin/dashboard.html', 
                            total_users=total_users,
                            total_reviews=total_reviews,
-                           total_messages=total_messages)
+                           total_messages=total_messages,
+                           active_page='dashboard')
 @app.route('/subadmin/users')
 @login_required
 def subadmin_users():
