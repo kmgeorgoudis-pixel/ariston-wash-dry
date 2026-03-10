@@ -26,6 +26,7 @@ class ContactMessage(db.Model):
     message = db.Column(db.Text, nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_completed = db.Column(db.Boolean, default=False)
 
     user = db.relationship("User", backref="contact_messages", lazy=True)
 

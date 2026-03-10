@@ -2718,6 +2718,33 @@ def remove_user_sub_admin(user_id):
 
     flash(f"Αφαιρέθηκαν τα δικαιώματα Sub-Admin από τον χρήστη {user.fullname}.", "warning")
     return redirect(f"/admin/users/{user_id}")
+@app.route("/admin/messages/<int:id>/complete", methods=["POST"])
+@login_required
+def complete_message(id):
+    if not (current_user.is_admin or getattr(current_user, 'is_sub_admin', False)):
+        return redirect("/")
+    
+    msg = ContactMessage.query.get_or_404(id)
+    msg.is_completed = not msg.is_completed  # Αντιστρέφει την κατάσταση (Toggle)
+    db.session.commit()
+    return redirect(request.referrer or url_for('admin_messages'))
+@app.route("/subadmin/messages/<int:id>/complete", methods=["POST"])
+@login_required
+def subadmin_complete_message(id):
+    # Έλεγχος αν είναι Sub-Admin ή Admin
+    if not (getattr(current_user, 'is_sub_admin', False) or current_user.is_admin):
+        flash("Δεν έχετε πρόσβαση.", "danger")
+        return redirect("/")
+    
+    msg = ContactMessage.query.get_or_404(id)
+    msg.is_completed = not msg.is_completed  # Toggle την κατάσταση
+    db.session.commit()
+    
+    status = "Ολοκληρώθηκε" if msg.is_completed else "Εκκρεμεί"
+    flash(f"Το μήνυμα σημειώθηκε ως: {status}", "success")
+    
+    # Επιστροφή στη σελίδα του Sub-Admin
+    return redirect(f"/subadmin/messages/{id}")
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")

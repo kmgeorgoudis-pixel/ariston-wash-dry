@@ -24,35 +24,39 @@
     <div>
         {% if messages %}
             {% for m in messages %}
-                <div style="border-bottom:1px solid #f1f5f9; transition:0.2s; position:relative;" 
-                     onmouseover="this.style.background='#f8fafc'" 
-                     onmouseout="this.style.background='white'">
-                    
-                    <a href="/subadmin/messages/{{ m.id }}" style="text-decoration:none; color:inherit; display:block; padding:20px;">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <div>
-                                <div style="font-size:16px; font-weight:700; color:#004a99; margin-bottom:4px;">
-                                    {{ m.subject }}
-                                </div>
-                                <div style="font-size:14px; color:#334155; font-weight:500;">
-                                    Από: {{ m.name }}
-                                </div>
-                                <div style="font-size:13px; color:#64748b; margin-top:2px;">
-                                    📧 {{ m.email }}
-                                </div>
-                            </div>
-                            <div style="text-align:right;">
-                                <div style="font-size:12px; color:#94a3b8; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                    {{ m.created_at.strftime('%d/%m/%Y %H:%M') }}
-                                </div>
-                                <div style="margin-top:8px; color:#004a99; font-size:12px; font-weight:600;">
-                                    Προβολή →
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+    <div style="border-bottom:1px solid #f1f5f9; transition:0.2s; position:relative; 
+                background: {% if m.is_completed %}#f0fdf4{% else %}white{% endif %};" 
+         onmouseover="this.style.background='#f8fafc'" 
+         onmouseout="this.style.background='{% if m.is_completed %}#f0fdf4{% else %}white{% endif %}'">
+        
+        <a href="/subadmin/messages/{{ m.id }}" style="text-decoration:none; color:inherit; display:block; padding:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                    <div style="font-size:16px; font-weight:700; color:{% if m.is_completed %}#059669{% else %}#004a99{% endif %}; margin-bottom:4px;">
+                        {{ m.subject }} {% if m.is_completed %} (Ολοκληρώθηκε) {% endif %}
+                    </div>
+                    <div style="font-size:14px; color:#334155; font-weight:500;">
+                        Από: {{ m.name }}
+                    </div>
                 </div>
-            {% endfor %}
+                <div style="text-align:right;">
+                    <div style="font-size:12px; color:#94a3b8; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
+                        {{ m.created_at.strftime('%d/%m/%Y %H:%M') }}
+                    </div>
+                    {% if m.is_completed %}
+                    <div style="margin-top:8px; color:#059669; font-size:12px; font-weight:700;">
+                        ✅ ΟΛΟΚΛΗΡΩΜΕΝΟ
+                    </div>
+                    {% else %}
+                    <div style="margin-top:8px; color:#004a99; font-size:12px; font-weight:600;">
+                        Εκκρεμεί →
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+    </div>
+{% endfor %}
         {% else %}
             <div style="padding:40px; text-align:center; color:#94a3b8;">
                 <div style="font-size:30px; margin-bottom:10px;">📭</div>
