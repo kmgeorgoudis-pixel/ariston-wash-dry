@@ -76,7 +76,50 @@
 
 </div>
 
+<div id="ai-disclaimer-overlay" style="
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.85); z-index: 9999; display: flex; 
+    align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    
+    <div style="
+        background: white; padding: 30px; border-radius: 20px; 
+        max-width: 500px; width: 90%; text-align: center; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-family: sans-serif;">
+        
+        <div style="font-size: 50px; margin-bottom: 15px;">🤖</div>
+        <h2 style="color: #0f172a; margin-bottom: 15px;">Σημαντική Ενημέρωση</h2>
+        
+        <div style="color: #475569; font-size: 14px; line-height: 1.6; margin-bottom: 25px; text-align: left;">
+            <p>Καλώς ορίσατε στο <strong>ARISTON AI</strong>. Πριν ξεκινήσουμε, παρακαλούμε λάβετε υπόψη τα εξής:</p>
+            <ul style="padding-left: 20px;">
+                <li>Το AI μπορεί να κάνει λάθη. Πάντα να επιβεβαιώνετε κρίσιμες πληροφορίες.</li>
+                <li>Οι απαντήσεις είναι συμβουλευτικές και δεν αντικαθιστούν την επίσημη επικοινωνία με το κατάστημα.</li>
+                <li>Χρησιμοποιώντας την υπηρεσία, αποδέχεστε τους <strong>Όρους Χρήσης</strong> και την <strong>Πολιτική Απορρήτου</strong> μας.</li>
+            </ul>
+        </div>
+        
+        <button id="accept-ai-terms" style="
+            background: #004a99; color: white; border: none; 
+            padding: 12px 30px; border-radius: 10px; font-weight: bold; 
+            cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s;">
+            Κατανοώ & Αποδέχομαι
+        </button>
+    </div>
+</div>
 
+<script>
+    
+    document.getElementById('accept-ai-terms').addEventListener('click', function() {
+        document.getElementById('ai-disclaimer-overlay').style.display = 'none';
+        
+        sessionStorage.setItem('ai_terms_accepted', 'true');
+    });
+
+    
+    if (sessionStorage.getItem('ai_terms_accepted') === 'true') {
+        document.getElementById('ai-disclaimer-overlay').style.display = 'none';
+    }
+</script>
 <script>
     (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="foTgJasLKt6S7dCUKS4C5";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
 </script>

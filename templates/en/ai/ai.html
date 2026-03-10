@@ -68,6 +68,62 @@
   </main>
 
 </div>
+<div id="ai-disclaimer-overlay" style="
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.85); z-index: 9999; display: flex; 
+    align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    
+    <div style="
+        background: white; padding: 35px; border-radius: 20px; 
+        max-width: 450px; width: 90%; text-align: center; 
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4); font-family: 'Segoe UI', Arial, sans-serif;">
+        
+        <div style="font-size: 50px; margin-bottom: 15px;">🤖</div>
+        <h2 style="color: #0f172a; margin-bottom: 15px; font-weight: 700;">AI Service Notice</h2>
+        
+        <div style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 25px; text-align: left;">
+            <p>Welcome to <strong>ARISTON AI</strong>. Please acknowledge the following before proceeding:</p>
+            <ul style="padding-left: 20px; margin-top: 10px;">
+                <li>AI may provide inaccurate information. Always verify critical details.</li>
+                <li>Our AI assistant is for advisory purposes only.</li>
+                <li>By continuing, you agree to our <strong>Terms of Service</strong> and <strong>Privacy Policy</strong>.</li>
+            </ul>
+        </div>
+        
+        <button id="accept-ai-terms" style="
+            background: #004a99; color: white; border: none; 
+            padding: 14px 30px; border-radius: 12px; font-weight: bold; 
+            cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0,74,153,0.3);">
+            I Understand & Accept
+        </button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const overlay = document.getElementById('ai-disclaimer-overlay');
+        const acceptBtn = document.getElementById('accept-ai-terms');
+
+        
+        if (localStorage.getItem('ariston_ai_accepted') === 'true') {
+            overlay.style.display = 'none';
+        }
+
+        acceptBtn.addEventListener('click', function() {
+            
+            overlay.style.transition = 'opacity 0.4s ease';
+            overlay.style.opacity = '0';
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 400);
+
+            
+            localStorage.setItem('ariston_ai_accepted', 'true');
+        });
+    })();
+</script>
 
 <script src="{{ url_for('static', filename='en/ai/ai.js') }}"></script>
 <script>
