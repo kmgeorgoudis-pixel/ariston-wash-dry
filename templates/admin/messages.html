@@ -24,31 +24,59 @@
 
         {% if messages %}
             {% for m in messages %}
-    <div style="
-        position:relative;
-        border-bottom:1px solid #e5e7eb;
-        padding:16px;
-        transition:0.2s;
-        {% if m.is_completed %} background: #f0fdf4; border-left: 5px solid #059669; {% else %} background: white; {% endif %}
-    "
-    onmouseover="this.style.background='#f3f4f6'"
-    onmouseout="this.style.background='{% if m.is_completed %}#f0fdf4{% else %}white{% endif %}'">
+                <div style="
+                    position:relative;
+                    border-bottom:1px solid #e5e7eb;
+                    padding:16px;
+                    transition:0.2s;
+                    /* Πράσινο φόντο αν είναι ολοκληρωμένο */
+                    background: {% if m.is_completed %}#f0fdf4{% else %}white{% endif %};
+                "
+                onmouseover="this.style.background='#f3f4f6'"
+                onmouseout="this.style.background='{% if m.is_completed %}#f0fdf4{% else %}white{% endif %}'">
 
-        {% if m.is_completed %}
-            <div style="position: absolute; right: 100px; top: 18px; color: #059669; font-weight: bold; font-size: 11px;">
-                ✅ ΟΛΟΚΛΗΡΩΜΕΝΟ
-            </div>
-        {% endif %}
+                    {% if m.is_completed %}
+                        <div style="position:absolute; right:110px; top:18px; background:#059669; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold;">
+                            ΟΛΟΚΛΗΡΩΘΗΚΕ
+                        </div>
+                    {% endif %}
 
-        <form action="/admin/messages/{{ m.id }}/delete" method="POST" ...> ... </form>
+                    <form action="/admin/messages/{{ m.id }}/delete" method="POST"
+                          style="position:absolute; right:16px; top:16px;"
+                          onsubmit="return confirm('Σίγουρα θέλετε να διαγράψετε αυτό το μήνυμα;');">
+                        <button type="submit"
+                                style="
+                                    background:#dc2626;
+                                    color:white;
+                                    border:none;
+                                    padding:6px 10px;
+                                    border-radius:6px;
+                                    font-size:12px;
+                                    cursor:pointer;
+                                ">
+                            Διαγραφή
+                        </button>
+                    </form>
 
-        <a href="/admin/messages/{{ m.id }}" style="text-decoration:none; color:#111827; display:block;">
-            <div style="font-size:16px; font-weight:700; color:{% if m.is_completed %}#059669{% else %}#0d47a1{% endif %};">
-                {{ m.subject }} {% if m.is_completed %}(Ολοκληρώθηκε){% endif %}
-            </div>
-            </a>
-    </div>
-{% endfor %}
+                    <a href="/admin/messages/{{ m.id }}"
+                       style="text-decoration:none; color:#111827; display:block;">
+
+                        <div style="font-size:16px; font-weight:700; color:{% if m.is_completed %}#059669{% else %}#0d47a1{% endif %};">
+                            {{ m.subject }}
+                        </div>
+
+                        <div style="font-size:14px; color:#374151; margin-top:4px;">
+                            Από: {{ m.name }} — {{ m.email }}
+                        </div>
+
+                        <div style="font-size:12px; color:#6b7280; margin-top:6px;">
+                            Ημερομηνία: {{ m.created_at.strftime('%d/%m/%Y %H:%M') }}
+                        </div>
+
+                    </a>
+
+                </div>
+            {% endfor %}
         {% else %}
             <div style="padding:14px; text-align:center; color:#6b7280;">
                 Δεν υπάρχουν μηνύματα επικοινωνίας.

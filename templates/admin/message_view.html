@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="admin-card" style="{% if m.is_completed %}border-left: 8px solid #059669; background: #f0fdf4;{% endif %}">
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div class="admin-card-title">📩 Μήνυμα Επικοινωνίας</div>
@@ -16,8 +17,20 @@
     </div>
 
     <p><strong>Ημερομηνία:</strong> {{ m.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+
+    {% if m.user_id %}
+        <p><strong>Από μέλος:</strong>
+            <a href="/admin/users/{{ m.user_id }}">{{ m.name }}</a>
+        </p>
+    {% else %}
+        <p><strong>Από επισκέπτη:</strong> {{ m.name or "Χωρίς όνομα" }}</p>
+    {% endif %}
+
+    <p><strong>Email:</strong> {{ m.email }}</p>
+    <p><strong>Θέμα:</strong> {{ m.subject }}</p>
+
     <p style="margin-top:20px;"><strong>Μήνυμα:</strong></p>
-    <div style="padding:12px; background:white; border-radius:8px; border:1px solid #e5e7eb;">
+    <div style="padding:12px; background:#f9fafb; border-radius:8px; border:1px solid #e5e7eb; color: #111;">
         {{ m.message }}
     </div>
 
@@ -26,9 +39,10 @@
             <button type="submit" style="
                 background: {% if m.is_completed %}#6b7280{% else %}#059669{% endif %};
                 color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">
-                {% if m.is_completed %}↩️ Επαναφορά σε Εκκρεμότητα{% else %}✅ Σήμανση ως Ολοκληρωμένο{% endif %}
+                {% if m.is_completed %}↩️ Ακύρωση Ολοκλήρωσης{% else %}✅ Σήμανση ως Ολοκληρωμένο{% endif %}
             </button>
         </form>
     </div>
 </div>
+
 {% endblock %}

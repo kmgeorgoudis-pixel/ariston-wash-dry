@@ -8,17 +8,13 @@
 
 {% block content %}
 
-<div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+<div style="margin-bottom: 20px;">
     <a href="/subadmin/messages" style="text-decoration:none; color:#64748b; font-size:14px;">← Επιστροφή στα Μηνύματα</a>
-    
-    {% if m.is_completed %}
-        <span style="background: #059669; color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold;">✅ ΟΛΟΚΛΗΡΩΜΕΝΟ</span>
-    {% endif %}
 </div>
 
-<div style="background:{% if m.is_completed %}#f0fdf4{% else %}#fff{% endif %}; padding:30px; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.05); border:1px solid {% if m.is_completed %}#059669{% else %}#e5e7eb{% endif %};">
-    <div style="font-size:18px; font-weight:700; color:#0f172a; margin-bottom:20px; border-bottom:1px solid #f1f5f9; padding-bottom:15px; display: flex; justify-content: space-between;">
-        <span>📩 Στοιχεία Επικοινωνίας</span>
+<div style="background:#fff; padding:30px; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.05); border:1px solid #e5e7eb;">
+    <div style="font-size:18px; font-weight:700; color:#0f172a; margin-bottom:20px; border-bottom:1px solid #f1f5f9; padding-bottom:15px;">
+        📩 Στοιχεία Επικοινωνίας
     </div>
 
     <div style="font-size:15px; color:#334155; line-height:1.8;">
@@ -34,25 +30,18 @@
             <p><strong>Από επισκέπτη:</strong> {{ m.name or "Χωρίς όνομα" }}</p>
         {% endif %}
 
+        
         <p><strong>Θέμα:</strong> <span style="color:#0f172a; font-weight:600;">{{ m.subject }}</span></p>
 
         <div style="margin-top:25px;">
             <p><strong>Κείμενο Μηνύματος:</strong></p>
-            <div style="padding:20px; background:#fff; border-radius:12px; border:1px solid #e2e8f0; color:#1e293b; white-space: pre-wrap; line-height:1.6;">
+            <div style="padding:20px; background:#f8fafc; border-radius:12px; border:1px solid #e2e8f0; color:#1e293b; white-space: pre-wrap; line-height:1.6;">
                 {{ m.message }}
             </div>
         </div>
     </div>
-
-    <div style="margin-top: 30px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
-        <form action="/admin/messages/{{ m.id }}/complete" method="POST">
-            <button type="submit" style="
-                background: {% if m.is_completed %}#64748b{% else %}#059669{% endif %};
-                color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 14px;">
-                {% if m.is_completed %}↩️ Επαναφορά σε Εκκρεμότητα{% else %}✅ Ολοκλήρωση Συνομιλίας{% endif %}
-            </button>
-        </form>
-    </div>
+    
+    
 </div>
 
 {% endblock %}
