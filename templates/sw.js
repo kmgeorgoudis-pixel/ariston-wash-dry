@@ -3,11 +3,13 @@ self.addEventListener('install', (e) => {
     caches.open('ariston-v1').then((cache) => {
       return cache.addAll([
         '/',
-        '/templates/images/icon-192.png',
-        '/templates/images/icon-512.png'
-      ]);
+        '/images/icon-192.png',
+        '/images/icon-512.png',
+        '/manifest.json'
+      ]).catch(err => console.log("Service Worker Cache Error:", err));
     })
   );
+  self.skipWaiting();
 });
 
 self.addEventListener('fetch', (e) => {
