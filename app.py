@@ -2757,9 +2757,13 @@ def serve_sw():
     # Το ίδιο και για το Service Worker
     return send_from_directory(app.static_folder, 'sw.js')
 @app.route('/static/images/<path:filename>')
-def serve_templates_images(filename):
-    # Εφόσον το static_folder είναι το "templates", 
-    # το os.path.join θα ψάξει στο templates/images/
+def custom_static_images(filename):
+    # Αυτό θα ψάξει στον φάκελο templates/images/ επειδή static_folder="templates"
+    return send_from_directory(os.path.join(app.static_folder, 'images'), filename)
+
+@app.route('/images/<path:filename>')
+def redirect_images(filename):
+    # Αν ο browser ζητήσει από το /images/, στείλτον στο σωστό μέρος
     return send_from_directory(os.path.join(app.static_folder, 'images'), filename)
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
