@@ -2745,6 +2745,17 @@ def subadmin_complete_message(id):
     
     # Επιστροφή στη σελίδα του Sub-Admin
     return redirect(f"/subadmin/messages/{id}")
+from flask import send_from_directory
+
+@app.route('/manifest.json')
+def serve_manifest():
+    # Αυτό ψάχνει στον πραγματικό φάκελο 'static' του δίσκου
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'manifest.json')
+
+@app.route('/sw.js')
+def serve_sw():
+    # Αυτό ψάχνει στον πραγματικό φάκελο 'static' του δίσκου
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'sw.js')
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")

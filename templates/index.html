@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="Qc2OA-gLDNhpJ-XnGJjJ6jLk_VCl4Ny73a9xrsVdLhI" />
     <title>ARISTON Wash & Dry</title>
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#004a99">
 
     
@@ -617,7 +617,8 @@ window.addEventListener('load', function() {
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register("{{ url_for('static', filename='sw.js') }}")
+      
+      navigator.serviceWorker.register("/sw.js")
         .then(reg => console.log('Ariston App Ready!'))
         .catch(err => console.log('App error:', err));
     });
