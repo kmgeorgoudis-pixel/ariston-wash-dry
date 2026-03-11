@@ -2749,13 +2749,13 @@ from flask import send_from_directory
 
 @app.route('/manifest.json')
 def serve_manifest():
-    # Αυτό ψάχνει στον πραγματικό φάκελο 'static' του δίσκου
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'manifest.json')
+    # Επειδή έχεις ορίσει static_folder="templates", το Flask θα ψάξει εκεί
+    return send_from_directory(app.static_folder, 'manifest.json')
 
 @app.route('/sw.js')
 def serve_sw():
-    # Αυτό ψάχνει στον πραγματικό φάκελο 'static' του δίσκου
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'sw.js')
+    # Το ίδιο και για το Service Worker
+    return send_from_directory(app.static_folder, 'sw.js')
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
