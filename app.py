@@ -2756,6 +2756,9 @@ def serve_manifest():
 def serve_sw():
     # Το ίδιο και για το Service Worker
     return send_from_directory(app.static_folder, 'sw.js')
+@app.route('/templates/images/<path:filename>')
+def serve_templates_images(filename):
+    return send_from_directory(os.path.join(app.static_folder, 'images'), filename)
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
