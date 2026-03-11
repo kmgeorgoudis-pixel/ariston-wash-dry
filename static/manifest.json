@@ -1,11 +1,10 @@
 {
   "name": "ARISTON Wash & Dry",
-  "short_name": "Ariston",
+  "short_name": "ARISTON",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#0a1118",
   "theme_color": "#004a99",
-  "description": "Premium Laundry & Dry Cleaning Services",
   "icons": [
     {
       "src": "/static/images/icon-192.png",
