@@ -514,7 +514,7 @@ professional laundry Samos
 <section class="info-section reveal">
     <div class="info-text">
         <h3>Καλώς ήρθατε στο Ariston Wash & Dry!</h3>
-        <p>Στο Ariston Wash & Dry μπορείτε να πλύνετε και να στεγνώσετε τα ρούχα σας εύκολα, γρήγορα και οικονομικά, σε λιγότερο από μία ώρα.</p>
+        <p>Στο ARISTON Wash & Dry μπορείτε να πλύνετε και να στεγνώσετε τα ρούχα σας εύκολα, γρήγορα και οικονομικά, σε λιγότερο από μία ώρα.</p>
         <p>Απολαύστε έναν καθαρό, μοντέρνο χώρο με σύγχρονα μηχανήματα υψηλής απόδοσης και απλή λειτουργία, με δυνατότητα πληρωμής με κάρτα ή μετρητά. 
            <span style="color: var(--accent); font-weight: 800; text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);">
            Μετά από κάθε πλύση, τα ρούχα και ο κάδος απολυμαίνονται πλήρως με ενεργό οξυγόνο, διασφαλίζοντας την απόλυτη υγιεινή.
@@ -652,19 +652,19 @@ window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     
-    // Έλεγχος: Αν υπάρχει promo overlay και είναι ορατό, μην δείξεις ακόμα το PWA banner
+    
     if (promoOverlay && promoOverlay.classList.contains('show')) {
         return; 
     }
     
-    // Αλλιώς εμφάνισέ το μετά από 3 δευτερόλεπτα
+    
     setTimeout(() => {
         pwaBanner.style.display = 'flex';
         pwaBanner.style.animation = 'slideUp 0.5s ease-out';
     }, 3000);
 });
 
-// Όταν ο χρήστης κλείνει το Promo "Γίνετε μέλος", τότε εμφάνισε το PWA Install
+
 const promoCloseBtn = document.getElementById('promo-close-btn');
 if (promoCloseBtn) {
     promoCloseBtn.addEventListener('click', () => {
@@ -690,7 +690,7 @@ installBtn.addEventListener('click', async () => {
 
 closePwaBtn.addEventListener('click', () => {
     pwaBanner.style.display = 'none';
-    // Προαιρετικά: Μην το ξαναδείξεις για αυτό το session
+    
     sessionStorage.setItem('pwaBannerDismissed', 'true');
 });
 
@@ -698,6 +698,33 @@ window.addEventListener('appinstalled', () => {
     pwaBanner.style.display = 'none';
     deferredPrompt = null;
 });
+
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+if (isIOS && !isStandalone) {
+    
+    const iosBanner = document.createElement('div');
+    iosBanner.style.cssText = `
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+        width: 90%; max-width: 400px; background: rgba(10, 25, 41, 0.98);
+        color: white; padding: 15px; border-radius: 20px; z-index: 10006;
+        border: 1px solid #0070ff; text-align: center; font-size: 0.85rem;
+        animation: slideUp 0.5s ease-out;
+    `;
+    
+    iosBanner.innerHTML = `
+        <div style="margin-bottom: 10px; font-weight: bold;">Εγκατάσταση ARISTON App στο iPhone</div>
+        <div>Πάτησε το κουμπί <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Ios_share_icon.svg/1200px-Ios_share_icon.svg.png" style="width:18px; vertical-align:middle;"> (Κοινή χρήση) και μετά <b>"Προσθήκη στην οθόνη αφετηρίας"</b>.</div>
+        <button onclick="this.parentElement.remove()" style="margin-top:10px; background:none; border:none; color:#00d4ff; font-weight:bold; cursor:pointer;">ΚΛΕΙΣΙΜΟ</button>
+    `;
+    
+    
+    setTimeout(() => {
+        document.body.appendChild(iosBanner);
+    }, 5000);
+}
 </script>
 </body>
 </html>
