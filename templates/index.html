@@ -409,6 +409,19 @@ professional laundry Samos
         <button class="cookie-btn btn-reject" onclick="closeCookieBanner('rejected')">ΑΠΟΡΡΙΨΗ</button>
     </div>
 </div>
+<div id="pwa-install-banner" style="display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 450px; background: rgba(10, 25, 41, 0.95); backdrop-filter: blur(15px); color: white; padding: 12px 20px; border-radius: 25px; z-index: 10005; box-shadow: 0 15px 45px rgba(0,0,0,0.6); align-items: center; justify-content: space-between; border: 1px solid var(--primary);">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <img src="{{ url_for('static', filename='images/icon-192.png') }}" style="width: 45px; height: 45px; border-radius: 12px; box-shadow: 0 0 15px var(--primary-glow);">
+        <div>
+            <div style="font-weight: 800; font-size: 0.9rem; letter-spacing: 0.5px;">ARISTON Wash & Dry App</div>
+            <div style="font-size: 0.7rem; opacity: 0.8;">Εγκατάσταση στην αρχική οθόνη</div>
+        </div>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <button id="btn-pwa-install" style="background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 15px; font-weight: 800; font-size: 0.75rem; cursor: pointer; text-transform: uppercase;">ΛΗΨΗ</button>
+        <button id="btn-pwa-close" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;">&times;</button>
+    </div>
+</div>
 <header>
     
     
@@ -628,6 +641,62 @@ window.addEventListener('load', function() {
         .catch(err => console.log('App error:', err));
     });
   }
+  let deferredPrompt;
+const pwaBanner = document.getElementById('pwa-install-banner');
+const installBtn = document.getElementById('btn-pwa-install');
+const closePwaBtn = document.getElementById('btn-pwa-close');
+const promoOverlay = document.getElementById('promo-overlay');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Έλεγχος: Αν υπάρχει promo overlay και είναι ορατό, μην δείξεις ακόμα το PWA banner
+    if (promoOverlay && promoOverlay.classList.contains('show')) {
+        return; 
+    }
+    
+    // Αλλιώς εμφάνισέ το μετά από 3 δευτερόλεπτα
+    setTimeout(() => {
+        pwaBanner.style.display = 'flex';
+        pwaBanner.style.animation = 'slideUp 0.5s ease-out';
+    }, 3000);
+});
+
+// Όταν ο χρήστης κλείνει το Promo "Γίνετε μέλος", τότε εμφάνισε το PWA Install
+const promoCloseBtn = document.getElementById('promo-close-btn');
+if (promoCloseBtn) {
+    promoCloseBtn.addEventListener('click', () => {
+        if (deferredPrompt) {
+            setTimeout(() => {
+                pwaBanner.style.display = 'flex';
+            }, 500);
+        }
+    });
+}
+
+installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+        }
+        deferredPrompt = null;
+        pwaBanner.style.display = 'none';
+    }
+});
+
+closePwaBtn.addEventListener('click', () => {
+    pwaBanner.style.display = 'none';
+    // Προαιρετικά: Μην το ξαναδείξεις για αυτό το session
+    sessionStorage.setItem('pwaBannerDismissed', 'true');
+});
+
+window.addEventListener('appinstalled', () => {
+    pwaBanner.style.display = 'none';
+    deferredPrompt = null;
+});
 </script>
 </body>
 </html>
