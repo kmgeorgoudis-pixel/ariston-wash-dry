@@ -728,41 +728,27 @@ if (isIOS && !isStandalone) {
 </script>
 <script>
     (function() {
-        const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-        const needsAutoLogin = localStorage.getItem('pwa_auto_login_active') === 'true';
-        const savedEmail = localStorage.getItem('pwa_remember_email');
-        
-        
-        if (window.location.pathname.includes('logout')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        // Αν ο server έστειλε manual_logout=true, σβήνουμε τα πάντα
+        if (urlParams.get('manual_logout') === 'true') {
             localStorage.removeItem('pwa_auto_login_active');
             localStorage.removeItem('pwa_remember_email');
-            sessionStorage.setItem('manual_logout', 'true');
+            
+            // Καθαρίζουμε το URL για να μη μείνει το "manual_logout" αν κάνει refresh
+            window.history.replaceState({}, document.title, "/");
             return; 
         }
 
-       
-        if (sessionStorage.getItem('manual_logout') === 'true') {
-            
-            setTimeout(() => sessionStorage.removeItem('manual_logout'), 2000);
-            return;
-        }
+        const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        const needsAutoLogin = localStorage.getItem('pwa_auto_login_active') === 'true';
+        const savedEmail = localStorage.getItem('pwa_remember_email');
 
-        
+        // Εκτέλεση Auto-Login μόνο αν δεν είμαστε ήδη συνδεδεμένοι
         {% if not current_user.is_authenticated %}
         if (isPWA && needsAutoLogin && savedEmail) {
-            
             window.location.href = "/pwa-auto-login?email=" + encodeURIComponent(savedEmail);
         }
         {% endif %}
-
-        
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('a[href*="logout"]')) {
-                localStorage.removeItem('pwa_auto_login_active');
-                localStorage.removeItem('pwa_remember_email');
-                sessionStorage.setItem('manual_logout', 'true');
-            }
-        });
     })();
 </script>
 </body>
