@@ -731,19 +731,28 @@ if (isIOS && !isStandalone) {
     const needsAutoLogin = localStorage.getItem('pwa_auto_login_active') === 'true';
     const savedEmail = localStorage.getItem('pwa_remember_email');
 
-    
+    // 1. Αυτόματο Login
     {% if not current_user.is_authenticated %}
     if (isPWA && needsAutoLogin && savedEmail) {
         window.location.href = "/pwa-auto-login?email=" + encodeURIComponent(savedEmail);
     }
     {% endif %}
+
+    
     document.addEventListener('click', function(event) {
-    // Αν ο χρήστης πατήσει οποιοδήποτε link που οδηγεί στο /logout
-    if (event.target.closest('a[href="/logout"]')) {
-        // Σβήσε την εντολή αυτόματου login από τη μνήμη του κινητού
-        localStorage.removeItem('pwa_auto_login_active');
-    }
-});
+        const logoutLink = event.target.closest('a[href="/logout"]');
+        if (logoutLink) {
+            
+            event.preventDefault(); 
+            
+            
+            localStorage.removeItem('pwa_auto_login_active');
+            localStorage.removeItem('pwa_remember_email');
+            
+            
+            window.location.href = logoutLink.href;
+        }
+    });
 </script>
 </body>
 </html>
