@@ -727,18 +727,17 @@ if (isIOS && !isStandalone) {
 }
 </script>
 <script>
+    
     const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    
-    
-    const justLoggedOut = document.referrer.includes('/logout') || window.location.pathname === '/logout';
-    
-   
     const needsAutoLogin = localStorage.getItem('pwa_auto_login_active') === 'true';
     const savedEmail = localStorage.getItem('pwa_remember_email');
 
     
+    const blockAutoLogin = sessionStorage.getItem('just_logged_out');
+
     {% if not current_user.is_authenticated %}
-    if (isPWA && needsAutoLogin && savedEmail && !justLoggedOut) {
+    
+    if (isPWA && needsAutoLogin && savedEmail && !blockAutoLogin) {
         window.location.href = "/pwa-auto-login?email=" + encodeURIComponent(savedEmail);
     }
     {% endif %}
@@ -748,9 +747,11 @@ if (isIOS && !isStandalone) {
         const logoutLink = event.target.closest('a[href="/logout"]');
         if (logoutLink) {
             
+            sessionStorage.setItem('just_logged_out', 'true');
+            
+            
             localStorage.removeItem('pwa_auto_login_active');
             localStorage.removeItem('pwa_remember_email');
-            
         }
     });
 </script>
