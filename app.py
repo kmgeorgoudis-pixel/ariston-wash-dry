@@ -1286,7 +1286,8 @@ def reset_password():
 @login_required
 def logout():
     logout_user()
-    return redirect("/")
+    # Προσθέτουμε την παράμετρο manual_logout
+    return redirect("/?manual_logout=true")
 
 @app.route("/updates-menu")
 @login_required

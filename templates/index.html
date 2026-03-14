@@ -729,12 +729,12 @@ if (isIOS && !isStandalone) {
 <script>
     (function() {
         const urlParams = new URLSearchParams(window.location.search);
-        // Αν ο server έστειλε manual_logout=true, σβήνουμε τα πάντα
+        
         if (urlParams.get('manual_logout') === 'true') {
             localStorage.removeItem('pwa_auto_login_active');
             localStorage.removeItem('pwa_remember_email');
             
-            // Καθαρίζουμε το URL για να μη μείνει το "manual_logout" αν κάνει refresh
+            
             window.history.replaceState({}, document.title, "/");
             return; 
         }
@@ -743,7 +743,7 @@ if (isIOS && !isStandalone) {
         const needsAutoLogin = localStorage.getItem('pwa_auto_login_active') === 'true';
         const savedEmail = localStorage.getItem('pwa_remember_email');
 
-        // Εκτέλεση Auto-Login μόνο αν δεν είμαστε ήδη συνδεδεμένοι
+        
         {% if not current_user.is_authenticated %}
         if (isPWA && needsAutoLogin && savedEmail) {
             window.location.href = "/pwa-auto-login?email=" + encodeURIComponent(savedEmail);
