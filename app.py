@@ -2765,6 +2765,28 @@ def custom_static_images(filename):
 def redirect_images(filename):
     # Αν ο browser ζητήσει από το /images/, στείλτον στο σωστό μέρος
     return send_from_directory(os.path.join(app.static_folder, 'images'), filename)
+from datetime import timedelta
+
+# Πρόσθεσε αυτή τη διαδρομή
+@app.route("/pwa-auto-login")
+def pwa_auto_login():
+    email = request.args.get("email")
+    if not email:
+        return redirect(url_for('login'))
+        
+    user = User.query.filter_by(email=email).first()
+    
+    if user:
+        # remember=True δημιουργεί το μόνιμο cookie
+        # duration ορίζει ότι θα κρατήσει 1 χρόνο
+        login_user(user, remember=True, duration=timedelta(days=365))
+        
+        # Redirect ανάλογα με το ποιος είναι
+        if user.is_admin: return redirect("/admin")
+        if getattr(user, 'is_sub_admin', False): return redirect("/subadmin")
+        return redirect("/index")
+        
+    return redirect("/login")
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")

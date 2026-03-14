@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Υπεύθυνη Δήλωση - ARISTON Wash & Dry</title>
+    <style>
+        :root {
+            --primary-color: #004a99;
+        }
+
+        body {
+            font-family: 'DejaVu Sans', 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Ρυθμίσεις για τη σελίδα A4 */
+        .page {
+            width: 210mm;
+            height: 297mm; /* Σταθερό ύψος για αποφυγή 2ης σελίδας */
+            padding: 15mm; /* Μείωση από 20mm για εξοικονόμηση χώρου */
+            margin: 5mm auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden; /* Κλειδώνει το περιεχόμενο στην 1 σελίδα */
+        }
+
+        /* Header με λογότυπο */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #333;
+        }
+
+        .logo-text span {
+            color: var(--primary-color);
+        }
+
+        .document-title {
+            text-align: center;
+            text-decoration: underline;
+            font-size: 1.4rem; /* Ελαφρώς μικρότερο font */
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        /* Κυρίως Κείμενο - Διατήρηση ίδιου κειμένου */
+        .content {
+            line-height: 1.6; /* Από 1.8 σε 1.6 για να κερδίσουμε ύψος */
+            font-size: 11pt;
+            text-align: justify;
+        }
+
+        .dots {
+            border-bottom: 1px dotted #000;
+            display: inline-block;
+        }
+
+        .info-row {
+            margin-bottom: 12px;
+        }
+
+        .store-highlight {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Υπογραφές - Πιο μαζεμένες */
+        .footer-section {
+            margin-top: 30px; /* Μείωση από 50px */
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature-box {
+            width: 48%;
+            padding: 10px; /* Μείωση από 15px */
+            border: 1px dashed #ccc;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        .date-section {
+            margin-top: 30px;
+        }
+
+        /* Ρυθμίσεις για την εκτύπωση σε PDF */
+        @media print {
+            body { background: none; }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                width: 210mm;
+                height: 297mm;
+            }
+            .no-print { display: none; }
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 25px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn no-print" onclick="window.print()">Εκτύπωση σε PDF</button>
+
+    <div class="page">
+        <div class="header">
+            <div class="logo-text">ARISTON <span>Wash & Dry</span></div>
+            <div style="text-align: right; font-size: 0.8rem; color: #444; line-height: 1.4;">
+                <b>ARISTON Wash & Dry</b><br>
+                Δερβενακίων 10, Βαθύ, Σάμος<br>
+                Τηλ: 6987598416<br>
+                email: info@aristonwashdry.gr<br>
+                www.aristonwashdry.gr
+            </div>
+        </div>
+
+        <div class="document-title">ΥΠΕΥΘΥΝΗ ΔΗΛΩΣΗ ΣΥΓΚΑΤΑΘΕΣΗΣ</div>
+
+        <div class="content">
+            <div class="info-row">
+                Ο/Η υπογεγραμμένος/η <span class="dots" style="min-width: 380px;"></span>
+            </div>
+            <div class="info-row">
+                του/της <span class="dots" style="min-width: 180px;"></span>,
+                με Αριθμό Δελτίου Ταυτότητας (ΑΔΤ) <span class="dots" style="min-width: 130px;"></span>,
+            </div>
+            <div class="info-row">
+                κάτοικος <span class="dots" style="min-width: 300px;"></span>, 
+                τηλ. επικοινωνίας <span class="dots" style="min-width: 130px;"></span>,
+            </div>
+            
+            <p style="margin-top: 20px;">
+                δηλώνω υπεύθυνα, ως γονέας / νόμιμος κηδεμόνας του/της ανήλικου/ανήλικης 
+                <span class="dots" style="min-width: 330px;"></span>,
+                ότι παρέχω τη συγκατάθεσή μου για τη συμμετοχή του/της σε <b>φωτογράφιση και/ή βιντεοσκόπηση</b> για τη δημιουργία διαφημιστικού υλικού που αφορά το κατάστημα <span class="store-highlight">ARISTON Wash & Dry</span>.
+            </p>
+
+            <p>
+                Δηλώνω επίσης ότι επιτρέπω τη χρήση, επεξεργασία και δημοσίευση του σχετικού φωτογραφικού ή/και οπτικοακουστικού υλικού στην ιστοσελίδα της επιχείρησης καθώς και στα μέσα κοινωνικής δικτύωσης (ενδεικτικά: Instagram, Facebook, TikTok) για σκοπούς προβολής και διαφήμισης της επιχείρησης.
+            </p>
+
+            <p>
+                Η παρούσα συγκατάθεση παρέχεται χωρίς οικονομική απαίτηση και αφορά αποκλειστικά τη χρήση του υλικού για τους παραπάνω διαφημιστικούς σκοπούς.
+            </p>
+
+            <div class="date-section">
+                Ημερομηνία: ...... / ...... / 20......
+            </div>
+
+            <div class="footer-section">
+                <div class="signature-box" style="text-align: center;">
+                    <p style="font-size: 0.8rem; margin-top: 0;"><b>Βεβαιώνεται το γνήσιο της υπογραφής</b></p>
+                    <p style="font-size: 0.7rem; color: #666; margin-bottom: 5px;">(Από ΚΕΠ, Αστυνομικό Τμήμα ή μέσω gov.gr)</p>
+                    <div style="height: 40px; border-bottom: 1px solid #eee; margin-bottom: 5px;"></div>
+                    <span style="font-size: 0.65rem; color: #999;">Σφραγίδα Υπηρεσίας / Ψηφιακή Επαλήθευση</span>
+                </div>
+                
+                <div class="signature-box" style="text-align: center; border: 1px solid #000;">
+                    <p style="margin-top: 0;"><b>Ο/Η Δηλών/ούσα</b></p>
+                    <div style="margin-top: 35px;">
+                        <span style="font-size: 0.75rem; color: #555;">(Ονοματεπώνυμο & Υπογραφή)</span>
+                        <div style="border-bottom: 2px solid #004a99; height: 25px; width: 85%; margin: 5px auto;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="position: absolute; bottom: 10px; left: 0; width: 100%; text-align: center; font-size: 0.65rem; color: #aaa; border-top: 1px solid #eee; padding-top: 5px;">
+            ARISTON Wash & Dry | Σάμος | Ειδικό Έντυπο Συγκατάθεσης Χρήσης Οπτικοακουστικού Υλικού (Φωτογραφία & Βίντεο)
+        </div>
+    </div>
+
+</body>
+</html>
