@@ -727,33 +727,43 @@ if (isIOS && !isStandalone) {
 }
 </script>
 <script>
-    
-    const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    const needsAutoLogin = localStorage.getItem('pwa_auto_login_active') === 'true';
-    const savedEmail = localStorage.getItem('pwa_remember_email');
-
-    
-    const blockAutoLogin = sessionStorage.getItem('just_logged_out');
-
-    {% if not current_user.is_authenticated %}
-    
-    if (isPWA && needsAutoLogin && savedEmail && !blockAutoLogin) {
-        window.location.href = "/pwa-auto-login?email=" + encodeURIComponent(savedEmail);
-    }
-    {% endif %}
-
-    
-    document.addEventListener('click', function(event) {
-        const logoutLink = event.target.closest('a[href="/logout"]');
-        if (logoutLink) {
-            
-            sessionStorage.setItem('just_logged_out', 'true');
-            
-            
+    (function() {
+        const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        const needsAutoLogin = localStorage.getItem('pwa_auto_login_active') === 'true';
+        const savedEmail = localStorage.getItem('pwa_remember_email');
+        
+        
+        if (window.location.pathname.includes('logout')) {
             localStorage.removeItem('pwa_auto_login_active');
             localStorage.removeItem('pwa_remember_email');
+            sessionStorage.setItem('manual_logout', 'true');
+            return; 
         }
-    });
+
+       
+        if (sessionStorage.getItem('manual_logout') === 'true') {
+            
+            setTimeout(() => sessionStorage.removeItem('manual_logout'), 2000);
+            return;
+        }
+
+        
+        {% if not current_user.is_authenticated %}
+        if (isPWA && needsAutoLogin && savedEmail) {
+            
+            window.location.href = "/pwa-auto-login?email=" + encodeURIComponent(savedEmail);
+        }
+        {% endif %}
+
+        
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('a[href*="logout"]')) {
+                localStorage.removeItem('pwa_auto_login_active');
+                localStorage.removeItem('pwa_remember_email');
+                sessionStorage.setItem('manual_logout', 'true');
+            }
+        });
+    })();
 </script>
 </body>
 </html>
