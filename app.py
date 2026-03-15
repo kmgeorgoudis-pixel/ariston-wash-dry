@@ -2824,7 +2824,9 @@ def generate_pdf():
     # Λήψη στοιχείων
     fullname = request.form.get("fullname", "")
     contact = request.form.get("contact", "")  # Τηλέφωνο ή Email
-    machine = request.form.get("machine", "")
+    # Αντί για request.form.get, χρησιμοποιούμε getlist για να πάρει όλα τα τσεκαρισμένα
+    machines_list = request.form.getlist("machine")
+    machine = ", ".join(machines_list) if machines_list else "Κανένα"
     total_amount = request.form.get("total_amount", "0")
     paid_amount = request.form.get("paid_amount", "0")
     debt_amount = request.form.get("debt_amount", "0")
@@ -2903,6 +2905,13 @@ def generate_pdf():
         pdf.line(10, pdf.get_y(), 200, pdf.get_y())
         pdf.ln(3)
         
+        # Χρησιμοποιούμε μικρότερο font αν επιλέχθηκαν πολλά μηχανήματα για να χωράνε
+        if len(machines_list) > 2:
+            pdf.set_font(font_name, '', 8)
+        else:
+            pdf.set_font(font_name, '', 10)
+            
+        # Χρήση multi_cell αντί για cell για να αλλάζει γραμμή αν είναι τεράστιο το κείμενο
         pdf.cell(95, 7, txt(f"Μηχάνημα: {machine}"), ln=0)
         pdf.set_font(font_name, '', 10)
         pdf.cell(95, 7, txt(f"Παράδοση: {delivery_time}"), ln=1, align='R')
@@ -2943,6 +2952,9 @@ def generate_pdf():
     buf.seek(0)
     
     return send_file(buf, mimetype='application/pdf', as_attachment=False, download_name=f"order_{order_code}.pdf")
+@app.route("/calculator")
+def calculator():
+    return render_template("calculator.html")
 
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
