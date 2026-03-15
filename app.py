@@ -2838,12 +2838,21 @@ def generate_pdf():
     pdf = FPDF()
     pdf.add_page()
     
-    # Προσθήκη Ελληνικής γραμματοσειράς (πρέπει να έχεις το αρχείο DejaVuSans.ttf στον φάκελό σου)
+    # Εντοπισμός του σωστού μονοπατιού για το αρχείο
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    font_path = os.path.join(base_path, 'DejaVuSans.ttf')
+
     try:
-        pdf.add_font('DejaVu', '', 'DejaVuSans.ttf', unicode=True)
-        font_name = 'DejaVu'
-    except:
-        font_name = 'Arial' # Fallback αν δεν βρει τη γραμματοσειρά
+        if os.path.exists(font_path):
+            pdf.add_font('DejaVu', '', font_path, unicode=True)
+            font_name = 'DejaVu'
+        else:
+            # Αν πάλι δεν το βρίσκει, θα βγάλει σφάλμα για να ξέρουμε
+            print(f"FONT NOT FOUND AT: {font_path}")
+            font_name = 'Arial' 
+    except Exception as e:
+        print(f"Error loading font: {e}")
+        font_name = 'Arial'
 
     def draw_ticket(y_offset, title):
         # Header Καταστήματος

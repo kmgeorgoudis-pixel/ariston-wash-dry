@@ -124,6 +124,15 @@
             .admin-logo-text, .admin-section-title, .admin-link span:not(.icon), .admin-footer { display: none; }
             .admin-link { justify-content: center; }
         }
+        .admin-link.drop-off-btn {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px dashed rgba(16, 185, 129, 0.4);
+    margin: 10px 0;
+}
+.admin-link.drop-off-btn:hover {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: #10b981;
+}
     </style>
 </head>
 <body>
@@ -160,8 +169,9 @@
                 </a>
             </li>
             <li>
-                <a href="/drop-off" class="btn btn-success">
-                    <i class="fas fa-plus"></i> Νέα Παραλαβή (Drop-off)
+                <a href="/drop-off" class="admin-link drop-off-btn">
+                    <span class="icon">🧺</span>
+                    <span>Νέα Παραλαβή</span>
                 </a>
             </li>
             <li>
