@@ -2914,7 +2914,7 @@ def generate_pdf():
         # Χρήση multi_cell αντί για cell για να αλλάζει γραμμή αν είναι τεράστιο το κείμενο
         pdf.cell(95, 7, txt(f"Μηχάνημα: {machine}"), ln=0)
         pdf.set_font(font_name, '', 10)
-        pdf.cell(95, 7, txt(f"Παράδοση: {delivery_time}"), ln=1, align='R')
+        pdf.cell(95, 7, txt(f"Παράδοση/Παραλαβή: {delivery_time}"), ln=1, align='R')
         
         # --- 5. PAYMENT BOX ---
         pdf.ln(6)
