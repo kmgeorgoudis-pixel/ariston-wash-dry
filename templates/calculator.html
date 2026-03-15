@@ -169,9 +169,30 @@
 
     function calculate() {
         try {
-            
-            let expr = currentInput.replace(/%/g, '/100');
-            let result = eval(expr);
+            let result;
+           
+            if (currentInput.includes('%')) {
+                
+                let match = currentInput.match(/(\d+\.?\d*)([\+\-\*\/])(\d+\.?\d*)%/);
+                
+                if (match) {
+                    let num1 = parseFloat(match[1]);
+                    let operator = match[2];
+                    let percentVal = parseFloat(match[3]);
+                    let percentageAmount = (num1 * percentVal) / 100;
+
+                    if (operator === '+') result = num1 + percentageAmount;
+                    else if (operator === '-') result = num1 - percentageAmount;
+                    else if (operator === '*') result = percentageAmount; // π.χ. 100 * 10% = 10
+                    else if (operator === '/') result = num1 / (percentVal / 100);
+                } else {
+                    
+                    result = eval(currentInput.replace(/%/g, '/100'));
+                }
+            } else {
+                
+                result = eval(currentInput);
+            }
             
             operation.innerText = currentInput + " =";
             display.innerText = Number.isInteger(result) ? result : parseFloat(result.toFixed(2));
@@ -182,12 +203,24 @@
         }
     }
 
-    // Υποστήριξη πληκτρολογίου
+    
     document.addEventListener('keydown', (e) => {
-        if (e.key >= '0' && e.key <= '9' || e.key === '.' || e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/' || e.key === '%') appendValue(e.key);
-        if (e.key === 'Enter' || e.key === '=') calculate();
-        if (e.key === 'Backspace') deleteLast();
-        if (e.key === 'Escape') clearCalc();
+        if ((e.key >= '0' && e.key <= '9') || e.key === '.' || e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/' || e.key === '%') {
+            e.preventDefault();
+            appendValue(e.key);
+        }
+        if (e.key === 'Enter' || e.key === '=') {
+            e.preventDefault();
+            calculate();
+        }
+        if (e.key === 'Backspace') {
+            e.preventDefault();
+            deleteLast();
+        }
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            clearCalc();
+        }
     });
 </script>
 
