@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Νέα Παραλαβή Ρούχων</h2>
+    <form action="/generate-pdf" method="POST" target="_blank">
+        <div class="mb-3">
+            <label>Ονοματεπώνυμο Πελάτη</label>
+            <input type="text" name="fullname" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Κινητό / Email</label>
+            <input type="text" name="contact" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Επιλογή Μηχανήματος</label>
+            <select name="machine" class="form-control">
+                <option value="Πλυντήριο 1">Πλυντήριο 1</option>
+                <option value="Πλυντήριο 2">Πλυντήριο 2</option>
+                <option value="Πλυντήριο 3">Πλυντήριο 3</option>
+                <option value="Στεγνωτήριο 4">Στεγνωτήριο 4</option>
+                <option value="Στεγνωτήριο 5">Στεγνωτήριο 5</option>
+                <option value="Στεγνωτήριο 6">Στεγνωτήριο 6</option>
+            </select>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>Συνολικό Ποσό (€)</label>
+                <input type="number" step="0.01" name="total_amount" id="total" class="form-control" required>
+            </div>
+            <div class="col">
+                <label>Πληρώθηκε (€)</label>
+                <input type="number" step="0.01" name="paid_amount" id="paid" class="form-control" required>
+            </div>
+            <div class="col">
+                <label>Υπόλοιπο (€)</label>
+                <input type="number" step="0.01" name="debt_amount" id="debt" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label>Προτεινόμενη Ώρα Παράδοσης</label>
+            <input type="text" name="delivery_time" class="form-control" placeholder="π.χ. Σήμερα 18:00">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Έκδοση PDF & Εκτύπωση</button>
+    </form>
+</div>
+
+<script>
+    // Αυτόματο υπόλοιπο
+    const total = document.getElementById('total');
+    const paid = document.getElementById('paid');
+    const debt = document.getElementById('debt');
+
+    [total, paid].forEach(input => {
+        input.addEventListener('input', () => {
+            debt.value = (parseFloat(total.value || 0) - parseFloat(paid.value || 0)).toFixed(2);
+        });
+    });
+</script>
+{% endblock %}

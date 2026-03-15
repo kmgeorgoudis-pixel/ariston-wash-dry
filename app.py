@@ -2788,6 +2788,115 @@ def pwa_auto_login():
         return redirect("/index")
         
     return redirect("/login")
+import random
+from datetime import datetime
+from flask import Flask, render_template, request, send_file
+from fpdf import FPDF
+import io
+
+# Βοηθητική συνάρτηση για να παίρνουμε την ημέρα στα Ελληνικά
+def get_greek_day():
+    days = ["Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο", "Κυριακή"]
+    return days[datetime.now().weekday()]
+
+from flask import abort # Πρόσθεσε το abort στα imports σου στην κορυφή
+
+@app.route("/drop-off", methods=["GET"])
+@login_required
+def drop_off_form():
+    # Έλεγχος αν ο χρήστης είναι admin ή sub-admin
+    is_admin = getattr(current_user, 'is_admin', False)
+    is_sub_admin = getattr(current_user, 'is_sub_admin', False)
+
+    if not is_admin and not is_sub_admin:
+        # Αν δεν είναι τίποτα από τα δύο, του πετάμε ένα 403 Forbidden
+        abort(403)
+
+    # Επιλογή του σωστού template ανάλογα με τον ρόλο
+    if is_admin:
+        return render_template("admin/drop_off.html")
+    else:
+        return render_template("subadmin/drop_off.html")
+
+@app.route("/generate-pdf", methods=["POST"])
+@login_required
+def generate_pdf():
+    # Λήψη στοιχείων
+    fullname = request.form.get("fullname")
+    contact = request.form.get("contact")
+    machine = request.form.get("machine")
+    total_amount = request.form.get("total_amount")
+    paid_amount = request.form.get("paid_amount")
+    debt_amount = request.form.get("debt_amount")
+    delivery_time = request.form.get("delivery_time")
+    
+    order_code = str(random.randint(1000, 9999))
+    current_date = datetime.now().strftime("%d/%m/%Y")
+    day_name = get_greek_day()
+    current_time = datetime.now().strftime("%H:%M")
+
+    pdf = FPDF()
+    pdf.add_page()
+    
+    # Προσθήκη Ελληνικής γραμματοσειράς (πρέπει να έχεις το αρχείο DejaVuSans.ttf στον φάκελό σου)
+    try:
+        pdf.add_font('DejaVu', '', 'DejaVuSans.ttf', unicode=True)
+        font_name = 'DejaVu'
+    except:
+        font_name = 'Arial' # Fallback αν δεν βρει τη γραμματοσειρά
+
+    def draw_ticket(y_offset, title):
+        # Header Καταστήματος
+        pdf.set_y(y_offset)
+        pdf.set_font(font_name, 'B', 14)
+        pdf.cell(0, 7, "ARISTON Wash & Dry", ln=True, align='C')
+        pdf.set_font(font_name, '', 9)
+        pdf.cell(0, 5, "www.aristonwashdry.gr | info@aristonwashdry.gr", ln=True, align='C')
+        pdf.cell(0, 5, "Τηλ: 6987598416", ln=True, align='C')
+        
+        pdf.ln(3)
+        pdf.set_font(font_name, 'B', 12)
+        pdf.set_fill_color(240, 240, 240)
+        pdf.cell(0, 8, f"--- {title} ---", ln=True, align='C', fill=True)
+        pdf.ln(2)
+        
+        # Στοιχεία Παραγγελίας
+        pdf.set_font(font_name, 'B', 11)
+        pdf.cell(0, 7, f"ΚΩΔΙΚΟΣ: #{order_code}", ln=True)
+        pdf.set_font(font_name, '', 10)
+        pdf.cell(0, 7, f"Ημερομηνία: {current_date} ({day_name}) | Ώρα: {current_time}", ln=True)
+        pdf.cell(0, 7, f"Πελάτης: {fullname}", ln=True)
+        pdf.cell(0, 7, f"Τηλ. Πελάτη: {contact}", ln=True)
+        pdf.cell(0, 7, f"Μηχάνημα: {machine}", ln=True)
+        pdf.set_font(font_name, 'B', 10)
+        pdf.cell(0, 7, f"ΠΑΡΑΔΟΣΗ ΕΩΣ: {delivery_time}", ln=True)
+        
+        # Οικονομικά
+        pdf.ln(2)
+        pdf.set_draw_color(100, 100, 100)
+        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+        pdf.ln(2)
+        pdf.cell(60, 7, f"Σύνολο: {total_amount}€", ln=0)
+        pdf.cell(60, 7, f"Πληρώθηκε: {paid_amount}€", ln=0)
+        pdf.set_text_color(200, 0, 0)
+        pdf.cell(60, 7, f"Υπόλοιπο: {debt_amount}€", ln=1)
+        pdf.set_text_color(0, 0, 0)
+        
+        # Διαχωριστική γραμμή για το κόψιμο
+        if y_offset < 100:
+            pdf.ln(15)
+            pdf.set_draw_color(150, 150, 150)
+            pdf.cell(0, 0, "- " * 40, ln=True, align='C')
+
+    # Σχεδίαση των δύο τμημάτων
+    draw_ticket(15, "ΕΝΤΥΠΟ ΠΕΛΑΤΗ")
+    draw_ticket(150, "ΕΝΤΥΠΟ ΕΠΙΧΕΙΡΗΣΗΣ")
+
+    buf = io.BytesIO()
+    pdf.output(buf)
+    buf.seek(0)
+    
+    return send_file(buf, mimetype='application/pdf', as_attachment=False, download_name=f"order_{order_code}.pdf")
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
