@@ -135,7 +135,7 @@
         <button class="calc-btn btn-equal" onclick="calculate()">=</button>
     </div>
 
-    <a href="/admin" class="back-link">← Επιστροφή στο Dashboard</a>
+    <a href="/" class="back-link">← back to home</a>
 </div>
 
 <script>
@@ -169,7 +169,7 @@
 
     function calculate() {
         try {
-            // Έξυπνη διαχείριση ποσοστού: αν γράψεις 100-10% να βγάλει 90
+            
             let expr = currentInput.replace(/%/g, '/100');
             let result = eval(expr);
             
