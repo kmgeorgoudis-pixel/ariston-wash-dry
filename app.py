@@ -2822,13 +2822,13 @@ def drop_off_form():
 @login_required
 def generate_pdf():
     # Λήψη στοιχείων
-    fullname = request.form.get("fullname")
-    contact = request.form.get("contact")
-    machine = request.form.get("machine")
-    total_amount = request.form.get("total_amount")
-    paid_amount = request.form.get("paid_amount")
-    debt_amount = request.form.get("debt_amount")
-    delivery_time = request.form.get("delivery_time")
+    fullname = request.form.get("fullname", "")
+    contact = request.form.get("contact", "")
+    machine = request.form.get("machine", "")
+    total_amount = request.form.get("total_amount", "0")
+    paid_amount = request.form.get("paid_amount", "0")
+    debt_amount = request.form.get("debt_amount", "0")
+    delivery_time = request.form.get("delivery_time", "")
     
     order_code = str(random.randint(1000, 9999))
     current_date = datetime.now().strftime("%d/%m/%Y")
@@ -2838,66 +2838,66 @@ def generate_pdf():
     pdf = FPDF()
     pdf.add_page()
     
-    # Εντοπισμός του σωστού μονοπατιού για το αρχείο
+    # Σωστό μονοπάτι για το Render
     base_path = os.path.dirname(os.path.abspath(__file__))
     font_path = os.path.join(base_path, 'DejaVuSans.ttf')
 
-    try:
-        if os.path.exists(font_path):
-            pdf.add_font('DejaVu', '', font_path, unicode=True)
+    # Φόρτωση γραμματοσειράς χωρίς το 'unicode=True' (το fpdf2 το κάνει αυτόματα)
+    font_loaded = False
+    if os.path.exists(font_path):
+        try:
+            pdf.add_font('DejaVu', '', font_path) # Αφαίρεσα το unicode=True
+            pdf.set_font('DejaVu', '', 12)
             font_name = 'DejaVu'
-        else:
-            # Αν πάλι δεν το βρίσκει, θα βγάλει σφάλμα για να ξέρουμε
-            print(f"FONT NOT FOUND AT: {font_path}")
-            font_name = 'Arial' 
-    except Exception as e:
-        print(f"Error loading font: {e}")
+            font_loaded = True
+        except Exception as e:
+            print(f"Font Error: {e}")
+            font_name = 'Arial'
+    else:
+        print("Font file not found!")
         font_name = 'Arial'
 
     def draw_ticket(y_offset, title):
-        # Header Καταστήματος
         pdf.set_y(y_offset)
-        pdf.set_font(font_name, 'B', 14)
+        
+        # Αν η γραμματοσειρά δεν φορτώθηκε, γυρνάμε τα κείμενα σε Greeklish 
+        # για να ΜΗΝ κρασάρει το σύστημα
+        def txt(text):
+            if not font_loaded:
+                # Πολύ απλή μετατροπή για τα βασικά αν έχουμε θέμα
+                replacements = {'Τ': 'T', 'η': 'i', 'λ': 'l', 'Ε': 'E', 'ν': 'n', 'τ': 't', 'υ': 'y', 'π': 'p', 'ο': 'o'}
+                for k, v in replacements.items(): text = text.replace(k, v)
+            return text
+
+        pdf.set_font(font_name, '', 14)
         pdf.cell(0, 7, "ARISTON Wash & Dry", ln=True, align='C')
         pdf.set_font(font_name, '', 9)
         pdf.cell(0, 5, "www.aristonwashdry.gr | info@aristonwashdry.gr", ln=True, align='C')
-        pdf.cell(0, 5, "Τηλ: 6987598416", ln=True, align='C')
+        pdf.cell(0, 5, txt("Τηλ: 6987598416"), ln=True, align='C')
         
         pdf.ln(3)
-        pdf.set_font(font_name, 'B', 12)
-        pdf.set_fill_color(240, 240, 240)
-        pdf.cell(0, 8, f"--- {title} ---", ln=True, align='C', fill=True)
-        pdf.ln(2)
+        pdf.set_font(font_name, '', 12)
+        pdf.cell(0, 8, f"--- {txt(title)} ---", ln=True, align='C')
         
-        # Στοιχεία Παραγγελίας
-        pdf.set_font(font_name, 'B', 11)
-        pdf.cell(0, 7, f"ΚΩΔΙΚΟΣ: #{order_code}", ln=True)
         pdf.set_font(font_name, '', 10)
-        pdf.cell(0, 7, f"Ημερομηνία: {current_date} ({day_name}) | Ώρα: {current_time}", ln=True)
-        pdf.cell(0, 7, f"Πελάτης: {fullname}", ln=True)
-        pdf.cell(0, 7, f"Τηλ. Πελάτη: {contact}", ln=True)
-        pdf.cell(0, 7, f"Μηχάνημα: {machine}", ln=True)
-        pdf.set_font(font_name, 'B', 10)
-        pdf.cell(0, 7, f"ΠΑΡΑΔΟΣΗ ΕΩΣ: {delivery_time}", ln=True)
+        pdf.cell(0, 7, f"CODE: #{order_code}", ln=True)
+        pdf.cell(0, 7, txt(f"Ημερομηνία: {current_date} ({day_name})"), ln=True)
+        pdf.cell(0, 7, txt(f"Πελάτης: {fullname}"), ln=True)
+        pdf.cell(0, 7, txt(f"Μηχάνημα: {machine}"), ln=True)
+        pdf.cell(0, 7, txt(f"ΠΑΡΑΔΟΣΗ: {delivery_time}"), ln=True)
         
-        # Οικονομικά
         pdf.ln(2)
-        pdf.set_draw_color(100, 100, 100)
-        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+        pdf.cell(0, 0, "-" * 50, ln=True)
         pdf.ln(2)
-        pdf.cell(60, 7, f"Σύνολο: {total_amount}€", ln=0)
-        pdf.cell(60, 7, f"Πληρώθηκε: {paid_amount}€", ln=0)
-        pdf.set_text_color(200, 0, 0)
-        pdf.cell(60, 7, f"Υπόλοιπο: {debt_amount}€", ln=1)
-        pdf.set_text_color(0, 0, 0)
+        pdf.cell(60, 7, txt(f"Σύνολο: {total_amount}€"), ln=0)
+        pdf.cell(60, 7, txt(f"Πληρώθηκε: {paid_amount}€"), ln=0)
+        pdf.cell(60, 7, txt(f"Υπόλοιπο: {debt_amount}€"), ln=1)
         
-        # Διαχωριστική γραμμή για το κόψιμο
         if y_offset < 100:
             pdf.ln(15)
-            pdf.set_draw_color(150, 150, 150)
-            pdf.cell(0, 0, "- " * 40, ln=True, align='C')
+            pdf.cell(0, 0, "- " * 30, ln=True, align='C')
 
-    # Σχεδίαση των δύο τμημάτων
+    # Σχεδίαση
     draw_ticket(15, "ΕΝΤΥΠΟ ΠΕΛΑΤΗ")
     draw_ticket(150, "ΕΝΤΥΠΟ ΕΠΙΧΕΙΡΗΣΗΣ")
 
