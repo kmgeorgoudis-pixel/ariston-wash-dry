@@ -2823,7 +2823,7 @@ def drop_off_form():
 def generate_pdf():
     # Λήψη στοιχείων
     fullname = request.form.get("fullname", "")
-    contact = request.form.get("contact", "")
+    contact = request.form.get("contact", "")  # Τηλέφωνο ή Email
     machine = request.form.get("machine", "")
     total_amount = request.form.get("total_amount", "0")
     paid_amount = request.form.get("paid_amount", "0")
@@ -2833,79 +2833,117 @@ def generate_pdf():
     order_code = str(random.randint(1000, 9999))
     current_date = datetime.now().strftime("%d/%m/%Y")
     day_name = get_greek_day()
-    current_time = datetime.now().strftime("%H:%M")
 
     pdf = FPDF()
     pdf.add_page()
     
-    # Σωστό μονοπάτι για το Render
     base_path = os.path.dirname(os.path.abspath(__file__))
     font_path = os.path.join(base_path, 'DejaVuSans.ttf')
+    # ΔΙΟΡΘΩΣΗ: Διαδρομή για το templates/images
+    logo_path = os.path.join(base_path, 'templates', 'images', 'logo3.png') 
 
-    # Φόρτωση γραμματοσειράς χωρίς το 'unicode=True' (το fpdf2 το κάνει αυτόματα)
     font_loaded = False
     if os.path.exists(font_path):
         try:
-            pdf.add_font('DejaVu', '', font_path) # Αφαίρεσα το unicode=True
-            pdf.set_font('DejaVu', '', 12)
+            pdf.add_font('DejaVu', '', font_path)
             font_name = 'DejaVu'
             font_loaded = True
-        except Exception as e:
-            print(f"Font Error: {e}")
-            font_name = 'Arial'
-    else:
-        print("Font file not found!")
-        font_name = 'Arial'
+        except: font_name = 'Arial'
+    else: font_name = 'Arial'
+
+    def txt(text):
+        if not font_loaded:
+            replacements = {'Τ': 'T', 'η': 'i', 'λ': 'l', 'Ε': 'E', 'ν': 'n', 'τ': 't', 'υ': 'y', 'π': 'p', 'ο': 'o', 'Π': 'P'}
+            for k, v in replacements.items(): text = text.replace(k, v)
+        return text
 
     def draw_ticket(y_offset, title):
         pdf.set_y(y_offset)
         
-        # Αν η γραμματοσειρά δεν φορτώθηκε, γυρνάμε τα κείμενα σε Greeklish 
-        # για να ΜΗΝ κρασάρει το σύστημα
-        def txt(text):
-            if not font_loaded:
-                # Πολύ απλή μετατροπή για τα βασικά αν έχουμε θέμα
-                replacements = {'Τ': 'T', 'η': 'i', 'λ': 'l', 'Ε': 'E', 'ν': 'n', 'τ': 't', 'υ': 'y', 'π': 'p', 'ο': 'o'}
-                for k, v in replacements.items(): text = text.replace(k, v)
-            return text
-
-        pdf.set_font(font_name, '', 14)
-        pdf.cell(0, 7, "ARISTON Wash & Dry", ln=True, align='C')
+        # --- 1. LOGO & HEADER ---
+        if os.path.exists(logo_path):
+            # Τοποθέτηση logo (x=10, y=y_offset, width=22)
+            pdf.image(logo_path, 10, y_offset, 22) 
+        
+        pdf.set_font(font_name, '', 16)
+        pdf.set_text_color(37, 99, 235) # Ariston Blue
+        pdf.cell(0, 8, "ARISTON Wash & Dry", ln=True, align='C')
+        
+        pdf.set_text_color(80, 80, 80)
         pdf.set_font(font_name, '', 9)
-        pdf.cell(0, 5, "www.aristonwashdry.gr | info@aristonwashdry.gr", ln=True, align='C')
-        pdf.cell(0, 5, txt("Τηλ: 6987598416"), ln=True, align='C')
+        pdf.cell(0, 4, "www.aristonwashdry.gr | info@aristonwashdry.gr", ln=True, align='C')
+        pdf.cell(0, 4, txt("Τηλ: 6987598416"), ln=True, align='C')
         
-        pdf.ln(3)
-        pdf.set_font(font_name, '', 12)
-        pdf.cell(0, 8, f"--- {txt(title)} ---", ln=True, align='C')
+        # --- 2. TITLE BAR ---
+        pdf.ln(6)
+        pdf.set_fill_color(240, 245, 255)
+        pdf.set_font(font_name, '', 11)
+        pdf.set_text_color(0, 0, 0)
+        pdf.cell(0, 8, f"--- {txt(title)} ---", ln=True, align='C', fill=True)
+        pdf.ln(4)
         
+        # --- 3. CUSTOMER INFO ---
         pdf.set_font(font_name, '', 10)
-        pdf.cell(0, 7, f"CODE: #{order_code}", ln=True)
-        pdf.cell(0, 7, txt(f"Ημερομηνία: {current_date} ({day_name})"), ln=True)
-        pdf.cell(0, 7, txt(f"Πελάτης: {fullname}"), ln=True)
-        pdf.cell(0, 7, txt(f"Μηχάνημα: {machine}"), ln=True)
-        pdf.cell(0, 7, txt(f"ΠΑΡΑΔΟΣΗ: {delivery_time}"), ln=True)
+        pdf.cell(95, 7, txt(f"ΚΩΔΙΚΟΣ: #{order_code}"), ln=0)
+        pdf.cell(95, 7, txt(f"Ημερομηνία: {current_date}"), ln=1, align='R')
         
         pdf.ln(2)
-        pdf.cell(0, 0, "-" * 50, ln=True)
-        pdf.ln(2)
-        pdf.cell(60, 7, txt(f"Σύνολο: {total_amount}€"), ln=0)
-        pdf.cell(60, 7, txt(f"Πληρώθηκε: {paid_amount}€"), ln=0)
-        pdf.cell(60, 7, txt(f"Υπόλοιπο: {debt_amount}€"), ln=1)
+        pdf.set_font(font_name, '', 12)
+        pdf.cell(0, 8, txt(f"Πελάτης: {fullname}"), ln=True)
         
+        # Εμφάνιση Τηλεφώνου/Email
+        pdf.set_font(font_name, '', 10)
+        pdf.set_text_color(100, 100, 100)
+        pdf.cell(0, 6, txt(f"Επικοινωνία: {contact}"), ln=True)
+        pdf.set_text_color(0, 0, 0)
+        
+        # --- 4. ORDER DETAILS ---
+        pdf.ln(3)
+        pdf.set_draw_color(220, 220, 220)
+        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+        pdf.ln(3)
+        
+        pdf.cell(95, 7, txt(f"Μηχάνημα: {machine}"), ln=0)
+        pdf.set_font(font_name, '', 10)
+        pdf.cell(95, 7, txt(f"Παράδοση: {delivery_time}"), ln=1, align='R')
+        
+        # --- 5. PAYMENT BOX ---
+        pdf.ln(6)
+        pdf.set_fill_color(248, 250, 252)
+        pdf.rect(10, pdf.get_y(), 190, 14, 'F')
+        
+        pdf.set_y(pdf.get_y() + 3)
+        pdf.set_font(font_name, '', 11)
+        pdf.cell(63, 8, txt(f"Σύνολο: {total_amount}€"), align='C')
+        pdf.cell(63, 8, txt(f"Πληρώθηκε: {paid_amount}€"), align='C')
+        
+        # Χρώμα για το χρέος
+        try:
+            val_debt = float(debt_amount.replace(',', '.'))
+            if val_debt > 0:
+                pdf.set_text_color(220, 38, 38) # Κόκκινο
+        except: pass
+        
+        pdf.cell(63, 8, txt(f"Υπόλοιπο: {debt_amount}€"), align='C', ln=1)
+        pdf.set_text_color(0, 0, 0)
+
+        # Γραμμή κοπής
         if y_offset < 100:
-            pdf.ln(15)
-            pdf.cell(0, 0, "- " * 30, ln=True, align='C')
+            pdf.set_y(140)
+            pdf.set_draw_color(150, 150, 150)
+            pdf.set_font('Arial', '', 10)
+            pdf.cell(0, 0, "- " * 45, ln=True, align='C')
 
     # Σχεδίαση
     draw_ticket(15, "ΕΝΤΥΠΟ ΠΕΛΑΤΗ")
-    draw_ticket(150, "ΕΝΤΥΠΟ ΕΠΙΧΕΙΡΗΣΗΣ")
+    draw_ticket(155, "ΕΝΤΥΠΟ ΕΠΙΧΕΙΡΗΣΗΣ")
 
     buf = io.BytesIO()
     pdf.output(buf)
     buf.seek(0)
     
     return send_file(buf, mimetype='application/pdf', as_attachment=False, download_name=f"order_{order_code}.pdf")
+
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
