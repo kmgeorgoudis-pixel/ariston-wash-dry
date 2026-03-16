@@ -2955,6 +2955,9 @@ def generate_pdf():
 @app.route("/calculator")
 def calculator():
     return render_template("calculator.html")
+@app.route("/how-to-use")
+def instructions():
+    return render_template("instructions.html")
 
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής

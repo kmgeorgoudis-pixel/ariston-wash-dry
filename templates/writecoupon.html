@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Κουπόνι Διαγωνισμού - Ariston</title>
+    <style>
+        :root {
+            --ariston-blue: #2563eb;
+            --gold: #d4af37;
+        }
+
+        body {
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* Μέγεθος Α5 οριζόντια */
+        .coupon-card {
+            width: 210mm;
+            height: 148mm;
+            background: white;
+            position: relative;
+            border: 15px solid var(--ariston-blue);
+            box-sizing: border-box;
+            padding: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        /* Εσωτερικό διακοσμητικό πλαίσιο */
+        .inner-border {
+            border: 2px solid var(--gold);
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Υδατογράφημα για ασφάλεια */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 80px;
+            color: rgba(37, 99, 235, 0.05);
+            font-weight: 900;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .header {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .header h1 {
+            color: var(--ariston-blue);
+            margin: 0;
+            font-size: 38px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header h2 {
+            font-size: 18px;
+            color: #444;
+            margin: 5px 0;
+            border-bottom: 2px solid var(--gold);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .content {
+            text-align: center;
+            z-index: 1;
+            margin: 20px 0;
+        }
+
+        .prize-box {
+            background: #f8fafc;
+            border: 1px dashed var(--ariston-blue);
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .prize-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .instructions {
+            font-size: 13px;
+            color: #ef4444;
+            font-style: italic;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 1;
+        }
+
+        .issuer-info {
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .stamp-area {
+            text-align: center;
+            width: 200px;
+        }
+
+        .stamp-line {
+            border-top: 1px solid #000;
+            margin-top: 50px;
+            padding-top: 5px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .security-code {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #94a3b8;
+        }
+
+        @media print {
+            body { background: white; }
+            .coupon-card { box-shadow: none; }
+            .no-print { display: none; }
+        }
+        
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: var(--ariston-blue);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Εκτύπωση σε PDF</button>
+
+<div class="coupon-card">
+    <div class="watermark">ARISTON Wash & Dry</div>
+    <div class="security-code">ID: AR-SAM-2026-7319</div>
+    
+    <div class="inner-border">
+        <div class="header">
+            <h1>ARISTON WASH & DRY</h1>
+            <h2>ΕΠΙΣΗΜΟ ΚΟΥΠΟΝΙ ΔΙΑΓΩΝΙΣΜΟΥ</h2>
+            <div style="font-weight: bold; margin-top: 5px;">Μαύρογένειο ΕΠΑΛ Σάμου</div>
+        </div>
+
+        <div class="content">
+            <div class="prize-box">
+                <div class="prize-text">1 ΠΛΥΣΙΜΟ (10kg) & 1 ΣΤΕΓΝΩΜΑ</div>
+                <div style="font-size: 14px; margin-top: 5px;">Προσφορά για τον τυχερό του λαχνού</div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-around; font-size: 14px; font-weight: bold;">
+                <span>Ημ. Έναρξης: 16/03/2026</span>
+                <span>Ημ. Λήξης: 31/05/2026</span>
+            </div>
+
+            <div class="instructions">
+                * Απαραίτητη προϋπόθεση εξαργύρωσης: Εγγραφή μέλους στο www.aristonwashdry.gr
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="issuer-info">
+                <strong>Εκδότης:</strong> Κωνσταντίνος Γεωργούδης<br>
+                <strong>Διεύθυνση:</strong> Δερβενακίων 10, Βαθύ, Σάμος 83100<br>
+                <strong>Τηλ:</strong> 6987598416<br>
+                <strong>Email:</strong> georgoudisk@aristonwashdry.gr<br>
+                <strong>Web:</strong> www.aristonwashdry.gr
+            </div>
+
+            <div class="stamp-area">
+                <div class="stamp-line">ΣΦΡΑΓΙΔΑ & ΥΠΟΓΡΑΦΗ</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

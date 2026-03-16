@@ -396,6 +396,41 @@ professional laundry Samos
     to { transform: translate(-50%, 0); opacity: 1; } 
 }
 
+    /* Container που κεντράρει τα πάντα στην οθόνη */
+    .video-center-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    /* Το μικρό, στρογγυλεμένο κουμπί */
+    .btn-video-small {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #8b5cf6; /* Μοβ Ariston Style */
+        color: white;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-video-small:hover {
+        background-color: #7c3aed;
+        transform: scale(1.05);
+        color: white;
+    }
+
+    .btn-video-small svg {
+        width: 18px;
+        height: 18px;
+    }
+
     </style>
 </head>
 <body>
@@ -531,7 +566,14 @@ professional laundry Samos
         <img src="{{ url_for('static', filename='images/1new.png') }}" alt="Ariston Wash & Dry">
     </div>
 </section>
-
+<div class="video-center-wrapper">
+    <a href="how-to-use" class="btn-video-small" target="_blank">
+        <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0013 8v4a1 1 0 001.553.894l2-1a1 1 0 000-1.788l-2-1z"></path>
+        </svg>
+        Οδηγίες Χρήσης
+    </a>
+</div>
 <a href="https://aristonwashdry.gr/epikoinonia" style="text-decoration: none; color: inherit;">
     <section class="contact reveal">
         <h3>Επικοινωνία</h3>
@@ -541,6 +583,7 @@ professional laundry Samos
         
     </section>
 </a>
+
 
 <footer>
     © 2026 Ariston Wash & Dry — All Rights Reserved<br>
