@@ -10,3 +10,4 @@ Jinja2
 Werkzeug
 requests
 fpdf2
+pdfkit
