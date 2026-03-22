@@ -2964,13 +2964,14 @@ import os
 # config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
 @app.route('/subadmin/special-services')
 @login_required
-def special_services_page():
-    # Αυτό το route απλά ανοίγει τη φόρμα
+def subadmin_special_services_page():  # <--- ΑΛΛΑΞΕ ΑΥΤΟ
+    # Αυτό το route απλά ανοίγει τη φόρμα για subadmin
     return render_template('subadmin/special_services.html')
+
 @app.route('/admin/special-services')
 @login_required
-def special_services_page():
-    # Αυτό το route απλά ανοίγει τη φόρμα
+def admin_special_services_page():  # <--- ΑΛΛΑΞΕ ΑΥΤΟ
+    # Αυτό το route απλά ανοίγει τη φόρμα για admin
     return render_template('admin/special_services.html')
 
 import os
@@ -2979,7 +2980,6 @@ import pdfkit
 from datetime import datetime
 
 @app.route('/generate-special-pdf', methods=['POST'])
-
 def generate_special_pdf():
     # 1. Λήψη στοιχείων επιχείρησης
     business_name = request.form.get('business_name')
@@ -2987,7 +2987,6 @@ def generate_special_pdf():
     current_time = datetime.now().strftime("%d/%m/%Y %H:%M")
 
     # Βρίσκουμε το φυσικό μονοπάτι της εικόνας στον server
-    # Αφού ο φάκελος templates είναι ο static σου:
     logo_path = os.path.join(app.root_path, 'templates', 'images', 'logo3.png')
 
     # 2. Συλλογή των προϊόντων δυναμικά
@@ -3006,7 +3005,6 @@ def generate_special_pdf():
                 })
 
     # 3. Render το Template
-    # Προσθέτουμε τη μεταβλητή logo_url για να την ξέρει το HTML
     rendered = render_template('admin/special_pdf_template.html', 
                                business_name=business_name,
                                business_phone=business_phone,
@@ -3017,7 +3015,7 @@ def generate_special_pdf():
     # 4. Μετατροπή σε PDF
     options = {
         'encoding': "UTF-8",
-        'enable-local-file-access': None, # Απαραίτητο για να διαβάσει το logo_path
+        'enable-local-file-access': None, 
         'quiet': '',
         'no-outline': None
     }
