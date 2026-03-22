@@ -175,6 +175,29 @@
                 </a>
             </li>
             <li>
+    <a href="/subadmin/special-services" class="admin-link special-services-btn {% if active_page == 'special_services' %}active{% endif %}">
+        <span class="icon">🏢</span>
+        <span>Ειδικές Υπηρεσίες</span>
+    </a>
+</li>
+
+<style>
+    /* Styling για να ξεχωρίζει ελαφρώς όπως το Νέα Παραλαβή */
+    .admin-link.special-services-btn {
+        background: rgba(37, 99, 235, 0.1); /* Απαλό μπλε background */
+        border: 1px dashed rgba(37, 99, 235, 0.4);
+        margin: 5px 0;
+    }
+    .admin-link.special-services-btn:hover {
+        background: rgba(37, 99, 235, 0.2);
+        border-color: var(--primary);
+    }
+    .admin-link.special-services-btn.active {
+        background: var(--primary);
+        border-style: solid;
+    }
+</style>
+            <li>
                 <a href="/subadmin/messages" class="admin-link {% if active_page == 'messages' %}active{% endif %}">
                     <span class="icon">✉️</span>
                     <span>Μηνύματα</span>

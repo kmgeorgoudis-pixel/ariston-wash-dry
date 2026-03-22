@@ -2979,7 +2979,7 @@ import pdfkit
 from datetime import datetime
 
 @app.route('/generate-special-pdf', methods=['POST'])
-@login_required
+
 def generate_special_pdf():
     # 1. Λήψη στοιχείων επιχείρησης
     business_name = request.form.get('business_name')
