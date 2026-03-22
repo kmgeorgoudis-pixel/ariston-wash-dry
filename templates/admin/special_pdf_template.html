@@ -9,26 +9,35 @@
             margin: 0;
             padding: 20px;
         }
-        /* Header Style */
-        .header {
+        
+        /* Διόρθωση Header με Table για εγγυημένο rendering στο PDF */
+        .header-table {
+            width: 100%;
             border-bottom: 3px solid #0070f3;
             padding-bottom: 20px;
             margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
+        
+        .logo-area {
+            width: 50%;
+            text-align: left;
+        }
+        
         .logo-area img {
             height: 80px;
         }
+        
         .info-area {
+            width: 50%;
             text-align: right;
         }
+        
         .info-area h2 {
             margin: 0;
             color: #0070f3;
             font-size: 22px;
         }
+        
         .info-area p {
             margin: 2px 0;
             font-size: 12px;
@@ -55,12 +64,12 @@
         }
 
         /* Table Style */
-        table {
+        table.items-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-        th {
+        table.items-table th {
             background-color: #111827;
             color: white;
             padding: 12px;
@@ -68,7 +77,7 @@
             font-size: 13px;
             text-transform: uppercase;
         }
-        td {
+        table.items-table td {
             padding: 12px;
             border-bottom: 1px solid #eee;
             font-size: 14px;
@@ -84,14 +93,15 @@
             border-top: 1px solid #eee;
             padding-top: 10px;
         }
-        .signature {
-            margin-top: 40px;
-            display: flex;
-            justify-content: space-between;
+
+        /* Signature Area με Table για να αποφύγουμε το Flex */
+        .signature-table {
+            width: 100%;
+            margin-top: 60px;
         }
         .sig-box {
             border-top: 1px solid #333;
-            width: 200px;
+            width: 250px;
             text-align: center;
             padding-top: 5px;
             font-size: 12px;
@@ -100,25 +110,28 @@
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo-area">
-            <img src="https://aristonwashdry.gr/static/images/logo3.png" alt="Ariston Logo" style="height: 80px;">
-        </div>
-        <div class="info-area">
-            <h2>ARISTON Wash & Dry</h2>
-            <p>📧 info@aristonwashdry.gr</p>
-            <p>📞 6987598416</p>
-            <p>🌐 www.aristonwashdry.gr</p>
-        </div>
-    </div>
+    <table class="header-table">
+        <tr>
+            <td class="logo-area">
+                <img src="https://aristonwashdry.gr/static/images/logo3.png" alt="Ariston Logo">
+            </td>
+            <td class="info-area">
+                <h2>ARISTON Wash & Dry</h2>
+                <p>📧 info@aristonwashdry.gr</p>
+                <p>📞 6987598416</p>
+                <p>🌐 www.aristonwashdry.gr</p>
+            </td>
+        </tr>
+    </table>
 
     <div class="details-box">
         <h3>ΣΤΟΙΧΕΙΑ ΠΑΡΑΛΑΒΗΣ (SPECIAL SERVICES)</h3>
         <p><strong>Επωνυμία:</strong> {{ business_name }}</p>
         <p><strong>Τηλέφωνο:</strong> {{ business_phone }}</p>
-        <p><strong>Ημερομηνία:</strong> {{ date_now }}</p> </div>
+        <p><strong>Ημερομηνία:</strong> {{ date_now }}</p> 
+    </div>
 
-    <table>
+    <table class="items-table">
         <thead>
             <tr>
                 <th width="50%">ΠΕΡΙΓΡΑΦΗ ΕΙΔΟΥΣ</th>
@@ -143,10 +156,16 @@
         </tbody>
     </table>
 
-    <div class="signature">
-        <div class="sig-box">Παραδόθηκε από</div>
-        <div class="sig-box">Παραλήφθηκε από (ARISTON Wash & Dry)</div>
-    </div>
+    <table class="signature-table">
+        <tr>
+            <td align="left">
+                <div class="sig-box">Παραδόθηκε από</div>
+            </td>
+            <td align="right">
+                <div class="sig-box">Παραλήφθηκε από (ARISTON Wash & Dry)</div>
+            </td>
+        </tr>
+    </table>
 
     <div class="footer">
         <p>Ευχαριστούμε για την εμπιστοσύνη σας. Το ARISTON Wash & Dry φροντίζει για την υγιεινή των λινών σας.</p>
