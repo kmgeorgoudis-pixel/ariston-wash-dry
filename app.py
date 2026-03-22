@@ -2973,19 +2973,18 @@ def generate_special_pdf():
     # 1. Λήψη στοιχείων επιχείρησης
     business_name = request.form.get('business_name')
     business_phone = request.form.get('business_phone')
-    date_now = datetime.now().strftime("%d/%m/%Y %H:%M")
+    # Ορίζουμε την ημερομηνία μία φορά
+    current_time = datetime.now().strftime("%d/%m/%Y %H:%M")
 
     # 2. Συλλογή των προϊόντων δυναμικά
     selected_items = []
     
-    # Ψάχνουμε όλα τα κλειδιά της φόρμας
     for key in request.form:
         if key.startswith('qty_'):
             qty = request.form.get(key)
-            # Αν η ποσότητα είναι πάνω από 0
             if qty and int(qty) > 0:
-                product_name = key.replace('qty_', '') # Παίρνουμε το όνομα του προϊόντος
-                iron_option = request.form.get(f'iron_{product_name}') # Παίρνουμε το σίδερο (ΝΑΙ/ΟΧΙ)
+                product_name = key.replace('qty_', '') 
+                iron_option = request.form.get(f'iron_{product_name}') 
                 
                 selected_items.append({
                     'name': product_name,
@@ -2993,27 +2992,27 @@ def generate_special_pdf():
                     'iron': iron_option
                 })
 
-    # 3. Render το Template του PDF (βρίσκεται στο templates/admin/)
+    # 3. Render το Template
+    # Προσέχουμε τα ονόματα των μεταβλητών να συμπίπτουν με το HTML
     rendered = render_template('admin/special_pdf_template.html', 
                                business_name=business_name,
                                business_phone=business_phone,
-                               date_now=date_now,
+                               date_now=current_time,  # Εδώ το διορθώσαμε
                                items=selected_items)
 
     # 4. Μετατροπή σε PDF
-    # Προσθέτουμε επιλογές για σωστά ελληνικά (encoding)
     options = {
         'encoding': "UTF-8",
-        'enable-local-file-access': None, # Σημαντικό για να βλέπει το Logo
+        'enable-local-file-access': None, 
         'quiet': ''
     }
     
     try:
+        # Χρησιμοποιούμε το configuration αν χρειάζεται, αλλά συνήθως στο Render παίζει έτσι
         pdf = pdfkit.from_string(rendered, False, options=options)
         
         response = make_response(pdf)
         response.headers['Content-Type'] = 'application/pdf'
-        # Το 'inline' ανοίγει το PDF στο browser, το 'attachment' το κατεβάζει
         response.headers['Content-Disposition'] = 'inline; filename=ariston_special.pdf'
         return response
     except Exception as e:
