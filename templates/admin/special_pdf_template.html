@@ -7,104 +7,79 @@
             font-family: 'DejaVu Sans', Arial, sans-serif;
             color: #333;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
         }
         
-        /* Διόρθωση Header με Table για εγγυημένο rendering στο PDF */
         .header-table {
             width: 100%;
             border-bottom: 3px solid #0070f3;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
         
-        .logo-area {
-            width: 50%;
-            text-align: left;
-        }
-        
-        .logo-area img {
-            height: 80px;
-        }
-        
-        .info-area {
-            width: 50%;
-            text-align: right;
-        }
-        
-        .info-area h2 {
-            margin: 0;
-            color: #0070f3;
-            font-size: 22px;
-        }
-        
-        .info-area p {
-            margin: 2px 0;
-            font-size: 12px;
-        }
+        .logo-area { width: 40%; text-align: left; }
+        .info-area { width: 60%; text-align: right; }
+        .info-area h2 { margin: 0; color: #0070f3; font-size: 20px; }
+        .info-area p { margin: 1px 0; font-size: 11px; }
 
-        /* Client Details Area */
         .details-box {
             background: #f9fafb;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 30px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 25px;
             border: 1px solid #e5e7eb;
         }
         .details-box h3 {
-            margin-top: 0;
-            font-size: 16px;
+            margin: 0 0 8px 0;
+            font-size: 15px;
             color: #111827;
             border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
+            padding-bottom: 3px;
         }
-        .details-box p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
+        .details-box p { margin: 3px 0; font-size: 13px; }
 
-        /* Table Style */
+        /* Πίνακας Ειδών με Fixed Layout */
         table.items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            table-layout: fixed; /* Κλειδώνει τα πλάτη των στηλών */
         }
+        
         table.items-table th {
             background-color: #111827;
             color: white;
-            padding: 12px;
-            text-align: left;
-            font-size: 13px;
+            padding: 10px;
+            font-size: 12px;
             text-transform: uppercase;
+            border: 1px solid #111827;
         }
+
         table.items-table td {
-            padding: 12px;
+            padding: 10px;
             border-bottom: 1px solid #eee;
-            font-size: 14px;
+            border-left: 1px solid #f9f9f9;
+            border-right: 1px solid #f9f9f9;
+            font-size: 13px;
+            word-wrap: break-word; /* Προστασία για μεγάλα ονόματα */
         }
-        .text-center { text-align: center; }
-        
+
         /* Footer */
         .footer {
-            margin-top: 50px;
+            margin-top: 40px;
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
             color: #9ca3af;
             border-top: 1px solid #eee;
             padding-top: 10px;
         }
 
-        /* Signature Area με Table για να αποφύγουμε το Flex */
-        .signature-table {
-            width: 100%;
-            margin-top: 60px;
-        }
+        .signature-table { width: 100%; margin-top: 40px; }
         .sig-box {
             border-top: 1px solid #333;
-            width: 250px;
+            width: 220px;
             text-align: center;
             padding-top: 5px;
-            font-size: 12px;
+            font-size: 11px;
         }
     </style>
 </head>
@@ -113,7 +88,7 @@
     <table class="header-table">
         <tr>
             <td class="logo-area">
-                 <img src="file://{{ logo_url }}" alt="Ariston wash and dry  Logo" style="height: 80px;">
+                 <img src="file://{{ logo_url }}" alt="Logo" style="height: 70px;">
             </td>
             <td class="info-area">
                 <h2>ARISTON Wash & Dry</h2>
@@ -134,17 +109,17 @@
     <table class="items-table">
         <thead>
             <tr>
-                <th width="50%">ΠΕΡΙΓΡΑΦΗ ΕΙΔΟΥΣ</th>
-                <th width="25%" class="text-center">ΤΕΜΑΧΙΑ</th>
-                <th width="25%" class="text-center">ΣΙΔΕΡΩΜΑ</th>
+                <th style="width: 50%; text-align: left;">ΠΕΡΙΓΡΑΦΗ ΕΙΔΟΥΣ</th>
+                <th style="width: 25%; text-align: center;">ΤΕΜΑΧΙΑ</th>
+                <th style="width: 25%; text-align: center;">ΣΙΔΕΡΩΜΑ</th>
             </tr>
         </thead>
         <tbody>
             {% for item in items %}
             <tr>
-                <td><strong>{{ item.name }}</strong></td>
-                <td class="text-center">{{ item.qty }}</td>
-                <td class="text-center">
+                <td style="width: 50%; text-align: left;"><strong>{{ item.name }}</strong></td>
+                <td style="width: 25%; text-align: center; font-weight: bold;">{{ item.qty }}</td>
+                <td style="width: 25%; text-align: center;">
                     {% if item.iron == 'ΝΑΙ' %}
                         <span style="color: #059669; font-weight: bold;">✔ ΝΑΙ</span>
                     {% else %}
@@ -158,27 +133,28 @@
 
     <table class="signature-table">
         <tr>
-            <td align="left" style="padding-bottom: 40px;">
+            <td align="left" style="padding-bottom: 30px;">
                 <div class="sig-box">Παραδόθηκε από (Πελάτης)</div>
             </td>
-            <td align="right" style="padding-bottom: 40px;">
-                <div class="sig-box">Παραλήφθηκε από (ARISTON Wash & Dry)</div>
+            <td align="right" style="padding-bottom: 30px;">
+                <div class="sig-box">Παραλήφθηκε από (ARISTON)</div>
             </td>
         </tr>
         
         <tr>
-            <td colspan="2" style="padding-top: 20px;">
-                <div style="border: 1px dashed #9ca3af; padding: 15px; border-radius: 8px;">
-                    <p style="margin: 0 0 10px 0; font-size: 13px; font-weight: bold; color: #111827;">
+            <td colspan="2" style="padding-top: 15px;">
+                <div style="border: 1px dashed #9ca3af; padding: 12px; border-radius: 8px;">
+                    <p style="margin: 0 0 8px 0; font-size: 12px; font-weight: bold;">
                         ΕΠΙΒΕΒΑΙΩΣΗ ΕΠΙΣΤΡΟΦΗΣ ΕΤΟΙΜΩΝ ΕΙΔΩΝ:
                     </p>
                     <table width="100%">
                         <tr>
-                            <td width="50%" align="left">
-                                <p style="font-size: 12px; margin: 5px 0;">Ημερομηνία Παράδοσης: ...... / ...... / 20...</p>
-                                <div class="sig-box" style="margin-top: 25px; width: 100%;">Υπογραφή Πελάτη (Παρελήφθησαν όλα)</div>
+                            <td width="60%" align="left">
+                                <p style="font-size: 11px; margin: 0;">Ημερομηνία Παράδοσης: ...... / ...... / 20...</p>
+                                <div class="sig-box" style="margin-top: 20px; width: 250px;">Υπογραφή Πελάτη (Παρελήφθησαν όλα)</div>
                             </td>
-                            <td width="50%"></td> </tr>
+                            <td></td>
+                        </tr>
                     </table>
                 </div>
             </td>
@@ -186,7 +162,7 @@
     </table>
 
     <div class="footer">
-        <p>Ευχαριστούμε για την εμπιστοσύνη σας. Το ARISTON Wash & Dry φροντίζει για την υγιεινή των λινών σας.</p>
+        <p>Το ARISTON Wash & Dry φροντίζει για την υγιεινή των λινών σας.</p>
     </div>
 
 </body>
