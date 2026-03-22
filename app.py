@@ -2962,8 +2962,13 @@ import os
 
 # Αν χρησιμοποιείς Windows, ίσως χρειαστεί να δηλώσεις το path του wkhtmltopdf
 # config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
-
+@app.route('/subadmin/special-services')
+@login_required
+def special_services_page():
+    # Αυτό το route απλά ανοίγει τη φόρμα
+    return render_template('subadmin/special_services.html')
 @app.route('/admin/special-services')
+@login_required
 def special_services_page():
     # Αυτό το route απλά ανοίγει τη φόρμα
     return render_template('admin/special_services.html')
@@ -2974,6 +2979,7 @@ import pdfkit
 from datetime import datetime
 
 @app.route('/generate-special-pdf', methods=['POST'])
+@login_required
 def generate_special_pdf():
     # 1. Λήψη στοιχείων επιχείρησης
     business_name = request.form.get('business_name')
