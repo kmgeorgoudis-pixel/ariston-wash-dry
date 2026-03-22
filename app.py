@@ -2968,17 +2968,24 @@ def special_services_page():
     # Αυτό το route απλά ανοίγει τη φόρμα
     return render_template('admin/special_services.html')
 
+import os
+from flask import render_template, request, make_response
+import pdfkit
+from datetime import datetime
+
 @app.route('/generate-special-pdf', methods=['POST'])
 def generate_special_pdf():
     # 1. Λήψη στοιχείων επιχείρησης
     business_name = request.form.get('business_name')
     business_phone = request.form.get('business_phone')
-    # Ορίζουμε την ημερομηνία μία φορά
     current_time = datetime.now().strftime("%d/%m/%Y %H:%M")
+
+    # Βρίσκουμε το φυσικό μονοπάτι της εικόνας στον server
+    # Αφού ο φάκελος templates είναι ο static σου:
+    logo_path = os.path.join(app.root_path, 'templates', 'images', 'logo3.png')
 
     # 2. Συλλογή των προϊόντων δυναμικά
     selected_items = []
-    
     for key in request.form:
         if key.startswith('qty_'):
             qty = request.form.get(key)
@@ -2993,22 +3000,23 @@ def generate_special_pdf():
                 })
 
     # 3. Render το Template
-    # Προσέχουμε τα ονόματα των μεταβλητών να συμπίπτουν με το HTML
+    # Προσθέτουμε τη μεταβλητή logo_url για να την ξέρει το HTML
     rendered = render_template('admin/special_pdf_template.html', 
                                business_name=business_name,
                                business_phone=business_phone,
-                               date_now=current_time,  # Εδώ το διορθώσαμε
-                               items=selected_items)
+                               date_now=current_time,
+                               items=selected_items,
+                               logo_url=logo_path)
 
     # 4. Μετατροπή σε PDF
     options = {
         'encoding': "UTF-8",
-        'enable-local-file-access': None, 
-        'quiet': ''
+        'enable-local-file-access': None, # Απαραίτητο για να διαβάσει το logo_path
+        'quiet': '',
+        'no-outline': None
     }
     
     try:
-        # Χρησιμοποιούμε το configuration αν χρειάζεται, αλλά συνήθως στο Render παίζει έτσι
         pdf = pdfkit.from_string(rendered, False, options=options)
         
         response = make_response(pdf)
@@ -3017,7 +3025,6 @@ def generate_special_pdf():
         return response
     except Exception as e:
         return f"Σφάλμα κατά τη δημιουργία του PDF: {str(e)}"
-
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
