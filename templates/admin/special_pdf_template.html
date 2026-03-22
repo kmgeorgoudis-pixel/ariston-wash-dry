@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'DejaVu Sans', Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        /* Header Style */
+        .header {
+            border-bottom: 3px solid #0070f3;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-area img {
+            height: 80px;
+        }
+        .info-area {
+            text-align: right;
+        }
+        .info-area h2 {
+            margin: 0;
+            color: #0070f3;
+            font-size: 22px;
+        }
+        .info-area p {
+            margin: 2px 0;
+            font-size: 12px;
+        }
+
+        /* Client Details Area */
+        .details-box {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #e5e7eb;
+        }
+        .details-box h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #111827;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .details-box p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        /* Table Style */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th {
+            background-color: #111827;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        .text-center { text-align: center; }
+        
+        /* Footer */
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 11px;
+            color: #9ca3af;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        .signature {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .sig-box {
+            border-top: 1px solid #333;
+            width: 200px;
+            text-align: center;
+            padding-top: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-area">
+            <img src="templates/images/logo3.png" alt="Ariston Logo">
+        </div>
+        <div class="info-area">
+            <h2>ARISTON Wash & Dry</h2>
+            <p>📧 info@aristonwashdry.gr</p>
+            <p>📞 6987598416</p>
+            <p>🌐 www.aristonwashdry.gr</p>
+        </div>
+    </div>
+
+    <div class="details-box">
+        <h3>ΣΤΟΙΧΕΙΑ ΠΑΡΑΛΑΒΗΣ (SPECIAL SERVICES)</h3>
+        <p><strong>Επωνυμία:</strong> {{ business_name }}</p>
+        <p><strong>Τηλέφωνο:</strong> {{ business_phone }}</p>
+        <p><strong>Ημερομηνία:</strong> {{ date_now }}</p> </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th width="50%">ΠΕΡΙΓΡΑΦΗ ΕΙΔΟΥΣ</th>
+                <th width="25%" class="text-center">ΤΕΜΑΧΙΑ</th>
+                <th width="25%" class="text-center">ΣΙΔΕΡΩΜΑ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td><strong>{{ item.name }}</strong></td>
+                <td class="text-center">{{ item.qty }}</td>
+                <td class="text-center">
+                    {% if item.iron == 'ΝΑΙ' %}
+                        <span style="color: #059669; font-weight: bold;">✔ ΝΑΙ</span>
+                    {% else %}
+                        <span style="color: #6b7280;">ΟΧΙ</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="signature">
+        <div class="sig-box">Παραδόθηκε από</div>
+        <div class="sig-box">Παραλήφθηκε από (Ariston)</div>
+    </div>
+
+    <div class="footer">
+        <p>Ευχαριστούμε για την εμπιστοσύνη σας. Το Ariston Wash & Dry φροντίζει για την υγιεινή των λινών σας.</p>
+    </div>
+
+</body>
+</html>

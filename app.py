@@ -2955,6 +2955,69 @@ def calculator():
 @app.route("/how-to-use")
 def instructions():
     return render_template("instructions.html")
+from flask import Flask, render_template, request, make_response
+from datetime import datetime
+import pdfkit
+import os
+
+# Αν χρησιμοποιείς Windows, ίσως χρειαστεί να δηλώσεις το path του wkhtmltopdf
+# config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
+
+@app.route('/admin/special-services')
+def special_services_page():
+    # Αυτό το route απλά ανοίγει τη φόρμα
+    return render_template('admin/special_services.html')
+
+@app.route('/generate-special-pdf', methods=['POST'])
+def generate_special_pdf():
+    # 1. Λήψη στοιχείων επιχείρησης
+    business_name = request.form.get('business_name')
+    business_phone = request.form.get('business_phone')
+    date_now = datetime.now().strftime("%d/%m/%Y %H:%M")
+
+    # 2. Συλλογή των προϊόντων δυναμικά
+    selected_items = []
+    
+    # Ψάχνουμε όλα τα κλειδιά της φόρμας
+    for key in request.form:
+        if key.startswith('qty_'):
+            qty = request.form.get(key)
+            # Αν η ποσότητα είναι πάνω από 0
+            if qty and int(qty) > 0:
+                product_name = key.replace('qty_', '') # Παίρνουμε το όνομα του προϊόντος
+                iron_option = request.form.get(f'iron_{product_name}') # Παίρνουμε το σίδερο (ΝΑΙ/ΟΧΙ)
+                
+                selected_items.append({
+                    'name': product_name,
+                    'qty': qty,
+                    'iron': iron_option
+                })
+
+    # 3. Render το Template του PDF (βρίσκεται στο templates/admin/)
+    rendered = render_template('admin/special_pdf_template.html', 
+                               business_name=business_name,
+                               business_phone=business_phone,
+                               date_now=date_now,
+                               items=selected_items)
+
+    # 4. Μετατροπή σε PDF
+    # Προσθέτουμε επιλογές για σωστά ελληνικά (encoding)
+    options = {
+        'encoding': "UTF-8",
+        'enable-local-file-access': None, # Σημαντικό για να βλέπει το Logo
+        'quiet': ''
+    }
+    
+    try:
+        pdf = pdfkit.from_string(rendered, False, options=options)
+        
+        response = make_response(pdf)
+        response.headers['Content-Type'] = 'application/pdf'
+        # Το 'inline' ανοίγει το PDF στο browser, το 'attachment' το κατεβάζει
+        response.headers['Content-Disposition'] = 'inline; filename=ariston_special.pdf'
+        return response
+    except Exception as e:
+        return f"Σφάλμα κατά τη δημιουργία του PDF: {str(e)}"
 
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
