@@ -152,29 +152,32 @@
         </div>
 
         <h3>🧺 Λίστα Ειδών</h3>
-        <table>
-            <thead>
+        <table style="table-layout: fixed;"> <thead>
                 <tr>
-                    <th>Περιγραφή Είδους</th>
-                    <th>Τεμάχια</th>
-                    <th>Σιδέρωμα</th>
+                    <th style="width: 50%;">Περιγραφή Είδους</th>
+                    <th style="width: 25%; text-align: center;">Τεμάχια</th>
+                    <th style="width: 25%; text-align: center;">Σιδέρωμα</th>
                 </tr>
             </thead>
             <tbody id="items-body">
                 <script>
                     const products = [
-                        "Σεντόνι Διπλό", "Σεντόνι Μικρό", "Πετσέτα Μεγάλη", "Πετσέτα Μικρή", 
-                        "Μαξιλαροθήκη", "Πατάκι", "Κουβέρτα Μεγάλη", "Κουβέρτα Μικρή", 
-                        "Πάπλωμα Μεγάλο", "Πάπλωμα Μικρό", "Παπλωματοθήκη Μεγάλη", 
-                        "Παπλωματοθήκη Μικρή", "Τραπεζομάντηλο Μεγάλο", "Τραπεζομάντηλο Μικρό"
+                        "Σεντόνι Διπλό", "Σεντόνι Μονό", "Πετσέτα Μεγάλη", "Πετσέτα Μικρή", 
+                        "Μαξιλαροθήκη", "Πατάκι", "Κουβέρτα Διπλή", "Κουβέρτα Μονή", 
+                        "Πάπλωμα Διπλό", "Πάπλωμα Μονό", "Παπλωματοθήκη Διπλή", 
+                        "Παπλωματοθήκη Μονή", "Τραπεζομάντηλο Μεγάλο", "Τραπεζομάντηλο Μικρό"
                     ];
 
                     document.write(products.map(p => `
                         <tr class="item-row">
-                            <td><strong>${p}</strong></td>
-                            <td><input type="number" name="qty_${p}" class="qty-input" value="0" min="0"></td>
-                            <td>
-                                <select name="iron_${p}" class="iron-select">
+                            <td style="vertical-align: middle;"><strong>${p}</strong></td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <input type="number" name="qty_${p}" class="qty-input" value="0" min="0" 
+                                       style="text-align: center; display: inline-block;">
+                            </td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <select name="iron_${p}" class="iron-select" 
+                                        style="width: 80px; text-align: center; display: inline-block;">
                                     <option value="ΟΧΙ">ΟΧΙ</option>
                                     <option value="ΝΑΙ">ΝΑΙ</option>
                                 </select>
