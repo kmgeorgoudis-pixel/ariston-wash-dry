@@ -150,3 +150,16 @@ admin url
 https://aristonwashdry.gr/super-secret-admin-register-ARISTON-983274982374982374982374982374
 
 
+whell locl: kato katv prin to </body>
+<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; font-family: sans-serif; padding: 20px;">
+    <div style="font-size: 60px; margin-bottom: 20px;">🚧</div>
+    <h1 style="color: #64ffda; font-weight: bold; font-size: 36px;">Υπό Ανάπτυξη</h1>
+    <p style="font-size: 18px; max-width: 500px; margin-bottom: 30px;">
+        Η λειτουργία του τροχού είναι υπό κατασκευή και θα είναι διαθέσιμη πολύ σύντομα!
+    </p>
+    <a href="/" style="background: #64ffda; color: #0a192f; text-decoration: none; padding: 10px 25px; border-radius: 20px; font-weight: bold;">
+        Επιστροφή στην Αρχική
+    </a>
+</div>
+
+

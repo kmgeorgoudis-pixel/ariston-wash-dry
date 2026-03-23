@@ -6,206 +6,278 @@
     <title>Ariston Fortune Wheel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-neon: #64ffda;
+            --accent-orange: #ff5400;
+            --dark-bg: #020c1b;
+            --wheel-border: #ffffff;
+        }
+
         body {
-            background: linear-gradient(135deg, #020c1b 0%, #0a192f 100%);
+            background: radial-gradient(circle at center, #0a192f 0%, #020c1b 100%);
             color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
             margin: 0;
+            overflow-x: hidden;
         }
 
-        /* Banner Οδηγιών */
+        /* Banner Οδηγιών - Glassmorphism */
         .instruction-banner {
-            background-color: rgba(100, 255, 218, 0.1);
-            border: 2px solid #64ffda;
+            background: rgba(100, 255, 218, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 255, 218, 0.3);
             color: white;
-            padding: 20px;
-            border-radius: 15px;
+            padding: 25px;
+            border-radius: 20px;
             margin: 20px;
-            max-width: 700px;
+            max-width: 650px;
             text-align: center;
-            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
-            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .instruction-banner h5 {
-            color: #64ffda;
-            font-weight: bold;
+            color: var(--primary-neon);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
         }
 
-        .instruction-banner p {
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        /* Κουμπί Κλεισίματος */
         .close-banner-btn {
-            background: linear-gradient(45deg, #64ffda, #1ae6b4);
+            background: var(--primary-neon);
             border: none;
-            color: #0a192f;
-            font-weight: bold;
-            padding: 8px 20px;
-            border-radius: 20px;
+            color: #020c1b;
+            font-weight: 800;
+            padding: 10px 25px;
+            border-radius: 30px;
             cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
         }
 
         .close-banner-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
         }
 
         .main-container {
             text-align: center;
+            padding: 40px 20px;
+            width: 100%;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 3rem;
+            text-shadow: 0 0 20px rgba(100, 255, 218, 0.2);
+            margin-bottom: 50px;
+        }
+
+        /* Wheel Styling */
+        .wheel-outer-wrapper {
+            position: relative;
             padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background: rgba(100, 255, 218, 0.03);
+            border-radius: 50%;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
         }
 
         .wheel-container {
             position: relative;
-            width: 380px;
-            height: 380px;
-            margin: 0 auto;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            padding: 10px;
+            background: #112240;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), 0 0 20px rgba(100, 255, 218, 0.1);
         }
 
-        /* Pointer - Βέλος */
+        /* Center Pin */
+        .wheel-container::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            z-index: 5;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            border: 4px solid #0a192f;
+        }
+
         .pointer {
             position: absolute;
-            top: -20px;
+            top: -15px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
-            border-top: 40px solid #ff5400;
-            z-index: 10;
-            filter: drop-shadow(0 0 5px rgba(255, 84, 0, 0.7));
+            border-top: 45px solid var(--accent-orange);
+            z-index: 20;
+            filter: drop-shadow(0 4px 10px rgba(255, 84, 0, 0.5));
+        }
+
+        /* Animation class for pointer when spinning */
+        .pointer.wiggle {
+            animation: wiggle 0.1s infinite;
+        }
+
+        @keyframes wiggle {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            50% { transform: translateX(-50%) rotate(-5deg); }
+            100% { transform: translateX(-50%) rotate(0deg); }
         }
 
         #wheel-canvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 8px solid #fff;
-            box-shadow: 0 0 40px rgba(100, 255, 218, 0.3);
-            transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            border: 12px solid var(--wheel-border);
+            transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1);
         }
 
+        /* Spin Button */
         #spin-button {
-            margin-top: 40px;
-            background: linear-gradient(45deg, #ff5400, #fca311);
+            margin-top: 50px;
+            background: linear-gradient(135deg, var(--accent-orange) 0%, #ff8c00 100%);
             border: none;
-            padding: 15px 60px;
-            font-size: 26px;
-            font-weight: bold;
-            border-radius: 50px;
+            padding: 18px 70px;
+            font-size: 24px;
+            font-weight: 900;
+            border-radius: 100px;
             color: white;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(255, 84, 0, 0.4);
+            letter-spacing: 3px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(255, 84, 0, 0.3);
         }
 
-        #spin-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255, 84, 0, 0.6);
+        #spin-button:hover:not(:disabled) {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 84, 0, 0.5);
+        }
+
+        #spin-button:active:not(:disabled) {
+            transform: scale(0.95);
         }
 
         #spin-button:disabled {
-            background: #555;
+            background: #233554;
+            color: #495670;
             cursor: not-allowed;
-            transform: none;
             box-shadow: none;
         }
 
         .result-message {
-            margin-top: 30px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #64ffda;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+            margin-top: 40px;
+            font-size: 1.5rem;
+            min-height: 40px;
+            color: var(--primary-neon);
+            font-weight: 600;
             opacity: 0;
-            transition: opacity 0.5s;
-            max-width: 600px;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
         }
 
         .result-message.show {
             opacity: 1;
+            transform: translateY(0);
         }
 
-        .hidden { display: none; }
+        @media (max-width: 480px) {
+            .wheel-container { width: 320px; height: 320px; }
+            h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
 
 <div id="instructionBanner" class="instruction-banner">
-    <h5>💡 Οδηγίες Παιχνιδιού</h5>
-    <p>Μπορείτε να γυρίσετε τον τροχό <strong>μία φορά κάθε 7 ημέρες</strong>. <br>
-    Τα δώρα φτάνουν έως και τα <strong>20€</strong>! <br>
-    Εάν κερδίσετε, η ομάδα του <strong>ARISTON Wash & Dry</strong> θα ενημερωθεί αυτόματα. <br>
-    Παρακαλούμε βγείτε από τη σελίδα και εμείς θα επικοινωνήσουμε μαζί σας μέσω email (στο email που χρησιμοποιήσατε για την εγγραφή σας) για την παραλαβή του ποσού.</p>
-    <button class="close-banner-btn" onclick="closeBanner()">OK, το κατάλαβα!</button>
+    <h5>💡 Fortune Wheel</h5>
+    <p>Δοκιμάστε την τύχη σας <strong>μία φορά την εβδομάδα</strong>.<br>
+    Κερδίστε εκπτώσεις και δώρα έως <strong>20€</strong>!</p>
+    <button class="close-banner-btn" onclick="closeBanner()">ΤΟ ΚΑΤΑΛΑΒΑ</button>
 </div>
 
 <div class="main-container">
-    <h1 class="mb-5">Ariston <span style="color: #64ffda;">Fortune</span></h1>
+    <h1>Ariston <span style="color: var(--primary-neon);">Fortune</span></h1>
     
-    <div class="wheel-container">
-        <div class="pointer"></div>
-        <canvas id="wheel-canvas" width="400" height="400"></canvas>
+    <div class="wheel-outer-wrapper d-inline-block">
+        <div class="wheel-container">
+            <div id="wheel-pointer" class="pointer"></div>
+            <canvas id="wheel-canvas" width="500" height="500"></canvas>
+        </div>
     </div>
     
+    <div class="mt-2">
     {% if can_spin %}
-        <button id="spin-button" onclick="spinWheel()">SPIN</button>
+        <button id="spin-button" onclick="spinWheel()">SPIN IT!</button>
     {% else %}
-        <div class="alert alert-warning mt-4 fs-5" style="max-width: 500px;">
-            Έχεις ήδη παίξει αυτή την εβδομάδα! Επίστρεψε την επόμενη.
+        <div class="alert mt-4" style="background: rgba(255,255,255,0.05); color: #8892b0; border: 1px dashed #233554;">
+            Επιστρέψτε σε 7 ημέρες για τη νέα σας προσπάθεια!
         </div>
     {% endif %}
+    </div>
 
     <div id="result-text" class="result-message"></div>
 </div>
 
 <script>
     function closeBanner() {
-        document.getElementById('instructionBanner').style.display = 'none';
+        document.getElementById('instructionBanner').style.opacity = '0';
+        setTimeout(() => document.getElementById('instructionBanner').style.display = 'none', 300);
     }
 
-    
     const canvas = document.getElementById('wheel-canvas');
     const ctx = canvas.getContext('2d');
     const displayPrizes = [5, 0, 10, 0, 20, 0, 15, 0, 7, 0]; 
-    const colors = ['#fca311', '#0a192f', '#64ffda', '#0a192f', '#fca311', '#0a192f', '#64ffda', '#0a192f', '#fca311', '#0a192f'];
+    // Χρώματα: Neon Teal, Dark Navy, Orange
+    const colors = ['#64ffda', '#0a192f', '#fca311', '#0a192f', '#64ffda', '#0a192f', '#fca311', '#0a192f', '#64ffda', '#0a192f'];
     const segments = displayPrizes.length;
     const arc = Math.PI / (segments / 2);
 
     function drawWheel() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (let i = 0; i < segments; i++) {
             const angle = i * arc;
+            
+            // Slice
             ctx.beginPath();
             ctx.fillStyle = colors[i];
-            ctx.moveTo(200, 200);
-            ctx.arc(200, 200, 200, angle, angle + arc, false);
-            ctx.lineTo(200, 200);
+            ctx.moveTo(250, 250);
+            ctx.arc(250, 250, 250, angle, angle + arc, false);
+            ctx.lineTo(250, 250);
             ctx.fill();
             
-            // Κείμενο
+            // Border γραμμή ανάμεσα στα τμήματα
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.stroke();
+
+            // Text
             ctx.save();
-            ctx.fillStyle = (colors[i] === '#0a192f') ? 'white' : '#0a192f';
-            ctx.font = 'bold 24px Arial';
-            ctx.translate(200 + Math.cos(angle + arc / 2) * 130, 200 + Math.sin(angle + arc / 2) * 130);
+            ctx.fillStyle = (colors[i] === '#0a192f') ? '#64ffda' : '#0a192f';
+            ctx.font = 'bold 30px sans-serif';
+            ctx.translate(250 + Math.cos(angle + arc / 2) * 170, 250 + Math.sin(angle + arc / 2) * 170);
             ctx.rotate(angle + arc / 2 + Math.PI / 2);
-            ctx.fillText(displayPrizes[i] > 0 ? displayPrizes[i] + '€' : '💔', -ctx.measureText(displayPrizes[i] > 0 ? displayPrizes[i] + '€' : '💔').width / 2, 0);
+            const text = displayPrizes[i] > 0 ? displayPrizes[i] + '€' : '✕';
+            ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
             ctx.restore();
         }
     }
@@ -214,10 +286,11 @@
     function spinWheel() {
         const button = document.getElementById('spin-button');
         const resultText = document.getElementById('result-text');
+        const pointer = document.getElementById('wheel-pointer');
 
         button.disabled = true;
         resultText.classList.remove('show');
-        resultText.innerText = "Η τύχη σου γυρίζει...";
+        pointer.classList.add('wiggle'); // Ξεκινάει το κούνημα του δείκτη
 
         fetch('/spin-result', {method: 'POST'})
         .then(response => response.json())
@@ -225,22 +298,27 @@
             if (data.error) {
                 alert(data.error);
                 button.disabled = false;
+                pointer.classList.remove('wiggle');
                 return;
             }
 
-           
-            const spins = 10; 
+            const spins = 8; 
             const totalRotation = (360 * spins) + data.angle;
             canvas.style.transform = `rotate(${totalRotation}deg)`;
 
             setTimeout(() => {
+                pointer.classList.remove('wiggle'); // Σταματάει το κούνημα
                 const message = data.prize > 0 ? 
-                    `🎉 ΣΥΓΧΑΡΗΤΗΡΙΑ! Κέρδισες ${data.prize}€! Η ομάδα μας θα επικοινωνήσει μαζί σου!` : 
-                    `😢 Κρίμα! Δοκίμασε την επόμενη εβδομάδα!`;
+                    `🎉 ΣΥΓΧΑΡΗΤΗΡΙΑ! Κέρδισες ${data.prize}€!` : 
+                    `😢 Τι κρίμα! Ραντεβού την άλλη εβδομάδα.`;
                 
                 resultText.innerText = message;
                 resultText.classList.add('show');
             }, 5000); 
+        })
+        .catch(err => {
+            button.disabled = false;
+            pointer.classList.remove('wiggle');
         });
     }
 </script>
