@@ -2378,18 +2378,32 @@ def verify_qr():
 @app.route('/lucky-wheel')
 @login_required 
 def lucky_wheel():
-    
-    
-    
     user = current_user
-    
     now = datetime.utcnow()
     can_spin = True
+    wait_message = ""
     
-    if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
-        can_spin = False
+    # Εξαίρεση για τον admin αν θέλεις να βλέπει πάντα το κουμπί
+    unlimited_spin_user = 'kmgeorgoudis@gmail.com'
+    
+    if user.last_spin_date and user.email != unlimited_spin_user:
+        next_spin = user.last_spin_date + timedelta(days=7)
+        if now < next_spin:
+            can_spin = False
+            diff = next_spin - now
+            days = diff.days
+            hours = diff.seconds // 3600
+            minutes = (diff.seconds % 3600) // 60
+            
+            # Δημιουργία δυναμικού μηνύματος
+            parts = []
+            if days > 0: parts.append(f"{days} ημέρες")
+            if hours > 0: parts.append(f"{hours} ώρες")
+            if minutes > 0: parts.append(f"{minutes} λεπτά")
+            
+            wait_message = "Επίστρεψε σε " + ", ".join(parts)
         
-    return render_template('wheel.html', can_spin=can_spin, username=user.fullname)
+    return render_template('wheel.html', can_spin=can_spin, wait_message=wait_message, username=user.fullname)
 
 @app.route('/spin-result', methods=['POST'])
 @login_required 

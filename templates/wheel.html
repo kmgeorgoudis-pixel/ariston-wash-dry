@@ -5,143 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ariston Fortune Wheel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-neon: #64ffda;
             --accent-orange: #ff5400;
-            --dark-bg: #020c1b;
-            --wheel-border: #ffffff;
+            --dark-blue: #0a192f;
+            --deep-dark: #020c1b;
+            --glass: rgba(100, 255, 218, 0.05);
         }
 
         body {
-            background: radial-gradient(circle at center, #0a192f 0%, #020c1b 100%);
+            background: radial-gradient(circle at center, var(--dark-blue) 0%, var(--deep-dark) 100%);
             color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             overflow-x: hidden;
         }
 
-        /* Banner Οδηγιών - Glassmorphism */
+        /* Instructions Banner */
         .instruction-banner {
-            background: rgba(100, 255, 218, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(100, 255, 218, 0.3);
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(100, 255, 218, 0.2);
             color: white;
             padding: 25px;
-            border-radius: 20px;
+            border-radius: 24px;
             margin: 20px;
-            max-width: 650px;
+            max-width: 600px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            animation: fadeInDown 0.8s ease-out;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideDown 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            z-index: 100;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .instruction-banner h5 {
             color: var(--primary-neon);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
         }
 
         .close-banner-btn {
             background: var(--primary-neon);
             border: none;
-            color: #020c1b;
+            color: var(--deep-dark);
             font-weight: 800;
-            padding: 10px 25px;
-            border-radius: 30px;
+            padding: 8px 24px;
+            border-radius: 12px;
             cursor: pointer;
             margin-top: 15px;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
 
         .close-banner-btn:hover {
-            background: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.4);
+            background: white;
         }
 
         .main-container {
             text-align: center;
-            padding: 40px 20px;
+            padding: 20px;
             width: 100%;
+            max-width: 1200px;
         }
 
         h1 {
-            font-weight: 800;
-            font-size: 3rem;
-            text-shadow: 0 0 20px rgba(100, 255, 218, 0.2);
-            margin-bottom: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 40px;
+            background: linear-gradient(to bottom, #fff 30%, var(--primary-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(100, 255, 218, 0.3));
         }
 
-        /* Wheel Styling */
+        /* Wheel Container Logic */
         .wheel-outer-wrapper {
             position: relative;
-            padding: 20px;
-            background: rgba(100, 255, 218, 0.03);
+            padding: 15px;
+            background: linear-gradient(145deg, #112240, #020c1b);
             border-radius: 50%;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+            box-shadow: 0 0 50px rgba(0,0,0,0.6), inset 0 0 20px rgba(100,255,218,0.1);
+            display: inline-block;
         }
 
         .wheel-container {
             position: relative;
-            width: 420px;
-            height: 420px;
+            width: clamp(300px, 85vw, 480px);
+            height: clamp(300px, 85vw, 480px);
             border-radius: 50%;
-            padding: 10px;
-            background: #112240;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), 0 0 20px rgba(100, 255, 218, 0.1);
+            border: 8px solid #1a2a44;
+            overflow: visible;
         }
 
-        /* Center Pin */
-        .wheel-container::after {
+        /* The Gold/Chrome ring around the wheel */
+        .wheel-container::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            background: white;
+            top: -15px; left: -15px; right: -15px; bottom: -15px;
             border-radius: 50%;
-            z-index: 5;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            border: 4px solid #0a192f;
+            border: 2px solid rgba(100, 255, 218, 0.3);
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.2; }
+            100% { transform: scale(1); opacity: 0.5; }
         }
 
         .pointer {
             position: absolute;
-            top: -15px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 45px solid var(--accent-orange);
-            z-index: 20;
-            filter: drop-shadow(0 4px 10px rgba(255, 84, 0, 0.5));
+            width: 40px;
+            height: 50px;
+            background: var(--accent-orange);
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 30;
+            filter: drop-shadow(0 5px 15px rgba(255, 84, 0, 0.6));
         }
 
-        /* Animation class for pointer when spinning */
         .pointer.wiggle {
-            animation: wiggle 0.1s infinite;
+            animation: wiggle 0.12s infinite;
         }
 
         @keyframes wiggle {
             0% { transform: translateX(-50%) rotate(0deg); }
-            50% { transform: translateX(-50%) rotate(-5deg); }
+            25% { transform: translateX(-50%) rotate(-8deg); }
+            75% { transform: translateX(-50%) rotate(8deg); }
             100% { transform: translateX(-50%) rotate(0deg); }
         }
 
@@ -149,33 +158,31 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 12px solid var(--wheel-border);
-            transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1);
+            background: var(--dark-blue);
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+            transition: transform 6s cubic-bezier(0.2, 0, 0, 1);
         }
 
         /* Spin Button */
         #spin-button {
-            margin-top: 50px;
-            background: linear-gradient(135deg, var(--accent-orange) 0%, #ff8c00 100%);
+            margin-top: 40px;
+            background: linear-gradient(135deg, var(--accent-orange), #ff8c00);
             border: none;
-            padding: 18px 70px;
-            font-size: 24px;
+            padding: 16px 60px;
+            font-size: 1.5rem;
             font-weight: 900;
-            border-radius: 100px;
+            border-radius: 50px;
             color: white;
             cursor: pointer;
-            letter-spacing: 3px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 20px rgba(255, 84, 0, 0.3);
+            letter-spacing: 2px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(255, 84, 0, 0.4);
+            font-family: 'Montserrat', sans-serif;
         }
 
         #spin-button:hover:not(:disabled) {
-            transform: scale(1.1) translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255, 84, 0, 0.5);
-        }
-
-        #spin-button:active:not(:disabled) {
-            transform: scale(0.95);
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 84, 0, 0.6);
         }
 
         #spin-button:disabled {
@@ -183,55 +190,67 @@
             color: #495670;
             cursor: not-allowed;
             box-shadow: none;
+            transform: none;
+        }
+
+        /* Locked UI */
+        .locked-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 30px;
+            display: inline-block;
         }
 
         .result-message {
-            margin-top: 40px;
-            font-size: 1.5rem;
-            min-height: 40px;
+            margin-top: 30px;
+            font-size: 1.8rem;
+            font-weight: 800;
             color: var(--primary-neon);
-            font-weight: 600;
+            min-height: 50px;
             opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.5s ease;
+            transform: scale(0.9);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .result-message.show {
             opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 480px) {
-            .wheel-container { width: 320px; height: 320px; }
-            h1 { font-size: 2rem; }
+            transform: scale(1);
+            text-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
         }
     </style>
 </head>
 <body>
 
 <div id="instructionBanner" class="instruction-banner">
-    <h5>💡 Fortune Wheel</h5>
-    <p>Δοκιμάστε την τύχη σας <strong>μία φορά την εβδομάδα</strong>.<br>
-    Κερδίστε εκπτώσεις και δώρα έως <strong>20€</strong>!</p>
+    <h5>💡 ARISTON FORTUNE</h5>
+    <p>Γυρίστε τον τροχό και κερδίστε έως και <strong>20€</strong>!<br>
+    Δυνατότητα συμμετοχής: <strong>Μία φορά ανά 7 ημέρες</strong>.</p>
     <button class="close-banner-btn" onclick="closeBanner()">ΤΟ ΚΑΤΑΛΑΒΑ</button>
 </div>
 
 <div class="main-container">
-    <h1>Ariston <span style="color: var(--primary-neon);">Fortune</span></h1>
+    <h1>Ariston Fortune</h1>
     
-    <div class="wheel-outer-wrapper d-inline-block">
+    <div class="wheel-outer-wrapper">
         <div class="wheel-container">
             <div id="wheel-pointer" class="pointer"></div>
-            <canvas id="wheel-canvas" width="500" height="500"></canvas>
+            <canvas id="wheel-canvas" width="600" height="600"></canvas>
         </div>
     </div>
     
-    <div class="mt-2">
+    <div class="mt-4">
     {% if can_spin %}
-        <button id="spin-button" onclick="spinWheel()">SPIN IT!</button>
+        <button id="spin-button" onclick="spinWheel()">SPIN NOW</button>
     {% else %}
-        <div class="alert mt-4" style="background: rgba(255,255,255,0.05); color: #8892b0; border: 1px dashed #233554;">
-            Επιστρέψτε σε 7 ημέρες για τη νέα σας προσπάθεια!
+        <div class="locked-card">
+            <div style="color: var(--primary-neon); font-weight: 800; margin-bottom: 5px;">
+                <span style="font-size: 1.2rem;">⏳</span> Ο ΤΡΟΧΟΣ ΕΙΝΑΙ ΚΛΕΙΔΩΜΕΝΟΣ
+            </div>
+            <div style="color: #8892b0; font-size: 0.9rem;">
+                {{ wait_message }}
+            </div>
         </div>
     {% endif %}
     </div>
@@ -248,39 +267,54 @@
     const canvas = document.getElementById('wheel-canvas');
     const ctx = canvas.getContext('2d');
     const displayPrizes = [5, 0, 10, 0, 20, 0, 15, 0, 7, 0]; 
-    // Χρώματα: Neon Teal, Dark Navy, Orange
     const colors = ['#64ffda', '#0a192f', '#fca311', '#0a192f', '#64ffda', '#0a192f', '#fca311', '#0a192f', '#64ffda', '#0a192f'];
     const segments = displayPrizes.length;
     const arc = Math.PI / (segments / 2);
 
     function drawWheel() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
         for (let i = 0; i < segments; i++) {
             const angle = i * arc;
             
-            // Slice
+            
             ctx.beginPath();
             ctx.fillStyle = colors[i];
-            ctx.moveTo(250, 250);
-            ctx.arc(250, 250, 250, angle, angle + arc, false);
-            ctx.lineTo(250, 250);
+            ctx.moveTo(300, 300);
+            ctx.arc(300, 300, 300, angle, angle + arc, false);
+            ctx.lineTo(300, 300);
             ctx.fill();
             
-            // Border γραμμή ανάμεσα στα τμήματα
-            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-            ctx.stroke();
+            
+            if (colors[i] === '#64ffda') {
+                ctx.save();
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            }
 
-            // Text
+            
             ctx.save();
             ctx.fillStyle = (colors[i] === '#0a192f') ? '#64ffda' : '#0a192f';
-            ctx.font = 'bold 30px sans-serif';
-            ctx.translate(250 + Math.cos(angle + arc / 2) * 170, 250 + Math.sin(angle + arc / 2) * 170);
+            ctx.font = '900 36px Montserrat';
+            ctx.translate(300 + Math.cos(angle + arc / 2) * 200, 300 + Math.sin(angle + arc / 2) * 200);
             ctx.rotate(angle + arc / 2 + Math.PI / 2);
             const text = displayPrizes[i] > 0 ? displayPrizes[i] + '€' : '✕';
             ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
             ctx.restore();
         }
+
+        
+        ctx.beginPath();
+        ctx.arc(300, 300, 25, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.strokeStyle = '#0a192f';
+        ctx.lineWidth = 5;
+        ctx.stroke();
     }
+
     drawWheel();
 
     function spinWheel() {
@@ -290,33 +324,37 @@
 
         button.disabled = true;
         resultText.classList.remove('show');
-        pointer.classList.add('wiggle'); // Ξεκινάει το κούνημα του δείκτη
+        pointer.classList.add('wiggle'); 
 
         fetch('/spin-result', {method: 'POST'})
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                alert(data.error);
+                alert("Σφάλμα: " + data.error);
                 button.disabled = false;
                 pointer.classList.remove('wiggle');
                 return;
             }
 
-            const spins = 8; 
+            const spins = 10; 
             const totalRotation = (360 * spins) + data.angle;
             canvas.style.transform = `rotate(${totalRotation}deg)`;
 
             setTimeout(() => {
-                pointer.classList.remove('wiggle'); // Σταματάει το κούνημα
+                pointer.classList.remove('wiggle');
                 const message = data.prize > 0 ? 
-                    `🎉 ΣΥΓΧΑΡΗΤΗΡΙΑ! Κέρδισες ${data.prize}€!` : 
-                    `😢 Τι κρίμα! Ραντεβού την άλλη εβδομάδα.`;
+                    `🎉 ΚΕΡΔΙΣΕΣ ${data.prize}€!` : 
+                    `😢 ΔΟΚΙΜΑΣΕ ΞΑΝΑ ΣΕ 7 ΗΜΕΡΕΣ`;
                 
                 resultText.innerText = message;
                 resultText.classList.add('show');
-            }, 5000); 
+                
+                
+                setTimeout(() => location.reload(), 4000);
+            }, 6000); 
         })
         .catch(err => {
+            console.error(err);
             button.disabled = false;
             pointer.classList.remove('wiggle');
         });
