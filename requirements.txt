@@ -11,3 +11,5 @@ Werkzeug
 requests
 fpdf2
 pdfkit
+qrcode
+Pillow
