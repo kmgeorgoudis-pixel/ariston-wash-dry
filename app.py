@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
-from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage, Score, Verification
+from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage, Score, Verification, Order
 import random
 import smtplib
 import time
