@@ -2810,20 +2810,57 @@ def get_greek_day():
     days = ["Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο", "Κυριακή"]
     return days[datetime.now().weekday()]
 
-from flask import abort # Πρόσθεσε το abort στα imports σου στην κορυφή
+from flask import abort, send_file, request
+import qrcode
+from PIL import Image
+import os
+import io
+import random
+from datetime import datetime
+
+# --- ΣΥΝΑΡΤΗΣΗ ΓΙΑ QR ΜΕ LOGO ---
+def generate_qr_with_logo(order_code):
+    # Το URL που θα σκανάρει ο πελάτης
+    base_url = "https://ariston-wash-dry.onrender.com/track/" 
+    data = f"{base_url}{order_code}"
+
+    qr = qrcode.QRCode(
+        version=3,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=10,
+        border=2
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+
+    img_qr = qr.make_image(fill_color="black", back_color="white").convert('RGB')
+
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    logo_path = os.path.join(base_path, 'templates', 'images', 'logo3.png')
+
+    if os.path.exists(logo_path):
+        logo = Image.open(logo_path)
+        qr_width, qr_height = img_qr.size
+        logo_size = int(qr_width * 0.2)
+        logo = logo.resize((logo_size, logo_size), Image.Resampling.LANCZOS)
+        pos = ((qr_width - logo_size) // 2, (qr_height - logo_size) // 2)
+        img_qr.paste(logo, pos)
+
+    temp_qr_path = os.path.join(base_path, f"temp_qr_{order_code}.png")
+    img_qr.save(temp_qr_path)
+    return temp_qr_path
+
+# --- ROUTES ---
 
 @app.route("/drop-off", methods=["GET"])
 @login_required
 def drop_off_form():
-    # Έλεγχος αν ο χρήστης είναι admin ή sub-admin
     is_admin = getattr(current_user, 'is_admin', False)
     is_sub_admin = getattr(current_user, 'is_sub_admin', False)
 
     if not is_admin and not is_sub_admin:
-        # Αν δεν είναι τίποτα από τα δύο, του πετάμε ένα 403 Forbidden
         abort(403)
 
-    # Επιλογή του σωστού template ανάλογα με τον ρόλο
     if is_admin:
         return render_template("admin/drop_off.html")
     else:
@@ -2832,27 +2869,47 @@ def drop_off_form():
 @app.route("/generate-pdf", methods=["POST"])
 @login_required
 def generate_pdf():
-    # Λήψη στοιχείων
+    # 1. Λήψη στοιχείων
     fullname = request.form.get("fullname", "")
-    contact = request.form.get("contact", "")  # Τηλέφωνο ή Email
-    # Αντί για request.form.get, χρησιμοποιούμε getlist για να πάρει όλα τα τσεκαρισμένα
+    contact = request.form.get("contact", "")
     machines_list = request.form.getlist("machine")
     machine = ", ".join(machines_list) if machines_list else "Κανένα"
-    total_amount = request.form.get("total_amount", "0")
-    paid_amount = request.form.get("paid_amount", "0")
-    debt_amount = request.form.get("debt_amount", "0")
+    
+    try:
+        total_val = float(request.form.get("total_amount", "0").replace(',', '.'))
+        paid_val = float(request.form.get("paid_amount", "0").replace(',', '.'))
+    except:
+        total_val, paid_val = 0.0, 0.0
+        
+    debt_val = total_val - paid_val
     delivery_time = request.form.get("delivery_time", "")
     
     order_code = str(random.randint(1000, 9999))
     current_date = datetime.now().strftime("%d/%m/%Y")
-    day_name = get_greek_day()
+    
+    # 2. ΑΠΟΘΗΚΕΥΣΗ ΣΤΗ ΒΑΣΗ (Disk)
+    new_order = Order(
+        order_code=order_code,
+        fullname=fullname,
+        contact=contact,
+        total_amount=total_val,
+        paid_amount=paid_val,
+        debt_amount=debt_val,
+        delivery_time=delivery_time,
+        status=0  # 0 = Παραλήφθηκε
+    )
+    db.session.add(new_order)
+    db.session.commit()
 
+    # 3. ΔΗΜΙΟΥΡΓΙΑ QR ΜΕ LOGO
+    qr_path = generate_qr_with_logo(order_code)
+
+    # 4. ΔΗΜΙΟΥΡΓΙΑ PDF
     pdf = FPDF()
     pdf.add_page()
     
     base_path = os.path.dirname(os.path.abspath(__file__))
     font_path = os.path.join(base_path, 'DejaVuSans.ttf')
-    # ΔΙΟΡΘΩΣΗ: Διαδρομή για το templates/images
     logo_path = os.path.join(base_path, 'templates', 'images', 'logo3.png') 
 
     font_loaded = False
@@ -2873,13 +2930,12 @@ def generate_pdf():
     def draw_ticket(y_offset, title):
         pdf.set_y(y_offset)
         
-        # --- 1. LOGO & HEADER ---
+        # Logo & Header
         if os.path.exists(logo_path):
-            # Τοποθέτηση logo (x=10, y=y_offset, width=22)
             pdf.image(logo_path, 10, y_offset, 22) 
         
         pdf.set_font(font_name, '', 16)
-        pdf.set_text_color(37, 99, 235) # Ariston Blue
+        pdf.set_text_color(37, 99, 235)
         pdf.cell(0, 8, "ARISTON Wash & Dry", ln=True, align='C')
         
         pdf.set_text_color(80, 80, 80)
@@ -2887,7 +2943,7 @@ def generate_pdf():
         pdf.cell(0, 4, "www.aristonwashdry.gr | info@aristonwashdry.gr", ln=True, align='C')
         pdf.cell(0, 4, txt("Τηλ: 6987598416"), ln=True, align='C')
         
-        # --- 2. TITLE BAR ---
+        # Title Bar
         pdf.ln(6)
         pdf.set_fill_color(240, 245, 255)
         pdf.set_font(font_name, '', 11)
@@ -2895,74 +2951,101 @@ def generate_pdf():
         pdf.cell(0, 8, f"--- {txt(title)} ---", ln=True, align='C', fill=True)
         pdf.ln(4)
         
-        # --- 3. CUSTOMER INFO ---
+        # QR Code Position (Τοποθέτηση δεξιά από τα στοιχεία)
+        if os.path.exists(qr_path):
+            pdf.image(qr_path, 165, y_offset + 30, 30)
+            pdf.set_font(font_name, '', 7)
+            pdf.set_xy(165, y_offset + 60)
+            pdf.cell(30, 4, txt("Scan to Track"), ln=0, align='C')
+
+        # Customer Info
+        pdf.set_xy(10, y_offset + 32)
         pdf.set_font(font_name, '', 10)
-        pdf.cell(95, 7, txt(f"ΚΩΔΙΚΟΣ: #{order_code}"), ln=0)
-        pdf.cell(95, 7, txt(f"Ημερομηνία: {current_date}"), ln=1, align='R')
+        pdf.cell(95, 7, txt(f"ΚΩΔΙΚΟΣ: #{order_code}"), ln=1)
+        pdf.cell(95, 7, txt(f"Ημερομηνία: {current_date}"), ln=1)
         
         pdf.ln(2)
         pdf.set_font(font_name, '', 12)
         pdf.cell(0, 8, txt(f"Πελάτης: {fullname}"), ln=True)
-        
-        # Εμφάνιση Τηλεφώνου/Email
         pdf.set_font(font_name, '', 10)
         pdf.set_text_color(100, 100, 100)
         pdf.cell(0, 6, txt(f"Επικοινωνία: {contact}"), ln=True)
         pdf.set_text_color(0, 0, 0)
         
-        # --- 4. ORDER DETAILS ---
+        # Order Details
         pdf.ln(3)
         pdf.set_draw_color(220, 220, 220)
-        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+        pdf.line(10, pdf.get_y(), 160, pdf.get_y()) # Μικρότερη γραμμή για να μη χτυπάει το QR
         pdf.ln(3)
         
-        # Χρησιμοποιούμε μικρότερο font αν επιλέχθηκαν πολλά μηχανήματα για να χωράνε
-        if len(machines_list) > 2:
-            pdf.set_font(font_name, '', 8)
-        else:
-            pdf.set_font(font_name, '', 10)
-            
-        # Χρήση multi_cell αντί για cell για να αλλάζει γραμμή αν είναι τεράστιο το κείμενο
-        pdf.cell(95, 7, txt(f"Μηχάνημα: {machine}"), ln=0)
         pdf.set_font(font_name, '', 10)
-        pdf.cell(95, 7, txt(f"Παράδοση/Παραλαβή: {delivery_time}"), ln=1, align='R')
+        pdf.cell(0, 7, txt(f"Μηχάνημα: {machine}"), ln=1)
+        pdf.cell(0, 7, txt(f"Παράδοση: {delivery_time}"), ln=1)
         
-        # --- 5. PAYMENT BOX ---
-        pdf.ln(6)
+        # Payment Box
+        pdf.ln(4)
         pdf.set_fill_color(248, 250, 252)
         pdf.rect(10, pdf.get_y(), 190, 14, 'F')
-        
         pdf.set_y(pdf.get_y() + 3)
-        pdf.set_font(font_name, '', 11)
-        pdf.cell(63, 8, txt(f"Σύνολο: {total_amount}€"), align='C')
-        pdf.cell(63, 8, txt(f"Πληρώθηκε: {paid_amount}€"), align='C')
-        
-        # Χρώμα για το χρέος
-        try:
-            val_debt = float(debt_amount.replace(',', '.'))
-            if val_debt > 0:
-                pdf.set_text_color(220, 38, 38) # Κόκκινο
-        except: pass
-        
-        pdf.cell(63, 8, txt(f"Υπόλοιπο: {debt_amount}€"), align='C', ln=1)
+        pdf.cell(63, 8, txt(f"Σύνολο: {total_val}€"), align='C')
+        pdf.cell(63, 8, txt(f"Πληρώθηκε: {paid_val}€"), align='C')
+        if debt_val > 0: pdf.set_text_color(220, 38, 38)
+        pdf.cell(63, 8, txt(f"Υπόλοιπο: {debt_val}€"), align='C', ln=1)
         pdf.set_text_color(0, 0, 0)
 
-        # Γραμμή κοπής
+        # Cut line
         if y_offset < 100:
             pdf.set_y(140)
             pdf.set_draw_color(150, 150, 150)
-            pdf.set_font('Arial', '', 10)
             pdf.cell(0, 0, "- " * 45, ln=True, align='C')
 
-    # Σχεδίαση
     draw_ticket(15, "ΕΝΤΥΠΟ ΠΕΛΑΤΗ")
     draw_ticket(155, "ΕΝΤΥΠΟ ΕΠΙΧΕΙΡΗΣΗΣ")
 
+    # Καθαρισμός QR αρχείου και αποστολή PDF
     buf = io.BytesIO()
     pdf.output(buf)
+    if os.path.exists(qr_path):
+        os.remove(qr_path)
     buf.seek(0)
     
     return send_file(buf, mimetype='application/pdf', as_attachment=False, download_name=f"order_{order_code}.pdf")
+@app.route("/track/<order_code>")
+def track_order(order_code):
+    # Ψάχνουμε την παραγγελία στη βάση δεδομένων με βάση τον 4ψήφιο κωδικό
+    order = Order.query.filter_by(order_code=order_code).first()
+    
+    if not order:
+        # Αν δεν βρεθεί ο κωδικός, εμφάνισε σφάλμα ή ανακατεύθυνση
+        return render_template("tracking_error.html"), 404
+
+    # Επιστρέφουμε το template του tracking περνώντας τα στοιχεία της παραγγελίας
+    return render_template("track_status.html", order=order)
+@app.route("/orders-list")
+@login_required
+def orders_list():
+    # Παίρνουμε όλες τις παραγγελίες από τη βάση, τις πιο πρόσφατες πάνω-πάνω
+    all_orders = Order.query.order_ some(Order.created_at.desc()).all()
+    return render_template("admin/orders_list.html", orders=all_orders)
+
+# Αλλαγή Status (θα καλείται με κουμπί)
+@app.route("/update-status/<int:order_id>/<int:new_status>")
+@login_required
+def update_status(order_id, new_status):
+    order = Order.query.get_or_404(order_id)
+    order.status = new_status
+    db.session.commit()
+    return redirect(url_for('orders_list'))
+@app.route("/delete-order/<int:order_id>")
+@login_required
+def delete_order(order_id):
+    order_to_delete = Order.query.get_or_404(order_id)
+    try:
+        db.session.delete(order_to_delete)
+        db.session.commit()
+        return redirect(url_for('orders_list'))
+    except:
+        return "Υπήρξε πρόβλημα κατά τη διαγραφή της παραγγελίας."
 @app.route("/calculator")
 def calculator():
     return render_template("calculator.html")

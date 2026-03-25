@@ -78,7 +78,25 @@ class Announcement(db.Model):
 
     user = db.relationship("User", backref="announcements")
 
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_code = db.Column(db.String(4), unique=True, nullable=False) # Ο 4ψήφιος κωδικός
+    fullname = db.Column(db.String(100), nullable=False)
+    contact = db.Column(db.String(100))
+    total_amount = db.Column(db.Float, default=0.0)
+    paid_amount = db.Column(db.Float, default=0.0)
+    debt_amount = db.Column(db.Float, default=0.0)
+    delivery_time = db.Column(db.String(100))
+    
+    # ΠΟΡΕΙΑ ΡΟΥΧΩΝ: 
+    # 0: Παραλήφθηκε, 1: Πλύσιμο, 2: Στέγνωμα, 3: Έτοιμα
+    status = db.Column(db.Integer, default=0) 
+    
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    def get_status_text(self):
+        statuses = {0: "Παραλήφθηκε", 1: "Σε Πλύσιμο", 2: "Σε Στέγνωμα", 3: "Έτοιμα για παραλαβή "}
+        return statuses.get(self.status, "Άγνωστο")
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

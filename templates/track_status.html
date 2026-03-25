@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Κατάσταση Παραγγελίας - ARISTON</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .step-active { color: #2563eb; }
+        .step-done { color: #10b981; }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="bg-blue-600 p-6 text-white text-center">
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" alt="Logo" class="h-16 mx-auto mb-2 bg-white rounded-full p-2">
+            <h1 class="text-xl font-bold">ARISTON Wash & Dry</h1>
+            <p class="text-sm opacity-80">Κωδικός Παραγγελίας: #{{ order.order_code }}</p>
+        </div>
+
+        <div class="p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-6 text-center">Γεια σας, {{ order.fullname }}!</h2>
+
+            <div class="relative">
+                <div class="absolute left-4 top-0 h-full w-0.5 bg-gray-200"></div>
+
+                <div class="flex items-center mb-8 relative">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 {{ 'bg-green-500' if order.status >= 0 else 'bg-gray-200' }}">
+                        <i class="fas fa-receipt text-white text-xs"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="font-bold {{ 'text-green-600' if order.status >= 0 else 'text-gray-400' }}">Παραλήφθηκε</p>
+                        <p class="text-xs text-gray-500">Η παραγγελία σας καταχωρήθηκε.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center mb-8 relative">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 {{ 'bg-blue-500 shadow-lg shadow-blue-200' if order.status == 1 else ('bg-green-500' if order.status > 1 else 'bg-gray-200') }}">
+                        <i class="fas fa-soap text-white text-xs {{ 'animate-spin' if order.status == 1 }}"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="font-bold {{ 'text-blue-600' if order.status == 1 else ('text-green-600' if order.status > 1 else 'text-gray-400') }}">Σε Πλύσιμο</p>
+                        <p class="text-xs text-gray-500">Τα ρούχα σας είναι στις μηχανές μας.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center mb-8 relative">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 {{ 'bg-orange-400 shadow-lg shadow-orange-200' if order.status == 2 else ('bg-green-500' if order.status > 2 else 'bg-gray-200') }}">
+                        <i class="fas fa-wind text-white text-xs"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="font-bold {{ 'text-orange-500' if order.status == 2 else ('text-green-600' if order.status > 2 else 'text-gray-400') }}">Σε Στέγνωμα</p>
+                        <p class="text-xs text-gray-500">Φροντίζουμε για το τέλειο στέγνωμα.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center relative">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center z-10 {{ 'bg-green-500 shadow-lg shadow-green-200' if order.status == 3 else 'bg-gray-200' }}">
+                        <i class="fas fa-check-double text-white text-xs"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="font-bold {{ 'text-green-600' if order.status == 3 else 'text-gray-400' }}">Έτοιμα προς Παράδοση!</p>
+                        <p class="text-xs text-gray-500">Μπορείτε να περάσετε να τα πάρετε.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-100 text-sm text-gray-600">
+                <div class="flex justify-between mb-2">
+                    <span>Εκτιμώμενη Παραλαβή:</span>
+                    <span class="font-semibold text-gray-800">{{ order.delivery_time }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Υπόλοιπο Πληρωμής:</span>
+                    <span class="font-semibold {{ 'text-red-500' if order.debt_amount > 0 else 'text-green-600' }}">
+                        {{ order.debt_amount }}€
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 p-4 text-center text-xs text-gray-400">
+            Ευχαριστούμε για την εμπιστοσύνη σας!
+        </div>
+    </div>
+
+</body>
+</html>
