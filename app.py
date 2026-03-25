@@ -3013,6 +3013,7 @@ def generate_pdf():
     return send_file(buf, mimetype='application/pdf', as_attachment=False, download_name=f"order_{order_code}.pdf")
 @app.route("/track/<order_code>")
 def track_order(order_code):
+    from database import Order
     # Ψάχνουμε την παραγγελία στη βάση δεδομένων με βάση τον 4ψήφιο κωδικό
     order = Order.query.filter_by(order_code=order_code).first()
     
@@ -3025,26 +3026,32 @@ def track_order(order_code):
 @app.route("/orders-list")
 @login_required
 def orders_list():
-    # Έλεγχος πρόσβασης: Μόνο για admin και subadmin
-    if current_user.role not in ['admin', 'subadmin']:
-        return abort(403)  # Αν δεν είναι κανένα από τα δύο, πετάει σφάλμα πρόσβασης
+    # Έλεγχος: Πρέπει να είναι ή Admin ή Sub_admin
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return abort(403)
 
-    # Παίρνουμε όλες τις παραγγελίες από τη βάση (πρώτα οι πιο πρόσφατες)
     all_orders = Order.query.order_by(Order.created_at.desc()).all()
-    
     return render_template("admin/orders_list.html", orders=all_orders)
 
-# Αλλαγή Status (θα καλείται με κουμπί)
+# 2. ΑΛΛΑΓΗ STATUS (Πρόσβαση και για τους δύο)
 @app.route("/update-status/<int:order_id>/<int:new_status>")
 @login_required
 def update_status(order_id, new_status):
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return abort(403)
+
     order = Order.query.get_or_404(order_id)
     order.status = new_status
     db.session.commit()
     return redirect(url_for('orders_list'))
+
+# 3. ΔΙΑΓΡΑΦΗ ΠΑΡΑΓΓΕΛΙΑΣ (Πρόσβαση και για τους δύο)
 @app.route("/delete-order/<int:order_id>")
 @login_required
 def delete_order(order_id):
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return abort(403)
+
     order_to_delete = Order.query.get_or_404(order_id)
     try:
         db.session.delete(order_to_delete)
