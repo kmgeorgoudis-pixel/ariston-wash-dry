@@ -2869,6 +2869,7 @@ def drop_off_form():
 @app.route("/generate-pdf", methods=["POST"])
 @login_required
 def generate_pdf():
+    from database import Order
     # 1. Λήψη στοιχείων
     fullname = request.form.get("fullname", "")
     contact = request.form.get("contact", "")
