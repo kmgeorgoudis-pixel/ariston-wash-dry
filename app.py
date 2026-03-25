@@ -3025,7 +3025,7 @@ def track_order(order_code):
 @login_required
 def orders_list():
     # Παίρνουμε όλες τις παραγγελίες από τη βάση, τις πιο πρόσφατες πάνω-πάνω
-    all_orders = Order.query.order_ some(Order.created_at.desc()).all()
+    all_orders = Order.query.order_by(Order.created_at.desc()).all()
     return render_template("admin/orders_list.html", orders=all_orders)
 
 # Αλλαγή Status (θα καλείται με κουμπί)
