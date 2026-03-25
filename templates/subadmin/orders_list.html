@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Διαχείριση Παραγγελιών - ARISTON</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">📦 Ενεργές Παραγγελίες</h1>
+            <a href="/drop-off" class="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-700"> + Νέα Παραλαβή</a>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-50 border-b">
+                    <tr>
+                        <th class="p-4 font-semibold text-gray-600">Κωδικός</th>
+                        <th class="p-4 font-semibold text-gray-600">Πελάτης</th>
+                        <th class="p-4 font-semibold text-gray-600">Status</th>
+                        <th class="p-4 font-semibold text-gray-600">Ενέργειες Status</th>
+                        <th class="p-4 font-semibold text-gray-600 text-right">Υπόλοιπο</th>
+                        <th class="p-4 font-semibold text-gray-600 text-center">Επιλογές</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr class="border-b hover:bg-gray-50 transition">
+                        <td class="p-4 font-mono font-bold text-blue-600">#{{ order.order_code }}</td>
+                        <td class="p-4">
+                            <div class="font-bold">{{ order.fullname }}</div>
+                            <div class="text-xs text-gray-400">{{ order.contact }}</div>
+                        </td>
+                        <td class="p-4">
+                            {% if order.status == 0 %}
+                                <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs">Παραλήφθηκε</span>
+                            {% elif order.status == 1 %}
+                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium italic">Πλύσιμο...</span>
+                            {% elif order.status == 2 %}
+                                <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-medium italic">Στέγνωμα...</span>
+                            {% elif order.status == 3 %}
+                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">ΕΤΟΙΜΑ</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-4 flex gap-2">
+                            <a href="/update-status/{{ order.id }}/1" class="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 transition">Πλύσιμο</a>
+                            <a href="/update-status/{{ order.id }}/2" class="px-2 py-1 bg-orange-400 text-white rounded text-xs hover:bg-orange-500 transition">Στέγνωμα</a>
+                            <a href="/update-status/{{ order.id }}/3" class="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 transition">Έτοιμο</a>
+                        </td>
+                        <td class="p-4 text-right font-bold {{ 'text-red-500' if order.debt_amount > 0 else 'text-green-600' }}">
+                            {{ order.debt_amount }}€
+                        </td>
+                        <td class="p-4 text-center">
+                            <a href="/delete-order/{{ order.id }}" 
+                               onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ order.fullname }};')"
+                               class="text-red-500 hover:text-red-700 p-2 transition">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

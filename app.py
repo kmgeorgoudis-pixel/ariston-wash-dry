@@ -3025,8 +3025,13 @@ def track_order(order_code):
 @app.route("/orders-list")
 @login_required
 def orders_list():
-    # Παίρνουμε όλες τις παραγγελίες από τη βάση, τις πιο πρόσφατες πάνω-πάνω
+    # Έλεγχος πρόσβασης: Μόνο για admin και subadmin
+    if current_user.role not in ['admin', 'subadmin']:
+        return abort(403)  # Αν δεν είναι κανένα από τα δύο, πετάει σφάλμα πρόσβασης
+
+    # Παίρνουμε όλες τις παραγγελίες από τη βάση (πρώτα οι πιο πρόσφατες)
     all_orders = Order.query.order_by(Order.created_at.desc()).all()
+    
     return render_template("admin/orders_list.html", orders=all_orders)
 
 # Αλλαγή Status (θα καλείται με κουμπί)
