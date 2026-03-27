@@ -2821,7 +2821,7 @@ from datetime import datetime
 # --- ΣΥΝΑΡΤΗΣΗ ΓΙΑ QR ΜΕ LOGO ---
 def generate_qr_with_logo(order_code):
     # Το URL που θα σκανάρει ο πελάτης
-    base_url = "https://ariston-wash-dry.onrender.com/track/" 
+    base_url = "https://aristonwashdry.gr/track/" 
     data = f"{base_url}{order_code}"
 
     qr = qrcode.QRCode(
