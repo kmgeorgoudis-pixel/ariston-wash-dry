@@ -3139,6 +3139,12 @@ def generate_special_pdf():
         return response
     except Exception as e:
         return f"Σφάλμα κατά τη δημιουργία του PDF: {str(e)}"
+@app.route('/update-debt/<int:order_id>/<float:new_amount>')
+def update_debt(order_id, new_amount):
+    order = Order.query.get_or_404(order_id)
+    order.debt_amount = new_amount
+    db.session.commit()
+    return redirect(url_for('orders_list')) # Ή όπως έχεις ονομάσει το route του πίνακα
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
