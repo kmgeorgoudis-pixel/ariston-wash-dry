@@ -2383,25 +2383,26 @@ def lucky_wheel():
     can_spin = True
     wait_message = ""
     
-    # Εξαίρεση για τον admin αν θέλεις να βλέπει πάντα το κουμπί
-    unlimited_spin_user = 'kmgeorgoudis@gmail.com'
+    # Λίστα με τα emails που έχουν απεριόριστα spins
+    unlimited_spin_users = ['kmgeorgoudis@gmail.com', 'kostaskrikonis09kr@gmail.com']
     
-    if user.last_spin_date and user.email != unlimited_spin_user:
-        next_spin = user.last_spin_date + timedelta(days=7)
-        if now < next_spin:
-            can_spin = False
-            diff = next_spin - now
-            days = diff.days
-            hours = diff.seconds // 3600
-            minutes = (diff.seconds % 3600) // 60
-            
-            # Δημιουργία δυναμικού μηνύματος
-            parts = []
-            if days > 0: parts.append(f"{days} ημέρες")
-            if hours > 0: parts.append(f"{hours} ώρες")
-            if minutes > 0: parts.append(f"{minutes} λεπτά")
-            
-            wait_message = "Επίστρεψε σε " + ", ".join(parts)
+    # Αν ο χρήστης ΔΕΝ είναι στη λίστα των admin, τότε έλεγξε τον περιορισμό των 7 ημερών
+    if user.email not in unlimited_spin_users:
+        if user.last_spin_date:
+            next_spin = user.last_spin_date + timedelta(days=7)
+            if now < next_spin:
+                can_spin = False
+                diff = next_spin - now
+                days = diff.days
+                hours = diff.seconds // 3600
+                minutes = (diff.seconds % 3600) // 60
+                
+                parts = []
+                if days > 0: parts.append(f"{days} ημέρες")
+                if hours > 0: parts.append(f"{hours} ώρες")
+                if minutes > 0: parts.append(f"{minutes} λεπτά")
+                
+                wait_message = "Επίστρεψε σε " + ", ".join(parts)
         
     return render_template('wheel.html', can_spin=can_spin, wait_message=wait_message, username=user.fullname)
 
