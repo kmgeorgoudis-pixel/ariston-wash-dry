@@ -2411,10 +2411,13 @@ def lucky_wheel():
 def spin_result():
     user = current_user
     now = datetime.utcnow()
-    unlimited_spin_user = 'kmgeorgoudis@gmail.com'
+    
+    # Ορισμός ως λίστα για σωστό έλεγχο
+    unlimited_emails = ['kmgeorgoudis@gmail.com', 'kostaskrikonis09kr@gmail.com']
     
     # 1. Έλεγχος περιορισμού (7 μέρες)
-    if user.email != unlimited_spin_user:
+    # Αν το email ΔΕΝ είναι στη λίστα των προνομιούχων
+    if user.email not in unlimited_emails:
         if user.last_spin_date and (now - user.last_spin_date) < timedelta(days=7):
             return jsonify({'error': 'Already spun'}), 400
     
