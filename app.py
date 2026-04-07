@@ -3379,7 +3379,7 @@ def subadmin_add_activity(user_id):
         flash('Το ποσό δεν είναι έγκυρο.', 'danger')
     
     # ΠΡΟΣΟΧΗ: Εδώ αλλάζουμε το redirect για να μείνει ο Sub-Admin στη σελίδα που ήταν
-    return redirect(url_for('subadmin_user_profile', user_id=user_id))
+    return redirect('/subadmin/users')
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")

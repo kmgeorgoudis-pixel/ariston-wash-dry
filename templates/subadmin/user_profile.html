@@ -63,8 +63,8 @@
     <!-- Γρήγορη Πρόσθεση -->
     <label style="color:#64748b; font-weight:600; font-size:13px; display:block; margin-bottom:10px;">Γρήγορη Πρόσθεση Ποσού:</label>
     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
-        {% for price in [1, 2, 5, 6, 8, 9, 10, 15, 20] %}
-        <form action="/admin/add_activity/{{ user.id }}" method="POST">
+        {% for price in [1, 2, 5, 6, 8, 9,] %}
+        <form action="/subadmin/add_activity/{{ user.id }}" method="POST">
             <input type="hidden" name="amount" value="{{ price }}">
             <input type="hidden" name="service_name" value="Υπηρεσία {{ price }}€">
             <button type="submit" style="padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; color: #0369a1; font-weight: bold; cursor: pointer; transition: 0.2s;" 
