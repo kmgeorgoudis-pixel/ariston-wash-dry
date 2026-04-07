@@ -16,9 +16,6 @@
         <p><strong>ID:</strong> {{ user.id }}</p>
         <p><strong>Όνομα:</strong> {{ user.fullname or "-" }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Ημερομηνία Εγγραφής:</strong>
-            {{ user.created_at.strftime('%d/%m/%Y') if user.created_at else '-' }}
-        </p>
         <p><strong>Ρόλος:</strong>
             {% if user.is_admin %}
                 <span style="color:#0d47a1; font-weight:700;">Admin</span>
@@ -44,11 +41,9 @@
         </div>
         
         <!-- Κουμπί για Ολικό Μηδενισμό -->
-        <form action="/admin/add_activity/{{ user.id }}" method="POST" onsubmit="return confirm('Θέλετε να μηδενίσετε το υπόλοιπο αυτού του πελάτη;');">
+        <form action="/admin/add_activity/{{ user.id }}" method="POST" onsubmit="return confirm('Θέλετε να μηδενίσετε το υπόλοιπο;');">
             {% set current_balance = user.activities|sum(attribute='amount') %}
-            <input type="hidden" name="amount_input" value="{{ current_balance }}">
-            <input type="hidden" name="service_name" value="Ολικός Μηδενισμός">
-            <input type="hidden" name="is_negative" value="true">
+            <input type="hidden" name="minus_amount" value="{{ current_balance }}">
             <button type="submit" style="padding: 8px 15px; border: 1px solid #b91c1c; border-radius: 8px; background: #fee2e2; color: #b91c1c; font-weight: bold; cursor: pointer; font-size: 12px;">
                 🗑️ Μηδενισμός
             </button>
@@ -68,31 +63,15 @@
         {% endfor %}
     </div>
 
-    <div class="admin-card-title" style="font-size: 13px; margin-bottom: 10px; color: #4b5563;">Χειροκίνητη Αφαίρεση</div>
-    <div style="margin-bottom: 20px; padding: 15px; background: #f9fafb; border-radius: 8px; border: 1px dashed #fca5a5;">
+    <div class="admin-card-title" style="font-size: 13px; margin-bottom: 10px; color: #b91c1c;">Χειροκίνητη Αφαίρεση</div>
+    <div style="margin-bottom: 10px; padding: 15px; background: #fef2f2; border-radius: 8px; border: 1px dashed #fca5a5;">
         <form action="/admin/add_activity/{{ user.id }}" method="POST" style="display: flex; gap: 8px; align-items: center;">
-            <input type="number" name="amount_input" step="0.01" placeholder="Ποσό προς αφαίρεση" required
-                   style="padding: 8px; border: 1px solid #fca5a5; border-radius: 8px; width: 160px; font-size: 13px;">
-            <input type="hidden" name="service_name" value="Διόρθωση / Αφαίρεση">
-            <input type="hidden" name="is_negative" value="true">
+            <input type="number" name="minus_amount" step="0.01" placeholder="Ποσό..." required
+                   style="padding: 8px; border: 1px solid #fca5a5; border-radius: 8px; width: 120px; font-size: 14px;">
             <button type="submit" style="padding: 8px 15px; border: none; border-radius: 8px; background: #ef4444; color: white; font-weight: bold; cursor: pointer;">
                 - Αφαίρεση
             </button>
         </form>
-    </div>
-
-    <div class="admin-card-title" style="font-size: 13px; margin-bottom: 10px; color: #4b5563;">Πρόσφατες Κινήσεις (Compact)</div>
-    <div style="max-height: 200px; overflow-y: auto; font-size: 13px; background: white; border: 1px solid #edf2f7; border-radius: 8px;">
-        {% for act in user.activities|sort(attribute='timestamp', reverse=True) %}
-            <div style="display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #edf2f7;">
-                <span style="color: #374151;">{{ act.activity_type }}</span>
-                <strong style="color: {{ '#b91c1c' if act.amount < 0 else '#059669' }};">
-                    {{ "%.2f"|format(act.amount) }}€
-                </strong>
-            </div>
-        {% else %}
-            <p style="color: #9ca3af; text-align: center; padding: 10px;">Καμία κίνηση ακόμα.</p>
-        {% endfor %}
     </div>
 </div>
 
@@ -100,12 +79,7 @@
 <div class="admin-card" style="margin-bottom:20px;">
     <div class="admin-card-title">Ενέργειες</div>
     <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
-        <form action="/admin/users/{{ user.id }}/delete" method="POST" onsubmit="return confirm('Οριστική διαγραφή χρήστη;');">
-            <button type="submit" style="padding:10px 14px; border:none; border-radius:10px; background:#fee2e2; color:#b91c1c; cursor:pointer;">
-                Διαγραφή Χρήστη
-            </button>
-        </form>
-
+        
         <a href="/admin/users/{{ user.id }}/coupon" style="padding:10px 14px; border-radius:10px; background:#e0f2fe; color:#0369a1; text-decoration:none;">
             Αποστολή Κουπονιού
         </a>
@@ -114,8 +88,12 @@
             Αποστολή Ανακοίνωσης
         </a>
 
+        <a href="/admin/users/{{ user.id }}/ready-clothes" style="padding:10px 14px; border-radius:10px; background:#dcfce7; color:#166534; text-decoration:none; display:flex; align-items:center; gap:5px;">
+            <span>👕</span> Έτοιμα Ρούχα
+        </a>
+
         {% if user.qr_enabled %}
-        <form action="/admin/users/{{ user.id }}/toggle_card" method="POST" onsubmit="return confirm('Απενεργοποίηση κάρτας;');">
+        <form action="/admin/users/{{ user.id }}/toggle_card" method="POST">
             <button type="submit" style="padding:10px 14px; border:none; border-radius:10px; background:#fee2e2; color:#b91c1c; cursor:pointer;">
                 Απενεργοποίηση Κάρτας
             </button>
@@ -132,29 +110,38 @@
             Μεταφορά Ποσού
         </a>
 
-        <a href="/admin/users/{{ user.id }}/ready-clothes" style="padding:10px 14px; border-radius:10px; background:#dcfce7; color:#166534; text-decoration:none; display:flex; align-items:center; gap:5px;">
-            <span>👕</span> Έτοιμα Ρούχα
-        </a>
-
+        <!-- Δικαιώματα Admin / Sub-Admin -->
         {% if not user.is_admin %}
-            <form action="/admin/users/{{ user.id }}/make_admin" method="POST" onsubmit="return confirm('Να γίνει Admin;');">
-                <button type="submit" style="padding:10px 14px; border:none; border-radius:10px; background:#dbeafe; color:#1e3a8a; cursor:pointer;">
-                    Κάνε Admin
-                </button>
+            <form action="/admin/users/{{ user.id }}/make_admin" method="POST">
+                <button type="submit" style="padding:10px 14px; border:none; border-radius:10px; background:#dbeafe; color:#1e3a8a; cursor:pointer;">Κάνε Admin</button>
             </form>
         {% else %}
-            <form action="/admin/users/{{ user.id }}/remove_admin" method="POST" onsubmit="return confirm('Αφαίρεση δικαιωμάτων Admin;');">
-                <button type="submit" style="padding:10px 14px; border:none; border-radius:10px; background:#fee2e2; color:#b91c1c; cursor:pointer;">
-                    Αφαίρεση Admin
-                </button>
+            <form action="/admin/users/{{ user.id }}/remove_admin" method="POST">
+                <button type="submit" style="padding:10px 14px; border:none; border-radius:10px; background:#fee2e2; color:#b91c1c; cursor:pointer;">Αφαίρεση Admin</button>
             </form>
         {% endif %}
+
+        {% if not user.is_sub_admin and not user.is_admin %}
+            <form action="/admin/users/{{ user.id }}/make_sub_admin" method="POST">
+                <button type="submit" style="padding:10px 14px; border:1px solid #0369a1; border-radius:10px; background:#f0f9ff; color:#0369a1; cursor:pointer;">Κάνε Sub-Admin</button>
+            </form>
+        {% elif user.is_sub_admin %}
+            <form action="/admin/users/{{ user.id }}/remove_sub_admin" method="POST">
+                <button type="submit" style="padding:10px 14px; border:none; border-radius:10px; background:#ffedd5; color:#9a3412; cursor:pointer;">Αφαίρεση Sub-Admin</button>
+            </form>
+        {% endif %}
+
+        <form action="/admin/users/{{ user.id }}/delete" method="POST" onsubmit="return confirm('Οριστική διαγραφή χρήστη;');">
+            <button type="submit" style="padding:10px 14px; border:none; border-radius:10px; background:#454545; color:white; cursor:pointer;">
+                Διαγραφή Χρήστη
+            </button>
+        </form>
     </div>
 </div>
 
-<!-- Κουπόνια & Ανακοινώσεις (Bottom Sections) -->
+<!-- Κουπόνια Χρήστη -->
 <div class="admin-card" style="margin-top:20px;">
-    <div class="admin-card-title">Κουπόνια Χρήστη</div>
+    <div class="admin-card-title">Ενεργά Κουπόνια</div>
     {% if coupons %}
         {% for c in coupons %}
             <div style="padding:12px; border-bottom:1px solid #e5e7eb;">
@@ -183,9 +170,10 @@
         form.addEventListener('submit', function() {
             const button = this.querySelector('button[type="submit"]');
             if (button) {
-                button.disabled = true;
-                button.innerHTML = "⏳";
-                button.style.opacity = "0.5";
+                setTimeout(() => {
+                    button.disabled = true;
+                    button.innerHTML = "⏳";
+                }, 50);
             }
         });
     });
