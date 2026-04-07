@@ -3271,7 +3271,7 @@ def enter_giveaway(gv_id):
 def admin_manage_giveaways():
     # Παίρνουμε όλους τους διαγωνισμούς από τη βάση
     all_giveaways = Giveaway.query.order_by(Giveaway.id.desc()).all()
-    return render_template("admin_manage_giveaways.html", giveaways=all_giveaways)
+    return render_template("admin/admin_manage_giveaways.html", giveaways=all_giveaways)
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
