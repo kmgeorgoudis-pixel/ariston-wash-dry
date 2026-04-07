@@ -179,8 +179,8 @@ oauth = OAuth(app)
 # 2. Χρησιμοποιούμε τα ΟΝΟΜΑΤΑ (KEYS) που βλέπουμε στο Render Dashboard
 google = oauth.register(
     name='google',
-    client_id=os.environ.get('756874932059-tnc2qc5gbhq9tuuf0ce3bs2hp3860b54.apps.googleusercontent.com'),
-    client_secret=os.environ.get('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'),
+    client_id=os.environ.get('GOOGLE_CLIENT_ID'),
+    client_secret=os.environ.get('GOOGLE_CLIENT_SECRET'),
     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
     client_kwargs={'scope': 'openid email profile'}
 )
