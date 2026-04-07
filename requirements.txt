@@ -13,3 +13,4 @@ fpdf2
 pdfkit
 qrcode
 Pillow
+Authlib
