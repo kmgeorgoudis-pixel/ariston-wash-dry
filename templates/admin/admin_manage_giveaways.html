@@ -101,18 +101,26 @@
                         </td>
                         <td>{{ gv.entry_deadline.strftime('%d/%m/%Y') }}</td>
                         <td class="text-center">
-                            {% if gv.is_active %}
-                                <a href="/admin/giveaway/draw/{{ gv.id }}" 
-                                   class="btn btn-warning btn-sm fw-bold shadow-sm"
-                                   onclick="return confirm('Είστε σίγουροι; Η κλήρωση θα επιλέξει τυχαία έναν νικητή και θα κλείσει τον διαγωνισμό!')">
-                                    <i class="fas fa-random me-1"></i> Κλήρωση Τώρα
-                                </a>
-                            {% else %}
-                                <button class="btn btn-outline-secondary btn-sm" disabled>
-                                    <i class="fas fa-trophy me-1"></i> Νικητής ID: {{ gv.winner_id }}
-                                </button>
-                            {% endif %}
-                        </td>
+                    <div class="d-flex justify-content-center gap-2">
+                        {% if gv.is_active %}
+                            <a href="/admin/giveaway/draw/{{ gv.id }}" 
+                            class="btn btn-warning btn-sm fw-bold shadow-sm"
+                            onclick="return confirm('Είστε σίγουροι; Η κλήρωση θα επιλέξει τυχαία έναν νικητή και θα κλείσει τον διαγωνισμό!')">
+                                <i class="fas fa-random"></i> Κλήρωση
+                            </a>
+                        {% else %}
+                            <button class="btn btn-outline-secondary btn-sm" disabled>
+                                <i class="fas fa-trophy"></i> Νικητής: {{ gv.winner_id }}
+                            </button>
+                        {% endif %}
+
+                        <a href="/admin/giveaway/delete/{{ gv.id }}" 
+                        class="btn btn-danger btn-sm shadow-sm"
+                        onclick="return confirm('ΠΡΟΣΟΧΗ! Ο διαγωνισμός και όλες οι συμμετοχές του θα διαγραφούν οριστικά από τη βάση. Είστε σίγουροι;')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                </td>
                     </tr>
                     {% else %}
                     <tr>
