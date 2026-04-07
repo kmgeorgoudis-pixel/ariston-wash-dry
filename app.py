@@ -3273,27 +3273,21 @@ def admin_manage_giveaways():
     all_giveaways = Giveaway.query.order_by(Giveaway.id.desc()).all()
     return render_template("admin/admin_manage_giveaways.html", giveaways=all_giveaways)
 @app.route('/admin/giveaway/delete/<int:giveaway_id>')
-@login_required 
+@login_required
 def delete_giveaway(giveaway_id):
-    # Έλεγχος αν ο χρήστης είναι admin
-    if not current_user.is_admin: # ή current_user.role != 'admin' ανάλογα το app σου
-        flash('Δεν έχετε πρόσβαση!', 'danger')
-        return redirect(url_for('index'))
-
     gv = Giveaway.query.get_or_404(giveaway_id)
-    
     try:
-        # 1. Σβήνουμε τις συμμετοχές που συνδέονται με αυτόν τον διαγωνισμό
-        Entry.query.filter_by(giveaway_id=gv.id).delete()
+        # ΠΡΟΣΟΧΗ: Σβήνουμε πρώτα όλες τις συμμετοχές αυτού του giveaway
+        Entry.query.filter_by(giveaway_id=giveaway_id).delete()
         
-        # 2. Σβήνουμε τον ίδιο τον διαγωνισμό
+        # Μετά σβήνουμε το ίδιο το giveaway
         db.session.delete(gv)
         db.session.commit()
-        flash(f'Ο διαγωνισμός "{gv.title}" διαγράφηκε επιτυχώς!', 'success')
+        flash('Ο διαγωνισμός διαγράφηκε!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash('Παρουσιάστηκε σφάλμα κατά τη διαγραφή.', 'danger')
-
+        print(f"Error: {e}") # Αυτό θα εκτυπώσει το ακριβές σφάλμα στα logs του Render
+        flash(f'Σφάλμα: {str(e)}', 'danger')
     return redirect(url_for('admin_manage_giveaways'))
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
