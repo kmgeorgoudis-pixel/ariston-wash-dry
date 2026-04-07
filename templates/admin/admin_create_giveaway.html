@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-gift me-2"></i>Δημιουργία Νέου Διαγωνισμού</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">Τίτλος Διαγωνισμού</label>
+                            <input type="text" name="title" class="form-control" placeholder="π.χ. Μεγάλος Διαγωνισμός Πάσχα" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">Περιγραφή & Έπαθλα</label>
+                            <textarea name="description" class="form-control" rows="5" placeholder="Περιγράψτε τι κερδίζουν οι χρήστες..." required></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label font-weight-bold">Λήξη Συμμετοχών</label>
+                                <input type="datetime-local" name="deadline" class="form-control" required>
+                                <small class="text-muted">Μέχρι πότε μπορούν να δηλώσουν συμμετοχή.</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label font-weight-bold">Ημερομηνία Αποτελεσμάτων</label>
+                                <input type="datetime-local" name="results" class="form-control" required>
+                                <small class="text-muted">Πότε θα γίνει η ανακοίνωση του νικητή.</small>
+                            </div>
+                        </div>
+
+                        <hr>
+                        
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-plus-circle me-2"></i>Δημοσίευση Διαγωνισμού
+                            </button>
+                            <a href="/admin/dashboard" class="btn btn-link text-muted mt-2">Ακύρωση</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

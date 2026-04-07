@@ -3252,6 +3252,35 @@ def enter_giveaway(gv_id):
     db.session.commit()
     flash("Η συμμετοχή σου καταχωρήθηκε! Καλή επιτυχία! 🍀", "success")
     return redirect(url_for('view_giveaways'))
+from datetime import datetime
+
+@app.route("/admin/giveaway/new", methods=["GET", "POST"])
+@admin_required
+def create_giveaway():
+    if request.method == "POST":
+        title = request.form.get("title")
+        description = request.form.get("description")
+        # Μετατροπή των string ημερομηνιών σε Python Objects
+        deadline = datetime.strptime(request.form.get("deadline"), '%Y-%m-%dT%H:%M')
+        results = datetime.strptime(request.form.get("results"), '%Y-%m-%dT%H:%M')
+        
+        new_gv = Giveaway(
+            title=title,
+            description=description,
+            entry_deadline=deadline,
+            result_date=results
+        )
+        db.session.add(new_gv)
+        db.session.commit()
+        flash("Ο διαγωνισμός δημιουργήθηκε με επιτυχία!", "success")
+        return redirect("/admin/dashboard") # Ή όπου έχεις το admin panel
+    return render_template("admin_create_giveaway.html")
+@app.route("/giveaways")
+@login_required
+def view_giveaways():
+    # Παίρνουμε όλους τους ενεργούς διαγωνισμούς
+    active_giveaways = Giveaway.query.filter_by(is_active=True).all()
+    return render_template("giveaways.html", giveaways=active_giveaways)
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
