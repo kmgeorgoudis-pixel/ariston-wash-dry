@@ -21,6 +21,8 @@ from email.message import EmailMessage
 from functools import wraps
 from flask import redirect, session, flash
 import hashlib
+from authlib.integrations.flask_client import OAuth
+import hashlib
 
 def get_secure_hash(user_id):
     # Αυτό το "αλάτι" κάνει το link μοναδικό για το δικό σου site
@@ -169,6 +171,13 @@ def load_user(user_id):
 # ============================
 #       PUBLIC PAGES
 # ============================
+google = oauth.register(
+    name='google',
+    client_id=os.environ.get('756874932059-tnc2qc5gbhq9tuuf0ce3bs2hp3860b54.apps.googleusercontent.com'),
+    client_secret=os.environ.get('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'),
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'}
+)
 @app.context_processor
 def inject_coming_soon_flag():
     return dict(show_coming_soon=True)

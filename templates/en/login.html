@@ -206,6 +206,34 @@
             .login-container { padding: 40px 25px; border-radius: 30px; }
             .login-title { font-size: 20px; }
         }
+        .google-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #1f1f1f;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    padding: 0 16px;
+    height: 40px;
+    border: 1px solid #747775;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background-color .2s, box-shadow .2s;
+    font-size: 14px;
+    margin: 5px;
+}
+
+.google-btn:hover {
+    background-color: #f2f2f2;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.30), 0 1px 3px 1px rgba(60,64,67,.15);
+}
+
+.google-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+}
     </style>
 </head>
 <body>
@@ -236,7 +264,10 @@
                 <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
             </a>
         </div>
-
+        <a href="{{ url_for('google_login') }}" class="google-btn">
+    <img class="google-icon" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google">
+    Sign in with Google
+</a>
         <form action="/en/login" method="POST">
             <div class="form-field">
                 <label>Email Address</label>
