@@ -396,7 +396,7 @@ professional laundry Samos
     to { transform: translate(-50%, 0); opacity: 1; } 
 }
 
-    /* Container που κεντράρει τα πάντα στην οθόνη */
+   
     .video-center-wrapper {
         display: flex;
         justify-content: center;
@@ -404,12 +404,12 @@ professional laundry Samos
         padding: 20px;
     }
 
-    /* Το μικρό, στρογγυλεμένο κουμπί */
+    
     .btn-video-small {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background-color: #8b5cf6; /* Μοβ Ariston Style */
+        background-color: #8b5cf6; 
         color: white;
         text-decoration: none;
         padding: 8px 16px;
@@ -430,6 +430,39 @@ professional laundry Samos
         width: 18px;
         height: 18px;
     }
+    
+.nav-giveaway {
+    background: linear-gradient(45deg, #2563eb, #3b82f6); /* Μπλε gradient */
+    color: white !important;
+    border-radius: 50px; 
+    padding: 8px 20px !important;
+    margin-left: 10px;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+
+.nav-giveaway:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    background: linear-gradient(45deg, #1d4ed8, #2563eb);
+    filter: brightness(1.1);
+}
+
+
+@keyframes gift-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.nav-giveaway i {
+    animation: gift-pulse 2s infinite ease-in-out; /* Το εικονίδιο του δώρου πάλλεται */
+}
 
     </style>
 </head>
@@ -575,7 +608,7 @@ professional laundry Samos
     </a>
 </div>
 <li class="nav-item">
-    <a class="nav-link fw-bold text-primary" href="/giveaways">
+    <a class="nav-link nav-giveaway" href="/giveaways">
         <i class="fas fa-gift me-1"></i> ΔΙΑΓΩΝΙΣΜΟΙ
     </a>
 </li>
