@@ -115,12 +115,11 @@ class Giveaway(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    entry_deadline = db.Column(db.DateTime, nullable=False)  # Μέχρι πότε δηλώνουν
-    result_date = db.Column(db.DateTime, nullable=False)     # Πότε βγαίνουν τα αποτελέσματα
-    winner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # Ο τυχερός
+    entry_deadline = db.Column(db.DateTime, nullable=False)
+    result_date = db.Column(db.DateTime, nullable=False)
+    winner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     is_active = db.Column(db.Boolean, default=True)
     
-    # Σχέση με τις συμμετοχές
     entries = db.relationship('GiveawayEntry', backref='giveaway', lazy=True)
 
 class GiveawayEntry(db.Model):
@@ -128,6 +127,9 @@ class GiveawayEntry(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     giveaway_id = db.Column(db.Integer, db.ForeignKey('giveaway.id'), nullable=False)
     entry_date = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # ΠΡΟΣΘΕΣΕ ΑΥΤΗ ΤΗ ΓΡΑΜΜΗ ΕΔΩ:
+    user = db.relationship('User', backref='entries')
 class Verification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
