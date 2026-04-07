@@ -181,6 +181,36 @@
             .register-container { padding: 40px 25px; border-radius: 30px; }
             .register-title { font-size: 20px; }
         }
+        /* Κουμπί Εγγραφής - Λίγο πιο έντονο */
+.google-signup-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #1a73e8; /* Μπλε χρώμα Google */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    padding: 0 20px;
+    height: 44px;
+    border: 2px solid #1a73e8; /* Μπλε περίγραμμα */
+    border-radius: 22px;
+    text-decoration: none;
+    transition: all .2s ease;
+    font-size: 15px;
+    margin: 10px;
+}
+
+.google-signup-btn:hover {
+    background-color: #f8fbff;
+    box-shadow: 0 4px 6px rgba(26, 115, 232, 0.2);
+    transform: translateY(-1px);
+}
+
+.google-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 12px;
+}
     </style>
 </head>
 <body>
@@ -201,7 +231,10 @@
                 <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="English" class="flag-icon">
             </a>
         </div>
-
+        <a href="{{ url_for('google_login') }}" class="google-signup-btn">
+    <img class="google-icon" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google">
+     Sign up with Google
+</a>
         <form action="/en/register" method="POST">
             <div class="form-field">
                 <label>Full Name</label>
