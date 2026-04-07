@@ -3221,7 +3221,7 @@ def create_giveaway():
         db.session.commit()
         flash("Ο διαγωνισμός δημιουργήθηκε με επιτυχία!", "success")
         return redirect("/admin/dashboard")
-    return render_template("admin_create_giveaway.html")
+    return render_template("/admin/admin_create_giveaway.html")
 
 # 2. Κλήρωση (Admin)
 @app.route("/admin/giveaway/draw/<int:gv_id>")
