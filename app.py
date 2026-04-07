@@ -3293,33 +3293,49 @@ def delete_giveaway(giveaway_id):
 @app.route('/admin/add_activity/<int:user_id>', methods=['POST'])
 @login_required
 def add_activity(user_id):
-    # Έλεγχος αν είναι Admin ή Sub-Admin (προσάρμοσε το ανάλογα με τα πεδία σου)
-    if not (current_user.is_admin or getattr(current_user, 'is_sub_admin', False)):
+    # Έλεγχος πρόσβασης: Επιτρέπεται σε Admin ΚΑΙ Sub-Admin
+    is_sub_admin = getattr(current_user, 'is_sub_admin', False)
+    if not (current_user.is_admin or is_sub_admin):
         flash('Δεν έχετε δικαίωμα για αυτή την ενέργεια.', 'danger')
         return redirect(url_for('index'))
         
+    # Παίρνουμε το ποσό είτε από τα έτοιμα κουμπιά (amount) είτε από το πεδίο αφαίρεσης (minus_amount)
     amount = request.form.get('amount', type=float)
-    service_name = request.form.get('service_name', 'Υπηρεσία')
+    minus_amount = request.form.get('minus_amount', type=float)
     
-    if amount:
+    # Προσδιορίζουμε το τελικό ποσό και το όνομα της υπηρεσίας
+    if minus_amount:
+        # Αν δόθηκε ποσό στο πεδίο αφαίρεσης, το κάνουμε αρνητικό
+        final_amount = -abs(minus_amount)
+        service_name = "Αφαίρεση / Διόρθωση"
+    else:
+        # Αλλιώς παίρνουμε το ποσό από το κουμπί
+        final_amount = amount
+        service_name = request.form.get('service_name', 'Υπηρεσία')
+    
+    if final_amount is not None:
         try:
             new_action = UserActivity(
                 user_id=user_id,
                 activity_type=service_name,
-                amount=amount,
-                timestamp=datetime.utcnow() # Σιγουρέψου ότι έχεις κάνει import το datetime
+                amount=final_amount,
+                timestamp=datetime.utcnow()
             )
             db.session.add(new_action)
             db.session.commit()
-            flash(f'Επιτυχής καταγραφή: {amount}€', 'success')
+            
+            # Διαφορετικό μήνυμα αν είναι πρόσθεση ή αφαίρεση
+            if final_amount > 0:
+                flash(f'Επιτυχής καταγραφή: +{final_amount}€', 'success')
+            else:
+                flash(f'Επιτυχής αφαίρεση: {final_amount}€', 'warning')
+                
         except Exception as e:
             db.session.rollback()
             flash(f'Σφάλμα κατά την αποθήκευση: {str(e)}', 'danger')
     else:
         flash('Το ποσό δεν είναι έγκυρο.', 'danger')
         
-    # ΠΡΟΣΟΧΗ: Εδώ βάλε το όνομα της συνάρτησης που δείχνει το προφίλ στο Admin
-    # Αν η συνάρτηση προφίλ σου λέγεται π.χ. def admin_user(id): τότε βάλε 'admin_user'
     return redirect(url_for('admin_user_profile', user_id=user_id))
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
