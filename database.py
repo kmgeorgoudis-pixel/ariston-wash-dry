@@ -130,6 +130,15 @@ class GiveawayEntry(db.Model):
     
     # ΠΡΟΣΘΕΣΕ ΑΥΤΗ ΤΗ ΓΡΑΜΜΗ ΕΔΩ:
     user = db.relationship('User', backref='entries')
+class UserActivity(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    activity_type = db.Column(db.String(100), nullable=False) # π.χ. "Πλύσιμο 6€"
+    amount = db.Column(db.Float, nullable=False)            # Το ποσό: 1, 2, 5, 6, 8, 9
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Σύνδεση με τον User για να μπορούμε να καλούμε user.activities
+    user = db.relationship('User', backref=db.backref('activities', lazy=True, cascade="all, delete-orphan"))
 class Verification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)

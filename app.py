@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
-from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage, Score, Verification, Order, Giveaway, GiveawayEntry
+from database import db, init_db, User, Coupon, Announcement, Review, ContactMessage, Score, Verification, Order, Giveaway, GiveawayEntry, UserActivity
 import random
 import smtplib
 import time
@@ -3290,6 +3290,37 @@ def delete_giveaway(giveaway_id):
         print(f"Error: {e}")
         flash('Παρουσιάστηκε σφάλμα κατά τη διαγραφή.', 'danger')
     return redirect(url_for('admin_manage_giveaways'))
+@app.route('/admin/add_activity/<int:user_id>', methods=['POST'])
+@login_required
+def add_activity(user_id):
+    # Έλεγχος αν είναι Admin ή Sub-Admin (προσάρμοσε το ανάλογα με τα πεδία σου)
+    if not (current_user.is_admin or getattr(current_user, 'is_sub_admin', False)):
+        flash('Δεν έχετε δικαίωμα για αυτή την ενέργεια.', 'danger')
+        return redirect(url_for('index'))
+        
+    amount = request.form.get('amount', type=float)
+    service_name = request.form.get('service_name', 'Υπηρεσία')
+    
+    if amount:
+        try:
+            new_action = UserActivity(
+                user_id=user_id,
+                activity_type=service_name,
+                amount=amount,
+                timestamp=datetime.utcnow() # Σιγουρέψου ότι έχεις κάνει import το datetime
+            )
+            db.session.add(new_action)
+            db.session.commit()
+            flash(f'Επιτυχής καταγραφή: {amount}€', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Σφάλμα κατά την αποθήκευση: {str(e)}', 'danger')
+    else:
+        flash('Το ποσό δεν είναι έγκυρο.', 'danger')
+        
+    # ΠΡΟΣΟΧΗ: Εδώ βάλε το όνομα της συνάρτησης που δείχνει το προφίλ στο Admin
+    # Αν η συνάρτηση προφίλ σου λέγεται π.χ. def admin_user(id): τότε βάλε 'admin_user'
+    return redirect(url_for('admin_user_profile', user_id=user_id))
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
