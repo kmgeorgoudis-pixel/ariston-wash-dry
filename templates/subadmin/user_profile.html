@@ -51,7 +51,43 @@
         </div>
     </div>
 </div>
+<!-- Οικονομικό Τεφτέρι (Sub-Admin Version) -->
+<div style="background:#fff; padding:25px; border-radius:16px; box-shadow:0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; border-left: 5px solid #0369a1; margin-bottom:25px;">
+    <div style="font-size:18px; font-weight:700; color:#0f172a; margin-bottom:15px; display:flex; align-items:center; justify-content:space-between;">
+        <span>💰 Οικονομικό Τεφτέρι</span>
+        <div style="font-size: 20px; color: #0369a1;">
+            {{ "%.2f"|format(user.activities|sum(attribute='amount')) }} €
+        </div>
+    </div>
 
+    <!-- Γρήγορη Πρόσθεση -->
+    <label style="color:#64748b; font-weight:600; font-size:13px; display:block; margin-bottom:10px;">Γρήγορη Πρόσθεση Ποσού:</label>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+        {% for price in [1, 2, 5, 6, 8, 9, 10, 15, 20] %}
+        <form action="/admin/add_activity/{{ user.id }}" method="POST">
+            <input type="hidden" name="amount" value="{{ price }}">
+            <input type="hidden" name="service_name" value="Υπηρεσία {{ price }}€">
+            <button type="submit" style="padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; color: #0369a1; font-weight: bold; cursor: pointer; transition: 0.2s;" 
+                    onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
+                +{{ price }}€
+            </button>
+        </form>
+        {% endfor %}
+    </div>
+
+    <!-- Χειροκίνητη Αφαίρεση -->
+    <label style="color:#b91c1c; font-weight:600; font-size:13px; display:block; margin-bottom:10px;">Χειροκίνητη Αφαίρεση / Διόρθωση:</label>
+    <div style="padding: 15px; background: #fff1f2; border-radius: 12px; border: 1px dashed #fecaca;">
+        <form action="/admin/add_activity/{{ user.id }}" method="POST" style="display: flex; gap: 10px; align-items: center;">
+            <input type="number" name="minus_amount" step="0.01" placeholder="Ποσό αφαίρεσης..." required
+                   style="padding: 10px; border: 1px solid #fda4af; border-radius: 8px; width: 160px; font-size: 14px;">
+            <button type="submit" style="padding: 10px 20px; border: none; border-radius: 8px; background: #e11d48; color: white; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                    onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                Εκτέλεση Αφαίρεσης
+            </button>
+        </form>
+    </div>
+</div>
 <div style="background:#fff; padding:25px; border-radius:16px; box-shadow:0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;">
     <div style="font-size:18px; font-weight:700; color:#0f172a; margin-bottom:20px;">
         ⚡ Διαθέσιμες Ενέργειες
