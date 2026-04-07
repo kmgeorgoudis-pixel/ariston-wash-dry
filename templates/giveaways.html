@@ -59,15 +59,15 @@
                         </div>
 
                         {% if current_user.is_authenticated %}
-                            {# Έλεγχος αν ο χρήστης έχει ήδη συμμετάσχει #}
-                            {% set user_entered = [] %}
+                            {# ΔΙΟΡΘΩΜΕΝΟΣ ΕΛΕΓΧΟΣ ΜΕ NAMESPACE #}
+                            {% set check = namespace(user_entered=false) %}
                             {% for entry in gv.entries %}
                                 {% if entry.user_id == current_user.id %}
-                                    {% do user_entered.append(1) %}
+                                    {% set check.user_entered = true %}
                                 {% endif %}
                             {% endfor %}
 
-                            {% if user_entered %}
+                            {% if check.user_entered %}
                                 <div class="alert alert-success text-center py-3">
                                     <i class="fas fa-check-circle me-2"></i> 
                                     <strong>Έχεις ήδη δηλώσει συμμετοχή!</strong><br>
