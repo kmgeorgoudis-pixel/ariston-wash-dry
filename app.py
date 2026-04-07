@@ -173,7 +173,6 @@ def load_user(user_id):
 # ============================
 
 
-
 # 1. Ορίζουμε το oauth object
 oauth = OAuth(app)
 
