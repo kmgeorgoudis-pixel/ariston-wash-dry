@@ -3198,62 +3198,9 @@ def google_authorize():
     flash("Αποτυχία σύνδεσης με τη Google.", "danger")
     return redirect(url_for('login'))
 import random
-
-# Δημιουργία Διαγωνισμού (Admin)
-@app.route("/admin/giveaway/new", methods=["GET", "POST"])
-@admin_required
-def create_giveaway():
-    if request.method == "POST":
-        new_gv = Giveaway(
-            title=request.form.get("title"),
-            description=request.form.get("description"),
-            entry_deadline=datetime.strptime(request.form.get("deadline"), '%Y-%m-%dT%H:%M'),
-            result_date=datetime.strptime(request.form.get("results"), '%Y-%m-%dT%H:%M')
-        )
-        db.session.add(new_gv)
-        db.session.commit()
-        flash("Ο διαγωνισμός δημιουργήθηκε!", "success")
-        return redirect("/admin/dashboard")
-    return render_template("admin_create_giveaway.html")
-
-# Κλήρωση (Admin)
-@app.route("/admin/giveaway/draw/<int:gv_id>")
-@admin_required
-def draw_winner(gv_id):
-    giveaway = Giveaway.query.get_or_404(gv_id)
-    entries = GiveawayEntry.query.filter_by(giveaway_id=gv_id).all()
-    
-    if entries:
-        lucky_entry = random.choice(entries)
-        giveaway.winner_id = lucky_entry.user_id
-        giveaway.is_active = False
-        db.session.commit()
-        flash(f"Η κλήρωση έγινε! Νικητής: {lucky_entry.user.fullname}", "success")
-    else:
-        flash("Δεν υπάρχουν συμμετοχές για αυτόν τον διαγωνισμό.", "warning")
-    return redirect("/admin/dashboard")
-@app.route("/giveaway/enter/<int:gv_id>", methods=["POST"])
-@login_required
-def enter_giveaway(gv_id):
-    # Έλεγχος αν έχει ήδη συμμετάσχει
-    existing = GiveawayEntry.query.filter_by(user_id=current_user.id, giveaway_id=gv_id).first()
-    if existing:
-        flash("Έχεις ήδη δηλώσει συμμετοχή!", "info")
-        return redirect(url_for('view_giveaways'))
-    
-    # Έλεγχος ημερομηνίας
-    giveaway = Giveaway.query.get(gv_id)
-    if datetime.utcnow() > giveaway.entry_deadline:
-        flash("Η προθεσμία για αυτόν τον διαγωνισμό έχει λήξει.", "danger")
-        return redirect(url_for('view_giveaways'))
-
-    new_entry = GiveawayEntry(user_id=current_user.id, giveaway_id=gv_id)
-    db.session.add(new_entry)
-    db.session.commit()
-    flash("Η συμμετοχή σου καταχωρήθηκε! Καλή επιτυχία! 🍀", "success")
-    return redirect(url_for('view_giveaways'))
 from datetime import datetime
 
+# 1. Δημιουργία Διαγωνισμού (Admin) - ΜΙΑ ΦΟΡΑ ΜΟΝΟ
 @app.route("/admin/giveaway/new", methods=["GET", "POST"])
 @admin_required
 def create_giveaway():
@@ -3273,14 +3220,52 @@ def create_giveaway():
         db.session.add(new_gv)
         db.session.commit()
         flash("Ο διαγωνισμός δημιουργήθηκε με επιτυχία!", "success")
-        return redirect("/admin/dashboard") # Ή όπου έχεις το admin panel
+        return redirect("/admin/dashboard")
     return render_template("admin_create_giveaway.html")
+
+# 2. Κλήρωση (Admin)
+@app.route("/admin/giveaway/draw/<int:gv_id>")
+@admin_required
+def draw_winner(gv_id):
+    giveaway = Giveaway.query.get_or_404(gv_id)
+    entries = GiveawayEntry.query.filter_by(giveaway_id=gv_id).all()
+    
+    if entries:
+        lucky_entry = random.choice(entries)
+        giveaway.winner_id = lucky_entry.user_id
+        giveaway.is_active = False
+        db.session.commit()
+        flash(f"Η κλήρωση έγινε! Νικητής: {lucky_entry.user.fullname}", "success")
+    else:
+        flash("Δεν υπάρχουν συμμετοχές για αυτόν τον διαγωνισμό.", "warning")
+    return redirect("/admin/dashboard")
+
+# 3. Σελίδα Διαγωνισμών (Χρήστης)
 @app.route("/giveaways")
 @login_required
 def view_giveaways():
-    # Παίρνουμε όλους τους ενεργούς διαγωνισμούς
     active_giveaways = Giveaway.query.filter_by(is_active=True).all()
     return render_template("giveaways.html", giveaways=active_giveaways)
+
+# 4. Συμμετοχή σε Διαγωνισμό (Χρήστης)
+@app.route("/giveaway/enter/<int:gv_id>", methods=["POST"])
+@login_required
+def enter_giveaway(gv_id):
+    existing = GiveawayEntry.query.filter_by(user_id=current_user.id, giveaway_id=gv_id).first()
+    if existing:
+        flash("Έχεις ήδη δηλώσει συμμετοχή!", "info")
+        return redirect(url_for('view_giveaways'))
+    
+    giveaway = Giveaway.query.get(gv_id)
+    if datetime.utcnow() > giveaway.entry_deadline:
+        flash("Η προθεσμία για αυτόν τον διαγωνισμό έχει λήξει.", "danger")
+        return redirect(url_for('view_giveaways'))
+
+    new_entry = GiveawayEntry(user_id=current_user.id, giveaway_id=gv_id)
+    db.session.add(new_entry)
+    db.session.commit()
+    flash("Η συμμετοχή σου καταχωρήθηκε! Καλή επιτυχία! 🍀", "success")
+    return redirect(url_for('view_giveaways'))
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
