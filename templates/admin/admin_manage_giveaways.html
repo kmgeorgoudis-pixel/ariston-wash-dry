@@ -10,7 +10,8 @@
         body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
         .admin-card { border: none; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
         .table-container { background: white; border-radius: 15px; padding: 20px; }
-        .badge-entries { font-size: 0.9rem; padding: 8px 12px; }
+        .badge-entries { font-size: 0.9rem; padding: 8px 12px; cursor: pointer; transition: 0.2s; }
+        .badge-entries:hover { transform: scale(1.05); filter: brightness(1.1); }
     </style>
 </head>
 <body>
@@ -37,7 +38,7 @@
     <div class="row mb-4">
         <div class="col">
             <h2 class="fw-bold text-dark"><i class="fas fa-trophy text-warning me-2"></i> Λίστα Διαγωνισμών</h2>
-            <p class="text-muted">Εδώ μπορείτε να δείτε τις συμμετοχές και να αναδείξετε νικητές.</p>
+            <p class="text-muted">Πατήστε στον αριθμό συμμετοχών για να δείτε τα emails.</p>
         </div>
     </div>
 
@@ -61,9 +62,35 @@
                             <small class="text-muted text-truncate d-inline-block" style="max-width: 200px;">{{ gv.description[:50] }}...</small>
                         </td>
                         <td>
-                            <span class="badge bg-info text-dark badge-entries">
+                            <span class="badge bg-info text-dark badge-entries" data-bs-toggle="modal" data-bs-target="#entriesModal{{ gv.id }}">
                                 <i class="fas fa-users me-1"></i> {{ gv.entries|length }}
                             </span>
+
+                            <div class="modal fade" id="entriesModal{{ gv.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 shadow">
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title"><i class="fas fa-list me-2"></i> Συμμετέχοντες: {{ gv.title }}</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul class="list-group list-group-flush">
+                                                {% for entry in gv.entries %}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span><i class="fas fa-envelope me-2 text-muted"></i> {{ entry.user.email }}</span>
+                                                    <small class="text-muted" style="font-size: 0.7rem;">{{ entry.entry_date.strftime('%d/%m %H:%M') }}</small>
+                                                </li>
+                                                {% else %}
+                                                <li class="list-group-item text-center py-4 text-muted">Καμία συμμετοχή ακόμα.</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Κλείσιμο</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             {% if gv.is_active %}
