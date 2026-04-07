@@ -172,10 +172,11 @@ def load_user(user_id):
 #       PUBLIC PAGES
 # ============================
 
+
 # 1. ΠΡΩΤΑ ορίζουμε το oauth object
 oauth = OAuth(app)
 
-# 2. ΜΕΤΑ κάνουμε το register χρησιμοποιώντας τα ΟΝΟΜΑΤΑ των μεταβλητών από το Render
+# 2. ΜΕΤΑ κάνουμε το register χρησιμοποιώντας τα ΟΝΟΜΑΤΑ των μεταβλητών (όπως τα έγραψες στο Render)
 google = oauth.register(
     name='google',
     client_id=os.environ.get('756874932059-tnc2qc5gbhq9tuuf0ce3bs2hp3860b54.apps.googleusercontent.com'),
