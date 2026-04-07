@@ -3163,6 +3163,39 @@ def update_debt(order_id, new_amount):
     order.debt_amount = new_amount
     db.session.commit()
     return redirect(url_for('orders_list')) # Ή όπως έχεις ονομάσει το route του πίνακα
+@app.route('/login/google')
+def google_login():
+    # Αυτό δημιουργεί το URL ανακατεύθυνσης προς τη Google
+    redirect_uri = url_for('google_authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/login/google/authorize')
+def google_authorize():
+    token = google.authorize_access_token()
+    user_info = token.get('userinfo')
+    if user_info:
+        email = user_info['email']
+        fullname = user_info.get('name', 'Google User')
+        
+        # Ψάχνουμε αν υπάρχει ο χρήστης
+        user = User.query.filter_by(email=email).first()
+        
+        if not user:
+            # Αν δεν υπάρχει, τον δημιουργούμε (χωρίς password)
+            user = User(
+                fullname=fullname, 
+                email=email, 
+                password=generate_password_hash(os.urandom(24).hex())
+            )
+            db.session.add(user)
+            db.session.commit()
+            flash(f"Καλώς ήρθατε, {fullname}!", "success")
+        
+        login_user(user)
+        return redirect(url_for('index'))
+    
+    flash("Αποτυχία σύνδεσης με τη Google.", "danger")
+    return redirect(url_for('login'))
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
