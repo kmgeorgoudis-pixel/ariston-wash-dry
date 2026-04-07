@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Διαχείριση Διαγωνισμών | Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
+        .admin-card { border: none; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .table-container { background: white; border-radius: 15px; padding: 20px; }
+        .badge-entries { font-size: 0.9rem; padding: 8px 12px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/admin"><i class="fas fa-user-shield me-2"></i> Admin Panel</a>
+        <a href="/admin/giveaway/new" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Νέος Διαγωνισμός</a>
+    </div>
+</nav>
+
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold text-dark"><i class="fas fa-trophy text-warning me-2"></i> Λίστα Διαγωνισμών</h2>
+            <p class="text-muted">Εδώ μπορείτε να δείτε τις συμμετοχές και να αναδείξετε νικητές.</p>
+        </div>
+    </div>
+
+    <div class="table-container shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Τίτλος Διαγωνισμού</th>
+                        <th>Συμμετοχές</th>
+                        <th>Κατάσταση</th>
+                        <th>Λήξη</th>
+                        <th class="text-center">Ενέργειες</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for gv in giveaways %}
+                    <tr>
+                        <td>
+                            <div class="fw-bold text-primary">{{ gv.title }}</div>
+                            <small class="text-muted text-truncate d-inline-block" style="max-width: 200px;">{{ gv.description[:50] }}...</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-info text-dark badge-entries">
+                                <i class="fas fa-users me-1"></i> {{ gv.entries|length }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if gv.is_active %}
+                                <span class="badge bg-success"><i class="fas fa-check me-1"></i> Ενεργός</span>
+                            {% else %}
+                                <span class="badge bg-secondary"><i class="fas fa-lock me-1"></i> Ολοκληρώθηκε</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ gv.entry_deadline.strftime('%d/%m/%Y') }}</td>
+                        <td class="text-center">
+                            {% if gv.is_active %}
+                                <a href="/admin/giveaway/draw/{{ gv.id }}" 
+                                   class="btn btn-warning btn-sm fw-bold shadow-sm"
+                                   onclick="return confirm('Είστε σίγουροι; Η κλήρωση θα επιλέξει τυχαία έναν νικητή και θα κλείσει τον διαγωνισμό!')">
+                                    <i class="fas fa-random me-1"></i> Κλήρωση Τώρα
+                                </a>
+                            {% else %}
+                                <button class="btn btn-outline-secondary btn-sm" disabled>
+                                    <i class="fas fa-trophy me-1"></i> Νικητής ID: {{ gv.winner_id }}
+                                </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <i class="fas fa-ghost fa-3x text-light mb-3"></i>
+                            <p class="text-muted">Δεν βρέθηκαν διαγωνισμοί στη βάση.</p>
+                            <a href="/admin/giveaway/new" class="btn btn-primary btn-sm">Δημιουργία Πρώτου</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

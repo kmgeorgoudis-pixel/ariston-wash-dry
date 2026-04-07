@@ -3238,7 +3238,7 @@ def draw_winner(gv_id):
         flash(f"Η κλήρωση έγινε! Νικητής: {lucky_entry.user.fullname}", "success")
     else:
         flash("Δεν υπάρχουν συμμετοχές για αυτόν τον διαγωνισμό.", "warning")
-    return redirect("/admin/dashboard")
+    return redirect("/admin")
 
 # 3. Σελίδα Διαγωνισμών (Χρήστης)
 @app.route("/giveaways")
@@ -3266,6 +3266,12 @@ def enter_giveaway(gv_id):
     db.session.commit()
     flash("Η συμμετοχή σου καταχωρήθηκε! Καλή επιτυχία! 🍀", "success")
     return redirect(url_for('view_giveaways'))
+@app.route("/admin/giveaways")
+@admin_required
+def admin_manage_giveaways():
+    # Παίρνουμε όλους τους διαγωνισμούς από τη βάση
+    all_giveaways = Giveaway.query.order_by(Giveaway.id.desc()).all()
+    return render_template("/admin/admin_manage_giveaways.html", giveaways=all_giveaways)
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
