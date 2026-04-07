@@ -89,6 +89,12 @@
                     <span>ΗΜΕΡΕΣ ΔΡΑΣΤΗΡΙΟΣ</span>
                     <b>{{ days_member }}</b>
                 </div>
+                <div class="info-item info-full" style="background: rgba(0, 212, 255, 0.05); padding: 15px; border-radius: 20px; border: 1px solid rgba(0, 212, 255, 0.2); margin-top: 10px;">
+    <span>ΥΠΟΛΟΙΠΟ ΛΟΓΑΡΙΑΣΜΟΥ</span>
+    <b style="font-size: 24px; color: #00d4ff;">
+        {{ "%.2f"|format(user.activities|sum(attribute='amount')) }} €
+    </b>
+</div>
                 <div class="info-item info-full">
                     <span>Ημερομηνία Εγγραφής</span>
                     <b>{{ user.created_at.strftime('%d/%m/%Y') }}</b>

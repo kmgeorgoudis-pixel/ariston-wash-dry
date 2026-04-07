@@ -162,7 +162,28 @@
             <div class="info-row"><strong>Name:</strong> <span>{{ current_user.fullname }}</span></div>
             <div class="info-row"><strong>Email:</strong> <span>{{ current_user.email }}</span></div>
         </div>
-
+        <!-- Financial Balance Section -->
+<div class="info-block" style="border-left: 4px solid var(--secondary); background: rgba(0, 212, 255, 0.05);">
+    <h3>Account Balance</h3>
+    <div class="info-row">
+        <strong>Current Balance:</strong> 
+        <span style="font-size: 22px; font-weight: 800; color: var(--white);">
+            {{ "%.2f"|format(current_user.activities|sum(attribute='amount')) }} €
+        </span>
+    </div>
+    
+    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px;">Account Status:</span>
+        {% set balance = current_user.activities|sum(attribute='amount') %}
+        {% if balance > 0 %}
+            <span style="background: #059669; color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;">UP TO DATE</span>
+        {% elif balance < 0 %}
+            <span style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;">OVERDUE</span>
+        {% else %}
+            <span style="background: var(--glass-border); color: var(--text-dim); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;">ZERO BALANCE</span>
+        {% endif %}
+    </div>
+</div>
         <div class="info-block">
             <h3>Membership Duration</h3>
             <div class="info-row"><strong>Registration Date:</strong> <span>{{ current_user.created_at.strftime('%d/%m/%Y') }}</span></div>
