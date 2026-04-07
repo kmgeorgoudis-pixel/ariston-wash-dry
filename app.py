@@ -3277,17 +3277,18 @@ def admin_manage_giveaways():
 def delete_giveaway(giveaway_id):
     gv = Giveaway.query.get_or_404(giveaway_id)
     try:
-        # ΠΡΟΣΟΧΗ: Σβήνουμε πρώτα όλες τις συμμετοχές αυτού του giveaway
-        Entry.query.filter_by(giveaway_id=giveaway_id).delete()
+        # Εδώ χρησιμοποιούμε το σωστό attribute του gv που περιέχει τις συμμετοχές.
+        # Αν στο μοντέλο Giveaway έχεις σχέση (relationship) με το όνομα 'entries':
+        for entry in gv.entries:
+            db.session.delete(entry)
         
-        # Μετά σβήνουμε το ίδιο το giveaway
         db.session.delete(gv)
         db.session.commit()
-        flash('Ο διαγωνισμός διαγράφηκε!', 'success')
+        flash('Ο διαγωνισμός και οι συμμετοχές διαγράφηκαν!', 'success')
     except Exception as e:
         db.session.rollback()
-        print(f"Error: {e}") # Αυτό θα εκτυπώσει το ακριβές σφάλμα στα logs του Render
-        flash(f'Σφάλμα: {str(e)}', 'danger')
+        print(f"Error: {e}")
+        flash('Παρουσιάστηκε σφάλμα κατά τη διαγραφή.', 'danger')
     return redirect(url_for('admin_manage_giveaways'))
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
