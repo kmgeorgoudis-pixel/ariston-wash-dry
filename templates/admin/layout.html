@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARISTON Panel – {% block title %}{% endblock %}</title>
+    <title>ARISTON Panel | {% block title %}{% endblock %}</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -16,26 +16,29 @@
             --sidebar-bg: #0f172a;
             --main-bg: #f8fafc;
             --card-bg: #ffffff;
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
+            --primary: #2563eb;
+            --primary-light: rgba(37, 99, 235, 0.1);
+            --accent: #10b981; /* Green για το Νέα Παραλαβή */
             --text-main: #1e293b;
             --text-muted: #64748b;
             --sidebar-text: #94a3b8;
-            --sidebar-hover: #1e293b;
             --border-color: #e2e8f0;
+            --radius: 12px;
         }
 
         body {
             margin: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--main-bg);
             color: var(--text-main);
+            font-size: 14px;
             overflow-x: hidden;
         }
 
-        .admin-wrapper { display: flex; min-height: 100vh; }
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
 
         /* --- SIDEBAR --- */
         .admin-sidebar {
@@ -43,248 +46,304 @@
             background: var(--sidebar-bg);
             display: flex;
             flex-direction: column;
+            padding: 24px 16px;
             position: sticky;
             top: 0;
             height: 100vh;
-            transition: all 0.3s ease;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .admin-logo {
-            padding: 30px 25px;
             display: flex;
             align-items: center;
             gap: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 0 12px;
+            margin-bottom: 40px;
         }
 
-        .admin-logo img { width: 40px; height: 40px; border-radius: 8px; box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        .admin-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+        }
 
         .admin-logo-text {
             font-size: 18px;
             font-weight: 800;
             color: #fff;
             letter-spacing: -0.5px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
-
-        .sidebar-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 15px;
-        }
-
-        .sidebar-content::-webkit-scrollbar { width: 4px; }
-        .sidebar-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
         .admin-section-title {
             font-size: 11px;
             text-transform: uppercase;
             color: #475569;
-            margin: 25px 0 10px 12px;
+            margin: 24px 0 12px;
+            padding-left: 12px;
             letter-spacing: 1.5px;
             font-weight: 700;
         }
 
-        .admin-menu { list-style: none; padding: 0; margin: 0; }
-        .admin-menu li { margin-bottom: 4px; }
+        .admin-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Custom Scrollbar για το μενού */
+        .admin-menu::-webkit-scrollbar { width: 4px; }
+        .admin-menu::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 
         .admin-link {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
-            border-radius: 10px;
+            padding: 12px 14px;
+            border-radius: var(--radius);
             color: var(--sidebar-text);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
         }
 
-        .admin-link .icon { font-size: 18px; width: 24px; text-align: center; }
+        .admin-link i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
 
         .admin-link:hover {
-            background: var(--sidebar-hover);
+            background: rgba(255, 255, 255, 0.05);
             color: #fff;
-            padding-left: 20px;
         }
 
         .admin-link.active {
-            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-            color: #fff !important;
+            background: var(--primary);
+            color: #fff;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        /* Special Buttons Styling */
-        .btn-special {
-            margin: 8px 0;
-            border: 1px solid rgba(255,255,255,0.1);
+        /* Ειδικά κουμπιά */
+        .drop-off-btn {
+            background: rgba(16, 185, 129, 0.1) !important;
+            color: #34d399 !important;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            margin-top: 10px;
+        }
+        .drop-off-btn:hover { background: rgba(16, 185, 129, 0.2) !important; border-color: #10b981; }
+
+        .special-services-btn {
+            background: rgba(59, 130, 246, 0.1) !important;
+            color: #60a5fa !important;
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
-        .drop-off-btn { color: var(--accent-success) !important; background: rgba(16, 185, 129, 0.05); }
-        .drop-off-btn:hover { background: var(--accent-success) !important; color: #fff !important; }
-
-        .giveaway-btn { color: #f59e0b !important; background: rgba(245, 158, 11, 0.05); }
-        .giveaway-btn:hover { background: #f59e0b !important; color: #fff !important; }
+        .giveaway-btn {
+            background: linear-gradient(45deg, #f59e0b, #d97706) !important;
+            color: white !important;
+            font-weight: 700 !important;
+            margin-top: 10px;
+        }
 
         /* --- MAIN AREA --- */
-        .admin-main { flex: 1; padding: 30px; max-width: 1600px; margin: 0 auto; width: 100%; }
+        .admin-main {
+            flex: 1;
+            padding: 32px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
         .admin-topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 35px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 32px;
+            background: var(--card-bg);
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color);
         }
 
-        .admin-top-title { font-size: 26px; font-weight: 800; color: var(--text-main); }
+        .admin-top-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
 
         .admin-top-user {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: #fff;
-            padding: 8px 20px;
+            background: var(--main-bg);
+            padding: 8px 16px;
             border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-            border: 1px solid var(--border-color);
             font-weight: 600;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
         }
 
         /* Flash Messages */
         .flash-box {
-            padding: 15px 20px;
+            padding: 16px 20px;
             border-radius: 12px;
-            margin-bottom: 25px;
+            font-weight: 600;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 500;
-            border-left: 5px solid;
+            gap: 10px;
+            border: 1px solid transparent;
             animation: slideIn 0.3s ease-out;
         }
-        .flash-box:not(.danger):not(.error) { background: #ecfdf5; color: #065f46; border-left-color: #10b981; }
-        .flash-box.danger, .flash-box.error { background: #fef2f2; color: #991b1b; border-left-color: #ef4444; }
+        .flash-box:not(.danger):not(.error) { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+        .flash-box.danger, .flash-box.error { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
 
-        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-        .admin-footer {
-            padding: 25px;
-            background: rgba(0,0,0,0.2);
+        .admin-footer-box {
+            margin-top: auto;
+            padding: 20px 12px 0;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        .logout-btn {
+        .logout-link {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            padding: 12px;
-            border-radius: 10px;
+            gap: 10px;
+            color: #f87171;
             text-decoration: none;
             font-weight: 700;
-            transition: 0.3s;
+            padding: 12px;
+            border-radius: 10px;
+            transition: 0.2s;
         }
-        .logout-btn:hover { background: #ef4444; color: #fff; }
+        .logout-link:hover { background: rgba(239, 68, 68, 0.1); }
 
-        /* Responsive */
+        /* Mobile */
         @media (max-width: 1024px) {
             .admin-sidebar { width: 80px; }
-            .admin-logo-text, .admin-section-title, .admin-link span:not(.icon), .admin-footer-info { display: none; }
-            .admin-main { padding: 20px; }
+            .admin-logo-text, .admin-section-title, .admin-link span, .admin-footer-box strong { display: none; }
+            .admin-logo { justify-content: center; padding: 0; }
+            .admin-main { padding: 16px; }
         }
     </style>
+
     {% block extra_head %}{% endblock %}
 </head>
 <body>
 
 <div class="admin-wrapper">
+
     <aside class="admin-sidebar">
         <div class="admin-logo">
-            <img src="{{ url_for('static', filename='images/logo3.png') }}" alt="A">
-            <div class="admin-logo-text">ARISTON ADMIN</div>
+            <img src="{{ url_for('static', filename='images/logo3.png') }}" alt="Ariston">
+            <div class="admin-logo-text">ARISTON</div>
         </div>
 
-        <div class="sidebar-content">
-            <div class="admin-section-title">Κεντρικά</div>
-            <ul class="admin-menu">
-                <li>
-                    <a href="/admin" class="admin-link {% if active_page == 'dashboard' %}active{% endif %}">
-                        <span class="icon"><i class="fas fa-chart-pie"></i></span>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-            </ul>
-
+        <div class="admin-section-title">Κεντρικά</div>
+        <ul class="admin-menu">
+            <li>
+                <a href="/admin" class="admin-link {% if active_page == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            
             <div class="admin-section-title">Διαχείριση</div>
-            <ul class="admin-menu">
-                <li>
-                    <a href="/admin/qr-scanner" class="admin-link {% if active_page == 'qr_scanner' %}active{% endif %}">
-                        <span class="icon"><i class="fas fa-qrcode"></i></span>
-                        <span>QR Scanner</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/users" class="admin-link {% if active_page == 'users' %}active{% endif %}">
-                        <span class="icon"><i class="fas fa-users"></i></span>
-                        <span>Μέλη</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/drop-off" class="admin-link btn-special drop-off-btn">
-                        <span class="icon"><i class="fas fa-plus-circle"></i></span>
-                        <span>Νέα Παραλαβή</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/giveaways" class="admin-link btn-special giveaway-btn">
-                        <span class="icon"><i class="fas fa-gift"></i></span>
-                        <span>Διαγωνισμοί</span>
-                    </a>
-                </li>
-            </ul>
+            
+            <li>
+                <a href="/admin/qr-scanner" class="admin-link {% if active_page == 'qr_scanner' %}active{% endif %}">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <span>QR Scanner</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" class="admin-link {% if active_page == 'users' %}active{% endif %}">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Μέλη</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/wheel-results" class="admin-link {% if active_page == 'wheel' %}active{% endif %}">
+                    <i class="fa-solid fa-circle-dot"></i>
+                    <span>Τυχερός Τροχός</span>
+                </a>
+            </li>
+            <li>
+                <a href="/drop-off" class="admin-link drop-off-btn">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <span>Νέα Παραλαβή</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/special-services" class="admin-link special-services-btn {% if active_page == 'special_services' %}active{% endif %}">
+                    <i class="fa-solid fa-building-user"></i>
+                    <span>Ειδικές Υπηρεσίες</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/coupons" class="admin-link {% if active_page == 'coupons' %}active{% endif %}">
+                    <i class="fa-solid fa-ticket"></i>
+                    <span>Κουπόνια</span>
+                </a>
+            </li>
 
-            <div class="admin-section-title">Επικοινωνία & Marketing</div>
-            <ul class="admin-menu">
-                <li>
-                    <a href="/admin/bulk-email" class="admin-link {% if active_page == 'bulk_email' %}active{% endif %}">
-                        <span class="icon"><i class="fas fa-paper-plane"></i></span>
-                        <span>Email Marketing</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/announcements2" class="admin-link {% if active_page == 'announcements' %}active{% endif %}">
-                        <span class="icon"><i class="fas fa-bullhorn"></i></span>
-                        <span>Ανακοινώσεις</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/messages" class="admin-link {% if active_page == 'messages' %}active{% endif %}">
-                        <span class="icon"><i class="fas fa-envelope"></i></span>
-                        <span>Μηνύματα</span>
-                    </a>
-                </li>
-            </ul>
+            <div class="admin-section-title">Marketing</div>
 
-            <div class="admin-section-title">Άλλα</div>
-            <ul class="admin-menu">
-                <li><a href="/admin/coupons" class="admin-link"><span class="icon"><i class="fas fa-ticket-alt"></i></span><span>Κουπόνια</span></a></li>
-                <li><a href="/admin/reviews" class="admin-link"><span class="icon"><i class="fas fa-star"></i></span><span>Αξιολογήσεις</span></a></li>
-            </ul>
-        </div>
+            <li>
+                <a href="/admin/announcements2" class="admin-link {% if active_page == 'announcements' %}active{% endif %}">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    <span>Ανακοινώσεις</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('create_giveaway') }}" class="admin-link giveaway-btn">
+                    <i class="fa-solid fa-gift"></i>
+                    <span>Νέος Διαγωνισμός</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/bulk-email" class="admin-link {% if active_page == 'bulk_email' %}active{% endif %}">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Email Marketing</span>
+                </a>
+            </li>
 
-        <div class="admin-footer">
-            <div class="admin-footer-info" style="color: #fff; font-size: 11px; margin-bottom: 10px; opacity: 0.6;">
-                Συνδεδεμένος: {{ current_user.email.split('@')[0] }}
-            </div>
-            <a href="/logout" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> <span>Αποσύνδεση</span>
+            <div class="admin-section-title">Υποστήριξη</div>
+
+            <li>
+                <a href="/admin/reviews" class="admin-link {% if active_page == 'reviews' %}active{% endif %}">
+                    <i class="fa-solid fa-star"></i>
+                    <span>Αξιολογήσεις</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/messages" class="admin-link {% if active_page == 'messages' %}active{% endif %}">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>Μηνύματα</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/verifications" class="admin-link {% if active_page == 'verifications' %}active{% endif %}">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Ταυτοποιήσεις</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="admin-footer-box">
+            <a href="/logout" class="logout-link">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Έξοδος</span>
             </a>
         </div>
     </aside>
@@ -295,8 +354,8 @@
                 {% block header_title %}{% endblock %}
             </div>
             <div class="admin-top-user">
-                <i class="fas fa-user-circle" style="color: var(--primary);"></i>
-                <span>{{ current_user.email }}</span>
+                <i class="fa-solid fa-circle-user" style="color: var(--primary);"></i>
+                {{ current_user.email.split('@')[0] }}
             </div>
         </header>
 
@@ -304,7 +363,7 @@
           {% if messages %}
             {% for category, message in messages %}
               <div class="flash-box {{ category }}">
-                <i class="fas fa-info-circle"></i>
+                <i class="fa-solid fa-circle-info"></i>
                 {{ message }}
               </div>
             {% endfor %}
