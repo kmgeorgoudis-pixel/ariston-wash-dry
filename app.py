@@ -1540,7 +1540,7 @@ def confirm_delete_otp():
 
 
 @app.route("/final-delete-confirm/<token>", methods=["GET", "POST"])
-@login_required
+
 def final_delete_confirm(token):
     # 1) Έλεγχος αν το token είναι σωστό
     if not token or token != session.get('delete_token'):
@@ -3919,7 +3919,7 @@ Warning: This action is irreversible.
     return render_template("en/confirm-otp-en.html")
 
 @app.route("/en/final-delete-confirm/<token>", methods=["GET", "POST"]) # ΠΡΟΣΘΗΚΗ METHODS
-@login_required
+
 def final_delete_confirm_en(token):
     if not token or token != session.get('delete_token'):
         flash("The link has expired or is invalid.", "danger")
