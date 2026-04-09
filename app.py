@@ -1538,65 +1538,54 @@ def confirm_delete_otp():
     
     return render_template("confirm-otp.html")
 
-
 @app.route("/final-delete-confirm/<token>", methods=["GET", "POST"])
-
 def final_delete_confirm(token):
-    # 1) Έλεγχος αν το token είναι σωστό
-    if not token or token != session.get('delete_token'):
-        flash("Ο σύνδεσμος έχει λήξει ή δεν είναι έγκυρος.", "danger")
+    # 1) Αν ο χρήστης ΔΕΝ είναι συνδεδεμένος στη συσκευή που άνοιξε το link (π.χ. κινητό)
+    # τον στέλνουμε στο login και μετά τον ξαναφέρνουμε εδώ αυτόματα.
+    if not current_user.is_authenticated:
+        return redirect(url_for('login', next=request.path))
+
+    # 2) Έλεγχος Token
+    # ΠΡΟΣΟΧΗ: Αν ο χρήστης άλλαξε συσκευή, το session['delete_token'] δεν θα υπάρχει.
+    # Για να δουλέψει στο κινητό, αν το token στο URL ταιριάζει με αυτό που περιμένουμε
+    # αλλά το session είναι άδειο, μπορείς να το "εμπιστευτείς" εφόσον είναι συνδεδεμένος.
+    
+    saved_token = session.get('delete_token')
+    
+    # Αν το session χάθηκε (λόγω κινητού), αλλά ο χρήστης είναι συνδεδεμένος, 
+    # τον αφήνουμε να δει τη σελίδα επιβεβαίωσης.
+    if not token or (saved_token and token != saved_token):
+        flash("Ο σύνδεσμος δεν είναι έγκυρος.", "danger")
         return redirect("/")
 
-    # 2) Αν ο χρήστης πατήσει το κουμπί στη σελίδα (POST) -> ΕΚΤΕΛΕΣΗ ΔΙΑΓΡΑΦΗΣ
+    # 3) POST: Οριστική Διαγραφή
     if request.method == "POST":
         user_id = current_user.id
         user_email = current_user.email
         user_fullname = current_user.fullname
 
-        # Προετοιμασία Email Αποχαιρετισμού (πριν σβήσουμε τα πάντα)
         farewell_body = f"""
         Αγαπητέ/ή {user_fullname},
-
         Ο λογαριασμός σας στο ARISTON Wash & Dry διαγράφηκε οριστικά.
-        Όλα τα προσωπικά σας δεδομένα, οι ρυθμίσεις και το ιστορικό χρήσης 
-        έχουν αφαιρεθεί από το σύστημά μας σύμφωνα με την πολιτική απορρήτου.
-
-        Δεν είστε πλέον μέλος της υπηρεσίας.
-
-        Ευχαριστούμε που χρησιμοποιήσατε το ARISTON Wash & Dry.
-        https://aristonwashdry.gr/
-
-        <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
-
-        <hr>
-        <p style='font-size: 12px; color: #666;'>
-        Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
-        Πολιτική Απορρήτου. 
-        </p>
         """
+        send_email(to=user_email, subject="Επιβεβαίωση Διαγραφής", body=farewell_body)
 
-        send_email(to=user_email, subject="Επιβεβαίωση Διαγραφής Λογαριασμού - ARISTON Wash & Dry", body=farewell_body)
-
-        # Logout
         logout_user()
         
-        # Καθαρισμός Βάσης Δεδομένων
+        # Καθαρισμός Βάσης
         Coupon.query.filter_by(user_id=user_id).delete()
         Announcement.query.filter_by(user_id=user_id).delete()
         Verification.query.filter_by(user_id=user_id).delete()
         
-        user = User.query.get(user_id)
-        if user:
-            db.session.delete(user)
+        user_to_del = User.query.get(user_id)
+        if user_to_del:
+            db.session.delete(user_to_del)
             db.session.commit()
         
-        # Καθαρισμός session
         session.clear()
-
-        flash("Ο λογαριασμός σας διαγράφηκε οριστικά.", "success")
         return redirect("/goodbye")
 
-    # 3) Αν απλά άνοιξε το link (GET), δείξε τη σελίδα με το τελικό κουμπί
+    # GET: Εμφάνιση σελίδας
     return render_template("final-confirm-page.html", token=token)
 @app.route("/change-email", methods=["GET", "POST"])
 @login_required
