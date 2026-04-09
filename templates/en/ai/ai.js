@@ -1,6 +1,6 @@
 // ------- DATA: QUESTIONS & ANSWERS -------
 const faqEnglish = [
-  { id: 1, question: "How does the washing machine work?", answer: "Select your program, softener, and detergent, insert the payment, load your laundry, and wait for the cycle to complete." },
+  { id: 1, question: "How does the washing machine work?", answer: "Select your program,  insert the payment, load your laundry, and wait for the cycle to complete." },
   { id: 2, question: "What should I do before loading the laundry?", answer: "Check pockets for any objects, separate whites from colors, and follow the care instructions on the clothing labels." },
   { id: 3, question: "How long does a wash cycle take?", answer: "A full wash cycle takes approximately 20-30 minutes." },
   { id: 4, question: "How long does drying take?", answer: "Drying is performed in 15-minute cycles." },
