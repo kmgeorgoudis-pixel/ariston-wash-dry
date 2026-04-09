@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Confirmation – ARISTON Wash & Dry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --danger: #ff1744;
+            --dark-bg: #0a1118;
+            --card-bg: rgba(255, 255, 255, 0.06);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top, #1a0b0e, #030508);
+            background-color: var(--dark-bg);
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; margin: 0;
+        }
+        .final-box {
+            max-width: 400px; padding: 40px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .warning-text {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 30px; font-size: 15px;
+            line-height: 1.6;
+        }
+        .confirm-btn {
+            width: 100%; padding: 18px;
+            background: var(--danger);
+            color: white; border: none;
+            border-radius: 15px; font-weight: 800;
+            cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(255, 23, 68, 0.3);
+            transition: transform 0.2s;
+        }
+        .confirm-btn:hover { transform: scale(1.02); background: #d50000; }
+    </style>
+</head>
+<body>
+    <div class="final-box">
+        <h2 style="color: var(--danger); margin-bottom: 15px; text-transform: uppercase;">Final Action</h2>
+        <p class="warning-text">
+            Are you sure? By clicking the button below, your account will be <strong>immediately and permanently</strong> deleted.
+        </p>
+        
+        <form method="POST">
+            <button type="submit" class="confirm-btn">PERMANENTLY DELETE</button>
+        </form>
+        
+        <a href="/" style="display:block; margin-top:20px; color:white; text-decoration:none; font-size:13px; opacity:0.6;">Cancel</a>
+    </div>
+</body>
+</html>
