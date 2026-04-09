@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Account – ARISTON Wash & Dry</title>
+    <title>Final Confirmation – ARISTON Wash & Dry</title>
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,7 +39,7 @@
             position: relative;
         }
 
-        /* --- BUBBLES SYSTEM (Danger Variation) --- */
+        /* --- BUBBLES SYSTEM --- */
         .bubbles-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -65,18 +65,19 @@
             100% { transform: translateY(-120vh) translateX(-20px) scale(1.5); opacity: 0; }
         }
 
-        /* --- DELETE CONTAINER --- */
+        /* --- CONTAINER --- */
         .delete-container {
             width: 100%;
             max-width: 480px;
             background: var(--card-bg);
             backdrop-filter: blur(25px);
-            padding: 45px;
+            padding: 50px 40px;
             border-radius: 40px;
             border: 1px solid rgba(255, 23, 68, 0.2);
             position: relative;
             z-index: 2;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
             animation: formReveal 0.8s var(--transition);
         }
 
@@ -85,35 +86,38 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .flash-box {
-            padding: 18px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255, 23, 68, 0.3);
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
             background: rgba(255, 23, 68, 0.1);
-            color: #ff5252;
-            text-align: center;
-            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            border: 1px solid rgba(255, 23, 68, 0.2);
+        }
+
+        .icon-wrapper svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--danger);
         }
 
         .delete-title {
             font-size: 28px;
             font-weight: 800;
             color: var(--danger);
-            margin-bottom: 15px;
-            text-align: center;
+            margin-bottom: 20px;
             letter-spacing: -0.5px;
             text-transform: uppercase;
         }
 
         .delete-warning {
-            text-align: center;
             color: var(--text-dim);
-            margin-bottom: 35px;
-            font-size: 14px;
-            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 15px;
+            line-height: 1.7;
             background: rgba(255, 255, 255, 0.03);
             padding: 25px;
             border-radius: 24px;
@@ -122,75 +126,33 @@
 
         .delete-warning strong {
             color: var(--white);
-            display: block;
-            margin-bottom: 8px;
-            font-size: 16px;
             font-weight: 800;
         }
 
-        .form-field { margin-bottom: 15px; }
-
-        .form-field input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            padding: 20px;
-            border-radius: 20px;
-            color: var(--white);
-            font-size: 15px;
-            font-weight: 600;
-            transition: var(--transition);
-            text-align: center;
-        }
-
-        .form-field input:focus {
-            outline: none;
-            border-color: var(--danger);
-            background: rgba(255, 23, 68, 0.05);
-            box-shadow: 0 0 0 4px var(--danger-glow);
-        }
-
-        .delete-btn {
-            width: 100%;
-            padding: 20px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 22px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 10px 25px var(--danger-glow);
-            margin-top: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        .delete-btn:hover {
-            background: var(--danger-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(255, 23, 68, 0.5);
-        }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
+        .close-hint {
             color: var(--text-dim);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 700;
-            transition: var(--transition);
+            font-size: 13px;
+            font-weight: 600;
+            padding-top: 10px;
         }
 
-        .back-link:hover { 
-            color: var(--white);
-            transform: scale(1.05);
+        .email-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4ade80; /* Success green for email sent */
+            margin-bottom: 20px;
         }
 
         @media (max-width: 480px) {
-            .delete-container { padding: 35px 20px; }
+            .delete-container { padding: 40px 25px; }
             .delete-title { font-size: 24px; }
         }
     </style>
@@ -200,46 +162,35 @@
     <div class="bubbles-container" id="bubbles-container"></div>
 
     <div class="delete-container">
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="flash-box">
-                {{ message }}
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-
-        <div class="delete-title">Account Deletion</div>
         
-        <div class="delete-warning">
-            <strong>Warning: Irreversible Action</strong>
-            Your profile and all associated data will be permanently removed from our servers.
+        <div class="email-status">
+            <span style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%;"></span>
+            Email Sent
         </div>
 
-        <form action="/en/delete-account" method="POST">
+        <div class="icon-wrapper">
+            <svg viewBox="0 0 24 24">
+                <path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,18H4V8l8,5l8-5V18z M12,11L4,6h16L12,11z"/>
+            </svg>
+        </div>
 
-            <div class="form-field">
-                <input type="email" name="email" placeholder="Confirm your Email" required autocomplete="off">
-            </div>
+        <div class="delete-title">Step 3: Final Link</div>
+        
+        <div class="delete-warning">
+            One last step! We sent a <strong>final confirmation link</strong> to your email. 
+            Check your inbox (and spam folder) and click the button to permanently delete your account.
+        </div>
 
-            <div class="form-field">
-                <input type="password" name="password" placeholder="Your Password" required>
-            </div>
-
-            <button class="delete-btn" type="submit">Next step!</button>
-
-        </form>
-
-        <a href="/en/settings-menu" class="back-link">Cancel and Go Back</a>
+        <p class="close-hint">
+            You can safely close this window now.
+        </p>
 
     </div>
 
     <script>
         function createBubbles() {
             const container = document.getElementById('bubbles-container');
-            const bubbleCount = 10;
+            const bubbleCount = 12;
             for (let i = 0; i < bubbleCount; i++) {
                 const bubble = document.createElement('div');
                 bubble.className = 'bubble';

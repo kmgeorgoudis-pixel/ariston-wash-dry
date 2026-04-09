@@ -1462,6 +1462,10 @@ from datetime import datetime, timedelta
 from flask import render_template, request, redirect, flash
 from flask_login import login_required, current_user, logout_user
 
+import random
+import string
+import secrets
+
 @app.route("/delete-account", methods=["GET", "POST"])
 @login_required
 def delete_account():
@@ -1471,19 +1475,82 @@ def delete_account():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    # 1) Έλεγχος email
+    # 1) Έλεγχος email & κωδικού
     if email != current_user.email:
         flash("Το email δεν ταιριάζει με το λογαριασμό σας.", "danger")
         return redirect("/delete-account")
 
-    # 2) Έλεγχος κωδικού
     if not check_password_hash(current_user.password, password):
         flash("Ο κωδικός δεν είναι σωστός.", "danger")
         return redirect("/delete-account")
 
-    # 3) Αποστολή επίσημου email διαγραφής με ΟΝΟΜΑ ΧΡΗΣΤΗ
-    body = f"""
-Αγαπητέ/ή {current_user.fullname},
+    # 2) Δημιουργία 6ψήφιου κωδικού (OTP)
+    otp = ''.join(random.choices(string.digits, k=6))
+    session['delete_otp'] = otp
+    
+    # 3) Αποστολή Email με τον κωδικό OTP
+    otp_body = f"""
+    Αγαπητέ/ή {current_user.fullname},
+    
+    Λάβαμε ένα αίτημα για την οριστική διαγραφή του λογαριασμού σας.
+    Για να προχωρήσετε, χρησιμοποιήστε τον παρακάτω κωδικό επιβεβαίωσης:
+    
+    ΚΩΔΙΚΟΣ: {otp}
+    
+    Αν δεν ζητήσατε εσείς τη διαγραφή, παρακαλούμε αλλάξτε άμεσα τον κωδικό πρόσβασής σας.
+    """
+    send_email(to=email, subject="Κωδικός Επιβεβαίωσης Διαγραφής", body=otp_body)
+
+    flash("Ένας 6ψήφιος κωδικός εστάλη στο email σας.", "warning")
+    return redirect(url_for('confirm_delete_otp'))
+@app.route("/confirm-delete-otp", methods=["GET", "POST"])
+@login_required
+def confirm_delete_otp():
+    if 'delete_otp' not in session:
+        return redirect("/delete-account")
+
+    if request.method == "POST":
+        user_otp = request.form.get("otp")
+        
+        if user_otp == session.get('delete_otp'):
+            # Δημιουργία μοναδικού Token για το Link
+            token = secrets.token_urlsafe(32)
+            session['delete_token'] = token
+            
+            # Δημιουργία του Link
+            confirm_link = url_for('final_delete_confirm', token=token, _external=True)
+            
+            # Email με το κουμπί
+            link_body = f"""
+            ΤΕΛΙΚΗ ΕΠΙΒΕΒΑΙΩΣΗ ΔΙΑΓΡΑΦΗΣ
+            
+            Πατήστε τον παρακάτω σύνδεσμο για να ολοκληρώσετε τη διαγραφή του λογαριασμού σας:
+            {confirm_link}
+            
+            Προσοχή: Μόλις πατήσετε το σύνδεσμο, ο λογαριασμός και τα δεδομένα σας θα διαγραφούν οριστικά.
+            """
+            send_email(to=current_user.email, subject="Τελικό Βήμα Διαγραφής (Link)", body=link_body)
+            
+            return render_template("delete-final-check.html") # Σελίδα που λέει "Ελέγξτε το email σας για το link"
+            
+        flash("Ο κωδικός OTP είναι λάθος.", "danger")
+    
+    return render_template("confirm-otp.html") # Η σελίδα με το input του 6ψήφιου
+@app.route("/final-delete-confirm/<token>")
+@login_required
+def final_delete_confirm(token):
+    # Έλεγχος αν το token είναι σωστό
+    if not token or token != session.get('delete_token'):
+        flash("Ο σύνδεσμος έχει λήξει ή δεν είναι έγκυρος.", "danger")
+        return redirect("/")
+
+    user_id = current_user.id
+    user_email = current_user.email
+    user_name = current_user.fullname
+
+    # 1) Προετοιμασία Email Αποχαιρετισμού (πριν σβήσουμε τα πάντα)
+    farewell_body = f"""
+Αγαπητέ/ή {user_name},
 
 Ο λογαριασμός σας στο ARISTON Wash & Dry διαγράφηκε οριστικά.
 Όλα τα προσωπικά σας δεδομένα, οι ρυθμίσεις και το ιστορικό χρήσης 
@@ -1496,40 +1563,35 @@ https://aristonwashdry.gr/
 
 <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
 
-
-
 <hr>
 <p style='font-size: 12px; color: #666;'>
 Το παρόν email στάλθηκε από το ARISTON Wash & Dry σύμφωνα με την 
-<a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
-Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας 
-και δεν κοινοποιούνται σε τρίτους.
+Πολιτική Απορρήτου. 
 </p>
 """
 
+    # 2) Αποστολή Email
     send_email(
-        to=current_user.email,
+        to=user_email,
         subject="Επιβεβαίωση Διαγραφής Λογαριασμού - ARISTON Wash & Dry",
-        body=body
+        body=farewell_body
     )
 
-    # 4) Αποθήκευση ID πριν το logout
-    user_id = current_user.id
-
-    # 5) Logout
+    # 3) Logout
     logout_user()
-
-    # 6) 🔥 Σβήνουμε πρώτα ΟΛΑ τα κουπόνια του χρήστη
+    
+    # 4) Καθαρισμός Βάσης Δεδομένων
     Coupon.query.filter_by(user_id=user_id).delete()
-
-    # 7) 🔥 Σβήνουμε όλες τις ανακοινώσεις του χρήστη
     Announcement.query.filter_by(user_id=user_id).delete()
     Verification.query.filter_by(user_id=user_id).delete()
-
-    # 8) 🔥 Τώρα σβήνουμε τον χρήστη
+    
     user = User.query.get(user_id)
-    db.session.delete(user)
-    db.session.commit()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+    
+    # 5) Καθαρισμός session
+    session.clear()
 
     flash("Ο λογαριασμός σας διαγράφηκε οριστικά.", "success")
     return redirect("/goodbye")
@@ -3791,58 +3853,105 @@ def delete_account_en():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    # 1) Email check
+    # 1) Credentials Check
     if email != current_user.email:
         flash("Email does not match your account.", "danger")
         return redirect("/en/delete-account")
 
-    # 2) Password check
     if not check_password_hash(current_user.password, password):
         flash("Password is incorrect.", "danger")
         return redirect("/en/delete-account")
 
-    # 3) Send confirmation email
+    # 2) Generate OTP
+    otp = ''.join(random.choices(string.digits, k=6))
+    session['delete_otp'] = otp
+    session['lang'] = 'en' # Κρατάμε τη γλώσσα για να ξέρουμε πού να τον γυρίσουμε
+
+    # 3) Send OTP Email
     body = f"""
 Dear {current_user.fullname},
 
-Your account on ARISTON Wash & Dry has been permanently deleted.
-All your personal data, settings, and usage history have been removed
-from our system according to our privacy policy.
+We received a request to permanently delete your account.
+To proceed, please use the following verification code:
 
-You are no longer a member of the service.
+CODE: {otp}
+
+If you did not request this, please change your password immediately.
+"""
+    send_email(to=email, subject="Account Deletion Verification Code", body=body)
+
+    flash("A 6-digit code has been sent to your email.", "warning")
+    return redirect(url_for('confirm_delete_otp_en'))
+
+@app.route("/en/confirm-delete-otp", methods=["GET", "POST"])
+@login_required
+def confirm_delete_otp_en():
+    if 'delete_otp' not in session:
+        return redirect("/en/delete-account")
+
+    if request.method == "POST":
+        user_otp = request.form.get("otp")
+        
+        if user_otp == session.get('delete_otp'):
+            token = secrets.token_urlsafe(32)
+            session['delete_token'] = token
+            
+            # Final Link
+            confirm_link = url_for('final_delete_confirm_en', token=token, _external=True)
+            
+            link_body = f"""
+FINAL DELETION STEP
+
+Click the link below to complete the permanent deletion of your account:
+{confirm_link}
+
+Warning: This action is irreversible.
+"""
+            send_email(to=current_user.email, subject="Final Deletion Step (Link)", body=link_body)
+            
+            return render_template("en/delete-final-check-en.html") # Page: "Check your email for the link"
+            
+        flash("Incorrect OTP code.", "danger")
+    
+    return render_template("en/confirm-otp-en.html")
+
+@app.route("/en/final-delete-confirm/<token>")
+@login_required
+def final_delete_confirm_en(token):
+    if not token or token != session.get('delete_token'):
+        flash("The link has expired or is invalid.", "danger")
+        return redirect("/en")
+
+    user_id = current_user.id
+    user_email = current_user.email
+    user_name = current_user.fullname
+
+    # Farewell Email
+    farewell_body = f"""
+Dear {user_name},
+
+Your account on ARISTON Wash & Dry has been permanently deleted.
+All your personal data, settings, and usage history have been removed 
+from our system according to our privacy policy.
 
 Thank you for using ARISTON Wash & Dry.
 https://aristonwashdry.gr/
-
-<a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;"><img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto; margin-top:12px;"></a>
-
-
-
-<hr>
-<p style='font-size: 12px; color: #666;'>
-This email was sent by ARISTON Wash & Dry in accordance with the 
-<a href="https://aristonwashdry.gr/privacy">Privacy Policy</a>. 
-Your data is used solely for the operation of the service and is not shared with third parties.
-</p>
 """
-    send_email(
-        to=current_user.email,
-        subject="Account Deletion Confirmation - ARISTON Wash & Dry",
-        body=body
-    )
+    send_email(to=user_email, subject="Account Deletion Confirmation - ARISTON Wash & Dry", body=farewell_body)
 
-    # 4) Save ID & logout
-    user_id = current_user.id
     logout_user()
-
-    # 5) Delete user data
+    
+    # Database Cleanup
     Coupon.query.filter_by(user_id=user_id).delete()
     Announcement.query.filter_by(user_id=user_id).delete()
     Verification.query.filter_by(user_id=user_id).delete()
+    
     user = User.query.get(user_id)
-    db.session.delete(user)
-    db.session.commit()
-
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+    
+    session.clear()
     flash("Your account has been permanently deleted.", "success")
     return redirect("/en/goodbye")
 

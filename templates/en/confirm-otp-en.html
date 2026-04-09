@@ -197,63 +197,20 @@
 </head>
 <body>
 
-    <div class="bubbles-container" id="bubbles-container"></div>
+<div class="delete-title">Step 2: Verification</div>
+<div class="delete-warning">
+    We have sent a <strong>6-digit code</strong> to your email. Please enter it below to continue.
+</div>
 
-    <div class="delete-container">
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="flash-box">
-                {{ message }}
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-
-        <div class="delete-title">Account Deletion</div>
-        
-        <div class="delete-warning">
-            <strong>Warning: Irreversible Action</strong>
-            Your profile and all associated data will be permanently removed from our servers.
-        </div>
-
-        <form action="/en/delete-account" method="POST">
-
-            <div class="form-field">
-                <input type="email" name="email" placeholder="Confirm your Email" required autocomplete="off">
-            </div>
-
-            <div class="form-field">
-                <input type="password" name="password" placeholder="Your Password" required>
-            </div>
-
-            <button class="delete-btn" type="submit">Next step!</button>
-
-        </form>
-
-        <a href="/en/settings-menu" class="back-link">Cancel and Go Back</a>
-
+<form action="/en/confirm-delete-otp" method="POST">
+    <div class="form-field">
+        <input type="text" name="otp" placeholder="000 000" maxlength="6" required 
+               style="font-size: 24px; letter-spacing: 5px; font-weight: 800;">
     </div>
+    <button class="delete-btn" type="submit">Verify Code</button>
+</form>
 
-    <script>
-        function createBubbles() {
-            const container = document.getElementById('bubbles-container');
-            const bubbleCount = 10;
-            for (let i = 0; i < bubbleCount; i++) {
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                const size = Math.random() * 80 + 30 + 'px';
-                bubble.style.width = size;
-                bubble.style.height = size;
-                bubble.style.left = Math.random() * 100 + '%';
-                bubble.style.animationDuration = Math.random() * 8 + 12 + 's';
-                bubble.style.animationDelay = Math.random() * 5 + 's';
-                container.appendChild(bubble);
-            }
-        }
-        createBubbles();
-    </script>
+<a href="/en/delete-account" class="back-link">Go Back</a>
 
 </body>
 </html>

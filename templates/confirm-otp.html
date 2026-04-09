@@ -157,43 +157,19 @@
     </style>
 </head>
 <body>
+<div class="delete-title">Βήμα 2: Επαλήθευση</div>
+<div class="delete-warning">
+    Σας στείλαμε έναν <strong>6ψήφιο κωδικό</strong> στο email σας. Εισάγετε τον παρακάτω.
+</div>
 
-    <div class="delete-container">
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="flash-box">
-                {{ message }}
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-
-        <div class="delete-title">Οριστική Διαγραφή</div>
-        
-        <div class="delete-warning">
-            <strong>Προσοχή: Μη αναστρέψιμη ενέργεια</strong>
-            Το προφίλ σας και όλα τα αποθηκευμένα δεδομένα θα διαγραφούν μόνιμα από το σύστημά μας.
-        </div>
-
-        <form action="/delete-account" method="POST">
-
-            <div class="form-field">
-                <input type="email" name="email" placeholder="Επιβεβαίωση Email" required>
-            </div>
-
-            <div class="form-field">
-                <input type="password" name="password" placeholder="Κωδικός Πρόσβασης" required>
-            </div>
-
-            <button class="delete-btn" type="submit">Επόμενο Βήμα </button>
-
-        </form>
-
-        <a href="/settings-menu" class="back-link">Ακύρωση και Επιστροφή</a>
-
+<form action="/confirm-delete-otp" method="POST">
+    <div class="form-field">
+        <input type="text" name="otp" placeholder="000 000" maxlength="6" required 
+               style="font-size: 24px; letter-spacing: 5px;">
     </div>
+    <button class="delete-btn" type="submit">Επαλήθευση Κωδικού</button>
+</form>
+<a href="/delete-account" class="back-link">Επιστροφή</a>
 
 </body>
 </html>
