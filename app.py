@@ -1474,33 +1474,33 @@ def delete_account():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    # 1) Έλεγχος email & κωδικού
-    if email != current_user.email:
-        flash("Το email δεν ταιριάζει με το λογαριασμό σας.", "danger")
+    if email != current_user.email or not check_password_hash(current_user.password, password):
+        flash("Τα στοιχεία δεν είναι σωστά.", "danger")
         return redirect("/delete-account")
 
-    if not check_password_hash(current_user.password, password):
-        flash("Ο κωδικός δεν είναι σωστός.", "danger")
-        return redirect("/delete-account")
-
-    # 2) Δημιουργία 6ψήφιου κωδικού (OTP)
+    # Δημιουργία OTP
     otp = ''.join(random.choices(string.digits, k=6))
     session['delete_otp'] = otp
     
-    # 3) Αποστολή Email με τον κωδικό OTP
+    # Αποστολή ΜΟΝΟ του OTP
+    # Αποστολή Επίσημου OTP Email
     otp_body = f"""
-    Αγαπητέ/ή {current_user.fullname},
-    
-    Λάβαμε ένα αίτημα για την οριστική διαγραφή του λογαριασμού σας.
-    Για να προχωρήσετε, χρησιμοποιήστε τον παρακάτω κωδικό επιβεβαίωσης:
-    
-    ΚΩΔΙΚΟΣ: {otp}
-    
-    Αν δεν ζητήσατε εσείς τη διαγραφή, παρακαλούμε αλλάξτε άμεσα τον κωδικό πρόσβασής σας.
+    <div style="font-family: sans-serif; max-width: 600px; color: #333; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+        <h2 style="color: #333;">Κωδικός Επιβεβαίωσης Διαγραφής</h2>
+        <p>Λάβαμε ένα αίτημα για την οριστική διαγραφή του λογαριασμού σας στο <strong>ARISTON Wash & Dry</strong>.</p>
+        <p>Για να ολοκληρώσετε τη διαδικασία, εισάγετε τον παρακάτω κωδικό στην οθόνη επαλήθευσης:</p>
+        
+        <div style="background: #f4f4f4; padding: 20px; text-align: center; border-radius: 8px; margin: 25px 0;">
+            <span style="font-size: 32px; font-weight: bold; letter-spacing: 10px; color: #d9534f;">{otp}</span>
+        </div>
+        
+        <p style="font-size: 14px; color: #666;">Ο κωδικός αυτός είναι έγκυρος για περιορισμένο χρονικό διάστημα. Αν δεν ζητήσατε εσείς τη διαγραφή, παρακαλούμε αγνοήστε αυτό το email και αλλάξτε άμεσα τον κωδικό πρόσβασής σας.</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin-top: 20px;">
+        <p style="font-size: 12px; color: #999; text-align: center;">ARISTON Wash & Dry - Υπηρεσίες Καθαρισμού</p>
+    </div>
     """
     send_email(to=email, subject="Κωδικός Επιβεβαίωσης Διαγραφής", body=otp_body)
 
-    flash("Ένας 6ψήφιος κωδικός εστάλη στο email σας.", "warning")
     return redirect(url_for('confirm_delete_otp'))
 
 
@@ -1514,79 +1514,56 @@ def confirm_delete_otp():
         user_otp = request.form.get("otp")
         
         if user_otp == session.get('delete_otp'):
-            # Δημιουργία μοναδικού Token για το Link
-            token = secrets.token_urlsafe(32)
-            session['delete_token'] = token
-            
-            # Δημιουργία του Link
-            confirm_link = url_for('final_delete_confirm', token=token, _external=True)
-            
-            # Email με το Link
-            link_body = f"""
-            ΤΕΛΙΚΗ ΕΠΙΒΕΒΑΙΩΣΗ ΔΙΑΓΡΑΦΗΣ
-            
-            Πατήστε τον παρακάτω σύνδεσμο για να ολοκληρώσετε τη διαγραφή του λογαριασμού σας:
-            {confirm_link}
-            
-            Προσοχή: Μόλις πατήσετε το σύνδεσμο, θα μεταφερθείτε στη σελίδα οριστικής επιβεβαίωσης.
+            # ΕΚΤΕΛΕΣΗ ΔΙΑΓΡΑΦΗΣ ΑΜΕΣΩΣ
+            user_id = current_user.id
+            user_email = current_user.email
+            user_fullname = current_user.fullname
+
+            # Στέλνουμε το επίσημο Farewell Email
+            # Στέλνουμε το επίσημο Farewell Email
+            farewell_content = f"""
+            <div style="font-family: sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
+                <div style="text-align: center; padding-bottom: 20px;">
+                    <h2 style="color: #d9534f;">Ο λογαριασμός σας διαγράφηκε</h2>
+                </div>
+                <p>Αγαπητέ/ή {user_fullname},</p>
+                <p>Σας επιβεβαιώνουμε ότι η διαδικασία οριστικής διαγραφής του λογαριασμού σας ολοκληρώθηκε με επιτυχία.</p>
+                
+                <p>Σύμφωνα με την πολιτική απορρήτου και τον κανονισμό <strong>GDPR</strong>:</p>
+                <ul style="color: #555;">
+                    <li>Τα προσωπικά σας στοιχεία έχουν αφαιρεθεί.</li>
+                    <li>Το ιστορικό των συναλλαγών σας έχει διαγραφεί.</li>
+                    <li>Η πρόσβαση στην πλατφόρμα έχει απενεργοποιηθεί.</li>
+                </ul>
+                
+                <p>Σας ευχαριστούμε που χρησιμοποιήσατε τις υπηρεσίες μας. Αν στο μέλλον επιθυμείτε να επιστρέψετε, θα χαρούμε να σας εξυπηρετήσουμε ξανά.</p>
+                
+                <p style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                    Με εκτίμηση,<br>
+                    <strong>Η ομάδα του ARISTON Wash & Dry</strong><br>
+                    <a href="https://aristonwashdry.gr" style="color: #0056b3; text-decoration: none;">aristonwashdry.gr</a>
+                </p>
+            </div>
             """
-            send_email(to=current_user.email, subject="Τελικό Βήμα Διαγραφής (Link)", body=link_body)
+            send_email(to=user_email, subject="Επιβεβαίωση Διαγραφής Λογαριασμού", body=farewell_content)
+
+            # Διαδικασία διαγραφής από DB
+            logout_user()
+            Coupon.query.filter_by(user_id=user_id).delete()
+            Announcement.query.filter_by(user_id=user_id).delete()
+            Verification.query.filter_by(user_id=user_id).delete()
             
-            return render_template("delete-final-check.html")
+            u = User.query.get(user_id)
+            if u:
+                db.session.delete(u)
+                db.session.commit()
+            
+            session.clear()
+            return redirect("/goodbye")
             
         flash("Ο κωδικός OTP είναι λάθος.", "danger")
     
     return render_template("confirm-otp.html")
-
-@app.route("/final-delete-confirm/<token>", methods=["GET", "POST"])
-def final_delete_confirm(token):
-    # 1) Αν ο χρήστης ΔΕΝ είναι συνδεδεμένος στη συσκευή που άνοιξε το link (π.χ. κινητό)
-    # τον στέλνουμε στο login και μετά τον ξαναφέρνουμε εδώ αυτόματα.
-    if not current_user.is_authenticated:
-        return redirect(url_for('login', next=request.path))
-
-    # 2) Έλεγχος Token
-    # ΠΡΟΣΟΧΗ: Αν ο χρήστης άλλαξε συσκευή, το session['delete_token'] δεν θα υπάρχει.
-    # Για να δουλέψει στο κινητό, αν το token στο URL ταιριάζει με αυτό που περιμένουμε
-    # αλλά το session είναι άδειο, μπορείς να το "εμπιστευτείς" εφόσον είναι συνδεδεμένος.
-    
-    saved_token = session.get('delete_token')
-    
-    # Αν το session χάθηκε (λόγω κινητού), αλλά ο χρήστης είναι συνδεδεμένος, 
-    # τον αφήνουμε να δει τη σελίδα επιβεβαίωσης.
-    if not token or (saved_token and token != saved_token):
-        flash("Ο σύνδεσμος δεν είναι έγκυρος.", "danger")
-        return redirect("/")
-
-    # 3) POST: Οριστική Διαγραφή
-    if request.method == "POST":
-        user_id = current_user.id
-        user_email = current_user.email
-        user_fullname = current_user.fullname
-
-        farewell_body = f"""
-        Αγαπητέ/ή {user_fullname},
-        Ο λογαριασμός σας στο ARISTON Wash & Dry διαγράφηκε οριστικά.
-        """
-        send_email(to=user_email, subject="Επιβεβαίωση Διαγραφής", body=farewell_body)
-
-        logout_user()
-        
-        # Καθαρισμός Βάσης
-        Coupon.query.filter_by(user_id=user_id).delete()
-        Announcement.query.filter_by(user_id=user_id).delete()
-        Verification.query.filter_by(user_id=user_id).delete()
-        
-        user_to_del = User.query.get(user_id)
-        if user_to_del:
-            db.session.delete(user_to_del)
-            db.session.commit()
-        
-        session.clear()
-        return redirect("/goodbye")
-
-    # GET: Εμφάνιση σελίδας
-    return render_template("final-confirm-page.html", token=token)
 @app.route("/change-email", methods=["GET", "POST"])
 @login_required
 def change_email():
@@ -3845,35 +3822,36 @@ def delete_account_en():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    # 1) Credentials Check
-    if email != current_user.email:
-        flash("Email does not match your account.", "danger")
+    if email != current_user.email or not check_password_hash(current_user.password, password):
+        flash("Invalid credentials.", "danger")
         return redirect("/en/delete-account")
 
-    if not check_password_hash(current_user.password, password):
-        flash("Password is incorrect.", "danger")
-        return redirect("/en/delete-account")
-
-    # 2) Generate OTP
+    # Generate OTP
     otp = ''.join(random.choices(string.digits, k=6))
     session['delete_otp'] = otp
     session['lang'] = 'en'
 
-    # 3) Send OTP Email
-    body = f"""
-Dear {current_user.fullname},
-
-We received a request to permanently delete your account.
-To proceed, please use the following verification code:
-
-CODE: {otp}
-
-If you did not request this, please change your password immediately.
-"""
-    send_email(to=email, subject="Account Deletion Verification Code", body=body)
+    # Official OTP Email (English)
+    otp_body = f"""
+    <div style="font-family: sans-serif; max-width: 600px; color: #333; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+        <h2 style="color: #333;">Account Deletion Verification Code</h2>
+        <p>We received a request to permanently delete your account at <strong>ARISTON Wash & Dry</strong>.</p>
+        <p>To proceed, please enter the following verification code on the confirmation screen:</p>
+        
+        <div style="background: #f4f4f4; padding: 20px; text-align: center; border-radius: 8px; margin: 25px 0;">
+            <span style="font-size: 32px; font-weight: bold; letter-spacing: 10px; color: #d9534f;">{otp}</span>
+        </div>
+        
+        <p style="font-size: 14px; color: #666;">This code is valid for a limited time. If you did not request this, please ignore this email and change your password immediately.</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin-top: 20px;">
+        <p style="font-size: 12px; color: #999; text-align: center;">ARISTON Wash & Dry - Cleaning Services</p>
+    </div>
+    """
+    send_email(to=email, subject="Account Deletion Verification Code", body=otp_body)
 
     flash("A 6-digit code has been sent to your email.", "warning")
     return redirect(url_for('confirm_delete_otp_en'))
+
 
 @app.route("/en/confirm-delete-otp", methods=["GET", "POST"])
 @login_required
@@ -3885,70 +3863,55 @@ def confirm_delete_otp_en():
         user_otp = request.form.get("otp")
         
         if user_otp == session.get('delete_otp'):
-            token = secrets.token_urlsafe(32)
-            session['delete_token'] = token
-            
-            # Final Link
-            confirm_link = url_for('final_delete_confirm_en', token=token, _external=True)
-            
-            link_body = f"""
-FINAL DELETION STEP
+            # EXECUTE DELETION IMMEDIATELY
+            user_id = current_user.id
+            user_email = current_user.email
+            user_fullname = current_user.fullname
 
-Click the link below to complete the permanent deletion of your account:
-{confirm_link}
+            # Official Farewell Email (English)
+            farewell_content = f"""
+            <div style="font-family: sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
+                <div style="text-align: center; padding-bottom: 20px;">
+                    <h2 style="color: #d9534f;">Account Successfully Deleted</h2>
+                </div>
+                <p>Dear {user_fullname},</p>
+                <p>This email confirms that your account at <strong>ARISTON Wash & Dry</strong> has been permanently deleted as per your request.</p>
+                
+                <p>In accordance with our privacy policy and <strong>GDPR</strong> regulations:</p>
+                <ul style="color: #555;">
+                    <li>Your personal information has been removed.</li>
+                    <li>Your transaction history has been cleared.</li>
+                    <li>Access to the platform has been disabled.</li>
+                </ul>
+                
+                <p>Thank you for using our services. If you choose to return in the future, we would be happy to serve you again.</p>
+                
+                <p style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                    Best Regards,<br>
+                    <strong>The ARISTON Wash & Dry Team</strong><br>
+                    <a href="https://aristonwashdry.gr" style="color: #0056b3; text-decoration: none;">aristonwashdry.gr</a>
+                </p>
+            </div>
+            """
+            send_email(to=user_email, subject="Account Deletion Confirmation", body=farewell_content)
 
-Warning: This action is irreversible.
-"""
-            send_email(to=current_user.email, subject="Final Deletion Step (Link)", body=link_body)
+            # Database Cleanup
+            logout_user()
+            Coupon.query.filter_by(user_id=user_id).delete()
+            Announcement.query.filter_by(user_id=user_id).delete()
+            Verification.query.filter_by(user_id=user_id).delete()
             
-            return render_template("en/delete-final-check-en.html")
+            u = User.query.get(user_id)
+            if u:
+                db.session.delete(u)
+                db.session.commit()
+            
+            session.clear()
+            return redirect("/en/goodbye")
             
         flash("Incorrect OTP code.", "danger")
     
     return render_template("en/confirm-otp-en.html")
-
-@app.route("/en/final-delete-confirm/<token>", methods=["GET", "POST"]) # ΠΡΟΣΘΗΚΗ METHODS
-
-def final_delete_confirm_en(token):
-    if not token or token != session.get('delete_token'):
-        flash("The link has expired or is invalid.", "danger")
-        return redirect("/en")
-
-    if request.method == "POST": # Η διαγραφή γίνεται ΜΟΝΟ με POST από το κουμπί
-        user_id = current_user.id
-        user_email = current_user.email
-        user_name = current_user.fullname
-
-        # Farewell Email
-        farewell_body = f"""
-Dear {user_fullname},
-
-Your account on ARISTON Wash & Dry has been permanently deleted.
-All your personal data, settings, and usage history have been removed 
-from our system according to our privacy policy.
-
-Thank you for using ARISTON Wash & Dry.
-https://aristonwashdry.gr/
-"""
-        send_email(to=user_email, subject="Account Deletion Confirmation - ARISTON Wash & Dry", body=farewell_body)
-
-        logout_user()
-        
-        # Database Cleanup
-        Coupon.query.filter_by(user_id=user_id).delete()
-        Announcement.query.filter_by(user_id=user_id).delete()
-        Verification.query.filter_by(user_id=user_id).delete()
-        
-        user_to_del = User.query.get(user_id)
-        if user_to_del:
-            db.session.delete(user_to_del)
-            db.session.commit()
-        
-        session.clear()
-        return redirect("/en/goodbye")
-
-    # Αν είναι GET (απλό κλικ στο link), δείχνουμε τη σελίδα με το κουμπί
-    return render_template("en/final-confirm-page-en.html", token=token)
 
 
 @app.route("/en/goodbye")

@@ -3,173 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Οριστική Διαγραφή Προφίλ – ARISTON Wash & Dry</title>
-
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+    <title>Επαλήθευση Διαγραφής</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --danger: #ff1744;
-            --danger-hover: #d50000;
-            --dark-bg: #030508;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --white: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.6);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        :root { --danger: #ff1744; --dark-bg: #030508; --white: #ffffff; }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            /* Κόκκινο radial gradient για προειδοποίηση */
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(255, 23, 68, 0.15), transparent 50%);
+            background-image: radial-gradient(circle at 50% 0%, rgba(255, 23, 68, 0.15), transparent 50%);
             color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
+            display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0;
         }
-
         .delete-container {
-            width: 100%;
-            max-width: 480px;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            padding: 45px;
-            border-radius: 32px;
-            border: 1px solid rgba(255, 23, 68, 0.2);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: shakeReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes shakeReveal {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Alerts */
-        .flash-box {
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255, 23, 68, 0.2);
-            background: rgba(255, 23, 68, 0.1);
-            color: var(--danger);
+            width: 100%; max-width: 400px; padding: 40px;
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px);
+            border-radius: 30px; border: 1px solid rgba(255, 23, 68, 0.2);
             text-align: center;
         }
-
-        .delete-title {
-            font-size: 26px;
-            font-weight: 800;
-            color: var(--danger);
-            margin-bottom: 15px;
-            text-align: center;
-            letter-spacing: -0.5px;
+        .otp-input {
+            width: 100%; padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05); color: white; font-size: 28px;
+            text-align: center; letter-spacing: 8px; margin: 20px 0; outline: none;
         }
-
-        .delete-warning {
-            text-align: center;
-            color: var(--text-dim);
-            margin-bottom: 35px;
-            font-size: 15px;
-            line-height: 1.6;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            border-radius: 20px;
-            border: 1px dashed rgba(255, 255, 255, 0.1);
-        }
-
-        .delete-warning strong {
-            color: var(--white);
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-field { margin-bottom: 15px; }
-
-        .form-field input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            padding: 18px;
-            border-radius: 16px;
-            color: var(--white);
-            font-size: 15px;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .form-field input:focus {
-            outline: none;
-            border-color: var(--danger);
-            background: rgba(255, 25, 68, 0.05);
-            box-shadow: 0 0 0 4px rgba(255, 23, 68, 0.1);
-        }
-
-        .delete-btn {
-            width: 100%;
-            padding: 18px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 18px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(255, 23, 68, 0.2);
-            margin-top: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .delete-btn:hover {
-            background: var(--danger-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 15px 25px rgba(255, 23, 68, 0.4);
-        }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 25px;
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .back-link:hover { color: var(--white); }
-
-        @media (max-width: 480px) {
-            .delete-container { padding: 35px 20px; }
+        .otp-input:focus { border-color: var(--danger); }
+        .btn {
+            width: 100%; padding: 15px; background: var(--danger); border: none;
+            border-radius: 15px; color: white; font-weight: 800; cursor: pointer;
         }
     </style>
 </head>
 <body>
-<div class="delete-title">Βήμα 2: Επαλήθευση</div>
-<div class="delete-warning">
-    Σας στείλαμε έναν <strong>6ψήφιο κωδικό</strong> στο email σας. Εισάγετε τον παρακάτω.
-</div>
-
-<form action="/confirm-delete-otp" method="POST">
-    <div class="form-field">
-        <input type="text" name="otp" placeholder="000 000" maxlength="6" required 
-               style="font-size: 24px; letter-spacing: 5px;">
+    <div class="delete-container">
+        <h2 style="color: var(--danger);">Τελική Επιβεβαίωση</h2>
+        <p style="color: rgba(255,255,255,0.6);">Εισάγετε τον 6ψήφιο κωδικό που λάβατε στο email σας.</p>
+        
+        <form action="/confirm-delete-otp" method="POST">
+            <input type="text" name="otp" class="otp-input" maxlength="6" placeholder="000000" required autofocus>
+            <button type="submit" class="btn">ΟΡΙΣΤΙΚΗ ΔΙΑΓΡΑΦΗ</button>
+        </form>
+        
+        <a href="/delete-account" style="display:block; margin-top:20px; color:gray; text-decoration:none; font-size:13px;">Ακύρωση</a>
     </div>
-    <button class="delete-btn" type="submit">Επαλήθευση Κωδικού</button>
-</form>
-<a href="/delete-account" class="back-link">Επιστροφή</a>
-
 </body>
 </html>
