@@ -2380,9 +2380,14 @@ def send_transfer_notification(email, recipient_name, sender_info, amount):
 @app.route('/announcement/<int:ann_id>')
 @login_required
 def view_announcement(ann_id):
-    # Παίρνουμε την ανακοίνωση, ελέγχοντας αν ανήκει στον χρήστη
-    ann = Announcement.query.filter_by(id=ann_id, user_id=current_user.id).first_or_404()
-    # Εδώ βεβαιώσου ότι το αρχείο λέγεται announcement_detail.html
+    # Ψάχνουμε την ανακοίνωση με το ID
+    ann = Announcement.query.get_or_404(ann_id)
+    
+    # ΕΛΕΓΧΟΣ: Αν η ανακοίνωση έχει user_id, τότε πρέπει να ανήκει στον τρέχοντα χρήστη
+    # Αν το user_id είναι None (δημόσια), τότε τη βλέπουν όλοι οι συνδεδεμένοι
+    if ann.user_id is not None and ann.user_id != current_user.id:
+        abort(403) # Απαγόρευση πρόσβασης αν ανήκει σε άλλον
+        
     return render_template('announcement_detail.html', ann=ann)
 
 import re
@@ -4007,9 +4012,15 @@ def public_card_en(user_id, token):
 @app.route('/en/announcement/<int:ann_id>')
 @login_required
 def view_announcement_en(ann_id):
-    # Αναζήτηση ανακοίνωσης για τον χρήστη (English version)
-    ann = Announcement.query.filter_by(id=ann_id, user_id=current_user.id).first_or_404()
-    # Εδώ βεβαιώσου ότι το αρχείο λέγεται en/announcement_detail_en.html
+    # Αναζήτηση ανακοίνωσης με το ID
+    ann = Announcement.query.get_or_404(ann_id)
+    
+    # Ασφάλεια: Αν η ανακοίνωση είναι προσωπική (έχει user_id), 
+    # πρέπει να ανήκει στον τρέχοντα χρήστη.
+    # Αν είναι None, την επιτρέπουμε σε όλους τους logged-in.
+    if ann.user_id is not None and ann.user_id != current_user.id:
+        abort(403)
+        
     return render_template('en/announcement_detail_en.html', ann=ann)
 
 

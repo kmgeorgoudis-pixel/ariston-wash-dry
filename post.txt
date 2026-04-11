@@ -1,3 +1,3 @@
 git add .
-git commit -m " m monday banner 2 "
+git commit -m " ypdates erros fix 1 "
 git push
