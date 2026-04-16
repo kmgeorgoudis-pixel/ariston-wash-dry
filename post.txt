@@ -1,3 +1,3 @@
 git add .
-git commit -m " google register email  "
+git commit -m " add my web  "
 git push
