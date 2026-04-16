@@ -3200,6 +3200,8 @@ def update_debt(order_id, new_amount):
     order.debt_amount = new_amount
     db.session.commit()
     return redirect(url_for('orders_list')) # Ή όπως έχεις ονομάσει το route του πίνακα
+
+
 @app.route('/login/google')
 def google_login():
     # Αυτό δημιουργεί το URL ανακατεύθυνσης προς τη Google
@@ -3210,15 +3212,16 @@ def google_login():
 def google_authorize():
     token = google.authorize_access_token()
     user_info = token.get('userinfo')
+    
     if user_info:
         email = user_info['email']
         fullname = user_info.get('name', 'Google User')
         
-        # Ψάχνουμε αν υπάρχει ο χρήστης
+        # Ψάχνουμε αν υπάρχει ο χρήστης στη βάση
         user = User.query.filter_by(email=email).first()
         
         if not user:
-            # Αν δεν υπάρχει, τον δημιουργούμε (χωρίς password)
+            # Αν δεν υπάρχει, τον δημιουργούμε (νέα εγγραφή μέσω Google)
             user = User(
                 fullname=fullname, 
                 email=email, 
@@ -3226,8 +3229,69 @@ def google_authorize():
             )
             db.session.add(user)
             db.session.commit()
+
+            # ===== ΑΠΟΣΤΟΛΗ EMAIL ΚΑΛΩΣΟΡΙΣΜΑΤΟΣ ΓΙΑ ΝΕΟ ΧΡΗΣΤΗ =====
+            try:
+                body = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <h2 style="color: #0056b3;">Καλωσόρισες στην οικογένεια του Ariston Wash & Dry! ✨</h2>
+                    <p>Αγαπητέ/ή <strong>{fullname}</strong>,</p>
+                    <p>Καλωσόρισες στην επίσημη κοινότητα του <strong>Ariston Wash & Dry</strong>! Η εγγραφή σου ολοκληρώθηκε με επιτυχία και πλέον έχεις πρόσβαση σε έναν κόσμο προνομίων και ψηφιακών ευκολιών.</p>
+                    
+                    <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🚀 Έξυπνη Εξυπηρέτηση & Διασκέδαση</h3>
+                    <ul>
+                        <li><strong>Ariston AI Assistant:</strong> Ο δικός σου ψηφιακός βοηθός για κάθε απορία: <a href="https://aristonwashdry.gr/ai">aristonwashdry.gr/ai</a></li>
+                        <li><strong>Ariston Game:</strong> Διασκέδασε και παιξέ το παιχνίδι πιάσε τον λεκέ ίσως φτάσεις την κατάταξη TOP 10 : <a href="https://aristonwashdry.gr/game">aristonwashdry.gr/game</a></li>
+                        <li> <strong>ΤΡΟΧΟΣ ΤΗΣ ΤΥΧΗΣ </strong> Μια φόρα την εβδομάδα γύρνα τον τυχέρο τροχό : <a href="https://aristonwashdry.gr/lucky-wheel">aristonwashdry.gr/lucky-wheel</a>  </li>
+                    </ul>
+
+                    <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🎁 Προνόμια & Δώρα</h3>
+                    <ul>
+                        <li><strong>Κουπόνια & Προσφορές:</strong> Δες τις εκπτώσεις σου ή δημιούργησε κουπόνια για να τα κάνεις <strong>δώρο</strong> σε αγαπημένα πρόσωπα: <a href="https://aristonwashdry.gr/updates-menu">aristonwashdry.gr/updates-menu</a></li>
+                        <li><strong>Ψηφιακή Κάρτα Μέλους:</strong> Έχε πάντα μαζί σου τα στοιχεία μέλους σου: <a href="https://aristonwashdry.gr/member-info">aristonwashdry.gr/member-info</a></li>
+                    </ul>
+
+                    <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">⚙️ Διαχείριση Λογαριασμού</h3>
+                    <ul>
+                        <li><strong>Προσωπικά Στοιχεία:</strong> Διαχείριση και αλλαγή στοιχείων σύνδεσης: <a href="https://aristonwashdry.gr/settings-menu">aristonwashdry.gr/settings-menu</a></li>
+                        <li><strong>Κατάργηση Προφίλ:</strong> Εάν επιθυμείς να διαγράψεις τον λογαριασμό σου: <a href="https://aristonwashdry.gr/delete-account">aristonwashdry.gr/delete-account</a></li>
+                    </ul>
+
+                    <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">✍️ Η γνώμη σου μετράει</h3>
+                    <p>
+                        Πες μας πώς σου φαίνεται η ιστοσελίδα μας: <a href="https://aristonwashdry.gr/site-review">Site Review</a><br>
+                        Αξιολόγησε την εμπειρία σου στο κατάστημα: <a href="https://aristonwashdry.gr/kritikes">Κριτική Καταστήματος</a>
+                    </p>
+
+                    <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">📞 Χρειάζεσαι βοήθεια;</h3>
+                    <p>Μην διστάσεις να επικοινωνήσεις μαζί μας μέσω της φόρμας επικοινωνίας: <a href="https://aristonwashdry.gr/epikoinonia">aristonwashdry.gr/epikoinonia</a></p>
+
+                    <p style="margin-top: 25px;">Σε ευχαριστούμε που μας εμπιστεύτηκες!<br>
+                    <strong>Με εκτίμηση,<br>Η ομάδα του Ariston Wash & Dry</strong></p>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="https://aristonwashdry.gr" target="_blank" style="text-decoration:none;">
+                            <img src="https://aristonwashdry.gr/templates/images/1new.png" alt="ARISTON Wash & Dry" style="height:100px; width:auto;">
+                        </a>
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid #eee; margin-top: 30px;">
+                    <p style='font-size: 12px; color: #666;'>
+                        Το παρόν email στάλθηκε αυτόματα από το ARISTON Wash & Dry σύμφωνα με την 
+                        <a href="https://aristonwashdry.gr/privacy">Πολιτική Απορρήτου</a>. 
+                        Τα δεδομένα σας χρησιμοποιούνται αποκλειστικά για τη λειτουργία της υπηρεσίας.
+                    </p>
+                </body>
+                </html>
+                """
+                send_email(to=email, subject="Καλωσόρισες στο Ariston Wash & Dry", body=body)
+            except Exception as e:
+                print(f"Σφάλμα κατά την αποστολή email (Google Login): {e}")
+
             flash(f"Καλώς ήρθατε, {fullname}!", "success")
         
+        # Σύνδεση του χρήστη (είτε νέος είτε παλιός)
         login_user(user)
         return redirect(url_for('index'))
     
