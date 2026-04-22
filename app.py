@@ -3480,6 +3480,7 @@ def subadmin_add_activity(user_id):
     
     # ΠΡΟΣΟΧΗ: Εδώ αλλάζουμε το redirect για να μείνει ο Sub-Admin στη σελίδα που ήταν
     return redirect(request.referrer or f'/subadmin/users/{user_id}')
+
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")

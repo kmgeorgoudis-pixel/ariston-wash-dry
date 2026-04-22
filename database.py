@@ -111,6 +111,7 @@ class User(db.Model, UserMixin):
     qr_enabled = db.Column(db.Boolean, default=True)
     last_spin_date = db.Column(db.DateTime, nullable=True)
     last_spin_prize = db.Column(db.Integer, default=0)
+    
 class Giveaway(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
