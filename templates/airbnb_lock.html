@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Access | Ariston Wash & Dry</title>
+    <style>
+        :root {
+            --primary: #004a99;
+            --accent: #00d4ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .lock-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="password"]:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover {
+            background: var(--accent);
+            color: #004a99;
+            transform: translateY(-2px);
+        }
+
+        .error-msg {
+            color: #ff4444;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .footer-logo {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="lock-card">
+        <span class="icon">🔒</span>
+        <h2>Partner Portal</h2>
+        <p>Η σελίδα είναι προστατευμένη. Εισάγετε τον κωδικό συνεργάτη Airbnb για να δείτε τις τιμές.</p>
+        
+        <form method="POST">
+            <input type="password" name="password" placeholder="Κωδικός Πρόσβασης" required autofocus>
+            <button type="submit" class="btn-submit">Είσοδος</button>
+        </form>
+
+        {% if error %}
+        <div class="error-msg">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="footer-logo">
+            Ariston Wash & Dry - Secure Partner Access
+        </div>
+    </div>
+
+    <script>
+        
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'p')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
