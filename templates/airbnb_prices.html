@@ -22,47 +22,7 @@
             color: #333;
         }
 
-        
-        #lock-screen {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        #lock-screen img { width: 80px; margin-bottom: 20px; }
-
-        input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin: 20px 0;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            box-sizing: border-box;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        .btn-enter {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            transition: 0.3s;
-        }
-
-        .btn-enter:hover { background: var(--accent); color: #004a99; }
-
-         
         #pricing-content {
-            display: none; 
             background: white;
             width: 95%;
             max-width: 600px;
@@ -127,13 +87,7 @@
         }
     </style>
 </head>
-<body oncontextmenu="return false;"> <div id="lock-screen">
-        <h2 style="color: var(--primary);">Airbnb Partners</h2>
-        <p>Εισάγετε τον κωδικό πρόσβασης για να δείτε τον τιμοκατάλογο.</p>
-        <input type="password" id="passInput" placeholder="Κωδικός">
-        <button class="btn-enter" onclick="checkPass()">ΠΡΟΒΟΛΗ ΤΙΜΩΝ</button>
-        <p id="errMsg" style="color: red; font-size: 14px; margin-top: 10px; display: none;">Λάθος κωδικός!</p>
-    </div>
+<body oncontextmenu="return false;"> 
 
     <div id="pricing-content">
         <div class="header">
@@ -161,6 +115,7 @@
 
         <div class="footer-note">
             * Οι τιμές ενδέχεται να αλλάξουν κατόπιν συνεννόησης. <br>
+            * Οι τιμές δεν συμπεριλαμβάνουν ΦΠΑ <br>
             Απαγορεύεται η αναδημοσίευση του παρόντος.
         </div>
     </div>
@@ -170,36 +125,20 @@
     </div>
 
     <script>
-        function checkPass() {
-            const pass = document.getElementById('passInput').value;
-            const correctPass = "AIRbnbpricing2026!";
-            
-            if(pass === correctPass) {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('pricing-content').style.display = 'block';
-            } else {
-                document.getElementById('errMsg').style.display = 'block';
-            }
-        }
-
-        
+        // Αποτροπή PrintScreen & Shortcuts
         document.addEventListener('keydown', function(e) {
-            // Block PrintScreen
             if (e.key === "PrintScreen") {
                 showOverlay();
             }
-            // Block Ctrl+P (Print)
             if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) {
                 e.preventDefault();
                 alert("Η εκτύπωση είναι απενεργοποιημένη.");
             }
-            // Block Ctrl+S (Save)
             if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
                 e.preventDefault();
             }
         });
 
-        
         document.addEventListener('keyup', function(e) {
             if (e.key === "PrintScreen") {
                 navigator.clipboard.writeText(''); 
@@ -211,11 +150,6 @@
             overlay.style.display = 'flex';
             setTimeout(() => { overlay.style.display = 'none'; }, 2000);
         }
-
-        
-        window.onblur = function() {
-            
-        };
     </script>
 </body>
 </html>
