@@ -3480,6 +3480,28 @@ def subadmin_add_activity(user_id):
     
     # ΠΡΟΣΟΧΗ: Εδώ αλλάζουμε το redirect για να μείνει ο Sub-Admin στη σελίδα που ήταν
     return redirect(request.referrer or f'/subadmin/users/{user_id}')
+from flask import Flask, render_template, request, session, redirect, url_for
+
+@app.route('/airbnb-prices', methods=['GET', 'POST'])
+def airbnb_prices():
+    password_required = "AIRbnbpricing2026!"
+    
+    if request.method == 'POST':
+        entered_password = request.form.get('password')
+        if entered_password == password_required:
+            session['airbnb_access'] = True
+            return redirect(url_for('airbnb_prices'))
+        else:
+            return render_template('airbnb_lock.html', error="Λάθος κωδικός πρόσβασης!")
+
+    # Αν ο χρήστης έχει ήδη δώσει τον κωδικό
+    if session.get('airbnb_access'):
+        # Μόλις φορτώσει η σελίδα, διαγράφουμε το access από το session 
+        # ώστε αν βγει ή κάνει ανανέωση να πρέπει να τον ξαναδώσει
+        session.pop('airbnb_access', None) 
+        return render_template('airbnb_prices.html')
+    
+    return render_template('airbnb_lock.html')
 
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
