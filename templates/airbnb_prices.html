@@ -22,7 +22,7 @@
             color: #333;
         }
 
-        /* Lock Screen Style */
+        
         #lock-screen {
             background: white;
             padding: 40px;
@@ -60,16 +60,16 @@
 
         .btn-enter:hover { background: var(--accent); color: #004a99; }
 
-        /* Pricing Content Style */
+         
         #pricing-content {
-            display: none; /* Hidden by default */
+            display: none; 
             background: white;
             width: 95%;
             max-width: 600px;
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 15px 50px rgba(0,0,0,0.4);
-            user-select: none; /* Αποτροπή επιλογής κειμένου */
+            user-select: none; 
         }
 
         .header {
@@ -117,7 +117,6 @@
             margin-top: 30px;
         }
 
-        /* Overlay for screenshots */
         #anti-screenshot-overlay {
             display: none;
             position: fixed;
@@ -153,7 +152,7 @@
             <li class="price-item"><span>ΠΑΠΛΩΜΑΤΟΘΗΚΗ</span> <span>2,20 €</span></li>
         </ul>
 
-        <div class="category">💨 ΣΙΔΕΡΟ</div>
+        <div class="category">💨 ΣΙΔΕΡΩΜΑ</div>
         <ul class="price-list">
             <li class="price-item"><span>ΣΕΝΤΟΝΙ ΜΟΝΟ</span> <span>1,00 €</span></li>
             <li class="price-item"><span>ΣΕΝΤΟΝΙ ΔΙΠΛΟ</span> <span>1,20 €</span></li>
@@ -183,7 +182,7 @@
             }
         }
 
-        // Αποτροπή PrintScreen & Shortcuts
+        
         document.addEventListener('keydown', function(e) {
             // Block PrintScreen
             if (e.key === "PrintScreen") {
@@ -200,10 +199,10 @@
             }
         });
 
-        // Ανίχνευση PrintScreen (σε μερικούς browsers)
+        
         document.addEventListener('keyup', function(e) {
             if (e.key === "PrintScreen") {
-                navigator.clipboard.writeText(''); // Καθαρισμός πρόχειρου
+                navigator.clipboard.writeText(''); 
             }
         });
 
@@ -213,10 +212,9 @@
             setTimeout(() => { overlay.style.display = 'none'; }, 2000);
         }
 
-        // Αυτόματο κλείδωμα όταν ο χρήστης φεύγει από το tab (προαιρετικό αλλά δυνατό)
+        
         window.onblur = function() {
-            // Αν θέλεις να ξανακλειδώνει μόλις αλλάξει tab, βγάλε το σχόλιο από κάτω:
-            // location.reload();
+            
         };
     </script>
 </body>
