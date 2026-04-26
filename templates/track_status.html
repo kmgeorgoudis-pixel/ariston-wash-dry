@@ -3,26 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="15">
-    <title>Κατάσταση Παραγγελίας - ARISTON</title>
+    <meta http-equiv="refresh" content="60"> <title>Κατάσταση Παραγγελίας - ARISTON</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .step-active { color: #2563eb; }
         .step-done { color: #10b981; }
+        /* Smooth transition για τη μετάφραση */
+        span, p, h1, h2, button { transition: all 0.2s ease; }
     </style>
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+
+    <div class="absolute top-4 right-4 z-50">
+        <button onclick="toggleLanguage()" id="langBtn" class="bg-white border border-blue-600 text-blue-600 px-4 py-1 rounded-full font-bold shadow-sm hover:bg-blue-50">
+            EN
+        </button>
+    </div>
 
     <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-blue-600 p-6 text-white text-center">
             <img src="{{ url_for('static', filename='images/logo3.png') }}" alt="Logo" class="h-16 mx-auto mb-2 bg-white rounded-full p-2">
             <h1 class="text-xl font-bold">ARISTON Wash & Dry</h1>
-            <p class="text-sm opacity-80">Κωδικός Παραγγελίας: #{{ order.order_code }}</p>
+            <p class="text-sm opacity-80"><span data-key="order_code">Κωδικός Παραγγελίας</span>: #{{ order.order_code }}</p>
         </div>
 
         <div class="p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-6 text-center">Γεια σας, {{ order.fullname }}!</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mb-6 text-center">
+                <span data-key="hello">Γεια σας</span>, {{ order.fullname }}!
+            </h2>
 
             <div class="relative">
                 <div class="absolute left-4 top-0 h-full w-0.5 bg-gray-200"></div>
@@ -32,8 +41,8 @@
                         <i class="fas fa-receipt text-white text-xs"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="font-bold {{ 'text-green-600' if order.status >= 0 else 'text-gray-400' }}">Παραλήφθηκε</p>
-                        <p class="text-xs text-gray-500">Η παραγγελία σας καταχωρήθηκε.</p>
+                        <p class="font-bold {{ 'text-green-600' if order.status >= 0 else 'text-gray-400' }}" data-key="status0_title">Παραλήφθηκε</p>
+                        <p class="text-xs text-gray-500" data-key="status0_desc">Η παραγγελία σας καταχωρήθηκε.</p>
                     </div>
                 </div>
 
@@ -42,8 +51,8 @@
                         <i class="fas fa-soap text-white text-xs {{ 'animate-spin' if order.status == 1 }}"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="font-bold {{ 'text-blue-600' if order.status == 1 else ('text-green-600' if order.status > 1 else 'text-gray-400') }}">Σε Πλύσιμο</p>
-                        <p class="text-xs text-gray-500">Τα ρούχα σας είναι στις μηχανές μας.</p>
+                        <p class="font-bold {{ 'text-blue-600' if order.status == 1 else ('text-green-600' if order.status > 1 else 'text-gray-400') }}" data-key="status1_title">Σε Πλύσιμο</p>
+                        <p class="text-xs text-gray-500" data-key="status1_desc">Τα ρούχα σας είναι στις μηχανές μας.</p>
                     </div>
                 </div>
 
@@ -52,8 +61,8 @@
                         <i class="fas fa-wind text-white text-xs"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="font-bold {{ 'text-orange-500' if order.status == 2 else ('text-green-600' if order.status > 2 else 'text-gray-400') }}">Σε Στέγνωμα</p>
-                        <p class="text-xs text-gray-500">Φροντίζουμε για το τέλειο στέγνωμα.</p>
+                        <p class="font-bold {{ 'text-orange-500' if order.status == 2 else ('text-green-600' if order.status > 2 else 'text-gray-400') }}" data-key="status2_title">Σε Στέγνωμα</p>
+                        <p class="text-xs text-gray-500" data-key="status2_desc">Φροντίζουμε για το τέλειο στέγνωμα.</p>
                     </div>
                 </div>
 
@@ -62,19 +71,19 @@
                         <i class="fas fa-check-double text-white text-xs"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="font-bold {{ 'text-green-600' if order.status == 3 else 'text-gray-400' }}">Έτοιμα προς Παράδοση!</p>
-                        <p class="text-xs text-gray-500">Μπορείτε να περάσετε να τα πάρετε.</p>
+                        <p class="font-bold {{ 'text-green-600' if order.status == 3 else 'text-gray-400' }}" data-key="status3_title">Έτοιμα προς Παράδοση!</p>
+                        <p class="text-xs text-gray-500" data-key="status3_desc">Μπορείτε να περάσετε να τα πάρετε.</p>
                     </div>
                 </div>
             </div>
 
             <div class="mt-8 pt-6 border-t border-gray-100 text-sm text-gray-600">
                 <div class="flex justify-between mb-2">
-                    <span>Εκτιμώμενη Παραλαβή:</span>
+                    <span data-key="pickup">Εκτιμώμενη Παραλαβή:</span>
                     <span class="font-semibold text-gray-800">{{ order.delivery_time }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span>Υπόλοιπο Πληρωμής:</span>
+                    <span data-key="debt">Υπόλοιπο Πληρωμής:</span>
                     <span class="font-semibold {{ 'text-red-500' if order.debt_amount > 0 else 'text-green-600' }}">
                         {{ order.debt_amount }}€
                     </span>
@@ -82,10 +91,65 @@
             </div>
         </div>
 
-        <div class="bg-gray-50 p-4 text-center text-xs text-gray-400">
+        <div class="bg-gray-50 p-4 text-center text-xs text-gray-400" data-key="thanks">
             Ευχαριστούμε για την εμπιστοσύνη σας!
         </div>
     </div>
 
+    <script>
+        const translations = {
+            'el': {
+                'order_code': 'Κωδικός Παραγγελίας',
+                'hello': 'Γεια σας',
+                'status0_title': 'Παραλήφθηκε',
+                'status0_desc': 'Η παραγγελία σας καταχωρήθηκε.',
+                'status1_title': 'Σε Πλύσιμο',
+                'status1_desc': 'Τα ρούχα σας είναι στις μηχανές μας.',
+                'status2_title': 'Σε Στέγνωμα',
+                'status2_desc': 'Φροντίζουμε για το τέλειο στέγνωμα.',
+                'status3_title': 'Έτοιμα προς Παράδοση!',
+                'status3_desc': 'Μπορείτε να περάσετε να τα πάρετε.',
+                'pickup': 'Εκτιμώμενη Παραλαβή:',
+                'debt': 'Υπόλοιπο Πληρωμής:',
+                'thanks': 'Ευχαριστούμε για την εμπιστοσύνη σας!',
+                'btn': 'EN'
+            },
+            'en': {
+                'order_code': 'Order Code',
+                'hello': 'Hello',
+                'status0_title': 'Received',
+                'status0_desc': 'Your order has been registered.',
+                'status1_title': 'Washing',
+                'status1_desc': 'Your clothes are in our machines.',
+                'status2_title': 'Drying',
+                'status2_desc': 'Taking care of the perfect drying.',
+                'status3_title': 'Ready for Pickup!',
+                'status3_desc': 'You can come and collect them.',
+                'pickup': 'Estimated Pickup:',
+                'debt': 'Balance Due:',
+                'thanks': 'Thank you for your trust!',
+                'btn': 'GR'
+            }
+        };
+
+        let currentLang = localStorage.getItem('prefLang') || 'el';
+
+        function updateContent() {
+            document.querySelectorAll('[data-key]').forEach(elem => {
+                const key = elem.getAttribute('data-key');
+                elem.innerText = translations[currentLang][key];
+            });
+            document.getElementById('langBtn').innerText = translations[currentLang]['btn'];
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'el' ? 'en' : 'el';
+            localStorage.setItem('prefLang', currentLang);
+            updateContent();
+        }
+
+        
+        window.onload = updateContent;
+    </script>
 </body>
 </html>
