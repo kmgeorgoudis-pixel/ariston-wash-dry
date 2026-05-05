@@ -2,21 +2,83 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Οδηγίες Χρήσης - Ariston</title>
+    <title>Οδηγίες - Ariston Wash & Dry</title>
     <style>
-        body { background: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
-        .video-container { width: 90%; max-width: 800px; text-align: center; color: white; }
-        video { width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .back-btn { display: inline-block; margin-top: 20px; color: #3b82f6; text-decoration: none; font-weight: bold; }
+        body { 
+            background: #0f172a; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 40px 0;
+            font-family: sans-serif; 
+        }
+        .container { width: 90%; max-width: 1000px; text-align: center; color: white; }
+        
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .video-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        video { 
+            width: 100%; 
+            border-radius: 10px; 
+            background: #000;
+        }
+
+        h2 { margin-bottom: 10px; font-size: 1.5rem; color: #f8fafc; }
+        .back-btn { 
+            display: inline-block; 
+            margin-top: 40px; 
+            color: #3b82f6; 
+            text-decoration: none; 
+            font-weight: bold; 
+            padding: 10px 20px;
+            border: 2px solid #3b82f6;
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background: #3b82f6;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <div class="video-container">
-        <h2>Οδηγίες Χρήσης Μηχανημάτων</h2>
-        <video controls>
-            <source src="{{ url_for('static', filename='videos/instructions1_com.mp4') }}" type="video/mp4">
-            Ο browser σας δεν υποστηρίζει βίντεο.
-        </video>
+    <div class="container">
+        <h1 style="color: #ffcc00;">Κέντρο Οδηγιών Ariston</h1>
+        
+        <div class="video-grid">
+            <!-- ΒΙΝΤΕΟ 1: ΟΔΗΓΙΕΣ ΧΡΗΣΗΣ -->
+            <div class="video-card">
+                <h2>Οδηγίες Χρήσης</h2>
+                <video controls>
+                    <source src="{{ url_for('static', filename='videos/instructions1_com.mp4') }}" type="video/mp4">
+                    Ο browser σας δεν υποστηρίζει βίντεο.
+                </video>
+            </div>
+
+            <!-- ΒΙΝΤΕΟ 2: ΠΥΡΑΣΦΑΛΕΙΑ -->
+            <div class="video-card">
+                <h2>Οδηγίες Πυρασφάλειας</h2>
+                <video controls>
+                    <source src="{{ url_for('static', filename='videos/fire.mp4') }}" type="video/mp4">
+                    Ο browser σας δεν υποστηρίζει βίντεο.
+                </video>
+            </div>
+        </div>
+
         <br>
         <a href="/" class="back-btn">← Επιστροφή στην Αρχική</a>
     </div>

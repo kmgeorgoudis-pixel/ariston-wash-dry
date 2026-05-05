@@ -3659,7 +3659,7 @@ def register_en():
             
             <h3 style="border-bottom: 2px solid #eee; padding-bottom: 5px;">🚀 Smart Service & Fun</h3>
             <ul>
-                <li><strong>Ariston AI Assistant:</strong> Your own digital assistant for any questions: <a href="https://aristonwashdry.gr/en/ai">aristonwashdry.gr/ai</a></li>
+                <li><strong>Ariston AI Assistant:</strong> Your own digital assistant for any questions: <a href="https://aristonwashdry.gr/en/ai">aristonwashdry.gr/en/ai</a></li>
                 <li><strong>Ariston Game:</strong> Have fun and play the game (Catch the Stain!)Maybe you reach the TOP 10: <a href="https://aristonwashdry.gr/game">aristonwashdry.gr/game</a></li>
                 <li> <strong>ARISTON LUCKY WHEEL</strong> Ones a week spin the lucky wheel: <a href="https://aristonwashdry.gr/lucky-wheel">aristonwashdry.gr/lucky-wheel</a>  </li>
             </ul>
