@@ -2435,7 +2435,7 @@ def lucky_wheel():
     wait_message = ""
     
     # Λίστα με τα emails που έχουν απεριόριστα spins
-    unlimited_spin_users = ['kmgeorgoudis@gmail.com', 'kostaskrikonis09kr@gmail.com']
+    unlimited_spin_users = ['kmgeorgoudis@gmail.com', 'kostaskrikonis09kr@gmail.com', 'stauroskarras@icloud.com']
     
     # Αν ο χρήστης ΔΕΝ είναι στη λίστα των admin, τότε έλεγξε τον περιορισμό των 7 ημερών
     if user.email not in unlimited_spin_users:
@@ -2464,7 +2464,7 @@ def spin_result():
     now = datetime.utcnow()
     
     # Ορισμός ως λίστα για σωστό έλεγχο
-    unlimited_emails = ['kmgeorgoudis@gmail.com', 'kostaskrikonis09kr@gmail.com']
+    unlimited_emails = ['kmgeorgoudis@gmail.com', 'kostaskrikonis09kr@gmail.com', 'stauroskarras@icloud.com']
     
     # 1. Έλεγχος περιορισμού (7 μέρες)
     # Αν το email ΔΕΝ είναι στη λίστα των προνομιούχων
