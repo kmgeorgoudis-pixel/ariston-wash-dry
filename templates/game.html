@@ -1,739 +1,994 @@
-
 <!DOCTYPE html>
 <html lang="el">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ariston Wash &amp; Dry Game</title>
-    <style>
-      
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #ffffff, #d6ecff);
-      background-image:
-        radial-gradient(circle at top left, #e0f7ff 10%, transparent 40%),
-        radial-gradient(circle at bottom right, #cce6ff 10%, transparent 50%);
-      font-family: 'Segoe UI', sans-serif;
-      overflow-x: hidden;
-      overflow-y: auto;
-      color: #003366;
-    }
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    #splash {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 0.8s ease, visibility 0.8s;
+<title>Ariston Wash & Dry Ultimate Game</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-.splash-hidden {
-  opacity: 0;
-  visibility: hidden;
+body{
+  font-family:'Segoe UI',sans-serif;
+  overflow:hidden;
+  background:
+  radial-gradient(circle at top left,#3da9fc 0%,transparent 25%),
+  radial-gradient(circle at bottom right,#90caf9 0%,transparent 25%),
+  linear-gradient(135deg,#ffffff,#dff3ff);
+  color:#003366;
 }
 
-    #intro-wrapper {
-      text-align: center;
-      padding: 3rem 1.5rem;
-      background: #ffffff;
-      max-width: 900px;
-      margin: 40px auto 0;
-      border-radius: 16px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-    }
+/* ================= SPLASH ================= */
 
-    #intro-title { font-size: 2rem; margin-bottom: 0.5rem; }
-    #intro-subtitle { font-size: 1.05rem; margin-bottom: 1.5rem; color: #335577; }
-
-    #nickname-block {
-      margin-bottom: 2rem;
-      padding: 1.2rem 1rem;
-      background: #f3f8ff;
-      border-radius: 12px;
-      border: 1px solid #d0e2ff;
-    }
-
-    #nickname-input {
-      padding: 0.6rem 0.8rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #aac4e8;
-      width: 220px;
-      outline: none;
-    }
-
-    /* --- ΣΤΥΛ ΓΙΑ ΤΑ ΚΟΥΜΠΙΑ --- */
-    button, #start-btn, #top10-btn {
-      font-family: 'Segoe UI', sans-serif;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Κουμπί Ξεκίνα / Start */
-    #start-btn {
-      padding: 0.9rem 2.5rem;
-      font-size: 1.2rem;
-      background: linear-gradient(135deg, #0077cc 0%, #004494 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 119, 204, 0.3);
-    }
-
-    #start-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 119, 204, 0.4);
-      filter: brightness(1.1);
-    }
-
-    /* Κουμπί Αλλαγή Ψευδωνύμου */
-    #change-nickname-btn {
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-      background-color: transparent;
-      color: #0077cc;
-      border: 2px solid #0077cc;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-
-    #change-nickname-btn:hover {
-      background-color: #0077cc;
-      color: white;
-    }
-
-    /* Κουμπί Top 10 */
-    #top10-btn {
-      padding: 0.9rem 2.1rem;
-      font-size: 1.1rem;
-      background-color: #ffffff;
-      color: #003366;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    #top10-btn:hover {
-      border-color: #0077cc;
-      color: #0077cc;
-      transform: translateY(-2px);
-      background-color: #f8fbff;
-    }
-
-    #top10-icon { margin-right: 8px; }
-
-    /* Κουμπί Play Again στο Game Over */
-    #gameover-screen button {
-      padding: 1rem 2rem;
-      font-size: 1.1rem;
-      background: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
-
-    #gameover-screen button:hover {
-      background: #005fa3;
-      transform: scale(1.05);
-    }
-
-    /* --- ΥΠΟΛΟΙΠΟ ΣΤΥΛ --- */
-    #instructions-text {
-      margin-top: 1.5rem;
-      text-align: left;
-      font-size: 0.97rem;
-      line-height: 1.7;
-    }
-
-    #intro-actions {
-      margin-top: 2rem;
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    #leketes-score, #leketes-timer {
-      position: absolute;
-      top: 10px;
-      font-size: 20px;
-      background: rgba(255,255,255,0.85);
-      padding: 10px 15px;
-      border-radius: 12px;
-      z-index: 10;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      font-weight: bold;
-      border: 1px solid #d0e2ff;
-    }
-
-    #leketes-score { left: 10px; color: #0077cc; }
-    #leketes-timer { right: 10px; color: #cc0000; }
-
-    #leketes-area {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      overflow: hidden;
-      cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><text y='34' font-size='32'>🧽</text></svg>") 16 16, pointer;
-    }
-
-    .leke {
-      width: 65px;
-      height: 65px;
-      background-image: url("https://i.postimg.cc/3x3QzSGq/leke.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-      position: absolute;
-      animation: fall 5.5s linear forwards, spin 5.5s linear infinite;
-      filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
-    }
-
-    @keyframes fall { from { top: -80px; } to { top: 100vh; } }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-    #game-ui { display: none; }
-    #gameover-screen {
-      position: fixed;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(5px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .home-btn {
-    display: inline-block;
-    padding: 16px 32px;
-    background: linear-gradient(135deg, #0055aa, #003d7a);
-    color: #ffffff;
-    font-size: 1.3rem;
-    font-weight: 700;
-    border-radius: 14px;
-    text-decoration: none;
-    box-shadow: 0 10px 25px rgba(0, 60, 120, 0.35);
-    transition: all 0.25s ease;
-    letter-spacing: 0.5px;
+#splash{
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  background:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:1s;
 }
 
-.home-btn:hover {
-    background: linear-gradient(135deg, #0077dd, #0055aa);
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 14px 30px rgba(0, 80, 160, 0.45);
+.splash-hidden{
+  opacity:0;
+  visibility:hidden;
 }
-  </style>
-    <link rel="icon" href="/favicon.ico">
-  </head>
-  <body>
-    <div id="splash">
-  <div style="text-align: center;">
-    <h1 style="color: #003366; font-family: 'Segoe UI', sans-serif;">ARISTON Wash & Dry Game</h1>
-    <p style="color: #0077cc; font-weight: bold;">(Catch the Stain!)</p>
-    <div id="loading-container" style="width: 300px; height: 20px; background: #e0e0e0; border-radius: 10px; margin: 20px auto; overflow: hidden; border: 1px solid #ccc;">
-      <div id="loading-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0077cc, #004494); transition: width 0.1s linear;"></div>
+
+#loading-container{
+  width:320px;
+  height:24px;
+  background:#e0e0e0;
+  border-radius:50px;
+  overflow:hidden;
+  margin-top:20px;
+  border:2px solid #ccc;
+}
+
+#loading-bar{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#0077cc,#00bfff);
+}
+
+/* ================= MENU ================= */
+
+#menu{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow-y:auto;
+  padding:30px;
+}
+
+.menu-box{
+  width:100%;
+  max-width:900px;
+  background:white;
+  border-radius:30px;
+  padding:40px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.15);
+  text-align:center;
+  animation:menuIn 1s ease;
+}
+
+@keyframes menuIn{
+  from{
+    transform:translateY(40px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+
+.logo{
+  font-size:3rem;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  color:#4d6f91;
+  margin-bottom:30px;
+}
+
+.lang-switch{
+  margin-bottom:25px;
+}
+
+.lang-switch button{
+  margin:0 5px;
+  padding:10px 18px;
+  border:none;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#e8f5ff;
+}
+
+.lang-switch button.active{
+  background:#0077cc;
+  color:white;
+}
+
+input{
+  padding:14px;
+  width:260px;
+  border-radius:12px;
+  border:2px solid #b8d9ff;
+  font-size:1rem;
+  outline:none;
+}
+
+.menu-buttons{
+  margin-top:30px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+  justify-content:center;
+}
+
+button{
+  cursor:pointer;
+}
+
+.main-btn{
+  padding:16px 32px;
+  border:none;
+  border-radius:15px;
+  font-size:1.1rem;
+  font-weight:bold;
+  color:white;
+  background:linear-gradient(135deg,#0077cc,#004ea3);
+  box-shadow:0 10px 25px rgba(0,119,204,0.3);
+  transition:0.25s;
+}
+
+.main-btn:hover{
+  transform:translateY(-4px) scale(1.03);
+}
+
+.secondary-btn{
+  padding:16px 32px;
+  border:none;
+  border-radius:15px;
+  font-size:1rem;
+  font-weight:bold;
+  background:white;
+  border:2px solid #d7e8ff;
+}
+
+.instructions{
+  margin-top:35px;
+  text-align:left;
+  line-height:1.7;
+  background:#f5fbff;
+  padding:25px;
+  border-radius:20px;
+}
+
+/* ================= GAME ================= */
+
+#game{
+  display:none;
+  width:100vw;
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+  cursor:crosshair;
+}
+
+#hud{
+  position:absolute;
+  top:15px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:20px;
+  z-index:999;
+}
+
+.hud-box{
+  background:rgba(255,255,255,0.9);
+  padding:12px 22px;
+  border-radius:16px;
+  font-weight:bold;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+#combo{
+  color:#ff6600;
+}
+
+#level{
+  color:#00aa66;
+}
+
+.stain{
+  width:72px;
+  height:72px;
+  position:absolute;
+  background-size:contain;
+  background-repeat:no-repeat;
+  animation:fall linear forwards;
+  user-select:none;
+  transition:transform .15s;
+}
+
+.stain:hover{
+  transform:scale(1.12);
+}
+
+.normal{
+  background-image:url("https://i.postimg.cc/3x3QzSGq/leke.png");
+}
+
+.golden{
+  background-image:none;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:52px;
+}
+
+.bomb{
+  background-image:none;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:52px;
+}
+
+.freeze{
+  background-image:none;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:52px;
+}
+
+@keyframes fall{
+  from{
+    top:-100px;
+    transform:rotate(0deg);
+  }
+  to{
+    top:110vh;
+    transform:rotate(360deg);
+  }
+}
+
+/* ================= EFFECTS ================= */
+
+.hit{
+  animation:hitAnim .3s forwards;
+}
+
+@keyframes hitAnim{
+  to{
+    transform:scale(1.8);
+    opacity:0;
+  }
+}
+
+#flash{
+  position:fixed;
+  inset:0;
+  background:white;
+  pointer-events:none;
+  opacity:0;
+  z-index:99999;
+}
+
+/* ================= GAME OVER ================= */
+
+#gameover{
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(8px);
+  z-index:99999;
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.gameover-box{
+  background:white;
+  padding:40px;
+  border-radius:30px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+  width:90%;
+  max-width:500px;
+}
+
+.final-score{
+  font-size:3rem;
+  color:#0077cc;
+  margin:20px 0;
+}
+
+canvas{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9999;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<div id="flash"></div>
+
+<!-- SPLASH -->
+
+<div id="splash">
+  <div style="text-align:center;">
+    <h1 style="font-size:3rem;color:#003366;">🧼 ARISTON Wash & Dry</h1>
+    <h2 style="color:#0077cc;margin-top:10px;">Ultimate Edition</h2>
+
+    <div id="loading-container">
+      <div id="loading-bar"></div>
     </div>
-    <p id="loading-text" style="font-size: 0.9rem; color: #555;">Loading... 0%</p>
+
+    <p id="loading-text" style="margin-top:15px;">
+      Loading...
+    </p>
   </div>
 </div>
-    <!-- Εισαγωγή + Ψευδώνυμο + Οδηγίες -->
-    <div id="instructions">
-      <div id="intro-wrapper">
-        <h1 id="intro-title">🧼 Ariston Wash &amp; Dry: Πιάσε τον Λεκέ / Catch
-          the Stain!</h1>
-        <p id="intro-subtitle"> Καθάρισε  όσους
-          περισσότερους λεκέδες μπορείς. Clean as many
-          stains as you can. </p>
-        <!-- Ψευδώνυμο -->
-        <div id="nickname-block">
-          <h2>Ψευδώνυμο παίκτη / Player nickname</h2>
-          <p> Πριν ξεκινήσεις, επίλεξε ένα ψευδώνυμο που θα εμφανίζεται στον
-            πίνακα κατάταξης Top 10. Each score is saved with your nickname in
-            the Top 10 leaderboard. </p>
-          <input id="nickname-input" placeholder="Πληκτρολόγησε το ψευδώνυμο σου"
 
-            maxlength="20" type="text">
-          <div id="nickname-error"></div>
-          <button id="change-nickname-btn" type="button" style="display:none;">
-            Αλλαγή ψευδωνύμου/change nickname </button> </div>
-        <!-- Οδηγίες παιχνιδιού -->
-        <div id="instructions-text">
-          <p> <strong>Πώς παίζεται/how to play:</strong><br>
-            Κάθε 5 δευτερόλεπτα εμφανίζονται 6 λεκέδες. Αν ένας λεκές μείνει
-            στην οθόνη για πολλή ώρα χωρίς να τον πατήσεις, το παιχνίδι
-            τελειώνει.Six stains appear every 5 seconds. If a stain stays on the screen for too long without being clicked, the game is over. </p>
-          <p> <strong>Στόχος/Goal:</strong><br>
-            Πάτησε όσο περισσότερους λεκέδες μπορείς  για να
-            συγκεντρώσεις το υψηλότερο σκορ.Tap as many stains as possible to get the highest score! </p>
-          <p> <strong>Extra πόντοι/Extra points:</strong><br>
-            Κατά τη διάρκεια του παιχνιδιού, εμφανίζονται κατά διαστήματα ειδικά
-            bonus αντικείμενα που δίνουν επιπλέον πόντους όταν τα πετυχαίνεις.
-            Μην τα αφήνεις να σου ξεφύγουν!Αλλά υπάρχουν και παγίδες!
-            During the game, special bonus items appear periodically, giving you extra points when hit. Don't let them slip away! But watch out there are traps too! </p>
-          <p> <strong>Leaderboard:</strong><br>
-            Τα καλύτερα σκορ εμφανίζονται στον πίνακα Top 10 μόνο με τα
-            ψευδώνυμα των παικτών.The best scores are displayed on the Top 10 leaderboard using only player nicknames. </p>
-        </div>
-        <!-- Κουμπιά: Start + Top10 -->
-        <div id="intro-actions"> <button id="start-btn" onclick="startGame()">Ξεκίνα
-            / Start</button> <a id="top10-btn" href="/top10"> <span id="top10-icon">🏆</span>
-            <span>Top 10 παίκτες/top 10 players</span> </a> <a href="/" class="home-btn">🏠
-            Επιστροφή στην Αρχική/back to home</a> </div>
-      </div>
+<!-- MENU -->
+
+<div id="menu">
+
+  <div class="menu-box">
+
+    <div class="logo">🧼</div>
+
+    <h1 id="title">Catch The Stain!</h1>
+
+    <p class="subtitle" id="subtitle">
+      Clean as many stains as possible!
+    </p>
+
+    <!-- LANG -->
+
+    <div class="lang-switch">
+      <button id="btn-el" class="active">🇬🇷 Ελληνικά</button>
+      <button id="btn-en">🇺🇸 English</button>
     </div>
-    <!-- Game UI -->
-    <div id="game-ui" style="display:none;">
-      <div id="leketes-score">🏆 Score: 0</div>
-      <div id="leketes-timer">⏱️ 2:00</div>
-      <div id="leketes-area"></div>
+
+    <!-- NICKNAME -->
+
+    <div>
+      <input type="text" id="nickname" maxlength="20" placeholder="Nickname">
     </div>
-    <!-- Game Over -->
-    <div id="gameover-screen" style="display:none;">
-    <h2>❌ Game Over / Τέλος Παιχνιδιού</h2>
-    <p id="gameover-score" style="font-size:1.3rem; font-weight:700; margin-bottom:10px;"></p>
-    <p id="gameover-time" style="font-size:1.1rem; font-weight:600; margin-bottom:10px;"></p>
-    <p>Προσπάθησε ξανά! / Try again!</p>
-    <button onclick="restartGame()">Παίξε Ξανά / Play Again</button>
+
+    <!-- BUTTONS -->
+
+    <div class="menu-buttons">
+
+      <button class="main-btn" onclick="startGame()" id="startText">
+        ▶ Start Game
+      </button>
+
+      <a href="/top10">
+        <button class="secondary-btn">
+          🏆 Top 10
+        </button>
+      </a>
+
+      <a href="/">
+        <button class="secondary-btn">
+          🏠 Home
+        </button>
+      </a>
+
+    </div>
+
+    <!-- INSTRUCTIONS -->
+
+    <div class="instructions" id="instructionsBox">
+
+      <h2>📜 Instructions</h2>
+
+      <br>
+
+      <p>
+        • Click stains before they escape.
+      </p>
+
+      <p>
+        • ⭐ Golden stains = +50 points
+      </p>
+
+      <p>
+        • ❄ Freeze = slows game
+      </p>
+
+      <p>
+        • 💣 Bomb = lose points
+      </p>
+
+      <p>
+        • Combo clicks multiply score
+      </p>
+
+      <p>
+        • Difficulty increases over time
+      </p>
+
+    </div>
+
+  </div>
+
 </div>
-    <script>
-    const USER_NICKNAME = "";
-</script>
-   <script>
 
-/* -----------------------------------------
-   ΒΑΣΙΚΕΣ ΜΕΤΑΒΛΗΤΕΣ ΠΑΙΧΝΙΔΙΟΥ
------------------------------------------ */
+<!-- GAME -->
 
-let score = 0;
+<div id="game">
 
-let timeCount = 0; // 🔥 ΝΕΟ – μετράει προς τα πάνω
+  <div id="hud">
 
-let gameInterval;
-let timerInterval;
-let bonusStarInterval;
-let bonusDiamondInterval;
-let xInterval; // 🔥 ΝΕΟ – για το ❌
-let gameRunning = false;
+    <div class="hud-box" id="scoreBox">
+      🏆 Score: 0
+    </div>
 
+    <div class="hud-box" id="timeBox">
+      ⏱ 0s
+    </div>
 
+    <div class="hud-box" id="combo">
+      🔥 Combo x1
+    </div>
 
-/* -----------------------------------------
-   ΗΧΟΙ
------------------------------------------ */
+    <div class="hud-box" id="level">
+      🚀 Level 1
+    </div>
 
-const bgAudio = new Audio("https://media.vocaroo.com/mp3/1e82R0rWcA2w");
-const popAudio = new Audio("https://media.vocaroo.com/mp3/1b3h6zXAKhdo");
-const winAudio = new Audio("https://media.vocaroo.com/mp3/1dmGGEdj376Y");
-const failAudio = new Audio("https://media.vocaroo.com/mp3/1lykkPnAt8Kv");
-const bonusAudio = new Audio("https://alternative-coffee-dx0gnrlsin.edgeone.app/bonus-143026.mp3");
+  </div>
 
-bgAudio.loop = false;
-bgAudio.volume = 0.5;
-popAudio.volume = 0.6;
-winAudio.volume = 0.9;
-failAudio.volume = 0.9;
-bonusAudio.volume = 1.0;
+</div>
 
-bgAudio.addEventListener("ended", () => {
-  if (gameRunning) {
-    bgAudio.currentTime = 0;
-    bgAudio.play();
+<!-- GAME OVER -->
+
+<div id="gameover">
+
+  <div class="gameover-box">
+
+    <h1 id="gameoverTitle">
+      Game Over
+    </h1>
+
+    <div class="final-score" id="finalScore">
+      0
+    </div>
+
+    <p id="survivalText"></p>
+
+    <br>
+
+    <button class="main-btn" onclick="restartGame()">
+      🔄 Play Again
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+/* ================================
+LANG SYSTEM
+================================ */
+
+let currentLang = "en";
+
+const translations = {
+
+  en:{
+    title:"Catch The Stain!",
+    subtitle:"Clean as many stains as possible!",
+    start:"▶ Start Game",
+    gameover:"Game Over",
+    survived:"You survived",
+    nickname:"Nickname",
+    instructions:`
+      <h2>📜 Instructions</h2><br>
+      <p>• Click stains before they escape.</p>
+      <p>• ⭐ Golden stains = +50 points</p>
+      <p>• ❄ Freeze = slows game</p>
+      <p>• 💣 Bomb = lose points</p>
+      <p>• 🔥 Combos multiply your score</p>
+      <p>• 🚀 Difficulty increases over time</p>
+    `
+  },
+
+  el:{
+    title:"Πιάσε τον Λεκέ!",
+    subtitle:"Καθάρισε όσους περισσότερους λεκέδες μπορείς!",
+    start:"▶ Ξεκίνα",
+    gameover:"Τέλος Παιχνιδιού",
+    survived:"Έπαιξες για",
+    nickname:"Ψευδώνυμο",
+    instructions:`
+      <h2>📜 Οδηγίες</h2><br>
+      <p>• Πάτα τους λεκέδες πριν φύγουν.</p>
+      <p>• ⭐ Χρυσός λεκές = +50 πόντοι</p>
+      <p>• ❄ Πάγος = επιβραδύνει το παιχνίδι</p>
+      <p>• 💣 Βόμβα = χάνεις πόντους</p>
+      <p>• 🔥 Combo αυξάνει σκορ</p>
+      <p>• 🚀 Η δυσκολία αυξάνεται συνεχώς</p>
+    `
   }
+
+};
+
+function setLanguage(lang){
+
+  currentLang = lang;
+
+  document.getElementById("title").innerHTML = translations[lang].title;
+  document.getElementById("subtitle").innerHTML = translations[lang].subtitle;
+  document.getElementById("startText").innerHTML = translations[lang].start;
+  document.getElementById("instructionsBox").innerHTML = translations[lang].instructions;
+  document.getElementById("nickname").placeholder = translations[lang].nickname;
+
+  document.getElementById("btn-el").classList.remove("active");
+  document.getElementById("btn-en").classList.remove("active");
+
+  document.getElementById("btn-"+lang).classList.add("active");
+}
+
+document.getElementById("btn-el").onclick=()=>setLanguage("el");
+document.getElementById("btn-en").onclick=()=>setLanguage("en");
+
+/* ================================
+GAME VARIABLES
+================================ */
+
+let gameRunning=false;
+
+let score=0;
+let timer=0;
+let combo=1;
+let level=1;
+
+let spawnRate=1800;
+
+let gameLoop;
+let timerLoop;
+let difficultyLoop;
+
+const game=document.getElementById("game");
+
+/* ================================
+AUDIO
+================================ */
+
+const hitSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3");
+
+const bonusSound = new Audio("https://cdn.pixabay.com/audio/2022/03/10/audio_c8ff72b3d2.mp3");
+
+const bombSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_115b9b0f43.mp3");
+
+/* ================================
+START GAME
+================================ */
+
+function startGame(){
+
+  const nickname=document.getElementById("nickname").value.trim();
+
+  if(nickname.length < 3){
+    alert(currentLang==="el"
+      ? "Βάλε ψευδώνυμο τουλάχιστον 3 χαρακτήρες"
+      : "Enter at least 3 characters");
+    return;
+  }
+
+  localStorage.setItem("ariston_nickname",nickname);
+
+  score=0;
+  timer=0;
+  combo=1;
+  level=1;
+  spawnRate=1800;
+
+  updateHUD();
+
+  document.getElementById("menu").style.display="none";
+  document.getElementById("game").style.display="block";
+
+  gameRunning=true;
+
+  gameLoop=setInterval(spawnRandom,spawnRate);
+
+  timerLoop=setInterval(()=>{
+    timer++;
+    updateHUD();
+  },1000);
+
+  difficultyLoop=setInterval(increaseDifficulty,15000);
+}
+
+/* ================================
+SPAWN SYSTEM
+================================ */
+
+function spawnRandom(){
+
+  if(!gameRunning) return;
+
+  const rand=Math.random();
+
+  if(rand<0.65){
+
+    spawnObject("normal",10);
+
+  }else if(rand<0.8){
+
+    spawnObject("golden",50,"⭐");
+
+  }else if(rand<0.9){
+
+    spawnObject("freeze",0,"❄");
+
+  }else{
+
+    spawnObject("bomb",-40,"💣");
+
+  }
+
+}
+
+function spawnObject(type,points,emoji=""){
+
+  const obj=document.createElement("div");
+
+  obj.classList.add("stain");
+  obj.classList.add(type);
+
+  obj.style.left=Math.random()*90+"vw";
+
+  const duration=Math.max(2.5,spawnRate/1000);
+
+  obj.style.animationDuration=duration+"s";
+
+  if(emoji){
+    obj.innerHTML=emoji;
+  }
+
+  obj.onclick=()=>{
+
+    if(!gameRunning) return;
+
+    obj.classList.add("hit");
+
+    setTimeout(()=>obj.remove(),250);
+
+    if(type==="bomb"){
+
+      combo=1;
+      score=Math.max(0,score+points);
+
+      bombSound.currentTime=0;
+      bombSound.play();
+
+      screenFlash();
+
+    }else if(type==="freeze"){
+
+      activateFreeze();
+
+      bonusSound.currentTime=0;
+      bonusSound.play();
+
+    }else{
+
+      score += points * combo;
+
+      combo++;
+
+      if(combo>10) combo=10;
+
+      hitSound.currentTime=0;
+      hitSound.play();
+
+      createParticles(
+        obj.offsetLeft,
+        obj.offsetTop
+      );
+    }
+
+    updateHUD();
+
+  };
+
+  game.appendChild(obj);
+
+  setTimeout(()=>{
+
+    if(document.body.contains(obj)){
+
+      obj.remove();
+
+      if(type==="normal"){
+
+        endGame();
+
+      }
+
+    }
+
+  },duration*1000);
+
+}
+
+/* ================================
+FREEZE POWER
+================================ */
+
+function activateFreeze(){
+
+  clearInterval(gameLoop);
+
+  spawnRate+=900;
+
+  gameLoop=setInterval(spawnRandom,spawnRate);
+
+  setTimeout(()=>{
+
+    clearInterval(gameLoop);
+
+    spawnRate-=900;
+
+    gameLoop=setInterval(spawnRandom,spawnRate);
+
+  },5000);
+
+}
+
+/* ================================
+DIFFICULTY
+================================ */
+
+function increaseDifficulty(){
+
+  level++;
+
+  spawnRate=Math.max(500,spawnRate-180);
+
+  clearInterval(gameLoop);
+
+  gameLoop=setInterval(spawnRandom,spawnRate);
+
+  updateHUD();
+
+}
+
+/* ================================
+HUD
+================================ */
+
+function updateHUD(){
+
+  document.getElementById("scoreBox").innerHTML=
+  `🏆 Score: ${score}`;
+
+  document.getElementById("timeBox").innerHTML=
+  `⏱ ${timer}s`;
+
+  document.getElementById("combo").innerHTML=
+  `🔥 Combo x${combo}`;
+
+  document.getElementById("level").innerHTML=
+  `🚀 Level ${level}`;
+
+}
+
+/* ================================
+GAME OVER
+================================ */
+
+function endGame(){
+
+  gameRunning=false;
+
+  clearInterval(gameLoop);
+  clearInterval(timerLoop);
+  clearInterval(difficultyLoop);
+
+  document.querySelectorAll(".stain").forEach(e=>e.remove());
+
+  document.getElementById("gameover").style.display="flex";
+
+  document.getElementById("finalScore").innerHTML=score;
+
+  document.getElementById("gameoverTitle").innerHTML=
+  translations[currentLang].gameover;
+
+  document.getElementById("survivalText").innerHTML=
+  `${translations[currentLang].survived} ${timer}s`;
+
+  saveScore();
+
+}
+
+/* ================================
+SAVE DATABASE SCORE
+================================ */
+
+function saveScore(){
+
+  fetch("/submit_score",{
+
+    method:"POST",
+
+    headers:{
+      "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+
+      nickname:localStorage.getItem("ariston_nickname"),
+
+      score:score,
+
+      time_played:timer,
+
+      level:level
+
+    })
+
+  })
+  .then(r=>r.json())
+  .then(data=>console.log(data))
+  .catch(err=>console.log(err));
+
+}
+
+/* ================================
+RESTART
+================================ */
+
+function restartGame(){
+
+  document.getElementById("gameover").style.display="none";
+  document.getElementById("menu").style.display="flex";
+  document.getElementById("game").style.display="none";
+
+}
+
+/* ================================
+SCREEN FLASH
+================================ */
+
+function screenFlash(){
+
+  const flash=document.getElementById("flash");
+
+  flash.style.opacity="0.7";
+
+  setTimeout(()=>{
+    flash.style.opacity="0";
+  },150);
+
+}
+
+/* ================================
+PARTICLES
+================================ */
+
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function createParticles(x,y){
+
+  for(let i=0;i<18;i++){
+
+    particles.push({
+
+      x,
+      y,
+      dx:(Math.random()-0.5)*6,
+      dy:(Math.random()-0.5)*6,
+      life:50
+
+    });
+
+  }
+
+}
+
+function animateParticles(){
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  particles.forEach((p,index)=>{
+
+    p.x+=p.dx;
+    p.y+=p.dy;
+    p.life--;
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,4,0,Math.PI*2);
+    ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`;
+    ctx.fill();
+
+    if(p.life<=0){
+      particles.splice(index,1);
+    }
+
+  });
+
+  requestAnimationFrame(animateParticles);
+
+}
+
+animateParticles();
+
+/* ================================
+LOADING
+================================ */
+
+window.addEventListener("load",()=>{
+
+  let width=0;
+
+  const interval=setInterval(()=>{
+
+    width+=2;
+
+    document.getElementById("loading-bar").style.width=width+"%";
+
+    document.getElementById("loading-text").innerHTML=
+    `Loading... ${width}%`;
+
+    if(width>=100){
+
+      clearInterval(interval);
+
+      setTimeout(()=>{
+
+        document.getElementById("splash")
+        .classList.add("splash-hidden");
+
+      },500);
+
+    }
+
+  },40);
+
 });
 
-
-
-/* -----------------------------------------
-   NICKNAME SYSTEM
------------------------------------------ */
-
-function getNickname() {
-  return localStorage.getItem("ariston_nickname") || "";
-}
-
-function setNickname(nick) {
-  localStorage.setItem("ariston_nickname", nick);
-}
-
-function initNickname() {
-  const input = document.getElementById("nickname-input");
-  const error = document.getElementById("nickname-error");
-  const changeBtn = document.getElementById("change-nickname-btn");
-
-  const saved = getNickname();
-  if (saved) {
-    input.value = saved;
-    changeBtn.style.display = "inline-block";
-    error.textContent = "";
-  }
-
-  changeBtn.addEventListener("click", () => {
-    input.focus();
-  });
-}
-
-function validateNickname() {
-  const input = document.getElementById("nickname-input");
-  const error = document.getElementById("nickname-error");
-  const nickname = input.value.trim();
-
-  if (!nickname) {
-    error.textContent = "Πρέπει να εισάγεις ψευδώνυμο για να ξεκινήσεις.";
-    return false;
-  }
-  if (nickname.length < 3) {
-    error.textContent = "Το ψευδώνυμο πρέπει να έχει τουλάχιστον 3 χαρακτήρες.";
-    return false;
-  }
-
-  error.textContent = "";
-  setNickname(nickname);
-  return true;
-}
-
-
-
-/* -----------------------------------------
-   ΕΝΑΡΞΗ ΠΑΙΧΝΙΔΙΟΥ
------------------------------------------ */
-
-function startGame() {
-  if (!validateNickname()) return;
-
-  document.getElementById("instructions").style.display = "none";
-  document.getElementById("game-ui").style.display = "block";
-  document.getElementById("gameover-screen").style.display = "none";
-
-  score = 0;
-  timeCount = 0; // 🔥 reset
-  gameRunning = true;
-
-  document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
-  document.getElementById("leketes-timer").innerText = `⏱️ 0`;
-
-  try {
-    bgAudio.currentTime = 0;
-    bgAudio.play();
-  } catch (e) {}
-
-  gameInterval = setInterval(spawnBatch, 5000);
-  timerInterval = setInterval(updateTimer, 1000);
-
-  // ⭐ BONUS κάθε ~10s μετά το 1 λεπτό
-  setTimeout(() => {
-    bonusStarInterval = setInterval(spawnStar, 10000);
-  }, 60000);
-
-  // 💎 BONUS κάθε ~20s μετά το 1 λεπτό
-  setTimeout(() => {
-    bonusDiamondInterval = setInterval(spawnDiamond, 20000);
-  }, 60000);
-
-  // ❌ κάθε 10 δευτερόλεπτα
-  xInterval = setInterval(spawnX, 10000); // 🔥 ΝΕΟ
-}
-
-
-
-/* -----------------------------------------
-   ΣΠΑWN ΛΕΚΕΔΩΝ
------------------------------------------ */
-
-function spawnBatch() {
-  for (let i = 0; i < 6; i++) {
-    spawnLekes();
-  }
-}
-
-function spawnLekes() {
-  const leke = document.createElement("div");
-  leke.className = "leke";
-  leke.style.left = Math.random() * 90 + "%";
-  leke.style.top = "-80px";
-
-  leke.onclick = () => {
-    score += 10;
-    leke.remove();
-    document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
-    popAudio.currentTime = 0;
-    popAudio.play();
-  };
-
-  document.getElementById("leketes-area").appendChild(leke);
-
-  setTimeout(() => {
-    if (document.body.contains(leke)) {
-      endGame(false);
-    }
-  }, 5500);
-}
-
-
-
-/* -----------------------------------------
-   ⭐ BONUS STAR (+25)
------------------------------------------ */
-
-function spawnStar() {
-  if (!gameRunning) return;
-
-  const star = document.createElement("div");
-  star.className = "leke";
-  star.style.backgroundImage = "none";
-  star.style.backgroundColor = "transparent";
-  star.style.display = "flex";
-  star.style.alignItems = "center";
-  star.style.justifyContent = "center";
-  star.style.fontSize = "50px";
-  star.innerHTML = "⭐";
-
-  star.style.left = Math.random() * 90 + "%";
-  star.style.top = "-80px";
-
-  star.onmousedown = (e) => {
-    e.stopPropagation();
-    score += 25;
-    document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
-    bonusAudio.currentTime = 0;
-    bonusAudio.play();
-    star.remove();
-  };
-
-  document.getElementById("leketes-area").appendChild(star);
-
-  setTimeout(() => {
-    if (document.body.contains(star)) star.remove();
-  }, 5400);
-}
-
-
-
-/* -----------------------------------------
-   💎 BONUS DIAMOND (+50)
------------------------------------------ */
-
-function spawnDiamond() {
-  if (!gameRunning) return;
-
-  const diamond = document.createElement("div");
-  diamond.className = "leke";
-  diamond.style.backgroundImage = "none";
-  diamond.style.backgroundColor = "transparent";
-  diamond.style.display = "flex";
-  diamond.style.alignItems = "center";
-  diamond.style.justifyContent = "center";
-  diamond.style.fontSize = "50px";
-  diamond.innerHTML = "💎";
-
-  diamond.style.left = Math.random() * 90 + "%";
-  diamond.style.top = "-80px";
-
-  diamond.onmousedown = (e) => {
-    e.stopPropagation();
-    score += 50;
-    document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
-    bonusAudio.currentTime = 0;
-    bonusAudio.play();
-    diamond.remove();
-  };
-
-  document.getElementById("leketes-area").appendChild(diamond);
-
-  setTimeout(() => {
-    if (document.body.contains(diamond)) diamond.remove();
-  }, 5400);
-}
-
-
-
-/* -----------------------------------------
-   ❌ BONUS NEGATIVE (-20)
------------------------------------------ */
-
-function spawnX() {
-  if (!gameRunning) return;
-
-  const x = document.createElement("div");
-  x.className = "leke";
-  x.style.backgroundImage = "none";
-  x.style.backgroundColor = "transparent";
-  x.style.display = "flex";
-  x.style.alignItems = "center";
-  x.style.justifyContent = "center";
-  x.style.fontSize = "50px";
-  x.innerHTML = "❌";
-
-  x.style.left = Math.random() * 90 + "%";
-  x.style.top = "-80px";
-
-  x.onmousedown = (e) => {
-    e.stopPropagation();
-    score -= 20;
-    document.getElementById("leketes-score").innerText = `🏆 Score: ${score}`;
-    x.remove();
-  };
-
-  document.getElementById("leketes-area").appendChild(x);
-
-  setTimeout(() => {
-    if (document.body.contains(x)) x.remove();
-  }, 5400);
-}
-
-
-
-/* -----------------------------------------
-   TIMER – ΜΕΤΡΑΕΙ ΠΡΟΣ ΤΑ ΠΑΝΩ 🔥
------------------------------------------ */
-
-function updateTimer() {
-  timeCount++; // 🔥 ανεβαίνει
-
-  document.getElementById("leketes-timer").innerText =
-    `⏱️ ${timeCount}`;
-}
-
-
-
-/* -----------------------------------------
-   GAME END
------------------------------------------ */
-
-function endGame(won) {
-  clearInterval(gameInterval);
-  clearInterval(timerInterval);
-  clearInterval(bonusStarInterval);
-  clearInterval(bonusDiamondInterval);
-  clearInterval(xInterval);
-
-  gameRunning = false;
-  bgAudio.pause();
-  bgAudio.currentTime = 0;
-
-  const area = document.getElementById("leketes-area");
-  area.innerHTML = "";
-
-  if (won) {
-    area.classList.add("game-win");
-    winAudio.play();
-    confetti();
-    setTimeout(() => {
-      alert(`🏆 Τελικό σκορ / Final Score: ${score}`);
-    }, 1000);
-  } else {
-    area.classList.add("game-over");
-    failAudio.play();
-    document.getElementById("game-ui").style.display = "none";
-    document.getElementById("gameover-score").innerText = `Τελικό Σκορ: ${score} πόντοι`;
-    document.getElementById("gameover-time").innerText = `Χρόνος παιχνιδιού: ${timeCount} δευτερόλεπτα`;
-    document.getElementById("gameover-screen").style.display = "flex";
-  }
-
-  const nickname = getNickname();
-
-  fetch("/submit_score", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      nickname: nickname,
-      score: score,
-      time_played: timeCount   // 🔥 ΣΤΕΛΝΟΥΜΕ ΤΟΝ ΧΡΟΝΟ
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log("Score saved:", data);
-  })
-  .catch(err => console.error("Error saving score:", err));
-}
-
-
-
-/* -----------------------------------------
-   RESTART
------------------------------------------ */
-
-function restartGame() {
-  document.getElementById("gameover-screen").style.display = "none";
-  document.getElementById("instructions").style.display = "block";
-}
-
-
-
-/* -----------------------------------------
-   CONFETTI
------------------------------------------ */
-
-function confetti() {
-  for (let i = 0; i < 100; i++) {
-    const dot = document.createElement("div");
-    dot.style.position = "absolute";
-    dot.style.width = "6px";
-    dot.style.height = "6px";
-    dot.style.borderRadius = "50%";
-    dot.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-    dot.style.left = Math.random() * window.innerWidth + "px";
-    dot.style.top = Math.random() * window.innerHeight + "px";
-    dot.style.opacity = 0.8;
-    dot.style.zIndex = 1000;
-    document.body.appendChild(dot);
-    setTimeout(() => dot.remove(), 2000);
-  }
-}
-
-
-
-/* -----------------------------------------
-   INIT
------------------------------------------ */
-
-window.startGame = startGame;
-window.restartGame = restartGame;
-
-document.addEventListener("DOMContentLoaded", initNickname);
-function startLoading() {
-  const bar = document.getElementById('loading-bar');
-  const text = document.getElementById('loading-text');
-  const splash = document.getElementById('splash');
-  let width = 0;
-  const duration = 5000; // 5 δευτερόλεπτα
-  const intervalTime = 50; // ανανέωση κάθε 50ms
-  const step = 100 / (duration / intervalTime);
-
-  const interval = setInterval(() => {
-    width += step;
-    if (width >= 100) {
-      width = 100;
-      clearInterval(interval);
-      text.innerText = "Ready!";
-      
-      // Κλείσιμο splash screen
-      setTimeout(() => {
-        splash.classList.add('splash-hidden');
-      }, 500);
-    }
-    bar.style.width = width + '%';
-    text.innerText = `Loading... ${Math.round(width)}%`;
-  }, intervalTime);
-}
-
-// Εκκίνηση του loading μόλις φορτώσει η σελίδα
-window.addEventListener('load', startLoading);
+/* ================================
+INIT
+================================ */
+
+setLanguage("en");
 
 </script>
 
-  </body>
+</body>
 </html>

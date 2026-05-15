@@ -1,171 +1,573 @@
+# Ultra Premium Top 10 Leaderboard – Ariston Wash & Dry
+
+```html
 <!DOCTYPE html>
 <html lang="el">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top 10 Παίκτες | Ariston Wash & Dry</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Top 10 Legends | Ariston Wash & Dry</title>
 
-    <style>
-        :root {
-            --accent-blue: #0070ff;
-            --bright-blue: #00d4ff;
-            --deep-ocean: #010409;
-            --pure-white: #ffffff;
-            --gold: #ffd700;
-            --silver: #c0c0c0;
-            --bronze: #cd7f32;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; min-height: 100%;
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--deep-ocean);
-            color: white;
-        }
+<style>
+:root {
+    --bg: #02060d;
+    --glass: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.12);
+    --blue: #008cff;
+    --cyan: #00e1ff;
+    --gold: #ffd700;
+    --silver: #d6d6d6;
+    --bronze: #cd7f32;
+    --white: #ffffff;
+}
 
-        /* Φόντο */
-        .hero-bg {
-            position: fixed;
-            width: 100%; height: 100vh;
-            background: linear-gradient(rgba(1, 4, 9, 0.85), rgba(1, 4, 9, 0.98)), 
-                        url('https://aristonwashdry.gr/templates/images/1new.png') center/cover no-repeat;
-            z-index: 0;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        #particles-js {
-            position: fixed;
-            width: 100%; height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
+html {
+    scroll-behavior: smooth;
+}
 
-        .container {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            z-index: 10;
-            /* Αφαιρέσαμε το opacity: 0 για σιγουριά */
-        }
+body {
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    overflow-x: hidden;
+    color: white;
+}
 
-        .leaderboard-card {
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 40px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            text-align: center;
-        }
+/* BACKGROUND */
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background:
+        linear-gradient(rgba(2,6,13,0.82), rgba(2,6,13,0.97)),
+        url('https://aristonwashdry.gr/templates/images/1new.png') center/cover no-repeat;
+    transform: scale(1.05);
+}
 
-        h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 42px); margin-bottom: 5px; }
-        .subtitle { color: var(--bright-blue); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 30px; }
+.glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.18;
+    z-index: -2;
+}
 
-        .leaderboard-list { list-style: none; padding: 0; margin: 0; }
+.glow.one {
+    background: #008cff;
+    top: -200px;
+    left: -150px;
+}
 
-        /* Row Styling */
-        .player-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+.glow.two {
+    background: #00e1ff;
+    bottom: -250px;
+    right: -150px;
+}
 
-        .rank-id { width: 40px; font-weight: 900; color: var(--accent-blue); text-align: left; }
-        .nickname { flex: 1; text-align: left; font-weight: 700; color: #fff; }
-        .stats { text-align: right; }
-        .score-val { display: block; font-weight: 900; font-size: 1.1rem; }
-        .time-val { font-size: 0.8rem; color: var(--bright-blue); }
+#particles-js {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
 
-        /* Medal Colors */
-        .rank-1 { border-left: 4px solid var(--gold); background: rgba(255, 215, 0, 0.1); }
-        .rank-2 { border-left: 4px solid var(--silver); background: rgba(192, 192, 192, 0.1); }
-        .rank-3 { border-left: 4px solid var(--bronze); background: rgba(205, 127, 50, 0.1); }
+.container {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    padding: 50px 20px 80px;
+}
 
-        .no-data { padding: 30px; opacity: 0.5; font-style: italic; }
+.hero {
+    text-align: center;
+    margin-bottom: 35px;
+}
 
-        .back-btn {
-            margin-top: 30px;
-            display: inline-block;
-            padding: 15px 30px;
-            background: #fff;
-            color: #000;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 12px;
-            transition: 0.3s;
-        }
-        .back-btn:hover { background: var(--bright-blue); transform: translateY(-3px); }
-    </style>
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.badge span {
+    font-size: 12px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    color: var(--cyan);
+}
+
+.hero h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(42px, 7vw, 80px);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 15px;
+    background: linear-gradient(to bottom, #fff, #8ed8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 40px rgba(0,140,255,0.4);
+}
+
+.hero p {
+    max-width: 650px;
+    margin: auto;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+.board {
+    position: relative;
+    overflow: hidden;
+    border-radius: 35px;
+    padding: 35px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow:
+        0 40px 80px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.board::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.03), transparent);
+    pointer-events: none;
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.board-title {
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.live-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+}
+
+.live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #00ff7f;
+    box-shadow: 0 0 12px #00ff7f;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: .5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.player-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: center;
+    padding: 20px 24px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+    transition: all .35s ease;
+}
+
+.player-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent);
+    opacity: 0;
+    transition: .35s;
+}
+
+.player-row:hover {
+    transform: translateY(-5px) scale(1.01);
+    border-color: rgba(0,225,255,0.25);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+.player-row:hover::before {
+    opacity: 1;
+}
+
+.rank {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 900;
+    font-size: 24px;
+}
+
+.rank small {
+    font-size: 12px;
+    opacity: .7;
+}
+
+.player {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 20px;
+    background: linear-gradient(135deg, rgba(0,140,255,0.25), rgba(0,225,255,0.12));
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.player-info h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.player-info span {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+}
+
+.stats {
+    text-align: right;
+}
+
+.points {
+    font-size: 26px;
+    font-weight: 900;
+}
+
+.time {
+    color: var(--cyan);
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.rank-1 {
+    background: linear-gradient(90deg, rgba(255,215,0,0.15), rgba(255,255,255,0.04));
+    border: 1px solid rgba(255,215,0,0.35);
+}
+
+.rank-2 {
+    background: linear-gradient(90deg, rgba(214,214,214,0.12), rgba(255,255,255,0.04));
+    border: 1px solid rgba(214,214,214,0.3);
+}
+
+.rank-3 {
+    background: linear-gradient(90deg, rgba(205,127,50,0.14), rgba(255,255,255,0.04));
+    border: 1px solid rgba(205,127,50,0.35);
+}
+
+.rank-1 .rank { color: var(--gold); }
+.rank-2 .rank { color: var(--silver); }
+.rank-3 .rank { color: var(--bronze); }
+
+.empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255,255,255,0.45);
+}
+
+.footer-actions {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+}
+
+.back-btn {
+    position: relative;
+    overflow: hidden;
+    padding: 18px 38px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: white;
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    box-shadow: 0 20px 40px rgba(0,140,255,0.35);
+    transition: .35s;
+}
+
+.back-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+    transform: translateX(-100%);
+}
+
+.back-btn:hover::before {
+    animation: shine 1s;
+}
+
+@keyframes shine {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.back-btn:hover {
+    transform: translateY(-4px) scale(1.03);
+}
+
+@media(max-width: 768px) {
+    .board {
+        padding: 22px;
+    }
+
+    .player-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .player,
+    .rank {
+        justify-content: center;
+    }
+
+    .stats {
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 50px;
+    }
+}
+</style>
 </head>
 <body>
 
-<div class="hero-bg"></div>
+<div class="background"></div>
+<div class="glow one"></div>
+<div class="glow two"></div>
 <div id="particles-js"></div>
 
 <div class="container">
-    <div class="leaderboard-card">
-        <h1>🏆 Top 10 Παίκτες</h1>
-        <span class="subtitle">Ariston Hall of Fame</span>
 
-        <ul class="leaderboard-list">
+    <section class="hero">
+        <div class="badge">
+            ⚡ <span>ARISTON Wash & Dry ELITE RANKING</span>
+        </div>
+
+        <h1>TOP 10 LEGENDS</h1>
+
+        <p>
+            Οι κορυφαίοι παίκτες του Ariston Wash & Dry Challenge.
+            Τα υψηλότερα σκορ, οι γρηγορότεροι χρόνοι και οι πραγματικοί legends.
+        </p>
+    </section>
+
+    <section class="board">
+
+        <div class="board-header">
+            <div class="board-title">🏆 Hall Of Fame</div>
+
+            <div class="live-status">
+                <div class="live-dot"></div>
+                LIVE LEADERBOARD
+            </div>
+        </div>
+
+        <div class="leaderboard">
+
             {% if players %}
-                {% for p in players %}
-                <li class="player-row rank-{{ loop.index }}">
-                    <span class="rank-id">#{{ loop.index }}</span>
-                    <span class="nickname">{{ p.nickname }}</span>
-                    <div class="stats">
-                        <span class="score-val">{{ p.best_score }} Πόντοι</span>
-                        <span class="time-val">⏱ {{ p.time_played }}s</span>
-                    </div>
-                </li>
-                {% endfor %}
-            {% else %}
-                <li class="no-data">Δεν βρέθηκαν παίκτες στη βάση δεδομένων.</li>
-            {% endif %}
-        </ul>
 
-        <a href="/game" class="back-btn">← Επιστροφή στο Παιχνίδι</a>
-    </div>
+                {% for p in players %}
+
+                <div class="player-row rank-{{ loop.index }}">
+
+                    <div class="rank">
+                        #{{ loop.index }}
+                    </div>
+
+                    <div class="player">
+                        <div class="avatar">
+                            {{ p.nickname[0] | upper }}
+                        </div>
+
+                        <div class="player-info">
+                            <h3>{{ p.nickname }}</h3>
+                            <span>Elite Competitor</span>
+                        </div>
+                    </div>
+
+                    <div class="stats">
+                        <div class="points">{{ p.best_score }}</div>
+                        <div class="time">⏱ {{ p.time_played }} sec</div>
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty">
+                    Δεν υπάρχουν ακόμη διαθέσιμα scores.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        <div class="footer-actions">
+            <a href="/game" class="back-btn">← Επιστροφή στο Παιχνίδι</a>
+        </div>
+
+    </section>
+
 </div>
 
 <script>
-    console.log("Leaderboard script loaded"); // Δες το στο F12 console
+particlesJS("particles-js", {
+    particles: {
+        number: {
+            value: 45
+        },
+        color: {
+            value: ['#008cff', '#00e1ff', '#ffffff']
+        },
+        shape: {
+            type: 'circle'
+        },
+        opacity: {
+            value: 0.22,
+            random: true
+        },
+        size: {
+            value: 3,
+            random: true
+        },
+        line_linked: {
+            enable: true,
+            distance: 160,
+            color: '#008cff',
+            opacity: 0.12,
+            width: 1
+        },
+        move: {
+            enable: true,
+            speed: 1.2,
+            direction: 'none',
+            random: true,
+            straight: false,
+            out_mode: 'out'
+        }
+    },
+    retina_detect: true
+});
 
-    // Particles
-    try {
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 30 },
-                "color": { "value": "#0070ff" },
-                "opacity": { "value": 0.2 },
-                "size": { "value": 2 },
-                "line_linked": { "enable": true, "distance": 150, "color": "#0070ff", "opacity": 0.1 },
-                "move": { "enable": true, "speed": 1 }
-            }
-        });
-    } catch(e) { console.error("Particles error:", e); }
+// HERO ANIMATION
+const tl = gsap.timeline();
 
-    // Απλό GSAP χωρίς να κρύβουμε το container
-    gsap.from(".player-row", {
-        duration: 0.5,
-        opacity: 0,
-        y: 10,
-        stagger: 0.05,
-        ease: "power2.out"
-    });
+tl.from('.badge', {
+    y: -30,
+    opacity: 0,
+    duration: .8,
+    ease: 'power3.out'
+});
+
+tl.from('.hero h1', {
+    y: 60,
+    opacity: 0,
+    duration: 1,
+    ease: 'power4.out'
+}, '-=.5');
+
+
+tl.from('.hero p', {
+    y: 20,
+    opacity: 0,
+    duration: .8
+}, '-=.6');
+
+
+tl.from('.board', {
+    scale: .96,
+    opacity: 0,
+    duration: 1,
+    ease: 'power3.out'
+}, '-=.4');
+
+
+gsap.from('.player-row', {
+    opacity: 0,
+    y: 25,
+    stagger: 0.08,
+    duration: .7,
+    ease: 'power3.out',
+    delay: .8
+});
+
+// Floating effect
+
+gsap.to('.glow.one', {
+    x: 80,
+    y: 50,
+    duration: 12,
+    repeat: -1,
+    yoyo: true,
+    ease: 'sine.inOut'
+});
+
+
+gsap.to('.glow.two', {
+    x: -80,
+    y: -50,
+    duration: 14,
+    repeat: -1,
+    yoyo: true,
+    ease: 'sine.inOut'
+});
 </script>
 
 </body>
 </html>
+```
+
+
