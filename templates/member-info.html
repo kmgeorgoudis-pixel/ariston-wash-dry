@@ -166,6 +166,22 @@
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
+        /* Progress Bar Styles */
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+
         @media (max-width: 480px) {
             .member-container { padding: 40px 20px; }
             .info-block p { flex-direction: column; align-items: flex-start; gap: 6px; }
@@ -193,27 +209,51 @@
             <h3>Διάρκεια Μέλους</h3>
             <p><strong>Ημερομηνία Εγγραφής:</strong> <span>{{ current_user.created_at.strftime('%d/%m/%Y') }}</span></p>
             <p><strong>Μέρες Μέλος:</strong> <span>{{ days_member }}</span></p>
-            <!-- Οικονομικό Υπόλοιπο -->
-<div class="info-block" style="border-left: 4px solid var(--secondary); background: rgba(0, 212, 255, 0.05);">
-    <h3>Οικονομική Εικόνα</h3>
-    <p><strong>Τρέχον Υπόλοιπο:</strong> 
-        <span style="font-size: 22px; font-weight: 800; color: var(--white);">
-            {{ "%.2f"|format(current_user.activities|sum(attribute='amount')) }} €
-        </span>
-    </p>
-    
-    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px;">Κατάσταση Λογαριασμού:</span>
-        {% set balance = current_user.activities|sum(attribute='amount') %}
-        {% if balance > 0 %}
-            <span style="background: #059669; color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;">ΕΝΗΜΕΡΟΣ</span>
-        {% elif balance < 0 %}
-            <span style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;">ΟΦΕΙΛΗ</span>
-        {% else %}
-            <span style="background: var(--glass-border); color: var(--text-dim); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;">ΜΗΔΕΝΙΚΟ</span>
-        {% endif %}
-    </div>
-</div>
+            
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px;">Κατάσταση Λογαριασμού:</span>
+                {% set balance = current_user.activities|sum(attribute='amount') %}
+                {% if balance > 0 %}
+                    <span style="background: #059669; color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;">ΕΝΗΜΕΡΟΣ</span>
+                {% elif balance < 0 %}
+                    <span style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;">ΟΦΕΙΛΗ</span>
+                {% else %}
+                    <span style="background: var(--glass-border); color: var(--text-dim); padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700;">ΜΗΔΕΝΙΚΟ</span>
+                {% endif %}
+            </div>
+        </div>
+
+        {% set current_balance = current_user.activities|sum(attribute='amount') %}
+        {% set goal = 80.0 %}
+        {% set remaining = goal - current_balance %}
+        {% set percentage = (current_balance / goal * 100)|round|int %}
+        {% if percentage > 100 %}{% set percentage = 100 %}{% endif %}
+        {% if percentage < 0 %}{% set percentage = 0 %}{% endif %}
+
+        <div class="info-block" style="border-left: 4px solid var(--secondary);">
+            <h3>Πρόγραμμα Επιβράβευσης</h3>
+            <p><strong>Τρέχον Υπόλοιπο:</strong> 
+                <span style="font-size: 22px; font-weight: 800; color: var(--white);">
+                    {{ "%.2f"|format(current_balance) }} €
+                </span>
+            </p>
+            
+            <div class="progress-container">
+                <div class="progress-fill" style="width: {{ percentage }}%;"></div>
+            </div>
+
+            {% if current_balance < goal %}
+                <p style="font-size: 13px; color: var(--text-dim); justify-content: center; text-align: center;">
+                    Σας λείπουν ακόμα <strong>{{ "%.2f"|format(remaining) }} €</strong> για το δωρεάν κουπόνι σας!
+                </p>
+            {% else %}
+                <p style="font-size: 13px; color: #00ff88; justify-content: center; text-align: center; font-weight: bold;">
+                    🎉 Συγχαρητήρια! Συμπληρώσατε το ποσό για το κουπόνι!
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="info-block">
             <div class="stats-box">
                 <p>🎉 Ευχαριστούμε που είστε μέλος της κοινότητάς μας!</p>
                 <p>🧺 Απολαμβάνετε προνόμια & ενημερώσεις για μέλη</p>
@@ -221,45 +261,43 @@
         </div>
 
         <div class="info-block" style="text-align: center;">
-    {% if current_user.qr_enabled %}
-        <h3>Ψηφιακή Ταυτότητα Μέλους</h3>
-        <div id="qrcode-container" style="background: white; padding: 20px; border-radius: 20px; display: inline-block; position: relative; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-            <div id="qrcode"></div>
-            <img src="{{ url_for('static', filename='images/logo3.png') }}" 
-                 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: white; border-radius: 5px; padding: 2px;">
+            {% if current_user.qr_enabled %}
+                <h3>Ψηφιακή Ταυτότητα Μέλους</h3>
+                <div id="qrcode-container" style="background: white; padding: 20px; border-radius: 20px; display: inline-block; position: relative; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <div id="qrcode"></div>
+                    <img src="{{ url_for('static', filename='images/logo3.png') }}" 
+                         style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: white; border-radius: 5px; padding: 2px;">
+                </div>
+                <p style="justify-content: center; font-size: 12px; margin-top: 15px; color: var(--secondary);">
+                    SCAN FOR LIVE MEMBER INFO
+                </p>
+            {% else %}
+                <div style="padding: 20px; border: 2px dashed #ff4444; border-radius: 20px; margin: 20px 0;">
+                    <h3 style="color: #ff4444;">Η Κάρτα είναι Ανενεργή</h3>
+                    <p style="font-size: 14px; color: var(--secondary);">
+                        Έχετε απενεργοποιήσει τη χρήση της Ψηφιακής Ταυτότητας. 
+                        Για επανενεργοποίηση, επικοινωνήστε με το κατάστημα.
+                    </p>
+                </div>
+            {% endif %}
         </div>
-        <p style="justify-content: center; font-size: 12px; margin-top: 15px; color: var(--secondary);">
-            SCAN FOR LIVE MEMBER INFO
-        </p>
-    {% else %}
-        <div style="padding: 20px; border: 2px dashed #ff4444; border-radius: 20px; margin: 20px 0;">
-            <h3 style="color: #ff4444;">Η Κάρτα είναι Ανενεργή</h3>
-            <p style="font-size: 14px; color: var(--secondary);">
-                Έχετε απενεργοποιήσει τη χρήση της Ψηφιακής Ταυτότητας. 
-                Για επανενεργοποίηση, επικοινωνήστε με το κατάστημα.
-            </p>
-        </div>
-    {% endif %}
-</div>
 
-{% if current_user.email in ['georgoudisk@aristonwashdry.gr', 'admin@admin.gr', 'info@aristonwashdry.gr'] %}
-    <a href="/get-my-backup-db-2026-xyz" class="back-btn" style="background: #ffc107; color: #000; border: none; margin-top: 10px; margin-bottom: -15px;">
-        📥 Κατέβασμα Backup
-    </a>
-{% endif %}
+        {% if current_user.email in ['georgoudisk@aristonwashdry.gr', 'admin@admin.gr', 'info@aristonwashdry.gr'] %}
+            <a href="/get-my-backup-db-2026-xyz" class="back-btn" style="background: #ffc107; color: #000; border: none; margin-top: 10px; margin-bottom: -15px;">
+                📥 Κατέβασμα Backup
+            </a>
+        {% endif %}
 
-<a href="/settings-menu" class="back-btn">Επιστροφή στις Ρυθμίσεις</a>
+        <a href="/settings-menu" class="back-btn">Επιστροφή στις Ρυθμίσεις</a>
 
     </div> 
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <script>
-        
         const qrcodeElement = document.getElementById("qrcode");
         if (qrcodeElement) {
             new QRCode(qrcodeElement, {
-                
                 text: window.location.origin + "/card/{{ current_user.id }}/{{ token }}", 
                 width: 180,
                 height: 180,
@@ -269,7 +307,6 @@
             });
         }
 
-        
         function createBubble() {
             const container = document.getElementById('bubbles');
             if (!container) return;
