@@ -339,6 +339,10 @@ body {
     background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
     transform: translateX(-100%);
 }
+.player-row {
+    opacity: 1;
+    visibility: visible;
+}
 
 .back-btn:hover::before {
     animation: shine 1s;
@@ -535,13 +539,19 @@ tl.from('.board', {
 }, '-=.4');
 
 
+gsap.set('.player-row', {
+    opacity: 1,
+    y: 0
+});
+
 gsap.from('.player-row', {
     opacity: 0,
     y: 25,
     stagger: 0.08,
-    duration: .7,
+    duration: 0.7,
     ease: 'power3.out',
-    delay: .8
+    delay: 0.8,
+    clearProps: 'all'
 });
 
 // Floating effect
@@ -568,6 +578,6 @@ gsap.to('.glow.two', {
 
 </body>
 </html>
-```
+
 
 
