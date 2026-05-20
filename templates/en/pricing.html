@@ -1,514 +1,609 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricing – ARISTON Wash & Dry</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo3.png') }}">
+    <!-- AUTO REFRESH -->
+    <meta http-equiv="refresh" content="15">
 
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
+    <title>TRACK -ARISTON Wash & Dry</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <style>
-        :root {
-            --primary: #0070ff;
-            --primary-glow: rgba(0, 112, 255, 0.4);
-            --secondary: #00d4ff;
-            --dark-bg: #0a1118;
-            --card-bg: rgba(255, 255, 255, 0.06);
-            --white: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.8);
-            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        * {
+            font-family: 'Poppins', sans-serif;
+            transition: all .25s ease;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at top right, #0d1b2a, #030508);
-            background-color: var(--dark-bg);
-            color: var(--white);
-            line-height: 1.7;
+            min-height: 100vh;
             overflow-x: hidden;
+
+            background:
+                radial-gradient(circle at top left, rgba(37, 99, 235, 0.35), transparent 25%),
+                radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.35), transparent 25%),
+                linear-gradient(135deg, #07111f 0%, #0f172a 45%, #111827 100%);
         }
 
-        /* --- Animations --- */
-        .reveal { 
-            opacity: 0; 
-            transform: translateY(40px) scale(0.98); 
-            transition: var(--transition); 
-        }
-        .reveal.active { 
-            opacity: 1; 
-            transform: translateY(0) scale(1); 
-        }
-
-        /* --- Header & Nav --- */
-        header {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0, 112, 255, 0.3);
-        }
-
-        .store-notice {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 8px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%; 
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-weight: 800;
-            font-size: 1.6rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            letter-spacing: -0.5px;
-        }
-
-        .logo span {
-            background: linear-gradient(to right, #fff, var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-icon { height: 45px; filter: drop-shadow(0 0 10px var(--primary)); }
-
-        .main-nav {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 112, 255, 0.05);
-        }
-
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            padding: 12px 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            opacity: 0.8;
-        }
-
-        .nav-links a:hover { opacity: 1; color: var(--secondary); text-shadow: 0 0 10px var(--primary); }
-
-        /* User Menu & Dropdown */
-        .user-menu { position: relative; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .user-avatar { width: 32px; height: 32px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--primary); }
-        .user-hint { font-size: 0.8rem; opacity: 0.9; color: white; }
-        .user-dropdown { 
-            position: absolute; top: 100%; right: 0; width: 220px; background: #ffffff; 
-            border: 1px solid var(--primary); border-radius: 12px; padding: 10px; 
-            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 30px rgba(0,112,255,0.3); 
-        }
-        .user-menu:hover .user-dropdown { display: flex; }
-        .user-dropdown a { color: #030508 !important; padding: 10px; border-radius: 8px; opacity: 1 !important; font-size: 0.85rem !important; display: block; text-align: left; }
-        .user-dropdown a:hover { background: #f0f7ff; }
-        .ai-btn { background: linear-gradient(90deg, #6200ea, #0070ff) !important; color: white !important; font-weight: 700 !important; }
-        .logout { color: #ff4444 !important; border-top: 1px solid #eee !important; margin-top: 5px; }
-
-        .auth-btn { 
-            background: var(--white); 
-            color: var(--primary) !important; 
-            padding: 6px 18px; 
-            border-radius: 100px; 
-            font-weight: 700 !important; 
-            opacity: 1 !important; 
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,112,255,0.2); 
-        }
-
-        /* --- Page Title Section --- */
-        .page-title {
-            padding: 180px 5% 60px;
-            text-align: center;
-            background: radial-gradient(circle at 50% 0%, rgba(0, 112, 255, 0.25), transparent 70%);
-        }
-
-        .page-title h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 20px; letter-spacing: -1px; text-shadow: 0 0 20px rgba(0,112,255,0.3); }
-        .page-title p { color: var(--text-dim); max-width: 800px; margin: 0 auto 15px; font-size: 1.1rem; }
-
-        /* --- Pricing Sections --- */
-        .pricing-section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
-        .pricing-header { text-align: center; margin-bottom: 50px; }
-        .pricing-header h2 { font-size: 2.2rem; color: var(--secondary); margin-bottom: 10px; font-weight: 800; }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        
-        .pricing-grid.small { max-width: 900px; margin: 0 auto 40px; }
-
-        .pricing-card {
-            background: var(--card-bg);
+        /* Floating background */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            animation: float 10s infinite ease-in-out;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 35px;
-            padding: 45px 40px;
-            transition: var(--transition);
-            text-align: center;
+        }
+
+        .bubble:nth-child(1) {
+            width: 140px;
+            height: 140px;
+            top: 10%;
+            left: 8%;
+        }
+
+        .bubble:nth-child(2) {
+            width: 220px;
+            height: 220px;
+            bottom: 5%;
+            right: 5%;
+            animation-duration: 15s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 30%;
+            left: 12%;
+            animation-duration: 13s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-18px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Glow */
+        .glow {
+            box-shadow:
+                0 0 20px rgba(59, 130, 246, 0.6),
+                0 0 50px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Timeline line */
+        .timeline-line {
+            position: absolute;
+            left: 16px;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background:
+                linear-gradient(to bottom,
+                    rgba(59, 130, 246, 0.9),
+                    rgba(255, 255, 255, 0.15));
+        }
+
+        /* Active pulse */
+        .pulse {
+            animation: pulse 1.7s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.8);
+            }
+
+            70% {
+                transform: scale(1.08);
+                box-shadow: 0 0 0 14px rgba(59, 130, 246, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
+        /* Shine animation */
+        .shine {
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        .pricing-card:hover {
-            transform: translateY(-12px);
-            border-color: var(--primary);
-            background: rgba(0, 112, 255, 0.08);
-            box-shadow: 0 30px 60px rgba(0,112,255,0.2);
+        .shine::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 80%;
+            height: 100%;
+            background:
+                linear-gradient(120deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.35),
+                    transparent);
+
+            transform: skewX(-25deg);
+            animation: shine 4s infinite;
         }
 
-        .pricing-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            margin-bottom: 25px;
-            color: var(--secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .badge-highlight { 
-            background: var(--primary); 
-            color: white; 
-            border-color: var(--secondary);
-            box-shadow: 0 0 15px var(--primary-glow);
-        }
-
-        .pricing-price { font-size: 3.5rem; font-weight: 800; margin-bottom: 5px; color: #fff; }
-        .pricing-subtitle { color: var(--secondary); font-size: 0.95rem; margin-bottom: 30px; font-weight: 600; }
-
-        .pricing-list { list-style: none; text-align: left; margin-bottom: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px; }
-        .pricing-list li { margin-bottom: 15px; font-size: 1rem; color: var(--text-dim); display: flex; align-items: center; gap: 12px; }
-
-        .pricing-tagline { font-size: 0.85rem; color: var(--secondary); opacity: 0.8; padding-top: 20px; font-style: italic; font-weight: 500; }
-
-        .note { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-top: 20px; opacity: 0.7; }
-
-        /* --- Contact & Footer --- */
-        .contact { padding: 100px 10%; background: #ffffff; color: #030508; text-align: center; border-radius: 60px 60px 0 0; position: relative; z-index: 5; }
-        .contact h3 { margin-bottom: 25px; color: var(--primary); font-size: 2.2rem; font-weight: 800; }
-        .contact p { font-size: 1.1rem; margin-bottom: 10px; }
-        
-        footer { padding: 60px 10% 30px; background: #030508; text-align: center; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
-        footer a { color: var(--white); text-decoration: none; margin: 0 10px; font-size: 0.85rem; font-weight: 600; }
-
-        /* --- Bubbles --- */
-        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .bubble { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.6), rgba(0,112,255,0.2)); border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; animation: floatUp linear forwards; }
-        @keyframes floatUp { from { transform: translateY(105vh); opacity: 0; } 50% { opacity: 0.5; } to { transform: translateY(-10vh); opacity: 0; } }
-
-        /* --- Mobile Responsive --- */
-        .hamburger { display: none; color: white; font-size: 1.8rem; cursor: pointer; }
-
-        @media (max-width: 900px) {
-            .hamburger { display: block; margin-left: auto; padding: 10px; }
-            .header-top { padding: 10px 5%; }
-            .nav-links {
-                display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
-                background: rgba(10, 17, 24, 0.98); padding: 40px 20px; gap: 20px; border-bottom: 2px solid var(--primary);
+        @keyframes shine {
+            100% {
+                left: 140%;
             }
-            .nav-links.active { display: flex; }
-            .user-menu { justify-content: center; width: 100%; }
-            .user-dropdown { position: static; width: 100%; background: #fff; box-shadow: none; display: none; margin-top: 10px; }
-            .user-menu:hover .user-dropdown { display: flex; }
-            .pricing-grid { grid-template-columns: 1fr; }
-            .page-title { padding-top: 140px; }
         }
-        .price-placeholder {
-    display: inline-block;
-    padding: 8px 20px;
-    background: linear-gradient(90deg, rgba(0,112,255,0.1) 25%, rgba(0,212,255,0.2) 50%, rgba(0,112,255,0.1) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite linear;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    color: var(--white);
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
 
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
+        /* Mobile */
+        @media (max-width: 640px) {
+
+            .main-card {
+                border-radius: 28px;
+            }
+
+            .header-padding {
+                padding: 2rem 1.5rem;
+            }
+
+            .content-padding {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
-<body>
 
-<header>
-    
-    
-    <div class="header-top">
-        <div class="logo">
-            <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
-            ARISTON <span>Wash & Dry</span>
-        </div>
-        <div class="hamburger" id="hamburger-btn">☰</div>
+<body class="flex items-center justify-center p-4 relative">
+
+    <!-- Background bubbles -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <!-- Language -->
+    <div class="absolute top-5 right-5 z-50">
+        <button onclick="toggleLanguage()" id="langBtn"
+            class="glass-card text-white font-semibold px-5 py-2 rounded-full hover:scale-105 glow">
+            EN
+        </button>
     </div>
 
-    <nav class="main-nav">
-        <div class="nav-links" id="nav-menu">
-            <a href="/en">Home</a>
-            <a href="/en/pricing">Pricing</a>
-            <a href="/en/photos">Photos</a>
-            <a href="/en/special-services">Special Services</a>
-            <a href="/en/reviews">Reviews</a>
-            <a href="/en/contact">Contact</a>
+    <!-- CARD -->
+    <div
+        class="main-card glass-card w-full max-w-xl rounded-[36px] overflow-hidden relative text-white animate-fade">
 
-            {% if current_user.is_authenticated %}
-            <div class="user-menu" id="user-menu-toggle">
-                <div class="user-avatar">{{ current_user.fullname[0]|upper }}</div>
-                <span class="user-hint">Member Area</span>
+        <!-- HEADER -->
+        <div
+            class="header-padding relative px-10 py-10 bg-gradient-to-br from-blue-600/40 via-cyan-400/20 to-transparent border-b border-white/10">
 
-                <div class="user-dropdown" id="user-dropdown-menu">
-                    <a href="/en/settings-menu">Settings</a>
-                    <a href="/en/updates-menu-en">Updates</a>
-                    <a href="/en/ai" class="menu-btn ai-btn">🤖 ARISTON AI ASSISTANT</a>
-                    <a href="/game">ARISTON Game</a>
-                    <a href="/logout" class="logout">Logout</a>
+            <!-- Decorative -->
+            <div
+                class="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-cyan-400/20 blur-3xl">
+            </div>
+
+            <div
+                class="absolute bottom-[-70px] left-[-40px] w-52 h-52 rounded-full bg-blue-600/20 blur-3xl">
+            </div>
+
+            <!-- Logo -->
+            <div class="relative z-10 text-center">
+
+                <div
+                    class="shine glow bg-white w-28 h-28 rounded-full mx-auto flex items-center justify-center shadow-2xl mb-5">
+
+                    <img src="{{ url_for('static', filename='images/logo3.png') }}"
+                        class="h-16 object-contain"
+                        alt="Logo">
                 </div>
+
+                <h1 class="text-4xl font-extrabold tracking-wide">
+                    ARISTON
+                </h1>
+
+                <p class="text-cyan-100 font-medium tracking-[3px] uppercase text-sm mt-1">
+                    Wash & Dry
+                </p>
+
+                <!-- ORDER CODE -->
+                <div
+                    class="inline-flex items-center gap-3 mt-6 glass-card px-5 py-3 rounded-2xl text-sm shadow-lg">
+
+                    <i class="fa-solid fa-barcode text-cyan-300"></i>
+
+                    <span data-key="order_code">
+                        Κωδικός Παραγγελίας
+                    </span>
+
+                    <span class="font-bold text-cyan-200">
+                        #{{ order.order_code }}
+                    </span>
+
+                </div>
+
             </div>
-            {% else %}
-            <a href="/en/auth_choice_en" class="auth-btn">Register / Login</a>
-            {% endif %}
         </div>
-    </nav>
-</header>
 
-<div class="bubbles-container" id="bubbles"></div>
+        <!-- CONTENT -->
+        <div class="content-padding p-8">
 
-<section class="page-title reveal">
-    <h1>Pricing</h1>
-    <p>Clean clothes, easy and affordable!</p>
-    <p>At Ariston Wash & Dry, you can wash and dry whatever you need quickly, easily, and cheaply.</p>
-    <p>Choose the washing machine size that suits your needs and leave the rest to us!</p>
-    <p>Whether you have a few clothes or a full family load, you'll find the perfect washer here.</p>
-    <p>Drop your clothes, select a program, press Start — it's that simple!</p>
-</section>
+            <!-- Greeting -->
+            <div class="text-center mb-10">
 
-<section class="pricing-section reveal">
-    <div class="pricing-header">
-        <h2>🧺 Washing Prices</h2>
-        <p style="color: var(--secondary); font-weight: bold;">Clean & fresh in less than 1 hour</p>
+                <h2 class="text-3xl font-bold">
+                    <span data-key="hello">Γεια σας</span>,
+                    <span class="text-cyan-300">
+                        {{ order.fullname }}
+                    </span>
+                </h2>
+
+                <p class="text-gray-300 mt-3 text-sm leading-relaxed"
+                    data-key="track_info">
+                    Μπορείτε να παρακολουθείτε live την πορεία της παραγγελίας σας.
+                </p>
+
+            </div>
+
+            <!-- TIMELINE -->
+            <div class="relative pl-12">
+
+                <div class="timeline-line"></div>
+
+                <!-- STEP -->
+                <div class="relative flex items-start mb-10">
+
+                    <div
+                        class="w-9 h-9 rounded-full flex items-center justify-center z-10
+                        {{ 'bg-green-500 glow' if order.status >= 0 else 'bg-white/20' }}">
+
+                        <i class="fa-solid fa-receipt text-sm"></i>
+
+                    </div>
+
+                    <div class="ml-5">
+
+                        <h3
+                            class="font-bold text-lg
+                            {{ 'text-green-400' if order.status >= 0 else 'text-gray-400' }}"
+                            data-key="status0_title">
+
+                            Παραλήφθηκε
+
+                        </h3>
+
+                        <p class="text-sm text-gray-300 mt-1"
+                            data-key="status0_desc">
+
+                            Η παραγγελία σας καταχωρήθηκε.
+
+                        </p>
+
+                    </div>
+                </div>
+
+                <!-- STEP -->
+                <div class="relative flex items-start mb-10">
+
+                    <div
+                        class="w-9 h-9 rounded-full flex items-center justify-center z-10
+                        {{ 'bg-blue-500 pulse glow' if order.status == 1 else ('bg-green-500 glow' if order.status > 1 else 'bg-white/20') }}">
+
+                        <i class="fa-solid fa-soap text-sm {{ 'fa-spin' if order.status == 1 }}"></i>
+
+                    </div>
+
+                    <div class="ml-5">
+
+                        <h3
+                            class="font-bold text-lg
+                            {{ 'text-cyan-300' if order.status == 1 else ('text-green-400' if order.status > 1 else 'text-gray-400') }}"
+                            data-key="status1_title">
+
+                            Σε Πλύσιμο
+
+                        </h3>
+
+                        <p class="text-sm text-gray-300 mt-1"
+                            data-key="status1_desc">
+
+                            Τα ρούχα σας είναι στις μηχανές μας.
+
+                        </p>
+
+                    </div>
+                </div>
+
+                <!-- STEP -->
+                <div class="relative flex items-start mb-10">
+
+                    <div
+                        class="w-9 h-9 rounded-full flex items-center justify-center z-10
+                        {{ 'bg-orange-400 pulse glow' if order.status == 2 else ('bg-green-500 glow' if order.status > 2 else 'bg-white/20') }}">
+
+                        <i class="fa-solid fa-wind text-sm"></i>
+
+                    </div>
+
+                    <div class="ml-5">
+
+                        <h3
+                            class="font-bold text-lg
+                            {{ 'text-orange-300' if order.status == 2 else ('text-green-400' if order.status > 2 else 'text-gray-400') }}"
+                            data-key="status2_title">
+
+                            Σε Στέγνωμα
+
+                        </h3>
+
+                        <p class="text-sm text-gray-300 mt-1"
+                            data-key="status2_desc">
+
+                            Φροντίζουμε για το τέλειο στέγνωμα.
+
+                        </p>
+
+                    </div>
+                </div>
+
+                <!-- STEP -->
+                <div class="relative flex items-start">
+
+                    <div
+                        class="w-9 h-9 rounded-full flex items-center justify-center z-10
+                        {{ 'bg-green-500 pulse glow' if order.status == 3 else 'bg-white/20' }}">
+
+                        <i class="fa-solid fa-check-double text-sm"></i>
+
+                    </div>
+
+                    <div class="ml-5">
+
+                        <h3
+                            class="font-bold text-lg
+                            {{ 'text-green-300' if order.status == 3 else 'text-gray-400' }}"
+                            data-key="status3_title">
+
+                            Έτοιμα προς Παράδοση!
+
+                        </h3>
+
+                        <p class="text-sm text-gray-300 mt-1"
+                            data-key="status3_desc">
+
+                            Μπορείτε να περάσετε να τα πάρετε.
+
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- INFO BOXES -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-12">
+
+                <!-- PICKUP -->
+                <div
+                    class="glass-card rounded-3xl p-5 hover:scale-[1.02] hover:border-cyan-400/30">
+
+                    <div class="flex items-center gap-4">
+
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-cyan-400/20 flex items-center justify-center text-cyan-300 text-xl glow">
+
+                            <i class="fa-solid fa-clock"></i>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-gray-300 text-sm"
+                                data-key="pickup">
+
+                                Εκτιμώμενη Παραλαβή:
+
+                            </p>
+
+                            <p class="font-bold text-lg text-white">
+
+                                {{ order.delivery_time }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- PAYMENT -->
+                <div
+                    class="glass-card rounded-3xl p-5 hover:scale-[1.02]">
+
+                    <div class="flex items-center gap-4">
+
+                        <div
+                            class="w-14 h-14 rounded-2xl
+                            {{ 'bg-red-500/20 text-red-300' if order.debt_amount > 0 else 'bg-green-500/20 text-green-300' }}
+                            flex items-center justify-center text-xl glow">
+
+                            <i class="fa-solid fa-wallet"></i>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-gray-300 text-sm"
+                                data-key="debt">
+
+                                Υπόλοιπο Πληρωμής:
+
+                            </p>
+
+                            <p
+                                class="font-bold text-2xl
+                                {{ 'text-red-300' if order.debt_amount > 0 else 'text-green-300' }}">
+
+                                {{ order.debt_amount }}€
+
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div
+            class="border-t border-white/10 py-5 text-center text-sm text-gray-400 bg-black/10">
+
+            <div class="flex items-center justify-center gap-2">
+
+                <i class="fa-solid fa-heart text-pink-400"></i>
+
+                <span data-key="thanks">
+                    Ευχαριστούμε για την εμπιστοσύνη σας!
+                </span>
+
+            </div>
+
+            <p class="text-xs mt-2 text-gray-500">
+                ARISTON Wash & Dry © 2026
+            </p>
+
+        </div>
+
     </div>
 
-    <div class="pricing-grid">
-        <div class="pricing-card">
-            <div class="pricing-badge">10 kg</div>
-            <div class="pricing-price">
-                <span style="font-size: 0.6em; opacity: 0.8;">from</span> 5€
-            </div>
-            <div style="background: rgba(13, 71, 161, 0.1); color: var(--secondary); padding: 5px 10px; border-radius: 20px; font-weight: bold; margin-bottom: 10px; display: inline-block; font-size: 0.9em;">
-                + Dry = 7€ total!
-            </div>
-            <div class="pricing-subtitle">Perfect for small loads</div>
-            <ul class="pricing-list">
-                <li>👕 8–10 shirts</li>
-                <li>👖 4–5 trousers</li>
-                <li>🛏️ 2 sets of sheets</li>
-                <li>🧺 6–8 towels</li>
-            </ul>
-            <div class="pricing-tagline">Everyday clothes & quick washes.</div>
-        </div>
+    <!-- TRANSLATIONS -->
+    <script>
 
-        <div class="pricing-card">
-            <div class="pricing-badge badge-highlight">15 kg</div>
-            <div class="pricing-price">
-                <span style="font-size: 0.6em; opacity: 0.8;">from</span> 8€
-            </div>
-            <div style="background: rgba(13, 71, 161, 0.1); color: var(--secondary); padding: 5px 10px; border-radius: 20px; font-weight: bold; margin-bottom: 10px; display: inline-block; font-size: 0.9em;">
-                + Dry = 10€ total!
-            </div>
-            <div class="pricing-subtitle">Ideal for families</div>
-            <ul class="pricing-list">
-                <li>👕 12–15 shirts</li>
-                <li>👖 6–8 trousers</li>
-                <li>🛏️ 3 sets of sheets</li>
-                <li>🧥 1–2 jackets / 🛌 1–2 medium quilts</li>
-            </ul>
-            <div class="pricing-tagline">Full family loads, sheets & quilts.</div>
-        </div>
-    </div>
-    
-    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: left;">
-        <p style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: white;">
-            <span style="font-size: 1.5em;">🧴</span>
-            <strong>6 Automatic Pumps:</strong> We use gentle & hypoallergenic detergents and softeners which are <strong>included in the price!</strong>
-        </p>
-        <p style="display: flex; align-items: center; gap: 10px; color: white;">
-            <span style="font-size: 1.5em;">✨</span>
-            <strong>Disinfection:</strong> The drum and clothes are disinfected with <strong>ACTIVE OXYGEN</strong> after every wash, for guaranteed hygiene!
-        </p>
-    </div>
+        const translations = {
 
-    <p class="note" style="margin-top: 20px;"><strong>Note:</strong> Do not fill the washing machine above ~80% — leave space for proper cleaning.</p>
-<div style="background: white; padding: 30px; border-radius: 20px; margin: 20px 0; border: 2px solid #003366; box-shadow: 0 5px 15px rgba(0,0,0,0.05); font-family: sans-serif;">
-    <h2 style="text-align: center; color: #003366; margin-top: 0; text-transform: uppercase; letter-spacing: 1px;">✨ Why Active Oxygen?</h2>
-    <p style="text-align: center; color: #666; margin-bottom: 25px;">The ultimate hygiene technology in every wash!</p>
+            el: {
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-        
-        <div style="text-align: center; padding: 15px;">
-            <div style="font-size: 40px; margin-bottom: 10px;">🛡️</div>
-            <h4 style="margin: 0; color: #003366; text-transform: uppercase;">Sanitization</h4>
-            <p style="font-size: 14px; color: #444; margin-top: 8px;">Eliminates <b>99.9%</b> of bacteria and germs in both clothes and the drum.</p>
-        </div>
+                order_code: "Κωδικός Παραγγελίας",
+                hello: "Γεια σας",
 
-        <div style="text-align: center; padding: 15px;">
-            <div style="font-size: 40px; margin-bottom: 10px;">🌿</div>
-            <h4 style="margin: 0; color: #003366; text-transform: uppercase;">Freshness</h4>
-            <p style="font-size: 14px; color: #444; margin-top: 8px;">Permanently removes tough odors like smoke, food, and dampness.</p>
-        </div>
+                track_info:
+                    "Μπορείτε να παρακολουθείτε live την πορεία της παραγγελίας σας.",
 
-        <div style="text-align: center; padding: 15px;">
-            <div style="font-size: 40px; margin-bottom: 10px;">☁️</div>
-            <h4 style="margin: 0; color: #003366; text-transform: uppercase;">Protection</h4>
-            <p style="font-size: 14px; color: #444; margin-top: 8px;">Eco-friendly process, ideal for sensitive or allergy-prone skin.</p>
-        </div>
+                status0_title: "Παραλήφθηκε",
+                status0_desc: "Η παραγγελία σας καταχωρήθηκε.",
 
-    </div>
-</div>
-</section>
+                status1_title: "Σε Πλύσιμο",
+                status1_desc: "Τα ρούχα σας είναι στις μηχανές μας.",
 
-<section class="pricing-section reveal">
-    <div class="pricing-header">
-        <h2>💨 Dryer Prices</h2>
-        <p style="color: var(--secondary); font-weight: bold;">Price per 15-minute cycle</p>
-    </div>
+                status2_title: "Σε Στέγνωμα",
+                status2_desc: "Φροντίζουμε για το τέλειο στέγνωμα.",
 
-    <div class="pricing-grid small">
-        <div class="pricing-card">
-            <div class="pricing-badge">15 kg Dryer</div>
-            <div class="pricing-price">
-                2€
-            </div>
-            <div class="pricing-subtitle">per 15 minutes</div>
-            <div class="pricing-tagline">Ideal for normal laundry loads.</div>
-        </div>
+                status3_title: "Έτοιμα προς Παράδοση!",
+                status3_desc: "Μπορείτε να περάσετε να τα πάρετε.",
 
-        <div class="pricing-card">
-            <div class="pricing-badge badge-highlight">18 kg Dryer</div>
-            <div class="pricing-price">
-                2€
-            </div>
-            <div class="pricing-subtitle">per 15 minutes</div>
-            <div class="pricing-tagline">Perfect for quilts, blankets & large loads.</div>
-        </div>
-    </div>
-    <p class="note">You can add extra drying time if needed. Prices are per 15-minute cycle after the first cycle.</p>
+                pickup: "Εκτιμώμενη Παραλαβή:",
+                debt: "Υπόλοιπο Πληρωμής:",
 
-</section>
+                thanks: "Ευχαριστούμε για την εμπιστοσύνη σας!",
 
-<a href="https://aristonwashdry.gr/en/contact" style="text-decoration: none; color: inherit;">
-    <section class="contact reveal">
-        <h3>Contact Us</h3>
-        <p>📍 Dervenakion 10, Vathy, Samos 83100</p>
-        <p>📞 6948897391 | 6944615574 | 6987598416</p>
-        <p>📧 info@aristonwashdry.gr</p>
-        
-    </section>
-</a>
+                btn: "EN"
+            },
 
-<footer style="padding: 40px 0; text-align: center; border-top: 1px solid var(--border-color); font-size: 0.9rem; opacity: 0.8;">
-    <div class="container">
-        © 2026 Ariston Wash & Dry — All Rights Reserved<br>
-        Website designed & developed by 
-        <a href="https://rebrand.ly/kosg" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 700; transition: var(--transition);">
-            Konstantinos Georgoudis
-        </a>
-        <br><br>
-        <div class="footer-legal" style="font-size: 0.8rem; opacity: 0.6;">
-            <a href="/en/terms" style="color: inherit; text-decoration: none; transition: 0.3s;">Terms</a> | 
-            <a href="/en/privacy" style="color: inherit; text-decoration: none; transition: 0.3s;">Privacy</a> | 
-            <a href="/en/cookies" style="color: inherit; text-decoration: none; transition: 0.3s;">Cookies</a>
-        </div>
-    </div>
-</footer>
+            en: {
 
-<script>
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('active');
-        });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+                order_code: "Order Code",
+                hello: "Hello",
 
-    const btn = document.getElementById('hamburger-btn');
-    const menu = document.getElementById('nav-menu');
-    btn.onclick = (e) => {
-        e.stopPropagation();
-        menu.classList.toggle('active');
-    };
+                track_info:
+                    "You can track your order live in real time.",
 
-    const userToggle = document.getElementById('user-menu-toggle');
-    const userDropdown = document.getElementById('user-dropdown-menu');
-    if (userToggle) {
-        userToggle.addEventListener('click', function(e) {
-            if (window.innerWidth <= 900) {
-                e.stopPropagation();
-                const isVisible = userDropdown.style.display === 'flex';
-                userDropdown.style.display = isVisible ? 'none' : 'flex';
+                status0_title: "Received",
+                status0_desc: "Your order has been registered.",
+
+                status1_title: "Washing",
+                status1_desc: "Your clothes are in our machines.",
+
+                status2_title: "Drying",
+                status2_desc: "Taking care of the perfect drying.",
+
+                status3_title: "Ready for Pickup!",
+                status3_desc: "You can come and collect them.",
+
+                pickup: "Estimated Pickup:",
+                debt: "Balance Due:",
+
+                thanks: "Thank you for your trust!",
+
+                btn: "GR"
             }
-        });
-    }
+        };
 
-    document.addEventListener('click', () => {
-        if (window.innerWidth <= 900) {
-            if(userDropdown) userDropdown.style.display = 'none';
-            menu.classList.remove('active');
+        let currentLang =
+            localStorage.getItem("prefLang") || "el";
+
+        function updateContent() {
+
+            document.querySelectorAll("[data-key]").forEach(el => {
+
+                const key = el.getAttribute("data-key");
+
+                if (translations[currentLang][key]) {
+
+                    el.innerText =
+                        translations[currentLang][key];
+                }
+            });
+
+            document.getElementById("langBtn").innerText =
+                translations[currentLang]["btn"];
         }
-    });
 
-    function createBubble() {
-        const container = document.getElementById('bubbles');
-        const bubble = document.createElement('div');
-        const size = Math.random() * 60 + 15 + 'px';
-        bubble.className = 'bubble';
-        bubble.style.width = size;
-        bubble.style.height = size;
-        bubble.style.left = Math.random() * 100 + 'vw';
-        bubble.style.animationDuration = Math.random() * 4 + 5 + 's';
-        container.appendChild(bubble);
-        setTimeout(() => bubble.remove(), 7000);
-    }
-    setInterval(createBubble, 500);
-</script>
+        function toggleLanguage() {
+
+            currentLang =
+                currentLang === "el" ? "en" : "el";
+
+            localStorage.setItem("prefLang", currentLang);
+
+            updateContent();
+        }
+
+        window.onload = updateContent;
+
+    </script>
 
 </body>
+
 </html>
