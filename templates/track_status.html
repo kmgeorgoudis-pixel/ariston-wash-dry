@@ -37,7 +37,6 @@
                 linear-gradient(135deg, #07111f 0%, #0f172a 45%, #111827 100%);
         }
 
-        /* Floating background */
         .bubble {
             position: absolute;
             border-radius: 50%;
@@ -83,7 +82,6 @@
             }
         }
 
-        /* Glass Card */
         .glass-card {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -95,14 +93,12 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
-        /* Glow */
         .glow {
             box-shadow:
                 0 0 20px rgba(59, 130, 246, 0.6),
                 0 0 50px rgba(59, 130, 246, 0.2);
         }
 
-        /* Timeline line */
         .timeline-line {
             position: absolute;
             left: 16px;
@@ -115,7 +111,6 @@
                     rgba(255, 255, 255, 0.15));
         }
 
-        /* Active pulse */
         .pulse {
             animation: pulse 1.7s infinite;
         }
@@ -137,7 +132,6 @@
             }
         }
 
-        /* Shine animation */
         .shine {
             position: relative;
             overflow: hidden;
@@ -166,7 +160,6 @@
             }
         }
 
-        /* Mobile */
         @media (max-width: 640px) {
 
             .main-card {
@@ -181,12 +174,17 @@
                 padding: 1.5rem;
             }
         }
+        @media (min-width: 1024px) {
+
+            .main-card {
+                max-width: 980px;
+            }
+        }
     </style>
 </head>
 
 <body class="flex items-center justify-center p-4 relative">
 
-    <!-- Background bubbles -->
     <div class="bubble"></div>
     <div class="bubble"></div>
     <div class="bubble"></div>
@@ -207,7 +205,6 @@
         <div
             class="header-padding relative px-10 py-10 bg-gradient-to-br from-blue-600/40 via-cyan-400/20 to-transparent border-b border-white/10">
 
-            <!-- Decorative -->
             <div
                 class="absolute top-[-50px] right-[-50px] w-44 h-44 rounded-full bg-cyan-400/20 blur-3xl">
             </div>
@@ -484,6 +481,108 @@
 
             </div>
 
+            <!-- MEMBER BANNER -->
+            <div class="mt-12">
+
+                <div class="glass-card rounded-[32px] overflow-hidden relative p-6 sm:p-8 border border-cyan-400/20">
+
+                    <div class="absolute -top-20 -right-20 w-72 h-72 bg-cyan-400/20 blur-3xl rounded-full"></div>
+                    <div class="absolute -bottom-24 -left-20 w-72 h-72 bg-blue-600/20 blur-3xl rounded-full"></div>
+
+                    <div class="relative z-10">
+
+                        <div class="flex flex-col xl:flex-row items-center xl:items-start gap-8">
+
+                            <div class="flex-shrink-0">
+
+                                <div class="shine glow rounded-3xl overflow-hidden border border-white/10">
+
+                                    <img src="{{ url_for('static', filename='images/logo3.png') }}"
+                                        alt="Ariston Member"
+                                        class="w-40 sm:w-52 object-contain bg-white p-5">
+
+                                </div>
+
+                            </div>
+
+                            <div class="flex-1 text-center xl:text-left w-full">
+
+                                <div
+                                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-400/15 border border-cyan-300/20 text-cyan-200 text-sm font-semibold mb-4">
+
+                                    <i class="fa-solid fa-crown text-yellow-300"></i>
+
+                                    <span data-key="member_badge">
+                                        ARISTON MEMBER
+                                    </span>
+
+                                </div>
+
+                                <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight">
+
+                                    <span data-key="member_title">
+                                        Γίνε μέλος στο ARISTON Wash & Dry
+                                    </span>
+
+                                </h2>
+
+                                <p class="text-gray-300 mt-4 leading-relaxed text-sm sm:text-base"
+                                    data-key="member_desc">
+
+                                    Βάλε όλες σου τις αγορές στον λογαριασμό σου για να λαμβάνεις
+                                    κουπόνια, προσφορές και μοναδικά προνόμια μέλους.
+
+                                </p>
+
+                                <div
+                                    class="flex flex-col sm:flex-row gap-4 mt-7 justify-center lg:justify-start">
+
+                                    <a id="registerBtn"
+                                        href="https://aristonwashdry.gr/register"
+                                        class="group relative overflow-hidden rounded-2xl px-7 py-4
+                                        bg-gradient-to-r from-cyan-400 to-blue-500
+                                        font-bold text-white shadow-2xl hover:scale-105 glow">
+
+                                        <span class="relative z-10 flex items-center justify-center gap-3">
+
+                                            <i class="fa-solid fa-user-plus"></i>
+
+                                            <span data-key="member_btn_register">
+                                                Γίνε Μέλος
+                                            </span>
+
+                                        </span>
+
+                                    </a>
+
+                                    <button onclick="openMemberModal()"
+                                        class="glass-card rounded-2xl px-7 py-4
+                                        font-semibold hover:scale-105 border border-white/10">
+
+                                        <span class="flex items-center justify-center gap-3">
+
+                                            <i class="fa-solid fa-id-card"></i>
+
+                                            <span data-key="member_btn_existing">
+                                                Είμαι ήδη μέλος
+                                            </span>
+
+                                        </span>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
         <!-- FOOTER -->
@@ -503,6 +602,95 @@
             <p class="text-xs mt-2 text-gray-500">
                 ARISTON Wash & Dry © 2026
             </p>
+
+        </div>
+
+    </div>
+
+    <!-- MEMBER MODAL -->
+    <div id="memberModal"
+        class="fixed inset-0 z-[999] hidden items-center justify-center bg-black/70 backdrop-blur-md p-4">
+
+        <div
+            class="glass-card w-full max-w-2xl rounded-[34px] overflow-hidden relative border border-cyan-400/20">
+
+            <div class="absolute -top-20 right-0 w-72 h-72 bg-cyan-400/20 blur-3xl rounded-full"></div>
+
+            <div class="relative z-10 p-8 sm:p-10 text-center">
+
+                <div
+                    class="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center
+                    bg-gradient-to-br from-cyan-400 to-blue-500 glow">
+
+                    <i class="fa-solid fa-qrcode text-4xl text-white"></i>
+
+                </div>
+
+                <h2 class="text-3xl font-extrabold text-white"
+                    data-key="modal_title">
+
+                    Είσαι ήδη μέλος;
+
+                </h2>
+
+                <p class="text-gray-300 mt-5 leading-relaxed text-sm sm:text-base"
+                    data-key="modal_desc">
+
+                    Πήγαινε στο κατάστημα, βρες τον διαθέσιμο υπάλληλο,
+                    συνδέσου στη σελίδα και δείξε την ταυτότητα μέλους σου
+                    (QR Code ή Member ID).
+
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+
+                    <a id="loginBtn"
+                        href="https://aristonwashdry.gr/login"
+                        class="rounded-2xl px-6 py-4
+                        bg-gradient-to-r from-blue-500 to-cyan-400
+                        font-bold text-white hover:scale-105 glow">
+
+                        <span class="flex items-center justify-center gap-3">
+
+                            <i class="fa-solid fa-right-to-bracket"></i>
+
+                            <span data-key="modal_login">
+                                Σύνδεση
+                            </span>
+
+                        </span>
+
+                    </a>
+
+                    <a id="memberInfoBtn"
+                        href="https://aristonwashdry.gr/member-info"
+                        class="glass-card rounded-2xl px-6 py-4
+                        font-semibold hover:scale-105 border border-white/10">
+
+                        <span class="flex items-center justify-center gap-3">
+
+                            <i class="fa-solid fa-id-badge"></i>
+
+                            <span data-key="modal_member_card">
+                                Ταυτότητα Μέλους
+                            </span>
+
+                        </span>
+
+                    </a>
+
+                </div>
+
+                <button onclick="closeMemberModal()"
+                    class="mt-7 text-gray-400 hover:text-white text-sm">
+
+                    <span data-key="modal_close">
+                        Κλείσιμο
+                    </span>
+
+                </button>
+
+            </div>
 
         </div>
 
@@ -538,6 +726,35 @@
 
                 thanks: "Ευχαριστούμε για την εμπιστοσύνη σας!",
 
+                member_badge: "ARISTON MEMBER",
+
+                member_title:
+                    "Γίνε μέλος στο ARISTON Wash & Dry",
+
+                member_desc:
+                    "Βάλε όλες σου τις αγορές στον λογαριασμό σου για να λαμβάνεις κουπόνια, προσφορές και μοναδικά προνόμια μέλους.",
+
+                member_btn_register:
+                    "Γίνε Μέλος",
+
+                member_btn_existing:
+                    "Είμαι ήδη μέλος",
+
+                modal_title:
+                    "Είσαι ήδη μέλος;",
+
+                modal_desc:
+                    "Πήγαινε στο κατάστημα, βρες τον διαθέσιμο υπάλληλο, συνδέσου στη σελίδα και δείξε την ταυτότητα μέλους σου (QR Code ή Member ID).",
+
+                modal_login:
+                    "Σύνδεση",
+
+                modal_member_card:
+                    "Ταυτότητα Μέλους",
+
+                modal_close:
+                    "Κλείσιμο",
+
                 btn: "EN"
             },
 
@@ -566,12 +783,61 @@
 
                 thanks: "Thank you for your trust!",
 
+                member_badge: "ARISTON MEMBER",
+
+                member_title:
+                    "Become a member at ARISTON Wash & Dry",
+
+                member_desc:
+                    "Add all your purchases to your account and receive coupons, special offers and exclusive member benefits.",
+
+                member_btn_register:
+                    "Become a Member",
+
+                member_btn_existing:
+                    "I am already a member",
+
+                modal_title:
+                    "Already a member?",
+
+                modal_desc:
+                    "Visit the store, find an available employee, log into your account and show your member identity (QR Code or Member ID).",
+
+                modal_login:
+                    "Login",
+
+                modal_member_card:
+                    "Member Identity",
+
+                modal_close:
+                    "Close",
+
                 btn: "GR"
             }
         };
 
         let currentLang =
             localStorage.getItem("prefLang") || "el";
+
+        function updateMemberLinks() {
+
+            const isEnglish = currentLang === "en";
+
+            document.getElementById("registerBtn").href =
+                isEnglish
+                    ? "https://aristonwashdry.gr/en/register"
+                    : "https://aristonwashdry.gr/register";
+
+            document.getElementById("loginBtn").href =
+                isEnglish
+                    ? "https://aristonwashdry.gr/en/login"
+                    : "https://aristonwashdry.gr/login";
+
+            document.getElementById("memberInfoBtn").href =
+                isEnglish
+                    ? "https://aristonwashdry.gr/en/member-info"
+                    : "https://aristonwashdry.gr/member-info";
+        }
 
         function updateContent() {
 
@@ -588,6 +854,8 @@
 
             document.getElementById("langBtn").innerText =
                 translations[currentLang]["btn"];
+
+            updateMemberLinks();
         }
 
         function toggleLanguage() {
@@ -598,6 +866,24 @@
             localStorage.setItem("prefLang", currentLang);
 
             updateContent();
+        }
+
+        function openMemberModal() {
+
+            document.getElementById("memberModal")
+                .classList.remove("hidden");
+
+            document.getElementById("memberModal")
+                .classList.add("flex");
+        }
+
+        function closeMemberModal() {
+
+            document.getElementById("memberModal")
+                .classList.remove("flex");
+
+            document.getElementById("memberModal")
+                .classList.add("hidden");
         }
 
         window.onload = updateContent;
