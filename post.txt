@@ -1,3 +1,3 @@
 git add .
-git commit -m " update price ans status 3 "
+git commit -m " update tefteri 1 "
 git push
