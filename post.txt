@@ -1,3 +1,3 @@
 git add .
-git commit -m " track banner 2 "
+git commit -m "lock lucky wheel 1 "
 git push
