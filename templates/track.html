@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ariston Wash & Dry | Live Tracking</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Html5Qrcode Library για το QR Scanner -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    
+    <style>
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .scan-line {
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, transparent, #22d3ee, #3b82f6, transparent);
+            position: absolute;
+            animation: scan 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px #22d3ee);
+        }
+        @keyframes scan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+    </style>
+</head>
+<body class="bg-[#090d16] text-white min-h-screen flex flex-col items-center justify-center font-sans relative overflow-x-hidden px-4">
+
+    <!-- Background Glows -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+    <!-- LANGUAGE SWITCHER BUTTON -->
+    <div class="absolute top-6 right-6 z-50">
+        <button onclick="toggleLanguage()" class="glass-panel px-4 py-2 rounded-xl text-sm font-bold border border-white/10 hover:border-cyan-400/50 transition-all cursor-pointer flex items-center gap-2">
+            <i class="fa-solid fa-earth-europe text-cyan-400"></i>
+            <span id="langBtnText">EN</span>
+        </button>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="w-full max-w-2xl relative z-10 my-12">
+        
+        <!-- 1. DYNAMIC ERROR BOX (Εμφανίζεται αν ο κωδικός δεν βρεθεί) -->
+        <div id="invalidCodeBox" class="glass-panel rounded-3xl p-6 border border-red-500/30 bg-red-950/10 mb-6 hidden">
+            <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 text-xl flex-shrink-0">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-bold text-lg text-red-400" data-translate="err_title">Ο κωδικός δεν είναι έγκυρος</h4>
+                    <p class="text-gray-400 text-sm mt-1" data-translate="err_desc">Δεν βρέθηκε παραγγελία με αυτόν τον κωδικό. Ελέγξτε ξανά το χαρτί σας ή χρησιμοποιήστε τις παρακάτω επιλογές:</p>
+                </div>
+            </div>
+            <!-- Help Options -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                <a id="aiLink" href="https://aristonwashdry.gr/ai" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-cyan-400/40 transition-all group">
+                    <div class="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <span class="text-xs font-semibold" data-translate="opt_ai">Μιλήστε με τον AI Assistant μας</span>
+                </a>
+                <a id="contactLink" href="https://aristonwashdry.gr/epikoinonia" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-blue-400/40 transition-all group">
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <span class="text-xs font-semibold" data-translate="opt_contact">Επικοινωνία με το κατάστημα</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 2. TRACK CARD -->
+        <div id="trackCard" class="glass-panel rounded-[40px] p-8 sm:p-12 shadow-2xl transition-all duration-500">
+            
+            <div class="flex flex-col items-center text-center mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white text-3xl mb-5 shadow-xl shadow-cyan-500/20">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-2 uppercase" data-translate="main_title">
+                    Live Tracking
+                </h1>
+                <p class="text-gray-400 text-sm max-w-md" data-translate="main_subtitle">
+                    Παρακολουθήστε την πορεία των ρούχων σας σε πραγματικό χρόνο.
+                </p>
+            </div>
+
+            <!-- INPUT & BUTTONS -->
+            <div class="space-y-4">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-5 flex items-center text-gray-500 text-xl">
+                        <i class="fa-solid fa-barcode text-cyan-400"></i>
+                    </span>
+                    <input type="text" id="trackCode" maxlength="4" placeholder="0000" 
+                        class="w-full pl-14 pr-4 py-5 bg-slate-950/80 border border-white/10 rounded-2xl text-center font-mono text-4xl tracking-[0.3em] font-bold text-white placeholder-gray-800 focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/10 transition-all uppercase">
+                </div>
+
+                <div id="localError" class="text-red-400 text-xs font-medium text-center hidden">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> <span data-translate="local_err">Εισάγετε 4 ψηφία.</span>
+                </div>
+
+                <!-- BUTTONS ROW (Search & QR Scanner) -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button onclick="startTracking()" class="flex-1 group relative overflow-hidden rounded-2xl py-4 bg-gradient-to-r from-cyan-400 to-blue-600 font-extrabold text-white shadow-xl hover:scale-[1.01] transition-all cursor-pointer text-center">
+                        <span class="flex items-center justify-center gap-2">
+                            <span data-translate="btn_search">ΕΝΤΟΠΙΣΜΟΣ ΠΑΡΑΓΓΕΛΙΑΣ</span>
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                    </button>
+                    
+                    <button onclick="openQRScanner()" class="glass-panel px-6 py-4 rounded-2xl font-bold border border-white/10 text-cyan-400 hover:bg-cyan-400/10 transition-all cursor-pointer flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-qrcode text-xl"></i>
+                        <span data-translate="btn_scan">SCAN QR</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- INFO BOX ABOUT RECEIPT & QR -->
+            <div class="mt-8 p-4 rounded-2xl bg-slate-900/40 border border-white/5 flex gap-4 items-start text-left">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 flex-shrink-0 mt-0.5">
+                    <i class="fa-solid fa-receipt"></i>
+                </div>
+                <div class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                    <p class="font-semibold text-gray-300 mb-1" data-translate="info_title">Πού θα βρείτε τον κωδικό;</p>
+                    <p data-translate="info_body">Ο 4ψήφιος κωδικός αναγράφεται πάνω στο χαρτί που λάβατε από το κατάστημα. Επίσης, στο χαρτί αναγράφεται ένα QR code, το οποίο μπορείτε να σκανάρετε απευθείας με την κάμερά σας πατώντας το κουμπί SCAN QR.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 3. LIVE QR SCANNER CAMERA PANEL (Κρυφό αρχικά) -->
+        <div id="scannerCard" class="glass-panel rounded-[40px] p-6 shadow-2xl text-center hidden flex-col items-center justify-center">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-cyan-400">
+                <i class="fa-solid fa-camera animate-pulse"></i> <span data-translate="scan_header">Σκανάρετε το QR Code</span>
+            </h3>
+            <div id="qr-reader" class="w-full max-w-sm overflow-hidden rounded-2xl border border-white/10 bg-black"></div>
+            <button onclick="closeQRScanner()" class="mt-5 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-semibold transition-all cursor-pointer" data-translate="btn_cancel">
+                Ακύρωση
+            </button>
+        </div>
+
+        <!-- 4. LOADING CARD -->
+        <div id="loadingCard" class="glass-panel rounded-[40px] p-16 shadow-2xl text-center hidden relative overflow-hidden min-h-[380px] flex-col items-center justify-center">
+            <div class="scan-line"></div>
+            <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center rounded-3xl bg-slate-900/50 border border-white/10 text-cyan-400 text-4xl animate-pulse">
+                <i class="fa-solid fa-shirt"></i>
+            </div>
+            <h3 class="text-xl font-black tracking-wide mb-1 text-white" data-translate="load_title">ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ</h3>
+            <p class="text-cyan-400 font-mono tracking-widest text-sm" id="loadingCodeText">CODE: ----</p>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT ΜΕΤΑΦΡΑΣΗΣ, SCANNER & REDIRECT -->
+    <script>
+        // 1. ΛΕΞΙΚΟ ΓΙΑ ΕΛΛΗΝΙΚΑ & ΑΓΓΛΙΚΑ
+        const translations = {
+            el: {
+                main_title: "Live Tracking",
+                main_subtitle: "Παρακολουθήστε την πορεία των ρούχων σας σε πραγματικό χρόνο.",
+                btn_search: "ΕΝΤΟΠΙΣΜΟΣ ΠΑΡΑΓΓΕΛΙΑΣ",
+                btn_scan: "SCAN QR",
+                local_err: "Παρακαλώ εισάγετε έναν έγκυρο 4ψήφιο κωδικό.",
+                info_title: "Πού θα βρείτε τον κωδικό;",
+                info_body: "Ο 4ψήφιος κωδικός αναγράφεται πάνω στο χαρτί που λάβατε από το κατάστημα. Επίσης, στο χαρτί αναγράφεται ένα QR code, το οποίο μπορείτε να σκανάρετε απευθείας με την κάμερά σας πατώντας το κουμπί SCAN QR.",
+                err_title: "Ο κωδικός δεν είναι έγκυρος",
+                err_desc: "Δεν βρέθηκε παραγγελία με αυτόν τον κωδικό. Ελέγξτε ξανά το χαρτί σας ή χρησιμοποιήστε τις παρακάτω επιλογές:",
+                opt_ai: "Μιλήστε με τον AI Assistant μας",
+                opt_contact: "Επικοινωνία με το κατάστημα",
+                scan_header: "Σκανάρετε το QR Code",
+                btn_cancel: "Ακύρωση",
+                load_title: "ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ"
+            },
+            en: {
+                main_title: "Live Tracking",
+                main_subtitle: "Track the status of your clothes in real time.",
+                btn_search: "TRACK ORDER",
+                btn_scan: "SCAN QR",
+                local_err: "Please enter a valid 4-digit code.",
+                info_title: "Where can you find the code?",
+                info_body: "The 4-digit code is written on the receipt you received from the store. There is also a QR code printed on the receipt, which you can scan directly using your camera by clicking the SCAN QR button.",
+                err_title: "Invalid Code",
+                err_desc: "No order was found with this code. Please check your receipt again or choose one of the options below:",
+                opt_ai: "Talk to our AI Assistant",
+                opt_contact: "Contact the store",
+                scan_header: "Scan the QR Code",
+                btn_cancel: "Cancel",
+                load_title: "RETRIEVING DATA"
+            }
+        };
+
+        let currentLang = 'el';
+        let html5QrCode = null;
+
+        // Συνάρτηση αλλαγής γλώσσας
+        function updateLanguageUI() {
+            document.querySelectorAll('[data-translate]').forEach(elem => {
+                const key = elem.getAttribute('data-translate');
+                if (translations[currentLang][key]) {
+                    elem.innerText = translations[currentLang][key];
+                }
+            });
+            
+            // Αλλαγή των Links ανάλογα με τη γλώσσα
+            const aiLink = document.getElementById('aiLink');
+            const contactLink = document.getElementById('contactLink');
+            const langBtnText = document.getElementById('langBtnText');
+            
+            if (currentLang === 'el') {
+                langBtnText.innerText = 'EN';
+                aiLink.href = 'https://aristonwashdry.gr/ai';
+                contactLink.href = 'https://aristonwashdry.gr/epikoinonia';
+            } else {
+                langBtnText.innerText = 'GR';
+                aiLink.href = 'https://aristonwashdry.gr/ai'; // Κρατάς το ίδιο ή το αλλάζεις αν έχεις en/ai
+                contactLink.href = 'https://aristonwashdry.gr/en/contact';
+            }
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'el' ? 'en' : 'el';
+            updateLanguageUI();
+        }
+
+        // 2. ΕΛΕΓΧΟΣ ΑΝ ΕΠΕΣΤΡΕΨΕ ΣΦΑΛΜΑ ΑΠΟ ΤΟ BACKEND (π.χ. /track?error=invalid)
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('error') === 'invalid') {
+                document.getElementById('invalidCodeBox').classList.remove('hidden');
+            }
+            updateLanguageUI();
+        });
+
+        // 3. ΕΝΤΟΠΙΣΜΟΣ & REDIRECT
+        function startTracking() {
+            const input = document.getElementById('trackCode');
+            const code = input.value.trim();
+            const localError = document.getElementById('localError');
+            
+            if (code.length !== 4) {
+                localError.classList.remove('hidden');
+                input.classList.add('border-red-500');
+                return;
+            }
+            
+            localError.classList.add('hidden');
+            input.classList.remove('border-red-500');
+
+            document.getElementById('loadingCodeText').innerText = 'CODE: ' + code.toUpperCase();
+            document.getElementById('trackCard').classList.add('hidden');
+            document.getElementById('invalidCodeBox').classList.add('hidden');
+            document.getElementById('loadingCard').classList.remove('hidden');
+            document.getElementById('loadingCard').classList.add('flex');
+
+            setTimeout(() => {
+                window.location.href = '/track/' + code;
+            }, 2000); 
+        }
+
+        // 4. LIVE QR CODE SCANNER ENGINE
+        function openQRScanner() {
+            document.getElementById('trackCard').classList.add('hidden');
+            document.getElementById('invalidCodeBox').classList.add('hidden');
+            document.getElementById('scannerCard').classList.remove('hidden');
+            document.getElementById('scannerCard').classList.add('flex');
+
+            html5QrCode = new Html5Qrcode("qr-reader");
+            
+            // Ξεκινάει το scan χρησιμοποιώντας την πίσω κάμερα (environment)
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                (decodedText) => {
+                    // Μόλις βρει QR Code, αποσπά τα τελευταία 4 ψηφία ή ολόκληρο αν είναι ο κωδικός
+                    // Αν το QR περιέχει link π.χ. aristonwashdry.gr/track/1234, παίρνει μόνο το 1234
+                    let scannedCode = decodedText.trim();
+                    if (scannedCode.includes('/')) {
+                        scannedCode = scannedCode.split('/').pop();
+                    }
+                    scannedCode = scannedCode.substring(0, 4);
+                    
+                    document.getElementById('trackCode').value = scannedCode;
+                    closeQRScanner();
+                    startTracking(); // Κάνει αυτόματα αναζήτηση μόλις σκανάρει!
+                },
+                (errorMessage) => { /* σιωπηλό fail κατά το ψάξιμο */ }
+            ).catch(err => {
+                alert("Σφάλμα κάμερας: " + err);
+                closeQRScanner();
+            });
+        }
+
+        function closeQRScanner() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    html5QrCode.clear();
+                }).catch(err => console.error(err));
+            }
+            document.getElementById('scannerCard').classList.add('hidden');
+            document.getElementById('scannerCard').classList.remove('flex');
+            document.getElementById('trackCard').classList.remove('hidden');
+        }
+
+        document.getElementById('trackCode').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') startTracking();
+        });
+    </script>
+</body>
+</html>

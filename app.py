@@ -3073,8 +3073,9 @@ def track_order(order_code):
     order = Order.query.filter_by(order_code=order_code).first()
     
     if not order:
-        # Αν δεν βρεθεί ο κωδικός, εμφάνισε σφάλμα ή ανακατεύθυνση
-        return render_template("tracking_error.html"), 404
+        # ΑΝ ΔΕΝ ΒΡΕΘΕΙ: Αντί για το ανύπαρκτο tracking_error.html, 
+        # κάνουμε redirect στην track_page με το error=invalid
+        return redirect(url_for('track_page', error='invalid'))
 
     # Επιστρέφουμε το template του tracking περνώντας τα στοιχεία της παραγγελίας
     return render_template("track_status.html", order=order)
@@ -3502,7 +3503,28 @@ def airbnb_prices():
         return render_template('airbnb_prices.html')
     
     return render_template('airbnb_lock.html')
+from flask import Flask, render_template, redirect, url_for
 
+from flask import Flask, render_template, redirect, url_for
+
+@app.route('/track', methods=['GET'])
+def track_page():
+    # Αυτό ανοίγει τη σελίδα αναζήτησης/σκαναρίσματος (track.html)
+    return render_template('track.html')
+
+
+@app.route('/track/<code_id>', methods=['GET'])
+def track_order_live(code_id):  # Αλλάχτηκε σε track_order_live για να μην υπάρχει διπλότυπο
+    order = Order.query.filter_by(order_code=code_id).first()
+    
+    # ΑΝ ΥΠΑΡΧΕΙ: Δείχνεις την κατάσταση
+    if order:
+        return render_template('track_status.html', order=order)
+    
+    # ΑΝ ΔΕΝ ΥΠΑΡΧΕΙ (Λάθος Κωδικός):
+    # Επιστροφή στην track_page περνώντας το error parameter στο URL
+    else:
+        return redirect(url_for('track_page', error='invalid'))
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
