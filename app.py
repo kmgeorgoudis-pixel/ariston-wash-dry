@@ -2939,9 +2939,10 @@ def generate_pdf():
         
     debt_val = total_val - paid_val
     delivery_time = request.form.get("delivery_time", "")
-    wa_link = generate_whatsapp_link(fullname, contact, order_code)
+    
     order_code = str(random.randint(1000, 9999))
     current_date = datetime.now().strftime("%d/%m/%Y")
+    wa_link = generate_whatsapp_link(fullname, contact, order_code)
     
     # 2. ΑΠΟΘΗΚΕΥΣΗ ΣΤΗ ΒΑΣΗ (Disk)
     new_order = Order(
