@@ -60,11 +60,24 @@
                             </div>
                         </td>
                         <td class="p-4 text-center">
-                            <a href="/delete-order/{{ order.id }}" 
-                               onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ order.fullname }};')"
-                               class="text-red-500 hover:text-red-700 p-2 transition">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
+                            <div class="flex items-center justify-center gap-2">
+                                <!-- Κουμπί WhatsApp -->
+                                <a href="https://wa.me/30{{ order.contact|replace(' ', '')|replace('-', '')|replace('+', '') }}?text={{ ('Αγαπητέ/ή ' ~ order.fullname ~ ', τα ρούχα σας με αριθμό παραγγελίας #' ~ order.order_code ~ ' είναι έτοιμα! Δείτε την παραγγελία σας εδώ: https://aristonwashdry.gr/track/' ~ order.order_code)|urlencode }}" 
+                                   target="_blank" 
+                                   title="Αποστολή WhatsApp"
+                                   class="bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                                    <i class="fab fa-whatsapp text-sm"></i>
+                                    <span>WhatsApp</span>
+                                </a>
+
+                                <!-- Κουμπί Διαγραφής -->
+                                <a href="/delete-order/{{ order.id }}" 
+                                   onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ order.fullname }};')"
+                                   title="Διαγραφή Παραγγελίας"
+                                   class="text-red-500 hover:text-red-700 p-1.5 transition">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

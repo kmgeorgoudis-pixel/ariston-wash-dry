@@ -2939,7 +2939,7 @@ def generate_pdf():
         
     debt_val = total_val - paid_val
     delivery_time = request.form.get("delivery_time", "")
-    
+    wa_link = generate_whatsapp_link(fullname, contact, order_code)
     order_code = str(random.randint(1000, 9999))
     current_date = datetime.now().strftime("%d/%m/%Y")
     
@@ -3525,6 +3525,28 @@ def track_order_live(code_id):  # Αλλάχτηκε σε track_order_live γι�
     # Επιστροφή στην track_page περνώντας το error parameter στο URL
     else:
         return redirect(url_for('track_page', error='invalid'))
+import urllib.parse
+
+
+def generate_whatsapp_link(fullname, contact, order_code):
+    # Καθαρισμός τηλεφώνου από κενά ή παύλες
+    clean_phone = "".join([c for c in str(contact) if c.isdigit()])
+
+    # Αν είναι 10ψήφιο ελληνικό, προσθέτουμε το 30 μπροστά
+    if len(clean_phone) == 10:
+        clean_phone = "30" + clean_phone
+
+    # Το κείμενο που θέλετε να στέλνεται
+    message = (
+        f"Αγαπητέ/ή {fullname}, τα ρούχα σας με αριθμό {order_code} τα λάβαμε "
+        f"και από τον σύνδεσμο https://aristonwashdry.gr/track/{order_code} "
+        f"θα μπορείτε να παρακολουθείτε την πορεία της παραγγελίας σας."
+    )
+
+    # Encoding του κειμένου για να διαβάζεται σωστά από το URL
+    encoded_message = urllib.parse.quote(message)
+
+    return f"https://wa.me/{clean_phone}?text={encoded_message}"
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
