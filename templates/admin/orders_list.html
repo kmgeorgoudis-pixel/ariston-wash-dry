@@ -62,7 +62,7 @@
                         <td class="p-4 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <!-- Κουμπί WhatsApp -->
-                                <a href="https://wa.me/30{{ order.contact|replace(' ', '')|replace('-', '')|replace('+', '') }}?text={{ ('Αγαπητέ/ή ' ~ order.fullname ~ ', τα ρούχα σας με αριθμό παραγγελίας #' ~ order.order_code ~ ' είναι έτοιμα! Δείτε την παραγγελία σας εδώ: https://aristonwashdry.gr/track/' ~ order.order_code)|urlencode }}" 
+                                <a href="https://wa.me/30{{ order.contact|replace(' ', '')|replace('-', '')|replace('+', '') }}?text={{ ('Αγαπητέ/ή ' ~ order.fullname ~ ', παραλάβαμε τα ρούχα σας με αριθμό παραγγελίας #' ~ order.order_code ~ '! Μπορείτε να παρακολουθείτε την πορεία τους εδώ: https://aristonwashdry.gr/track/' ~ order.order_code)|urlencode }}" 
                                    target="_blank" 
                                    title="Αποστολή WhatsApp"
                                    class="bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">

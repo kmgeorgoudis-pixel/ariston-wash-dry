@@ -31,23 +31,7 @@
                         <td class="p-4 font-mono font-bold text-blue-600">#{{ order.order_code }}</td>
                         <td class="p-4">
                             <div class="font-bold">{{ order.fullname }}</div>
-                            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
-                                <span>{{ order.contact }}</span>
-                                {% if order.contact %}
-                                    {# Καθαρισμός τηλεφώνου για το link του WhatsApp #}
-                                    {% set clean_phone = order.contact | replace(' ', '') | replace('-', '') | replace('+', '') %}
-                                    {# Αν ξεκινάει από 69, προσθέτουμε τον κωδικό Ελλάδας 30 #}
-                                    {% if clean_phone.startswith('69') %}
-                                        {% set clean_phone = '30' + clean_phone %}
-                                    {% endif %}
-                                    <a href="https://wa.me/{{ clean_phone }}?text=Γεια%20σας%20{{ order.fullname | urlencode }},%20σχετικά%20με%20την%20παραγγελία%20σας%20%23{{ order.order_code }}%20(Status:%20{{ order.get_status_text() | urlencode }})." 
-                                       target="_blank" 
-                                       class="inline-flex items-center gap-1 bg-green-500 text-white px-2 py-0.5 rounded-full hover:bg-green-600 text-[10px] font-medium transition"
-                                       title="Αποστολή μήνυματος στο WhatsApp">
-                                        <i class="fab font-bold fa-whatsapp"></i> WhatsApp
-                                    </a>
-                                {% endif %}
-                            </div>
+                            <div class="text-xs text-gray-400">{{ order.contact }}</div>
                         </td>
                         <td class="p-4">
                             {% if order.status == 0 %}
@@ -76,11 +60,24 @@
                             </div>
                         </td>
                         <td class="p-4 text-center">
-                            <a href="/delete-order/{{ order.id }}" 
-                               onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ order.fullname }};')"
-                               class="text-red-500 hover:text-red-700 p-2 transition">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
+                            <div class="flex items-center justify-center gap-2">
+                                <!-- Κουμπί WhatsApp -->
+                                <a href="https://wa.me/30{{ order.contact|replace(' ', '')|replace('-', '')|replace('+', '') }}?text={{ ('Αγαπητέ/ή ' ~ order.fullname ~ ', παραλάβαμε τα ρούχα σας με αριθμό παραγγελίας #' ~ order.order_code ~ '! Μπορείτε να παρακολουθείτε την πορεία τους εδώ: https://aristonwashdry.gr/track/' ~ order.order_code)|urlencode }}" 
+                                   target="_blank" 
+                                   title="Αποστολή WhatsApp"
+                                   class="bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                                    <i class="fab fa-whatsapp text-sm"></i>
+                                    <span>WhatsApp</span>
+                                </a>
+
+                                <!-- Κουμπί Διαγραφής -->
+                                <a href="/delete-order/{{ order.id }}" 
+                                   onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ order.fullname }};')"
+                                   title="Διαγραφή Παραγγελίας"
+                                   class="text-red-500 hover:text-red-700 p-1.5 transition">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}
@@ -93,7 +90,9 @@ function editPrice(orderId, currentPrice) {
     let newPrice = prompt("Εισάγετε το νέο ποσό (χρησιμοποιήστε τελεία για δεκαδικά):", currentPrice);
     
     if (newPrice !== null && newPrice !== "") {
+        
         newPrice = newPrice.replace(',', '.');
+        
         if (!isNaN(newPrice)) {
             window.location.href = `/update-debt/${orderId}/${newPrice}`;
         } else {
