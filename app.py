@@ -3089,7 +3089,31 @@ def orders_list():
 
     all_orders = Order.query.order_by(Order.created_at.desc()).all()
     return render_template("admin/orders_list.html", orders=all_orders)
+# 4. ΕΠΕΞΕΡΓΑΣΙΑ ΛΕΠΤΟΜΕΡΕΙΩΝ ΠΑΡΑΓΓΕΛΙΑΣ (Υπόλοιπο, Ώρα Παραλαβής, Σημειώσεις)
+@app.route("/update-order-details", methods=["POST"])
+@login_required
+def update_order_details():
+    # Έλεγχος δικαιωμάτων (Admin ή Sub_admin)
+    if not (current_user.is_admin or current_user.is_sub_admin):
+        return abort(403)
 
+    order_id = request.form.get("order_id")
+    debt_amount = request.form.get("debt_amount")
+    delivery_time = request.form.get("delivery_time")
+    admin_note = request.form.get("admin_note")
+
+    order = Order.query.get_or_404(order_id)
+
+    # Ενημέρωση υπολοίπου (μετατροπή κόμματος σε τελεία για έγκυρο float)
+    if debt_amount is not None and debt_amount.strip() != "":
+        order.debt_amount = float(debt_amount.replace(",", "."))
+
+    # Ενημέρωση ώρας και σημείωσης καταστήματος
+    order.delivery_time = delivery_time
+    order.admin_note = admin_note
+
+    db.session.commit()
+    return redirect(url_for("orders_list"))
 # 2. ΑΛΛΑΓΗ STATUS (Πρόσβαση και για τους δύο)
 @app.route("/update-status/<int:order_id>/<int:new_status>")
 @login_required

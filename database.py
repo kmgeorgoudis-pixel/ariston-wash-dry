@@ -91,6 +91,10 @@ class Order(db.Model):
     # ΠΟΡΕΙΑ ΡΟΥΧΩΝ: 
     # 0: Παραλήφθηκε, 1: Πλύσιμο, 2: Στέγνωμα, 3: Έτοιμα
     status = db.Column(db.Integer, default=0) 
+
+    # ΝΕΑ ΠΕΔΙΑ ΓΙΑ ΣΗΜΕΙΩΣΕΙΣ
+    admin_note = db.Column(db.Text, nullable=True)     # Σημείωση καταστήματος
+    customer_note = db.Column(db.Text, nullable=True)  # Σημείωση που αφήνει ο πελάτης
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
