@@ -42,7 +42,9 @@
                                 <span class="font-bold text-gray-800">{{ order.fullname }}</span>
                                 {% if order.customer_note %}
                                 <button type="button" 
-                                        onclick="showCustomerNote({{ (order.fullname or '')|tojson }}, {{ (order.customer_note or '')|tojson }})"
+                                        data-fullname="{{ order.fullname or '' }}"
+                                        data-note="{{ order.customer_note or '' }}"
+                                        onclick="showCustomerNoteFromButton(this)"
                                         class="bg-amber-100 text-amber-700 hover:bg-amber-200 p-1 px-2 rounded-full text-xs font-semibold flex items-center gap-1 transition"
                                         title="Διαβάστε τη σημείωση πελάτη">
                                     <i class="fas fa-comment-dots text-amber-600"></i>
@@ -81,7 +83,11 @@
                                     {{ order.debt_amount }}€
                                 </span>
                                 <button type="button" 
-                                        onclick="openEditModal('{{ order.id }}', '{{ order.debt_amount }}', {{ (order.delivery_time or '')|tojson }}, {{ (order.admin_note or '')|tojson }})"
+                                        data-id="{{ order.id }}"
+                                        data-debt="{{ order.debt_amount }}"
+                                        data-delivery="{{ order.delivery_time or '' }}"
+                                        data-note="{{ order.admin_note or '' }}"
+                                        onclick="openEditModalFromButton(this)"
                                         class="text-gray-400 hover:text-blue-500 transition p-1"
                                         title="Επεξεργασία Παραγγελίας">
                                     <i class="fas fa-edit text-xs"></i>
@@ -176,11 +182,11 @@
     </div>
 
 <script>
-function openEditModal(orderId, debtAmount, deliveryTime, adminNote) {
-    document.getElementById('modalOrderId').value = orderId;
-    document.getElementById('modalDebtAmount').value = debtAmount;
-    document.getElementById('modalDeliveryTime').value = deliveryTime || '';
-    document.getElementById('modalAdminNote').value = adminNote || '';
+function openEditModalFromButton(btn) {
+    document.getElementById('modalOrderId').value = btn.getAttribute('data-id');
+    document.getElementById('modalDebtAmount').value = btn.getAttribute('data-debt');
+    document.getElementById('modalDeliveryTime').value = btn.getAttribute('data-delivery');
+    document.getElementById('modalAdminNote').value = btn.getAttribute('data-note');
     document.getElementById('editModal').classList.remove('hidden');
 }
 
@@ -188,9 +194,9 @@ function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
 
-function showCustomerNote(fullname, noteText) {
-    document.getElementById('noteCustomerName').innerText = fullname;
-    document.getElementById('noteCustomerContent').innerText = noteText;
+function showCustomerNoteFromButton(btn) {
+    document.getElementById('noteCustomerName').innerText = btn.getAttribute('data-fullname');
+    document.getElementById('noteCustomerContent').innerText = btn.getAttribute('data-note');
     document.getElementById('customerNoteModal').classList.remove('hidden');
 }
 

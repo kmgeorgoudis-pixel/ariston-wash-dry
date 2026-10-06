@@ -3572,6 +3572,17 @@ def generate_whatsapp_link(fullname, contact, order_code):
     encoded_message = urllib.parse.quote(message)
 
     return f"https://wa.me/{clean_phone}?text={encoded_message}"
+@app.route('/save_user_note/<order_code>', methods=['POST'])
+def save_user_note(order_code):
+    user_note = request.form.get('customer_note') or request.form.get('note')
+    
+    # Εύρεση παραγγελίας με βάση τον κωδικό
+    order = Order.query.filter_by(order_code=order_code).first()
+    if order:
+        order.customer_note = user_note
+        db.session.commit()
+        
+    return redirect(f'/track/{order_code}')
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
