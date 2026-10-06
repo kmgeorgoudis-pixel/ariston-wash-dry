@@ -2,18 +2,19 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Διαχείριση Παραγγελιών - ARISTON</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 p-8">
+<body class="bg-gray-100 p-4 md:p-8">
     <div class="max-w-6xl mx-auto">
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <h1 class="text-3xl font-bold text-gray-800">📦 Ενεργές Παραγγελίες</h1>
-            <a href="/drop-off" class="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-700"> + Νέα Παραλαβή</a>
+            <a href="/drop-off" class="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition"> + Νέα Παραλαβή</a>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+        <div class="bg-white rounded-xl shadow-sm overflow-x-auto border border-gray-200">
             <table class="w-full text-left border-collapse">
                 <thead class="bg-gray-50 border-b">
                     <tr>
@@ -31,16 +32,16 @@
                         <td class="p-4 font-mono font-bold text-blue-600">
                             #{{ order.order_code }}
                             {% if order.delivery_time %}
-                            <div class="text-xs text-gray-500 font-normal mt-1">
-                                <i class="far font-bold text-gray-600 fa-clock"></i> {{ order.delivery_time }}
+                            <div class="text-xs text-gray-500 font-normal mt-1 flex items-center gap-1">
+                                <i class="fa-regular fa-clock text-gray-500"></i> {{ order.delivery_time }}
                             </div>
                             {% endif %}
                         </td>
                         <td class="p-4">
                             <div class="flex items-center gap-2">
-                                <span class="font-bold">{{ order.fullname }}</span>
+                                <span class="font-bold text-gray-800">{{ order.fullname }}</span>
                                 {% if order.customer_note %}
-                                <button onclick="showCustomerNote('{{ order.fullname }}', '{{ order.customer_note|escapejs }}')" 
+                                <button type="button" onclick="showCustomerNote('{{ order.fullname|escapejs }}', '{{ order.customer_note|escapejs }}')" 
                                         class="bg-amber-100 text-amber-700 hover:bg-amber-200 p-1 px-2 rounded-full text-xs font-semibold flex items-center gap-1 transition"
                                         title="Διαβάστε τη σημείωση πελάτη">
                                     <i class="fas fa-comment-dots text-amber-600"></i>
@@ -57,7 +58,7 @@
                         </td>
                         <td class="p-4">
                             {% if order.status == 0 %}
-                                <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs">Παραλήφθηκε</span>
+                                <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Παραλήφθηκε</span>
                             {% elif order.status == 1 %}
                                 <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium italic">Πλύσιμο...</span>
                             {% elif order.status == 2 %}
@@ -66,17 +67,19 @@
                                 <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">ΕΤΟΙΜΑ</span>
                             {% endif %}
                         </td>
-                        <td class="p-4 flex gap-2">
-                            <a href="/update-status/{{ order.id }}/1" class="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 transition">Πλύσιμο</a>
-                            <a href="/update-status/{{ order.id }}/2" class="px-2 py-1 bg-orange-400 text-white rounded text-xs hover:bg-orange-500 transition">Στέγνωμα</a>
-                            <a href="/update-status/{{ order.id }}/3" class="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 transition">Έτοιμο</a>
+                        <td class="p-4">
+                            <div class="flex gap-1.5">
+                                <a href="/update-status/{{ order.id }}/1" class="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 transition">Πλύσιμο</a>
+                                <a href="/update-status/{{ order.id }}/2" class="px-2 py-1 bg-orange-400 text-white rounded text-xs hover:bg-orange-500 transition">Στέγνωμα</a>
+                                <a href="/update-status/{{ order.id }}/3" class="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 transition">Έτοιμο</a>
+                            </div>
                         </td>
                         <td class="p-4 text-right">
                             <div class="flex items-center justify-end gap-2">
                                 <span id="price-{{ order.id }}" class="font-bold {{ 'text-red-500' if order.debt_amount > 0 else 'text-green-600' }}">
                                     {{ order.debt_amount }}€
                                 </span>
-                                <button onclick="openEditModal('{{ order.id }}', '{{ order.debt_amount }}', '{{ order.delivery_time|default('', true)|escapejs }}', '{{ order.admin_note|default('', true)|escapejs }}')" 
+                                <button type="button" onclick="openEditModal('{{ order.id }}', '{{ order.debt_amount }}', '{{ order.delivery_time|default('', true)|escapejs }}', '{{ order.admin_note|default('', true)|escapejs }}')" 
                                         class="text-gray-400 hover:text-blue-500 transition p-1"
                                         title="Επεξεργασία Παραγγελίας">
                                     <i class="fas fa-edit text-xs"></i>
@@ -86,8 +89,9 @@
                         <td class="p-4 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <!-- Κουμπί WhatsApp -->
-                                <a href="https://wa.me/30{{ order.contact|replace(' ', '')|replace('-', '')|replace('+', '') }}?text={{ ('Αγαπητέ/ή ' ~ order.fullname ~ ', παραλάβαμε τα ρούχα σας με αριθμό παραγγελίας #' ~ order.order_code ~ '! Μπορείτε να παρακολουθείτε την πορεία τους εδώ: https://aristonwashdry.gr/track/' ~ order.order_code)|urlencode }}" 
+                                <a href="https://wa.me/{{ order.contact|replace(' ', '')|replace('-', '')|replace('+', '') }}?text={{ ('Αγαπητέ/ή ' ~ order.fullname ~ ', παραλάβαμε τα ρούχα σας με αριθμό παραγγελίας #' ~ order.order_code ~ '! Μπορείτε να παρακολουθείτε την πορεία τους εδώ: https://aristonwashdry.gr/track/' ~ order.order_code)|urlencode }}" 
                                    target="_blank" 
+                                   rel="noopener noreferrer"
                                    title="Αποστολή WhatsApp"
                                    class="bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
                                     <i class="fab fa-whatsapp text-sm"></i>
@@ -96,7 +100,7 @@
 
                                 <!-- Κουμπί Διαγραφής -->
                                 <a href="/delete-order/{{ order.id }}" 
-                                   onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ order.fullname }};')"
+                                   onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ order.fullname|escapejs }};')"
                                    title="Διαγραφή Παραγγελίας"
                                    class="text-red-500 hover:text-red-700 p-1.5 transition">
                                     <i class="fas fa-trash-alt"></i>
@@ -110,7 +114,7 @@
         </div>
     </div>
 
-    <!-- MODAL ΕΠΕΞΕΡΓΑΣΙΑΣ ΠΑΡΑΓΓΕΛΙΑΣ (Υπόλοιπο, Ώρα Παραλαβής, Σημειώσεις Καταστήματος) -->
+    <!-- MODAL ΕΠΕΞΕΡΓΑΣΙΑΣ ΠΑΡΑΓΓΕΛΙΑΣ -->
     <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative">
             <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -120,28 +124,24 @@
             <form id="editOrderForm" method="POST" action="/update-order-details">
                 <input type="hidden" id="modalOrderId" name="order_id">
                 
-                <!-- Υπόλοιπο -->
                 <div class="mb-4">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Υπόλοιπο (€):</label>
                     <input type="number" step="0.01" id="modalDebtAmount" name="debt_amount" required 
                            class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 </div>
 
-                <!-- Εκτιμώμενη Ώρα Παραλαβής -->
                 <div class="mb-4">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Εκτιμώμενη Ώρα Παραλαβής:</label>
                     <input type="text" id="modalDeliveryTime" name="delivery_time" placeholder="π.χ. Σήμερα 18:00 ή Αύριο πρωί" 
                            class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 </div>
 
-                <!-- Σημείωση Καταστήματος -->
                 <div class="mb-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Σημείωση Καταστήματος (Admin Note):</label>
                     <textarea id="modalAdminNote" name="admin_note" rows="3" placeholder="Προσθέστε κάποια παρατήρηση/σημείωση..." 
                               class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"></textarea>
                 </div>
 
-                <!-- Κουμπιά Modal -->
                 <div class="flex justify-end gap-3">
                     <button type="button" onclick="closeEditModal()" 
                             class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg text-sm font-semibold transition">
@@ -174,7 +174,6 @@
     </div>
 
 <script>
-// Άνοιγμα Modal Επεξεργασίας
 function openEditModal(orderId, debtAmount, deliveryTime, adminNote) {
     document.getElementById('modalOrderId').value = orderId;
     document.getElementById('modalDebtAmount').value = debtAmount;
@@ -183,22 +182,33 @@ function openEditModal(orderId, debtAmount, deliveryTime, adminNote) {
     document.getElementById('editModal').classList.remove('hidden');
 }
 
-// Κλείσιμο Modal Επεξεργασίας
 function closeEditModal() {
     document.getElementById('editModal').classList.add('hidden');
 }
 
-// Προβολή Σημείωσης Πελάτη
 function showCustomerNote(fullname, noteText) {
     document.getElementById('noteCustomerName').innerText = fullname;
     document.getElementById('noteCustomerContent').innerText = noteText;
     document.getElementById('customerNoteModal').classList.remove('hidden');
 }
 
-// Κλείσιμο Modal Σημείωσης Πελάτη
 function closeCustomerNoteModal() {
     document.getElementById('customerNoteModal').classList.add('hidden');
 }
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === "Escape") {
+        closeEditModal();
+        closeCustomerNoteModal();
+    }
+});
+
+window.onclick = function(event) {
+    const editModal = document.getElementById('editModal');
+    const customerModal = document.getElementById('customerNoteModal');
+    if (event.target === editModal) closeEditModal();
+    if (event.target === customerModal) closeCustomerNoteModal();
+};
 </script>
 </body>
 </html>
