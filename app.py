@@ -3576,13 +3576,14 @@ def generate_whatsapp_link(fullname, contact, order_code):
 def save_user_note(order_code):
     user_note = request.form.get('customer_note') or request.form.get('note')
     
-    # Εύρεση παραγγελίας με βάση τον κωδικό
     order = Order.query.filter_by(order_code=order_code).first()
-    if order:
-        order.customer_note = user_note
-        db.session.commit()
+    if order and user_note:
+        note_cleaned = user_note.strip()
+        if note_cleaned:  # Αποθηκεύουμε μόνο αν υπάρχει πραγματικό κείμενο
+            order.customer_note = note_cleaned
+            db.session.commit()
         
-    return redirect(f'/track/{order_code}')
+    return redirect(url_for('track_order', order_code=order_code))
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")
