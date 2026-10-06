@@ -41,7 +41,8 @@
                             <div class="flex items-center gap-2">
                                 <span class="font-bold text-gray-800">{{ order.fullname }}</span>
                                 {% if order.customer_note %}
-                                <button type="button" onclick="showCustomerNote('{{ order.fullname|escapejs }}', '{{ order.customer_note|escapejs }}')" 
+                                <button type="button" 
+                                        onclick="showCustomerNote({{ (order.fullname or '')|tojson }}, {{ (order.customer_note or '')|tojson }})"
                                         class="bg-amber-100 text-amber-700 hover:bg-amber-200 p-1 px-2 rounded-full text-xs font-semibold flex items-center gap-1 transition"
                                         title="Διαβάστε τη σημείωση πελάτη">
                                     <i class="fas fa-comment-dots text-amber-600"></i>
@@ -79,7 +80,8 @@
                                 <span id="price-{{ order.id }}" class="font-bold {{ 'text-red-500' if order.debt_amount > 0 else 'text-green-600' }}">
                                     {{ order.debt_amount }}€
                                 </span>
-                                <button type="button" onclick="openEditModal('{{ order.id }}', '{{ order.debt_amount }}', '{{ order.delivery_time|default('', true)|escapejs }}', '{{ order.admin_note|default('', true)|escapejs }}')" 
+                                <button type="button" 
+                                        onclick="openEditModal('{{ order.id }}', '{{ order.debt_amount }}', {{ (order.delivery_time or '')|tojson }}, {{ (order.admin_note or '')|tojson }})"
                                         class="text-gray-400 hover:text-blue-500 transition p-1"
                                         title="Επεξεργασία Παραγγελίας">
                                     <i class="fas fa-edit text-xs"></i>
@@ -100,7 +102,7 @@
 
                                 <!-- Κουμπί Διαγραφής -->
                                 <a href="/delete-order/{{ order.id }}" 
-                                   onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ order.fullname|escapejs }};')"
+                                   onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ (order.fullname or '')|e }};')"
                                    title="Διαγραφή Παραγγελίας"
                                    class="text-red-500 hover:text-red-700 p-1.5 transition">
                                     <i class="fas fa-trash-alt"></i>
