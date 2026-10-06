@@ -2,18 +2,23 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Διαχείριση Παραγγελιών - ARISTON</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 p-8">
-    <div class="max-w-6xl mx-auto">
+<body class="bg-gray-100 p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- HEADER -->
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">📦 Ενεργές Παραγγελίες</h1>
-            <a href="/drop-off" class="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-700"> + Νέα Παραλαβή</a>
+            <a href="/drop-off" class="bg-gray-800 text-white px-6 py-2.5 rounded-lg hover:bg-gray-700 font-medium transition shadow-sm">
+                + Νέα Παραλαβή
+            </a>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+        <!-- ORDERS TABLE -->
+        <div class="bg-white rounded-xl shadow-sm overflow-x-auto border border-gray-200">
             <table class="w-full text-left border-collapse">
                 <thead class="bg-gray-50 border-b">
                     <tr>
@@ -25,17 +30,38 @@
                         <th class="p-4 font-semibold text-gray-600 text-center">Επιλογές</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-200">
                     {% for order in orders %}
-                    <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="p-4 font-mono font-bold text-blue-600">#{{ order.order_code }}</td>
+                    <tr class="hover:bg-gray-50 transition">
+                        <!-- CODE & TIME -->
                         <td class="p-4">
-                            <div class="font-bold">{{ order.fullname }}</div>
-                            <div class="text-xs text-gray-400">{{ order.contact }}</div>
+                            <div class="font-mono font-bold text-blue-600 text-base">#{{ order.order_code }}</div>
+                            {% if order.delivery_time %}
+                            <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                                <i class="far fa-clock"></i> {{ order.delivery_time }}
+                            </div>
+                            {% endif %}
                         </td>
+
+                        <!-- CUSTOMER & CUSTOMER NOTE BUTTON -->
+                        <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-gray-900">{{ order.fullname }}</span>
+                                {% if order.customer_note %}
+                                <button onclick="showCustomerNote('{{ order.fullname|escapejs }}', '{{ order.customer_note|escapejs }}')" 
+                                        class="bg-amber-100 text-amber-800 hover:bg-amber-200 text-xs font-semibold px-2 py-1 rounded-md flex items-center gap-1 border border-amber-300 transition">
+                                    <i class="fas fa-comment-dots"></i>
+                                    <span>Σημείωση</span>
+                                </button>
+                                {% endif %}
+                            </div>
+                            <div class="text-xs text-gray-500 mt-0.5">{{ order.contact }}</div>
+                        </td>
+
+                        <!-- STATUS BADGE -->
                         <td class="p-4">
                             {% if order.status == 0 %}
-                                <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs">Παραλήφθηκε</span>
+                                <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">Παραλήφθηκε</span>
                             {% elif order.status == 1 %}
                                 <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium italic">Πλύσιμο...</span>
                             {% elif order.status == 2 %}
@@ -44,24 +70,34 @@
                                 <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">ΕΤΟΙΜΑ</span>
                             {% endif %}
                         </td>
-                        <td class="p-4 flex gap-2">
-                            <a href="/update-status/{{ order.id }}/1" class="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 transition">Πλύσιμο</a>
-                            <a href="/update-status/{{ order.id }}/2" class="px-2 py-1 bg-orange-400 text-white rounded text-xs hover:bg-orange-500 transition">Στέγνωμα</a>
-                            <a href="/update-status/{{ order.id }}/3" class="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 transition">Έτοιμο</a>
+
+                        <!-- STATUS ACTIONS -->
+                        <td class="p-4">
+                            <div class="flex gap-1.5">
+                                <a href="/update-status/{{ order.id }}/1" class="px-2.5 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 transition font-medium">Πλύσιμο</a>
+                                <a href="/update-status/{{ order.id }}/2" class="px-2.5 py-1 bg-orange-400 text-white rounded text-xs hover:bg-orange-500 transition font-medium">Στέγνωμα</a>
+                                <a href="/update-status/{{ order.id }}/3" class="px-2.5 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 transition font-medium">Έτοιμο</a>
+                            </div>
                         </td>
+
+                        <!-- DEBT / PRICE -->
                         <td class="p-4 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <span id="price-{{ order.id }}" class="font-bold {{ 'text-red-500' if order.debt_amount > 0 else 'text-green-600' }}">
+                                <span class="font-bold text-base {{ 'text-red-500' if order.debt_amount > 0 else 'text-green-600' }}">
                                     {{ order.debt_amount }}€
                                 </span>
-                                <button onclick="editPrice('{{ order.id }}', '{{ order.debt_amount }}')" class="text-gray-400 hover:text-blue-500 transition">
+                                <button onclick="openEditModal('{{ order.id }}', '{{ order.debt_amount }}', '{{ order.delivery_time or '' }}', '{{ order.admin_note or '' }}')" 
+                                        title="Επεξεργασία Λεπτομερειών"
+                                        class="text-gray-400 hover:text-blue-600 transition p-1">
                                     <i class="fas fa-edit text-xs"></i>
                                 </button>
                             </div>
                         </td>
+
+                        <!-- OPTIONS (WHATSAPP & DELETE) -->
                         <td class="p-4 text-center">
                             <div class="flex items-center justify-center gap-2">
-                                <!-- Κουμπί WhatsApp -->
+                                <!-- WhatsApp Button -->
                                 <a href="https://wa.me/30{{ order.contact|replace(' ', '')|replace('-', '')|replace('+', '') }}?text={{ ('Αγαπητέ/ή ' ~ order.fullname ~ ', παραλάβαμε τα ρούχα σας με αριθμό παραγγελίας #' ~ order.order_code ~ '! Μπορείτε να παρακολουθείτε την πορεία τους εδώ: https://aristonwashdry.gr/track/' ~ order.order_code)|urlencode }}" 
                                    target="_blank" 
                                    title="Αποστολή WhatsApp"
@@ -70,11 +106,11 @@
                                     <span>WhatsApp</span>
                                 </a>
 
-                                <!-- Κουμπί Διαγραφής -->
+                                <!-- Delete Button -->
                                 <a href="/delete-order/{{ order.id }}" 
                                    onclick="return confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις την παραγγελία του/της {{ order.fullname }};')"
                                    title="Διαγραφή Παραγγελίας"
-                                   class="text-red-500 hover:text-red-700 p-1.5 transition">
+                                   class="text-red-500 hover:text-red-700 p-1.5 transition rounded hover:bg-red-50">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </div>
@@ -85,21 +121,97 @@
             </table>
         </div>
     </div>
-<script>
-function editPrice(orderId, currentPrice) {
-    let newPrice = prompt("Εισάγετε το νέο ποσό (χρησιμοποιήστε τελεία για δεκαδικά):", currentPrice);
-    
-    if (newPrice !== null && newPrice !== "") {
-        
-        newPrice = newPrice.replace(',', '.');
-        
-        if (!isNaN(newPrice)) {
-            window.location.href = `/update-debt/${orderId}/${newPrice}`;
-        } else {
-            alert("Παρακαλώ εισάγετε έγκυρο αριθμό!");
+
+    <!-- MODAL 1: ΠΡΟΒΟΛΗ ΣΗΜΕΙΩΣΗΣ ΠΕΛΑΤΗ -->
+    <div id="customerNoteModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-fade-in">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg">
+                    <i class="fas fa-comment-dots"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-lg">Σημείωση Πελάτη</h3>
+                    <p id="modalCustomerName" class="text-xs text-gray-500"></p>
+                </div>
+            </div>
+            
+            <div class="bg-amber-50/60 border border-amber-200 rounded-xl p-4 text-gray-700 text-sm leading-relaxed whitespace-pre-line mb-6" id="modalCustomerNoteText">
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeCustomerNoteModal()" class="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium text-sm rounded-xl transition">
+                    Έκλεισε
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: ΕΠΕΞΕΡΓΑΣΙΑ ΛΕΠΤΟΜΕΡΕΙΩΝ ΠΑΡΑΓΓΕΛΙΑΣ -->
+    <div id="editDetailsModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl relative">
+            <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
+                <i class="fas fa-edit text-blue-600"></i> Επεξεργασία Παραγγελίας
+            </h3>
+
+            <form action="/update-order-details" method="POST" class="space-y-4">
+                <input type="hidden" name="order_id" id="edit_order_id">
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Υπόλοιπο Πληρωμής (€)</label>
+                    <input type="text" name="debt_amount" id="edit_debt_amount" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Εκτιμώμενη Ώρα/Ημέρα Παραλαβής</label>
+                    <input type="text" name="delivery_time" id="edit_delivery_time" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="π.χ. Σήμερα στις 18:00">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Σημείωση Καταστήματος (Admin Note)</label>
+                    <textarea name="admin_note" id="edit_admin_note" rows="3" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Οδηγίες ή σημειώσεις του καταστήματος..."></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium rounded-xl transition">
+                        Ακύρωση
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-xl transition shadow-sm">
+                        Αποθήκευση
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Customer Note Modal
+        function showCustomerNote(customerName, noteText) {
+            document.getElementById('modalCustomerName').innerText = customerName;
+            document.getElementById('modalCustomerNoteText').innerText = noteText;
+            document.getElementById('customerNoteModal').classList.remove('hidden');
+            document.getElementById('customerNoteModal').classList.add('flex');
         }
-    }
-}
-</script>
+
+        function closeCustomerNoteModal() {
+            document.getElementById('customerNoteModal').classList.add('hidden');
+            document.getElementById('customerNoteModal').classList.remove('flex');
+        }
+
+        // Edit Order Details Modal
+        function openEditModal(orderId, debtAmount, deliveryTime, adminNote) {
+            document.getElementById('edit_order_id').value = orderId;
+            document.getElementById('edit_debt_amount').value = debtAmount;
+            document.getElementById('edit_delivery_time').value = deliveryTime;
+            document.getElementById('edit_admin_note').value = adminNote;
+            document.getElementById('editDetailsModal').classList.remove('hidden');
+            document.getElementById('editDetailsModal').classList.add('flex');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editDetailsModal').classList.add('hidden');
+            document.getElementById('editDetailsModal').classList.remove('flex');
+        }
+    </script>
 </body>
 </html>
