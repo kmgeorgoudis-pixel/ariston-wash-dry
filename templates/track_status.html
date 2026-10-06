@@ -503,7 +503,7 @@
                 </div>
                 {% endif %}
 
-                <!-- ΣΗΜΕΙΩΣΗ ΧΡΗΣΤΗ (Φόρμα Αποστολής / Εμφάνιση) -->
+                
                 <div class="glass-card rounded-3xl p-6 border border-white/10">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-10 h-10 rounded-2xl bg-blue-500/20 flex items-center justify-center text-cyan-300 shrink-0">
@@ -516,11 +516,11 @@
 
                     <form action="/save_user_note/{{ order.order_code }}" method="POST" class="space-y-4">
                         <textarea 
-                            name="user_note" 
+                            name="customer_note" 
                             rows="3" 
                             class="w-full rounded-2xl bg-black/30 border border-white/15 p-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition"
                             placeholder="Γράψτε μια σημείωση για το κατάστημα (π.χ. οδηγίες παράδοσης)..."
-                            data-key-placeholder="user_note_placeholder">{{ order.user_note if order.user_note else '' }}</textarea>
+                            data-key-placeholder="user_note_placeholder">{{ order.customer_note if order.customer_note else '' }}</textarea>
 
                         <button type="submit" 
                             class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 font-bold text-sm text-white hover:scale-105 glow flex items-center justify-center gap-2">

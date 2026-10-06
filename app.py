@@ -3574,12 +3574,13 @@ def generate_whatsapp_link(fullname, contact, order_code):
     return f"https://wa.me/{clean_phone}?text={encoded_message}"
 @app.route('/save_user_note/<order_code>', methods=['POST'])
 def save_user_note(order_code):
-    user_note = request.form.get('customer_note') or request.form.get('note')
+    # Λαμβάνουμε την τιμή ανεξάρτητα από το αν στάλθηκε ως customer_note, user_note ή note
+    user_note = request.form.get('customer_note') or request.form.get('user_note') or request.form.get('note')
     
     order = Order.query.filter_by(order_code=order_code).first()
     if order and user_note:
         note_cleaned = user_note.strip()
-        if note_cleaned:  # Αποθηκεύουμε μόνο αν υπάρχει πραγματικό κείμενο
+        if note_cleaned:
             order.customer_note = note_cleaned
             db.session.commit()
         
