@@ -31,6 +31,17 @@
             50% { top: 100%; }
             100% { top: 0%; }
         }
+        /* Custom Scrollbar για το Chat */
+        .chat-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(34, 211, 238, 0.4);
+        }
     </style>
 </head>
 <body class="bg-[#090d16] text-white min-h-screen flex flex-col items-center justify-center font-sans relative overflow-x-hidden px-4">
@@ -39,7 +50,7 @@
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none"></div>
 
     <!-- LANGUAGE SWITCHER BUTTON -->
-    <div class="absolute top-6 right-6 z-50">
+    <div class="absolute top-6 right-6 z-40">
         <button onclick="toggleLanguage()" class="glass-panel px-4 py-2 rounded-xl text-sm font-bold border border-white/10 hover:border-cyan-400/50 transition-all cursor-pointer flex items-center gap-2">
             <i class="fa-solid fa-earth-europe text-cyan-400"></i>
             <span id="langBtnText">EN</span>
@@ -62,12 +73,14 @@
             </div>
             <!-- Help Options -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                <a id="aiLink" href="https://aristonwashdry.gr/ai" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-cyan-400/40 transition-all group">
+                <!-- AI Assistant Trigger Button -->
+                <button onclick="openAIChatModal()" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-cyan-400/40 transition-all group text-left cursor-pointer w-full">
                     <div class="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-robot"></i>
                     </div>
                     <span class="text-xs font-semibold" data-translate="opt_ai">Μιλήστε με τον AI Assistant μας</span>
-                </a>
+                </button>
+
                 <a id="contactLink" href="https://aristonwashdry.gr/epikoinonia" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-blue-400/40 transition-all group">
                     <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-phone"></i>
@@ -158,7 +171,57 @@
 
     </div>
 
-    <!-- SCRIPT ΜΕΤΑΦΡΑΣΗΣ, SCANNER & REDIRECT -->
+    <!-- 5. MEΓΑΛΟ & OMORFO AI CHAT MODAL WINDOW -->
+    <div id="aiChatModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md hidden transition-all duration-300">
+        <div class="w-full max-w-3xl h-[85vh] max-h-[750px] glass-panel bg-slate-900/90 border border-white/15 rounded-3xl shadow-2xl flex flex-col overflow-hidden relative">
+            
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-white/10 bg-slate-950/60 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl shadow-lg shadow-cyan-500/20">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-base sm:text-lg leading-tight">Ariston AI Concierge</h3>
+                        <div class="flex items-center gap-2 text-xs text-cyan-400 mt-0.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span data-translate="ai_status">Online • Έτοιμος να βοηθήσει</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="closeAIChatModal()" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/15 text-gray-400 hover:text-white transition-all flex items-center justify-center text-lg cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Messages Container) -->
+            <div id="aiMessagesContainer" class="flex-1 p-6 overflow-y-auto chat-scroll space-y-4 text-sm sm:text-base">
+                <!-- Welcome Bot Message -->
+                <div class="flex gap-3 max-w-[85%]">
+                    <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm flex-shrink-0 mt-1">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-slate-800/80 border border-white/10 text-gray-200 p-4 rounded-2xl rounded-tl-xs shadow-md" data-translate="ai_welcome">
+                        Γεια σας! 🧺 Είμαι ο ψηφιακός βοηθός του Ariston Wash & Dry. Πώς μπορώ να σας βοηθήσω με την παραγγελία ή τις υπηρεσίες μας;
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer (Input Bar) -->
+            <div class="p-4 bg-slate-950/70 border-t border-white/10">
+                <form onsubmit="handleAISubmit(event)" class="flex items-center gap-3">
+                    <input type="text" id="aiUserInput" placeholder="Γράψτε το μήνυμά σας εδώ..." data-translate-holder="ai_placeholder" class="flex-1 px-5 py-3.5 bg-slate-900/90 border border-white/10 rounded-xl text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all">
+                    <button type="submit" class="px-6 py-3.5 bg-gradient-to-r from-cyan-400 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all cursor-pointer flex items-center gap-2">
+                        <span class="hidden sm:inline" data-translate="ai_send">Αποστολή</span>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT ΜΕΤΑΦΡΑΣΗΣ, SCANNER, AI MODAL & REDIRECT -->
     <script>
         // 1. ΛΕΞΙΚΟ ΓΙΑ ΕΛΛΗΝΙΚΑ & ΑΓΓΛΙΚΑ
         const translations = {
@@ -176,7 +239,11 @@
                 opt_contact: "Επικοινωνία με το κατάστημα",
                 scan_header: "Σκανάρετε το QR Code",
                 btn_cancel: "Ακύρωση",
-                load_title: "ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ"
+                load_title: "ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ",
+                ai_status: "Online • Έτοιμος να βοηθήσει",
+                ai_welcome: "Γεια σας! 🧺 Είμαι ο ψηφιακός βοηθός του Ariston Wash & Dry. Πώς μπορώ να σας βοηθήσω με την παραγγελία ή τις υπηρεσίες μας;",
+                ai_placeholder: "Γράψτε το μήνυμά σας εδώ...",
+                ai_send: "Αποστολή"
             },
             en: {
                 main_title: "Live Tracking",
@@ -192,7 +259,11 @@
                 opt_contact: "Contact the store",
                 scan_header: "Scan the QR Code",
                 btn_cancel: "Cancel",
-                load_title: "RETRIEVING DATA"
+                load_title: "RETRIEVING DATA",
+                ai_status: "Online • Ready to help",
+                ai_welcome: "Hello! 🧺 I am the digital assistant of Ariston Wash & Dry. How can I assist you with your order or our services?",
+                ai_placeholder: "Type your message here...",
+                ai_send: "Send"
             }
         };
 
@@ -207,19 +278,23 @@
                     elem.innerText = translations[currentLang][key];
                 }
             });
+
+            document.querySelectorAll('[data-translate-holder]').forEach(elem => {
+                const key = elem.getAttribute('data-translate-holder');
+                if (translations[currentLang][key]) {
+                    elem.placeholder = translations[currentLang][key];
+                }
+            });
             
             // Αλλαγή των Links ανάλογα με τη γλώσσα
-            const aiLink = document.getElementById('aiLink');
             const contactLink = document.getElementById('contactLink');
             const langBtnText = document.getElementById('langBtnText');
             
             if (currentLang === 'el') {
                 langBtnText.innerText = 'EN';
-                aiLink.href = 'https://aristonwashdry.gr/ai';
                 contactLink.href = 'https://aristonwashdry.gr/epikoinonia';
             } else {
                 langBtnText.innerText = 'GR';
-                aiLink.href = 'https://aristonwashdry.gr/ai'; // Κρατάς το ίδιο ή το αλλάζεις αν έχεις en/ai
                 contactLink.href = 'https://aristonwashdry.gr/en/contact';
             }
         }
@@ -238,7 +313,7 @@
             updateLanguageUI();
         });
 
-        // 3. ΕΝΤΟΠΙΣΜΟΣ & REDIRECT
+        // 3. ΕΝТОΠΙΣΜΟΣ & REDIRECT
         function startTracking() {
             const input = document.getElementById('trackCode');
             const code = input.value.trim();
@@ -273,13 +348,10 @@
 
             html5QrCode = new Html5Qrcode("qr-reader");
             
-            // Ξεκινάει το scan χρησιμοποιώντας την πίσω κάμερα (environment)
             html5QrCode.start(
                 { facingMode: "environment" }, 
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 (decodedText) => {
-                    // Μόλις βρει QR Code, αποσπά τα τελευταία 4 ψηφία ή ολόκληρο αν είναι ο κωδικός
-                    // Αν το QR περιέχει link π.χ. aristonwashdry.gr/track/1234, παίρνει μόνο το 1234
                     let scannedCode = decodedText.trim();
                     if (scannedCode.includes('/')) {
                         scannedCode = scannedCode.split('/').pop();
@@ -288,7 +360,7 @@
                     
                     document.getElementById('trackCode').value = scannedCode;
                     closeQRScanner();
-                    startTracking(); // Κάνει αυτόματα αναζήτηση μόλις σκανάρει!
+                    startTracking();
                 },
                 (errorMessage) => { /* σιωπηλό fail κατά το ψάξιμο */ }
             ).catch(err => {
@@ -311,6 +383,100 @@
         document.getElementById('trackCode').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') startTracking();
         });
+
+        // 5. FUNCTIONS ΓΙΑ ΤΟ LARGE AI CHAT MODAL
+        function openAIChatModal() {
+            const modal = document.getElementById('aiChatModal');
+            modal.classList.remove('hidden');
+            document.getElementById('aiUserInput').focus();
+        }
+
+        function closeAIChatModal() {
+            const modal = document.getElementById('aiChatModal');
+            modal.classList.add('hidden');
+        }
+
+        async function handleAISubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('aiUserInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const container = document.getElementById('aiMessagesContainer');
+
+            // 1. Προσθήκη μηνύματος χρήστη
+            const userMsgHTML = `
+                <div class="flex gap-3 justify-end">
+                    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white p-4 rounded-2xl rounded-tr-xs shadow-md max-w-[85%]">
+                        ${escapeHtml(text)}
+                    </div>
+                </div>
+            `;
+            container.innerHTML += userMsgHTML;
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // 2. Προσθήκη Loading Indicator
+            const loadingId = 'ai-loading-' + Date.now();
+            const loadingHTML = `
+                <div id="${loadingId}" class="flex gap-3 max-w-[85%]">
+                    <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm flex-shrink-0 mt-1">
+                        <i class="fa-solid fa-robot animate-spin"></i>
+                    </div>
+                    <div class="bg-slate-800/80 border border-white/10 text-gray-400 p-4 rounded-2xl rounded-tl-xs italic">
+                        Σκέφτεται...
+                    </div>
+                </div>
+            `;
+            container.innerHTML += loadingHTML;
+            container.scrollTop = container.scrollHeight;
+
+            // 3. Κλήση Backend API
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+                const data = await response.json();
+                
+                document.getElementById(loadingId).remove();
+
+                let reply = data.response || "Λυπάμαι, συνέβη κάποιο σφάλμα.";
+                let formattedReply = escapeHtml(reply).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-cyan-400 underline hover:text-cyan-300">$1</a>');
+
+                const botMsgHTML = `
+                    <div class="flex gap-3 max-w-[85%]">
+                        <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm flex-shrink-0 mt-1">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div class="bg-slate-800/80 border border-white/10 text-gray-200 p-4 rounded-2xl rounded-tl-xs shadow-md">
+                            ${formattedReply}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += botMsgHTML;
+            } catch (err) {
+                document.getElementById(loadingId).remove();
+                const errorHTML = `
+                    <div class="flex gap-3 max-w-[85%]">
+                        <div class="w-8 h-8 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center text-sm flex-shrink-0 mt-1">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="bg-red-950/40 border border-red-500/30 text-red-300 p-4 rounded-2xl rounded-tl-xs shadow-md">
+                            Αποτυχία σύνδεσης. Παρακαλώ ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += errorHTML;
+            }
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
     </script>
 </body>
 </html>
