@@ -3594,7 +3594,6 @@ client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 @app.route('/api/chat', methods=['POST'])
 @login_required
-
 def ai_chat():
     data = request.json or {}
     user_message = data.get('message', '')
@@ -3633,7 +3632,7 @@ def ai_chat():
 
     try:
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="llama3-8b-8192",  # <-- Διορθωμένο όνομα μοντέλου Groq
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message}
