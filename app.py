@@ -3589,13 +3589,21 @@ import os
 from flask import request, jsonify
 from groq import Groq
 
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+# ΔΕΝ αρχικοποιούμε το client εδώ έξω!
 
 @app.route('/api/chat', methods=['POST'])
 @login_required
 def ai_chat():
     data = request.json or {}
     user_message = data.get('message', '')
+
+    # 1. Διαβάζουμε το API Key τη στιγμή που γίνεται το request
+    api_key = os.environ.get("GROQ_API_KEY")
+
+    # 2. Διαγνωστικός έλεγχος
+    if not api_key:
+        print("CRITICAL ERROR: GROQ_API_KEY environment variable is missing or empty!")
+        return jsonify({"response": "Σφάλμα ρυθμίσεων διακομιστή (Missing API Key)."}), 500
 
     system_prompt = """
     You are an AI assistant for Ariston Wash & Dry, a self-service laundry facility in Samos (10 Dervenakion St, Vathy).
@@ -3630,8 +3638,11 @@ def ai_chat():
     """
 
     try:
+        # 3. Αρχικοποίηση του client με το επιβεβαιωμένο key
+        client = Groq(api_key=api_key)
+
         completion = client.chat.completions.create(
-            model="llama-3.1-8b-instant",  # <-- ΣΤΑΘΕΡΟ & ΕΓΓΥΗΜΕΝΟ MODEL ID
+            model="llama-3.1-8b-instant",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message}
@@ -3641,6 +3652,7 @@ def ai_chat():
         )
         reply = completion.choices[0].message.content
         return jsonify({"response": reply})
+
     except Exception as e:
         print(f"Groq API Error: {e}")
         return jsonify({"response": "Λυπάμαι, υπήρξε ένα πρόβλημα επικοινωνίας. Παρακαλώ δοκιμάστε ξανά σε λίγο!"}), 500
