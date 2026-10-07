@@ -3586,7 +3586,6 @@ def save_user_note(order_code):
         
     return redirect(url_for('track_order', order_code=order_code))
 import os
-import re
 from flask import request, jsonify
 from groq import Groq
 
@@ -3632,7 +3631,7 @@ def ai_chat():
 
     try:
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",  # <-- Διορθωμένο όνομα μοντέλου Groq
+            model="llama3-8b-8192",  # <-- ΣΤΑΘΕΡΟ & ΕΓΓΥΗΜΕΝΟ MODEL ID
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message}
