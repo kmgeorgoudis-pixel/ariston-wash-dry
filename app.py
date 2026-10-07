@@ -3594,7 +3594,7 @@ client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 @app.route('/api/chat', methods=['POST'])
 @login_required
-@limiter.limit("10 per minute")
+
 def ai_chat():
     data = request.json or {}
     user_message = data.get('message', '')
