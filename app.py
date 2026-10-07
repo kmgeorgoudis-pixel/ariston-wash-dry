@@ -3646,7 +3646,7 @@ def ai_chat():
                 {"role": "user", "content": user_message}
             ],
             temperature=0.6,
-            max_tokens=350
+            max_tokens=600
         )
         reply = completion.choices[0].message.content
         return jsonify({"response": reply})
