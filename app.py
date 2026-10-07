@@ -3632,7 +3632,7 @@ def ai_chat():
 
     try:
         completion = client.chat.completions.create(
-            model="llama3-8b-8192",  # <-- Διορθωμένο όνομα μοντέλου Groq
+            model="llama-3.1-8b-instant",  # <-- Διορθωμένο όνομα μοντέλου Groq
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message}
