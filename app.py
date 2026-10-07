@@ -3585,6 +3585,67 @@ def save_user_note(order_code):
             db.session.commit()
         
     return redirect(url_for('track_order', order_code=order_code))
+import os
+import re
+from flask import request, jsonify
+from groq import Groq
+
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+
+@app.route('/api/chat', methods=['POST'])
+@login_required
+@limiter.limit("10 per minute")
+def ai_chat():
+    data = request.json or {}
+    user_message = data.get('message', '')
+
+    system_prompt = """
+    You are an AI assistant for Ariston Wash & Dry, a self-service laundry facility in Samos (10 Dervenakion St, Vathy).
+    Primary Function: You help users with their inquiries, issues, and requests in a friendly, concise, and helpful tone.
+    Language: Always reply in the language the user speaks (Greek or English).
+
+    KNOWLEDGE BASE:
+    1. General Info & Amenities:
+       - Location: 10 Dervenakion St, Vathy, Samos.
+       - Self-service laundry & drying in under 1 hour.
+       - Free Wi-Fi, vending machines, lounge, accessible for disabled (ΑμεΑ).
+       - Hours: Daily 07:00–23:00, no appointment needed.
+
+    2. Usage & Hygiene:
+       - Washers: 10kg & 15kg. Dryers: 15kg & 18kg.
+       - Automatic certified, hypoallergenic detergent and softener included.
+       - Automatic drum disinfection with active oxygen after every wash.
+       - Allowed: Duvets & blankets. Prohibited: Carpets.
+
+    3. Pricing & Payments:
+       - Prices based on machine size (washing) or per 15-min cycle (drying).
+       - Payments: Cash, card, contactless (Apple/Google Pay), IRIS.
+
+    4. Track & Orders / Dynamic Rules:
+       - TRACKING RULE: If a user asks about their clothes, order status, or provides an order code, direct them to check their status online at: https://aristonwashdry.gr/track/<CODE> (replace <CODE> with their code if provided, or give the general track URL: https://aristonwashdry.gr/track).
+       - DELAY / COMPLAINT RULE: If a user complains about delays (e.g., "είναι έτσι 2 μέρες", "καθυστερεί", "δεν έχει αλλάξει η πορεία"), politely inform them and instruct them to call directly at 6987598416 for immediate assistance.
+       - MACHINE USAGE RULE: If asked how to use/operate machines, provide this link: https://aristonwashdry.gr/how-to-use
+
+    5. Support Contact:
+       - Phones: +30 694 889 7391, 694 461 5574, 698 759 8416.
+       - Email: info@aristonwashdry.gr | Tech/Coupons: georgoudisk@aristonwashdry.gr
+    """
+
+    try:
+        completion = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message}
+            ],
+            temperature=0.6,
+            max_tokens=350
+        )
+        reply = completion.choices[0].message.content
+        return jsonify({"response": reply})
+    except Exception as e:
+        print(f"Groq API Error: {e}")
+        return jsonify({"response": "Λυπάμαι, υπήρξε ένα πρόβλημα επικοινωνίας. Παρακαλώ δοκιμάστε ξανά σε λίγο!"}), 500
 #####AGGLIKA####
 # Αγγλική έκδοση αρχικής
 @app.route("/en")

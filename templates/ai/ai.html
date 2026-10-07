@@ -7,6 +7,120 @@
 
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="{{ url_for('static', filename='ai/ai.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    /* Styling για το Κουμπί Live AI & το Modal Chat */
+    .live-ai-btn {
+      background: linear-gradient(135deg, #004a99, #0284c7);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 15px;
+      box-shadow: 0 4px 12px rgba(0, 74, 153, 0.3);
+      transition: all 0.3s ease;
+    }
+    .live-ai-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 74, 153, 0.4);
+    }
+
+    /* Modal Live Chat Window */
+    #live-chat-modal {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 380px;
+      max-width: 90vw;
+      height: 520px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      z-index: 9999;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      font-family: sans-serif;
+    }
+
+    .live-chat-header {
+      background: #004a99;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .live-chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #f8fafc;
+      font-size: 14px;
+    }
+
+    .chat-bubble {
+      max-width: 82%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .chat-bubble.user {
+      background: #004a99;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+
+    .chat-bubble.bot {
+      background: #e2e8f0;
+      color: #0f172a;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+
+    .live-chat-input {
+      padding: 12px;
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 8px;
+    }
+
+    .live-chat-input input {
+      flex: 1;
+      border: 1px solid #cbd5e1;
+      padding: 10px 14px;
+      border-radius: 10px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .live-chat-input button {
+      background: #004a99;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,7 +136,6 @@
         <img src="{{ url_for('static', filename='images/en-flag.png') }}" alt="EN" style="width:24px;">
       </a>
     </div>
-    
 
     <div class="sidebar-header">
       <div class="logo-glass">
@@ -30,19 +143,24 @@
       </div>
       <h1>ARISTON AI</h1>
       <p>Premium Laundry Concierge</p>
+
+      <!-- ΚΟΥΜΠΙ LIVE AI BOHΘΟΣ -->
+      <button class="live-ai-btn" onclick="toggleLiveChat()">
+        <i class="fas fa-robot"></i>
+        <span>Μιλήστε με τον Live AI Βοηθό</span>
+      </button>
     </div>
 
+    <!-- Ετοιμες Ερωτήσεις (Διατηρούνται κανονικά) -->
     <div class="sidebar-content" id="ariston-chat-questions"></div>
 
     <div class="sidebar-footer">
       <a href="{{ url_for('index') }}" class="exit-btn">← Αρχική</a>
     </div>
-
   </aside>
 
   <!-- CHAT -->
   <main class="chat">
-
     <header class="chat-header">
       <div class="chat-ai">
         <img src="/ai-image/logo3.png" alt="AI Avatar">
@@ -55,7 +173,6 @@
 
     <section class="chat-body" id="ariston-chat-window">
       <div class="chat-messages" id="ariston-chat-messages">
-
         <div class="ai-msg">
           <img src="/ai-image/logo3.png" alt="AI Avatar">
           <div class="bubble">
@@ -64,14 +181,35 @@
                   data-avatar="/ai-image/logo3.png"></span>
           </div>
         </div>
-
       </div>
     </section>
-
   </main>
 
 </div>
 
+<!-- MODAL LIVE AI CHAT -->
+<div id="live-chat-modal">
+  <div class="live-chat-header">
+    <div style="display: flex; items-center: center; gap: 8px;">
+      <i class="fas fa-robot"></i>
+      <strong style="font-size: 15px;">ARISTON Live AI Assistant</strong>
+    </div>
+    <button onclick="toggleLiveChat()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">✕</button>
+  </div>
+
+  <div class="live-chat-messages" id="modal-messages">
+    <div class="chat-bubble bot">
+      Γεια σας! 🤖 Είμαι ο AI Βοηθός του ARISTON Wash & Dry. Πώς μπορώ να σας βοηθήσω σήμερα;
+    </div>
+  </div>
+
+  <div class="live-chat-input">
+    <input type="text" id="modal-input" placeholder="Γράψτε το μήνυμά σας..." onkeypress="if(event.key==='Enter') sendLiveMessage()">
+    <button onclick="sendLiveMessage()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<!-- DISCLAIMER OVERLAY -->
 <div id="ai-disclaimer-overlay" style="
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(0,0,0,0.85); z-index: 9999; display: flex; 
@@ -104,20 +242,64 @@
 </div>
 
 <script>
-    
     document.getElementById('accept-ai-terms').addEventListener('click', function() {
         document.getElementById('ai-disclaimer-overlay').style.display = 'none';
-        
         sessionStorage.setItem('ai_terms_accepted', 'true');
     });
 
-    
     if (sessionStorage.getItem('ai_terms_accepted') === 'true') {
         document.getElementById('ai-disclaimer-overlay').style.display = 'none';
     }
-</script>
-<script>
-    (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="foTgJasLKt6S7dCUKS4C5";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+
+    // Toggle Live Chat Modal
+    function toggleLiveChat() {
+        const modal = document.getElementById('live-chat-modal');
+        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    // Send Message to Groq Backend
+    async function sendLiveMessage() {
+        const input = document.getElementById('modal-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const messagesContainer = document.getElementById('modal-messages');
+
+        // User message
+        messagesContainer.innerHTML += `<div class="chat-bubble user">${escapeHtml(text)}</div>`;
+        input.value = '';
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Loading bubble
+        const loadingId = 'loading-' + Date.now();
+        messagesContainer.innerHTML += `<div id="${loadingId}" class="chat-bubble bot"><i>Σκέφτεται...</i></div>`;
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await response.json();
+            
+            document.getElementById(loadingId).remove();
+            
+            // Format links in response
+            let formattedResponse = escapeHtml(data.response).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #0284c7; text-decoration: underline;">$1</a>');
+            
+            messagesContainer.innerHTML += `<div class="chat-bubble bot">${formattedResponse}</div>`;
+        } catch (err) {
+            document.getElementById(loadingId).remove();
+            messagesContainer.innerHTML += `<div class="chat-bubble bot" style="color: red;">Σφάλμα σύνδεσης. Παρακαλώ δοκιμάστε ξανά.</div>`;
+        }
+        
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
 </script>
 
 <script src="{{ url_for('static', filename='ai/ai.js') }}"></script>
