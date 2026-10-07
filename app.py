@@ -3631,7 +3631,7 @@ def ai_chat():
 
     try:
         completion = client.chat.completions.create(
-            model="llama-3.1-8b-instant",  # <-- ΣΤΑΘΕΡΟ & ΕΓΓΥΗΜΕΝΟ MODEL ID
+            model="llama-3.3-70b-versatile",  # <-- ΣΤΑΘΕΡΟ & ΕΓΓΥΗΜΕΝΟ MODEL ID
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message}
