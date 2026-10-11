@@ -3,480 +3,2614 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ariston Wash & Dry | Live Tracking</title>
+
+    <meta name="theme-color" content="#080d18">
+    <meta name="color-scheme" content="dark">
+
+    <meta name="description"
+          content="Ariston Wash & Dry — Παρακολουθήστε την παραγγελία σας εύκολα, γρήγορα και με ασφάλεια.">
+
+    <title>Live Tracking | Ariston Wash & Dry</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Html5Qrcode Library για το QR Scanner -->
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- QR Scanner -->
     <script src="https://unpkg.com/html5-qrcode"></script>
-    
+
+    <!-- Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
     <style>
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        :root {
+            --bg: #080d18;
+            --panel: rgba(16, 25, 43, 0.78);
+            --cyan: #67e8f9;
+            --blue: #3b82f6;
+            --muted: #8491a7;
+            --border: rgba(255, 255, 255, 0.085);
         }
-        .scan-line {
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(to right, transparent, #22d3ee, #3b82f6, transparent);
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: #f8fafc;
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::selection {
+            background: rgba(103, 232, 249, 0.25);
+            color: white;
+        }
+
+        .font-display {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        /* BACKGROUND */
+
+        .background-base {
+            position: fixed;
+            inset: 0;
+            z-index: -5;
+            background:
+                radial-gradient(
+                    ellipse at 50% -20%,
+                    rgba(37, 99, 235, 0.18),
+                    transparent 55%
+                ),
+                linear-gradient(
+                    180deg,
+                    #080d18 0%,
+                    #0a1020 50%,
+                    #080d18 100%
+                );
+        }
+
+        .background-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -4;
+            pointer-events: none;
+            opacity: 0.16;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.035) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.035) 1px,
+                    transparent 1px
+                );
+
+            background-size: 58px 58px;
+
+            mask-image: linear-gradient(
+                to bottom,
+                black,
+                transparent 85%
+            );
+        }
+
+        .orb {
+            position: fixed;
+            z-index: -3;
+            pointer-events: none;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.17;
+        }
+
+        .orb-one {
+            width: 340px;
+            height: 340px;
+            background: #0891b2;
+            top: 15%;
+            left: -200px;
+        }
+
+        .orb-two {
+            width: 380px;
+            height: 380px;
+            background: #1d4ed8;
+            right: -240px;
+            top: 38%;
+        }
+
+        /* GLASS */
+
+        .glass {
+            background: var(--panel);
+            border: 1px solid var(--border);
+
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+
+            box-shadow:
+                0 24px 80px rgba(0, 0, 0, 0.22),
+                inset 0 1px 0 rgba(255,255,255,0.035);
+        }
+
+        .glass-soft {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.065);
+        }
+
+        /* BRAND */
+
+        .brand-icon {
+            background: linear-gradient(
+                140deg,
+                #a5f3fc 0%,
+                #38bdf8 45%,
+                #2563eb 100%
+            );
+
+            box-shadow:
+                0 8px 35px rgba(34,211,238,0.19),
+                inset 0 1px 0 rgba(255,255,255,0.4);
+        }
+
+        .gradient-text {
+            background: linear-gradient(
+                100deg,
+                #ffffff 0%,
+                #a5f3fc 45%,
+                #60a5fa 100%
+            );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 13px;
+
+            border: 1px solid rgba(103,232,249,0.15);
+            border-radius: 100px;
+
+            background: rgba(34,211,238,0.055);
+
+            color: #a5f3fc;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            position: relative;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #34d399;
+            flex-shrink: 0;
+        }
+
+        .status-dot::after {
+            content: "";
             position: absolute;
-            animation: scan 1.5s ease-in-out infinite;
-            filter: drop-shadow(0 0 8px #22d3ee);
+            inset: -4px;
+            border: 1px solid rgba(52,211,153,0.45);
+            border-radius: 50%;
+            animation: pulse-ring 2s infinite;
         }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: scale(1.9);
+                opacity: 0;
+            }
+        }
+
+        /* BUTTONS */
+
+        .primary-btn {
+            position: relative;
+            overflow: hidden;
+
+            background: linear-gradient(
+                110deg,
+                #22d3ee 0%,
+                #38bdf8 48%,
+                #3b82f6 100%
+            );
+
+            color: #07111f;
+
+            box-shadow:
+                0 10px 30px rgba(34,211,238,0.12),
+                inset 0 1px 0 rgba(255,255,255,0.35);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                filter 0.2s ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 15px 40px rgba(34,211,238,0.22),
+                inset 0 1px 0 rgba(255,255,255,0.4);
+
+            filter: brightness(1.06);
+        }
+
+        .primary-btn:active {
+            transform: scale(0.985);
+        }
+
+        .secondary-btn {
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.035);
+            transition: all 0.2s ease;
+        }
+
+        .secondary-btn:hover {
+            border-color: rgba(103,232,249,0.35);
+            background: rgba(34,211,238,0.065);
+        }
+
+        /* INPUT */
+
+        .code-input {
+            width: 100%;
+            outline: none;
+
+            background: rgba(5,10,20,0.78);
+            border: 1px solid rgba(255,255,255,0.09);
+
+            color: white;
+            caret-color: var(--cyan);
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .code-input:focus {
+            border-color: rgba(103,232,249,0.7);
+
+            background: rgba(5,10,20,0.95);
+
+            box-shadow:
+                0 0 0 4px rgba(34,211,238,0.07),
+                0 0 35px rgba(34,211,238,0.04);
+        }
+
+        .code-input::placeholder {
+            color: rgba(148,163,184,0.24);
+        }
+
+        /* ENTRANCE ANIMATION */
+
+        .animate-enter {
+            animation: enter 0.75s cubic-bezier(.2,.8,.2,1) both;
+        }
+
+        .animate-enter-delay {
+            animation: enter 0.75s cubic-bezier(.2,.8,.2,1) 0.12s both;
+        }
+
+        @keyframes enter {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* SCAN ANIMATION */
+
+        .scan-frame {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scan-line {
+            position: absolute;
+            z-index: 2;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 2px;
+
+            background: linear-gradient(
+                90deg,
+                transparent,
+                #67e8f9,
+                #60a5fa,
+                transparent
+            );
+
+            box-shadow: 0 0 22px rgba(34,211,238,0.8);
+
+            animation: scan 2s ease-in-out infinite;
+        }
+
         @keyframes scan {
-            0% { top: 0%; }
-            50% { top: 100%; }
-            100% { top: 0%; }
+            0%, 100% {
+                top: 0;
+            }
+
+            50% {
+                top: calc(100% - 2px);
+            }
         }
-        /* Custom Scrollbar για το Chat */
+
+        /* MODAL */
+
+        .modal-backdrop {
+            background: rgba(2,6,15,0.82);
+
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .modal-card {
+            animation: modal-in 0.25s ease both;
+        }
+
+        @keyframes modal-in {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* CHAT */
+
+        .chat-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148,163,184,0.25) transparent;
+            overscroll-behavior: contain;
+        }
+
         .chat-scroll::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
+
         .chat-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
+            background: rgba(148,163,184,0.25);
+            border-radius: 20px;
         }
-        .chat-scroll::-webkit-scrollbar-thumb:hover {
-            background: rgba(34, 211, 238, 0.4);
+
+        .chat-message {
+            animation: message-in 0.25s ease both;
+            overflow-wrap: anywhere;
+        }
+
+        @keyframes message-in {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message a {
+            color: #67e8f9;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .chat-message a:hover {
+            color: white;
+        }
+
+        .typing-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #67e8f9;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            30% {
+                transform: translateY(-4px);
+                opacity: 1;
+            }
+        }
+
+        /* ERROR */
+
+        .error-state {
+            border-color: rgba(248,113,113,0.25);
+            background: rgba(127,29,29,0.10);
+        }
+
+        /* QR READER */
+
+        #qr-reader {
+            width: 100%;
+            border: none !important;
+            color: white;
+        }
+
+        #qr-reader video {
+            width: 100% !important;
+            border-radius: 14px;
+            object-fit: cover;
+        }
+
+        #qr-reader img {
+            display: inline-block;
+        }
+
+        #qr-reader__dashboard_section_csr button,
+        #qr-reader__dashboard_section_swaplink {
+            margin: 6px;
+            padding: 9px 12px;
+            border: 1px solid rgba(103,232,249,0.3);
+            border-radius: 10px;
+            background: #111c2f;
+            color: white;
+            cursor: pointer;
+        }
+
+        #qr-reader__dashboard_section_csr select {
+            max-width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            background: #111c2f;
+            color: white;
+        }
+
+        #qr-reader__status_span {
+            color: #94a3b8;
+        }
+
+        /* ACCESSIBILITY */
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid #67e8f9;
+            outline-offset: 4px;
+        }
+
+        @media (max-width: 640px) {
+            .main-card {
+                border-radius: 26px;
+            }
+
+            .main-content {
+                padding: 23px;
+            }
+
+            .hero-title {
+                font-size: clamp(34px, 10vw, 47px);
+                letter-spacing: -0.055em;
+            }
+
+            .chat-modal {
+                height: 90dvh;
+                max-height: none;
+                border-radius: 22px;
+            }
+
+            .chat-body {
+                padding: 16px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
-<body class="bg-[#090d16] text-white min-h-screen flex flex-col items-center justify-center font-sans relative overflow-x-hidden px-4">
 
-    <!-- Background Glows -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+<body class="flex min-h-screen flex-col">
 
-    <!-- LANGUAGE SWITCHER BUTTON -->
-    <div class="absolute top-6 right-6 z-40">
-        <button onclick="toggleLanguage()" class="glass-panel px-4 py-2 rounded-xl text-sm font-bold border border-white/10 hover:border-cyan-400/50 transition-all cursor-pointer flex items-center gap-2">
-            <i class="fa-solid fa-earth-europe text-cyan-400"></i>
-            <span id="langBtnText">EN</span>
-        </button>
-    </div>
+    <!-- BACKGROUND -->
+    <div class="background-base"></div>
+    <div class="background-grid"></div>
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
 
-    <!-- MAIN CONTAINER -->
-    <div class="w-full max-w-2xl relative z-10 my-12">
-        
-        <!-- 1. DYNAMIC ERROR BOX (Εμφανίζεται αν ο κωδικός δεν βρεθεί) -->
-        <div id="invalidCodeBox" class="glass-panel rounded-3xl p-6 border border-red-500/30 bg-red-950/10 mb-6 hidden">
-            <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-                <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 text-xl flex-shrink-0">
+
+    <!-- HEADER -->
+    <header class="relative z-20 w-full border-b border-white/[0.055]">
+
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 sm:px-8 lg:px-10">
+
+            <a href="/"
+               class="group flex min-w-0 items-center gap-3"
+               aria-label="Ariston Wash & Dry — Αρχική σελίδα">
+
+                <div class="brand-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-lg text-slate-950">
+                    <i class="fa-solid fa-shirt"></i>
+                </div>
+
+                <div class="min-w-0">
+                    <div class="font-display truncate text-sm font-extrabold tracking-tight text-white sm:text-base">
+                        ARISTON
+                        <span class="text-cyan-300">WASH & DRY</span>
+                    </div>
+
+                    <div class="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.19em] text-slate-500 sm:text-[11px]"
+                         data-translate="brand_subtitle">
+                        Smart Laundry Experience
+                    </div>
+                </div>
+            </a>
+
+
+            <div class="flex shrink-0 items-center gap-3">
+
+                <div class="hidden items-center gap-2 rounded-full border border-emerald-400/10 bg-emerald-400/[0.045] px-3 py-2 sm:flex">
+
+                    <span class="status-dot"></span>
+
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-300"
+                          data-translate="system_status">
+                        System Online
+                    </span>
+                </div>
+
+
+                <button id="languageButton"
+                        type="button"
+                        onclick="toggleLanguage()"
+                        class="secondary-btn flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-xs font-extrabold text-white"
+                        aria-label="Change language">
+
+                    <i class="fa-solid fa-globe text-cyan-300"></i>
+
+                    <span id="langBtnText">EN</span>
+
+                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-500"></i>
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+    <main class="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center px-4 pb-10 pt-10 sm:px-8 sm:pt-14 lg:px-10 lg:pt-16">
+
+
+        <!-- HERO -->
+        <section class="animate-enter mb-9 flex w-full max-w-3xl flex-col items-center text-center sm:mb-12">
+
+            <div class="eyebrow mb-6">
+
+                <span class="status-dot"></span>
+
+                <span data-translate="hero_badge">
+                    YOUR LAUNDRY. YOUR CONTROL.
+                </span>
+
+            </div>
+
+
+            <h1 class="font-display hero-title text-4xl font-extrabold leading-[1.12] tracking-[-0.045em] text-white sm:text-6xl">
+
+                <span data-translate="hero_title_1">
+                    Your laundry,
+                </span>
+
+                <br>
+
+                <span class="gradient-text" data-translate="hero_title_2">
+                    one step ahead.
+                </span>
+
+            </h1>
+
+
+            <p class="mt-5 max-w-xl text-sm leading-7 text-slate-400 sm:text-base sm:leading-8"
+               data-translate="hero_description">
+
+                Η παραγγελία σας, πάντα υπό τον έλεγχό σας.
+                Εισαγάγετε τον προσωπικό σας κωδικό και δείτε
+                τις διαθέσιμες πληροφορίες της παραγγελίας σας.
+            </p>
+
+
+            <div class="mt-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[11px] font-semibold text-slate-500 sm:text-xs">
+
+                <span class="flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-cyan-300"></i>
+                    <span data-translate="trust_secure">Ασφαλής πρόσβαση</span>
+                </span>
+
+                <span class="hidden h-1 w-1 rounded-full bg-slate-700 sm:block"></span>
+
+                <span class="flex items-center gap-2">
+                    <i class="fa-solid fa-qrcode text-cyan-300"></i>
+                    <span data-translate="trust_qr">QR scanning</span>
+                </span>
+
+                <span class="hidden h-1 w-1 rounded-full bg-slate-700 sm:block"></span>
+
+                <span class="flex items-center gap-2">
+                    <i class="fa-solid fa-headset text-cyan-300"></i>
+                    <span data-translate="trust_support">AI assistance</span>
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- INVALID CODE MESSAGE -->
+        <section id="invalidCodeBox"
+                 class="glass error-state mb-5 hidden w-full max-w-2xl rounded-3xl p-5 sm:p-6"
+                 role="alert">
+
+            <div class="flex items-start gap-4">
+
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-400/10 text-lg text-red-300">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                 </div>
-                <div class="flex-1">
-                    <h4 class="font-bold text-lg text-red-400" data-translate="err_title">Ο κωδικός δεν είναι έγκυρος</h4>
-                    <p class="text-gray-400 text-sm mt-1" data-translate="err_desc">Δεν βρέθηκε παραγγελία με αυτόν τον κωδικό. Ελέγξτε ξανά το χαρτί σας ή χρησιμοποιήστε τις παρακάτω επιλογές:</p>
+
+                <div class="min-w-0 flex-1">
+
+                    <h2 class="font-display text-base font-extrabold text-red-200"
+                        data-translate="err_title">
+                        Δεν βρέθηκε η παραγγελία
+                    </h2>
+
+                    <p class="mt-2 text-sm leading-6 text-slate-400"
+                       data-translate="err_desc">
+
+                        Ελέγξτε τον κωδικό στην απόδειξή σας
+                        ή χρησιμοποιήστε κάποια από τις παρακάτω επιλογές.
+                    </p>
+
                 </div>
+
             </div>
-            <!-- Help Options -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                <!-- AI Assistant Trigger Button -->
-                <button onclick="openAIChatModal()" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-cyan-400/40 transition-all group text-left cursor-pointer w-full">
-                    <div class="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+
+
+            <div class="mt-5 grid gap-3 sm:grid-cols-2">
+
+                <button type="button"
+                        onclick="openAIChatModal()"
+                        class="secondary-btn flex items-center gap-3 rounded-2xl p-4 text-left">
+
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
                         <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <span class="text-xs font-semibold" data-translate="opt_ai">Μιλήστε με τον AI Assistant μας</span>
-                </button>
-
-                <a id="contactLink" href="https://aristonwashdry.gr/epikoinonia" class="glass-panel p-3 rounded-xl flex items-center gap-3 hover:border-blue-400/40 transition-all group">
-                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-phone"></i>
-                    </div>
-                    <span class="text-xs font-semibold" data-translate="opt_contact">Επικοινωνία με το κατάστημα</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- 2. TRACK CARD -->
-        <div id="trackCard" class="glass-panel rounded-[40px] p-8 sm:p-12 shadow-2xl transition-all duration-500">
-            
-            <div class="flex flex-col items-center text-center mb-8">
-                <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white text-3xl mb-5 shadow-xl shadow-cyan-500/20">
-                    <i class="fa-solid fa-truck-fast"></i>
-                </div>
-                <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-2 uppercase" data-translate="main_title">
-                    Live Tracking
-                </h1>
-                <p class="text-gray-400 text-sm max-w-md" data-translate="main_subtitle">
-                    Παρακολουθήστε την πορεία των ρούχων σας σε πραγματικό χρόνο.
-                </p>
-            </div>
-
-            <!-- INPUT & BUTTONS -->
-            <div class="space-y-4">
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-5 flex items-center text-gray-500 text-xl">
-                        <i class="fa-solid fa-barcode text-cyan-400"></i>
                     </span>
-                    <input type="text" id="trackCode" maxlength="4" placeholder="0000" 
-                        class="w-full pl-14 pr-4 py-5 bg-slate-950/80 border border-white/10 rounded-2xl text-center font-mono text-4xl tracking-[0.3em] font-bold text-white placeholder-gray-800 focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/10 transition-all uppercase">
-                </div>
 
-                <div id="localError" class="text-red-400 text-xs font-medium text-center hidden">
-                    <i class="fa-solid fa-circle-exclamation mr-1"></i> <span data-translate="local_err">Εισάγετε 4 ψηφία.</span>
-                </div>
-
-                <!-- BUTTONS ROW (Search & QR Scanner) -->
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <button onclick="startTracking()" class="flex-1 group relative overflow-hidden rounded-2xl py-4 bg-gradient-to-r from-cyan-400 to-blue-600 font-extrabold text-white shadow-xl hover:scale-[1.01] transition-all cursor-pointer text-center">
-                        <span class="flex items-center justify-center gap-2">
-                            <span data-translate="btn_search">ΕΝΤΟΠΙΣΜΟΣ ΠΑΡΑΓΓΕΛΙΑΣ</span>
-                            <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>
+                        <span class="block text-sm font-bold text-white"
+                              data-translate="opt_ai">
+                            AI Assistant
                         </span>
-                    </button>
-                    
-                    <button onclick="openQRScanner()" class="glass-panel px-6 py-4 rounded-2xl font-bold border border-white/10 text-cyan-400 hover:bg-cyan-400/10 transition-all cursor-pointer flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-qrcode text-xl"></i>
-                        <span data-translate="btn_scan">SCAN QR</span>
-                    </button>
-                </div>
-            </div>
 
-            <!-- INFO BOX ABOUT RECEIPT & QR -->
-            <div class="mt-8 p-4 rounded-2xl bg-slate-900/40 border border-white/5 flex gap-4 items-start text-left">
-                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 flex-shrink-0 mt-0.5">
-                    <i class="fa-solid fa-receipt"></i>
-                </div>
-                <div class="text-xs sm:text-sm text-gray-400 leading-relaxed">
-                    <p class="font-semibold text-gray-300 mb-1" data-translate="info_title">Πού θα βρείτε τον κωδικό;</p>
-                    <p data-translate="info_body">Ο 4ψήφιος κωδικός αναγράφεται πάνω στο χαρτί που λάβατε από το κατάστημα. Επίσης, στο χαρτί αναγράφεται ένα QR code, το οποίο μπορείτε να σκανάρετε απευθείας με την κάμερά σας πατώντας το κουμπί SCAN QR.</p>
-                </div>
-            </div>
+                        <span class="mt-1 block text-xs text-slate-500"
+                              data-translate="opt_ai_desc">
+                            Βρείτε άμεσα βοήθεια
+                        </span>
+                    </span>
 
-        </div>
-
-        <!-- 3. LIVE QR SCANNER CAMERA PANEL (Κρυφό αρχικά) -->
-        <div id="scannerCard" class="glass-panel rounded-[40px] p-6 shadow-2xl text-center hidden flex-col items-center justify-center">
-            <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-cyan-400">
-                <i class="fa-solid fa-camera animate-pulse"></i> <span data-translate="scan_header">Σκανάρετε το QR Code</span>
-            </h3>
-            <div id="qr-reader" class="w-full max-w-sm overflow-hidden rounded-2xl border border-white/10 bg-black"></div>
-            <button onclick="closeQRScanner()" class="mt-5 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-semibold transition-all cursor-pointer" data-translate="btn_cancel">
-                Ακύρωση
-            </button>
-        </div>
-
-        <!-- 4. LOADING CARD -->
-        <div id="loadingCard" class="glass-panel rounded-[40px] p-16 shadow-2xl text-center hidden relative overflow-hidden min-h-[380px] flex-col items-center justify-center">
-            <div class="scan-line"></div>
-            <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center rounded-3xl bg-slate-900/50 border border-white/10 text-cyan-400 text-4xl animate-pulse">
-                <i class="fa-solid fa-shirt"></i>
-            </div>
-            <h3 class="text-xl font-black tracking-wide mb-1 text-white" data-translate="load_title">ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ</h3>
-            <p class="text-cyan-400 font-mono tracking-widest text-sm" id="loadingCodeText">CODE: ----</p>
-        </div>
-
-    </div>
-
-    <!-- 5. MEΓΑΛΟ & OMORFO AI CHAT MODAL WINDOW -->
-    <div id="aiChatModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md hidden transition-all duration-300">
-        <div class="w-full max-w-3xl h-[85vh] max-h-[750px] glass-panel bg-slate-900/90 border border-white/15 rounded-3xl shadow-2xl flex flex-col overflow-hidden relative">
-            
-            <!-- Modal Header -->
-            <div class="px-6 py-4 border-b border-white/10 bg-slate-950/60 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl shadow-lg shadow-cyan-500/20">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-white text-base sm:text-lg leading-tight">Ariston AI Concierge</h3>
-                        <div class="flex items-center gap-2 text-xs text-cyan-400 mt-0.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span data-translate="ai_status">Online • Έτοιμος να βοηθήσει</span>
-                        </div>
-                    </div>
-                </div>
-                <button onclick="closeAIChatModal()" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/15 text-gray-400 hover:text-white transition-all flex items-center justify-center text-lg cursor-pointer">
-                    <i class="fa-solid fa-xmark"></i>
                 </button>
+
+
+                <a id="contactLink"
+                   href="/epikoinonia"
+                   class="secondary-btn flex items-center gap-3 rounded-2xl p-4">
+
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-400/10 text-blue-300">
+                        <i class="fa-solid fa-headset"></i>
+                    </span>
+
+                    <span>
+                        <span class="block text-sm font-bold text-white"
+                              data-translate="opt_contact">
+                            Επικοινωνία
+                        </span>
+
+                        <span class="mt-1 block text-xs text-slate-500"
+                              data-translate="opt_contact_desc">
+                            Μιλήστε μαζί μας
+                        </span>
+                    </span>
+
+                </a>
+
             </div>
 
-            <!-- Modal Body (Messages Container) -->
-            <div id="aiMessagesContainer" class="flex-1 p-6 overflow-y-auto chat-scroll space-y-4 text-sm sm:text-base">
-                <!-- Welcome Bot Message -->
-                <div class="flex gap-3 max-w-[85%]">
-                    <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm flex-shrink-0 mt-1">
+        </section>
+
+
+        <!-- TRACKING CARD -->
+        <section id="trackCard"
+                 class="glass main-card animate-enter-delay relative w-full max-w-2xl overflow-hidden rounded-[32px]">
+
+            <!-- Top decorative line -->
+            <div class="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent"></div>
+
+
+            <div class="main-content p-6 sm:p-10">
+
+
+                <!-- CARD HEADER -->
+                <div class="mb-8 flex items-center gap-4">
+
+                    <div class="brand-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl text-slate-950">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+
+                        <div class="font-display text-lg font-extrabold tracking-tight text-white sm:text-xl"
+                             data-translate="card_title">
+                            Order Tracking
+                        </div>
+
+                        <p class="mt-1 text-xs leading-5 text-slate-400 sm:text-sm"
+                           data-translate="card_subtitle">
+                            Η εμπειρία σας ξεκινά εδώ.
+                        </p>
+
+                    </div>
+
+                    <div class="hidden h-10 w-10 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.025] text-slate-500 sm:flex">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </div>
+
+                </div>
+
+
+                <!-- INPUT LABEL -->
+                <label for="trackCode"
+                       class="mb-3 block text-xs font-bold uppercase tracking-[0.13em] text-slate-300"
+                       data-translate="input_label">
+
+                    Ο προσωπικός σας κωδικός
+                </label>
+
+
+                <!-- INPUT -->
+                <div class="relative">
+
+                    <div class="pointer-events-none absolute inset-y-0 left-5 flex items-center text-cyan-300">
+                        <i class="fa-solid fa-hashtag text-lg"></i>
+                    </div>
+
+
+                    <input type="text"
+                           id="trackCode"
+                           name="trackCode"
+                           maxlength="4"
+                           inputmode="numeric"
+                           autocomplete="off"
+                           autocapitalize="characters"
+                           spellcheck="false"
+                           placeholder="0000"
+                           aria-describedby="inputHelp localError"
+
+                           class="code-input rounded-2xl py-5 pl-14 pr-5 text-center font-mono text-4xl font-bold tracking-[0.35em] sm:py-6 sm:text-5xl"
+
+                           aria-label="4-character order code">
+
+
+                    <div class="pointer-events-none absolute inset-y-0 right-5 flex items-center text-slate-700">
+                        <i class="fa-solid fa-barcode text-xl"></i>
+                    </div>
+
+                </div>
+
+
+                <!-- INPUT HELP -->
+                <div id="inputHelp"
+                     class="mt-3 flex items-start gap-2 text-xs leading-5 text-slate-500">
+
+                    <i class="fa-solid fa-circle-info mt-0.5 text-cyan-400/70"></i>
+
+                    <span data-translate="input_help">
+                        Πληκτρολογήστε τον 4ψήφιο κωδικό που αναγράφεται στην απόδειξή σας.
+                    </span>
+
+                </div>
+
+
+                <!-- LOCAL ERROR -->
+                <div id="localError"
+                     class="mt-3 hidden rounded-xl border border-red-400/15 bg-red-400/[0.06] px-4 py-3 text-xs font-semibold leading-5 text-red-300"
+                     role="alert">
+
+                    <i class="fa-solid fa-circle-exclamation mr-2"></i>
+
+                    <span data-translate="local_err">
+                        Παρακαλώ εισάγετε έναν έγκυρο 4ψήφιο κωδικό.
+                    </span>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="mt-6 grid gap-3 sm:grid-cols-[1fr_auto]">
+
+                    <button id="searchButton"
+                            type="button"
+                            onclick="startTracking()"
+                            class="primary-btn flex min-h-[58px] items-center justify-center gap-3 rounded-2xl px-5 py-4 text-sm font-extrabold">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <span data-translate="btn_search">
+                            ΕΝΤΟΠΙΣΜΟΣ ΠΑΡΑΓΓΕΛΙΑΣ
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right ml-auto text-xs"></i>
+
+                    </button>
+
+
+                    <button type="button"
+                            onclick="openQRScanner()"
+                            class="secondary-btn flex min-h-[58px] items-center justify-center gap-3 rounded-2xl px-5 py-4 text-sm font-bold text-cyan-200">
+
+                        <i class="fa-solid fa-qrcode text-xl"></i>
+
+                        <span data-translate="btn_scan">
+                            SCAN QR
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- DIVIDER -->
+                <div class="my-8 flex items-center gap-4">
+
+                    <div class="h-px flex-1 bg-white/[0.07]"></div>
+
+                    <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-600"
+                          data-translate="or">
+                        OR
+                    </span>
+
+                    <div class="h-px flex-1 bg-white/[0.07]"></div>
+
+                </div>
+
+
+                <!-- RECEIPT INFO -->
+                <div class="glass-soft flex items-start gap-4 rounded-2xl p-4 sm:p-5">
+
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-300/[0.07] text-cyan-300">
+                        <i class="fa-solid fa-receipt text-lg"></i>
+                    </div>
+
+
+                    <div class="min-w-0 flex-1">
+
+                        <h3 class="text-sm font-bold text-slate-200"
+                            data-translate="info_title">
+
+                            Πού θα βρείτε τον κωδικό σας;
+                        </h3>
+
+                        <p class="mt-2 text-xs leading-6 text-slate-400 sm:text-sm"
+                           data-translate="info_body">
+
+                            Ο κωδικός βρίσκεται στην απόδειξη που λάβατε
+                            από το κατάστημα. Μπορείτε επίσης να σαρώσετε
+                            το QR code της απόδειξης χρησιμοποιώντας την κάμερά σας.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUPPORT SHORTCUT -->
+                <button type="button"
+                        onclick="openAIChatModal()"
+                        class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-xs font-semibold text-slate-500 transition-colors hover:text-cyan-300">
+
+                    <i class="fa-solid fa-sparkles text-cyan-400"></i>
+
+                    <span data-translate="support_hint">
+                        Χρειάζεστε βοήθεια; Ρωτήστε τον Ariston AI Assistant.
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- QR SCANNER -->
+        <section id="scannerCard"
+                 class="glass mt-5 hidden w-full max-w-2xl rounded-[30px] p-5 sm:p-8">
+
+            <div class="mb-6 flex items-center justify-between gap-4">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                        <i class="fa-solid fa-camera text-lg"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="font-display text-base font-extrabold text-white"
+                            data-translate="scan_header">
+                            Σαρώστε την απόδειξή σας
+                        </h2>
+
+                        <p class="mt-1 text-xs text-slate-500"
+                           data-translate="scan_subtitle">
+                            Τοποθετήστε το QR μέσα στο πλαίσιο.
+                        </p>
+                    </div>
+
+                </div>
+
+                <span class="status-dot"></span>
+
+            </div>
+
+
+            <div class="scan-frame overflow-hidden rounded-2xl border border-white/10 bg-black">
+
+                <div id="qr-reader"></div>
+
+            </div>
+
+
+            <div id="scannerError"
+                 class="mt-4 hidden rounded-xl border border-red-400/20 bg-red-400/5 p-3 text-sm text-red-300"
+                 role="alert">
+            </div>
+
+
+            <button type="button"
+                    onclick="closeQRScanner()"
+                    class="secondary-btn mt-5 w-full rounded-xl px-5 py-3.5 text-sm font-bold text-white">
+
+                <i class="fa-solid fa-xmark mr-2"></i>
+
+                <span data-translate="btn_cancel">
+                    Ακύρωση
+                </span>
+
+            </button>
+
+        </section>
+
+
+        <!-- LOADING -->
+        <section id="loadingCard"
+                 class="glass relative mt-5 hidden min-h-[310px] w-full max-w-2xl flex-col items-center justify-center overflow-hidden rounded-[30px] p-8 text-center sm:min-h-[350px]">
+
+            <div class="scan-line"></div>
+
+
+            <div class="mb-7 flex h-20 w-20 items-center justify-center rounded-3xl border border-cyan-300/15 bg-cyan-300/[0.06] text-3xl text-cyan-300">
+
+                <i class="fa-solid fa-shirt animate-pulse"></i>
+
+            </div>
+
+
+            <h2 class="font-display text-lg font-extrabold tracking-tight text-white sm:text-xl"
+                data-translate="load_title">
+
+                ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ
+            </h2>
+
+
+            <p id="loadingCodeText"
+               class="mt-3 font-mono text-sm tracking-[0.18em] text-cyan-300">
+                CODE: ----
+            </p>
+
+
+            <div class="mt-6 flex items-center gap-2 text-xs text-slate-500">
+
+                <span class="status-dot"></span>
+
+                <span data-translate="load_subtitle">
+                    Επεξεργαζόμαστε το αίτημά σας...
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER HELP CARDS -->
+        <section class="mt-8 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
+
+            <a id="footerPricingLink"
+               href="/timokatalogos"
+               class="glass-soft group flex items-center gap-4 rounded-2xl p-4 transition-all hover:border-cyan-300/20 hover:bg-white/[0.04]">
+
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-400/[0.08] text-blue-300 transition-transform group-hover:scale-105">
+                    <i class="fa-solid fa-tags text-lg"></i>
+                </div>
+
+                <div class="min-w-0 flex-1">
+
+                    <div class="text-sm font-bold text-slate-200"
+                         data-translate="footer_pricing">
+                        Τιμοκατάλογος
+                    </div>
+
+                    <div class="mt-1 text-xs text-slate-500"
+                         data-translate="footer_pricing_desc">
+                        Δείτε τις υπηρεσίες μας
+                    </div>
+
+                </div>
+
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-600"></i>
+
+            </a>
+
+
+            <a id="footerContactLink"
+               href="/epikoinonia"
+               class="glass-soft group flex items-center gap-4 rounded-2xl p-4 transition-all hover:border-cyan-300/20 hover:bg-white/[0.04]">
+
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-400/[0.08] text-cyan-300 transition-transform group-hover:scale-105">
+                    <i class="fa-solid fa-headset text-lg"></i>
+                </div>
+
+                <div class="min-w-0 flex-1">
+
+                    <div class="text-sm font-bold text-slate-200"
+                         data-translate="footer_contact">
+                        Επικοινωνία
+                    </div>
+
+                    <div class="mt-1 text-xs text-slate-500"
+                         data-translate="footer_contact_desc">
+                        Είμαστε εδώ για εσάς
+                    </div>
+
+                </div>
+
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-600"></i>
+
+            </a>
+
+        </section>
+
+
+        <!-- FOOTER BRAND -->
+        <footer class="mt-12 w-full max-w-2xl border-t border-white/[0.055] pt-7 text-center">
+
+            <div class="mb-3 flex items-center justify-center gap-2">
+
+                <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.045] text-xs text-cyan-300">
+                    <i class="fa-solid fa-shirt"></i>
+                </div>
+
+                <span class="font-display text-xs font-extrabold tracking-wide text-slate-400">
+                    ARISTON WASH & DRY
+                </span>
+
+            </div>
+
+
+            <p class="text-[11px] leading-6 text-slate-600"
+               data-translate="footer_motto">
+
+                Καθαρά ρούχα, καθαρό μυαλό.
+            </p>
+
+
+            <p class="mt-2 text-[10px] text-slate-700">
+                © <span id="currentYear"></span> Ariston Wash & Dry.
+                <span data-translate="footer_rights">All rights reserved.</span>
+            </p>
+
+        </footer>
+
+    </main>
+
+
+    <!-- AI CHAT MODAL -->
+    <div id="aiChatModal"
+         class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="aiModalTitle">
+
+
+        <section class="modal-card glass chat-modal flex h-[85vh] max-h-[780px] w-full max-w-3xl flex-col overflow-hidden rounded-[28px] border border-white/[0.12] sm:h-[82vh]">
+
+
+            <!-- CHAT HEADER -->
+            <header class="flex items-center justify-between gap-3 border-b border-white/[0.07] bg-slate-950/35 px-4 py-4 sm:px-6">
+
+                <div class="flex min-w-0 items-center gap-3">
+
+                    <div class="brand-icon flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-xl text-slate-950">
                         <i class="fa-solid fa-robot"></i>
                     </div>
-                    <div class="bg-slate-800/80 border border-white/10 text-gray-200 p-4 rounded-2xl rounded-tl-xs shadow-md" data-translate="ai_welcome">
-                        Γεια σας! 🧺 Είμαι ο ψηφιακός βοηθός του Ariston Wash & Dry. Πώς μπορώ να σας βοηθήσω με την παραγγελία ή τις υπηρεσίες μας;
+
+
+                    <div class="min-w-0">
+
+                        <h2 id="aiModalTitle"
+                            class="font-display truncate text-sm font-extrabold text-white sm:text-base">
+                            Ariston W&D AI Concierge
+                        </h2>
+
+
+                        <div class="mt-1 flex items-center gap-2">
+
+                            <span class="status-dot"></span>
+
+                            <span class="text-[11px] font-semibold text-emerald-300"
+                                  data-translate="ai_status">
+
+                                Online • Έτοιμος να βοηθήσει
+                            </span>
+
+                        </div>
+
                     </div>
+
                 </div>
+
+
+                <button id="closeChatButton"
+                        type="button"
+                        onclick="closeAIChatModal()"
+                        class="secondary-btn flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:text-white"
+                        aria-label="Close chat">
+
+                    <i class="fa-solid fa-xmark text-lg"></i>
+
+                </button>
+
+            </header>
+
+
+            <!-- CHAT INTRO STRIP -->
+            <div class="flex items-center gap-3 border-b border-white/[0.05] bg-white/[0.015] px-5 py-3 sm:px-6">
+
+                <i class="fa-solid fa-sparkles text-sm text-cyan-300"></i>
+
+                <p class="text-[11px] leading-5 text-slate-400"
+                   data-translate="ai_subtitle">
+
+                    Ο ψηφιακός σας βοηθός για τις υπηρεσίες του Ariston Wash & Dry.
+                </p>
+
             </div>
 
-            <!-- Modal Footer (Input Bar) -->
-            <div class="p-4 bg-slate-950/70 border-t border-white/10">
-                <form onsubmit="handleAISubmit(event)" class="flex items-center gap-3">
-                    <input type="text" id="aiUserInput" placeholder="Γράψτε το μήνυμά σας εδώ..." data-translate-holder="ai_placeholder" class="flex-1 px-5 py-3.5 bg-slate-900/90 border border-white/10 rounded-xl text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all">
-                    <button type="submit" class="px-6 py-3.5 bg-gradient-to-r from-cyan-400 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all cursor-pointer flex items-center gap-2">
-                        <span class="hidden sm:inline" data-translate="ai_send">Αποστολή</span>
+
+            <!-- MESSAGES -->
+            <div id="aiMessagesContainer"
+                 class="chat-body chat-scroll flex-1 space-y-5 overflow-y-auto p-5 sm:p-7"
+                 aria-live="polite"
+                 aria-relevant="additions">
+
+
+                <!-- WELCOME -->
+                <div class="chat-message flex gap-3">
+
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/10 bg-cyan-300/[0.08] text-cyan-300">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+
+
+                    <div class="max-w-[88%]">
+
+                        <div class="mb-2 flex items-center gap-2">
+
+                            <span class="text-xs font-extrabold text-slate-300">
+                                Ariston W&D  AI
+                            </span>
+
+                            <span class="text-[10px] text-slate-600"
+                                  data-translate="just_now">
+                                Μόλις τώρα
+                            </span>
+
+                        </div>
+
+
+                        <div id="aiWelcomeMessage"
+                             class="rounded-2xl rounded-tl-sm border border-white/[0.07] bg-slate-800/55 p-4 text-sm leading-7 text-slate-200"
+                             data-translate="ai_welcome">
+
+                            Γεια σας! 🧺
+
+                            Καλώς ήρθατε στο Ariston Wash & Dry.
+                            Είμαι ο ψηφιακός σας βοηθός και μπορώ να σας βοηθήσω
+                            με τις υπηρεσίες μας, τις πληροφορίες του καταστήματος
+                            και την παραγγελία σας.
+
+                            Πώς μπορώ να σας εξυπηρετήσω;
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHAT SUGGESTIONS -->
+            <div id="chatSuggestions"
+                 class="flex flex-wrap gap-2 border-t border-white/[0.04] px-4 pb-3 pt-4 sm:px-6">
+
+                <button type="button"
+                        onclick="sendSuggestion('prices')"
+                        class="secondary-btn rounded-full px-3 py-2 text-[11px] font-semibold text-slate-300">
+
+                    <i class="fa-solid fa-tags mr-1.5 text-cyan-300"></i>
+
+                    <span data-translate="suggest_prices">
+                        Τιμές
+                    </span>
+
+                </button>
+
+
+                <button type="button"
+                        onclick="sendSuggestion('hours')"
+                        class="secondary-btn rounded-full px-3 py-2 text-[11px] font-semibold text-slate-300">
+
+                    <i class="fa-regular fa-clock mr-1.5 text-cyan-300"></i>
+
+                    <span data-translate="suggest_hours">
+                        Ωράριο
+                    </span>
+
+                </button>
+
+
+                <button type="button"
+                        onclick="sendSuggestion('help')"
+                        class="secondary-btn rounded-full px-3 py-2 text-[11px] font-semibold text-slate-300">
+
+                    <i class="fa-solid fa-circle-question mr-1.5 text-cyan-300"></i>
+
+                    <span data-translate="suggest_help">
+                        Χρειάζομαι βοήθεια
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- CHAT INPUT -->
+            <div class="border-t border-white/[0.07] bg-slate-950/40 p-4 sm:px-6 sm:py-5">
+
+                <form id="aiChatForm"
+                      class="flex items-center gap-2.5 sm:gap-3"
+                      onsubmit="handleAISubmit(event)">
+
+
+                    <div class="relative min-w-0 flex-1">
+
+                        <input type="text"
+                               id="aiUserInput"
+                               name="message"
+                               maxlength="2000"
+                               autocomplete="off"
+                               required
+
+                               placeholder="Γράψτε το μήνυμά σας..."
+                               data-translate-holder="ai_placeholder"
+
+                               class="code-input rounded-xl px-4 py-3.5 text-sm sm:rounded-2xl sm:px-5 sm:py-4"
+
+                               aria-label="Chat message">
+
+
+                    </div>
+
+
+                    <button id="aiSendButton"
+                            type="submit"
+                            class="primary-btn flex h-[49px] shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-extrabold sm:h-[55px] sm:rounded-2xl sm:px-5">
+
+                        <span class="hidden sm:inline"
+                              data-translate="ai_send">
+                            Αποστολή
+                        </span>
+
                         <i class="fa-solid fa-paper-plane"></i>
+
                     </button>
+
                 </form>
+
+
+                <div class="mt-3 flex items-center justify-center gap-2 text-[10px] text-slate-600">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    <span data-translate="ai_disclaimer">
+                        Μην κοινοποιείτε ευαίσθητα προσωπικά δεδομένα.
+                    </span>
+
+                </div>
+
             </div>
 
-        </div>
+        </section>
+
     </div>
 
-    <!-- SCRIPT ΜΕΤΑΦΡΑΣΗΣ, SCANNER, AI MODAL & REDIRECT -->
+
     <script>
-        // 1. ΛΕΞΙΚΟ ΓΙΑ ΕΛΛΗΝΙΚΑ & ΑΓΓΛΙΚΑ
+        "use strict";
+
+        /* =========================================
+           1. TRANSLATIONS
+        ========================================= */
+
         const translations = {
+
             el: {
-                main_title: "Live Tracking",
-                main_subtitle: "Παρακολουθήστε την πορεία των ρούχων σας σε πραγματικό χρόνο.",
+                brand_subtitle: "Smart Laundry Experience",
+                system_status: "System Online",
+
+                hero_badge: "YOUR LAUNDRY. YOUR CONTROL.",
+                hero_title_1: "Τα ρούχα σας,",
+                hero_title_2: "υπό τον έλεγχό σας.",
+
+                hero_description:
+                    "Η παραγγελία σας, πάντα υπό τον έλεγχό σας. " +
+                    "Εισαγάγετε τον προσωπικό σας κωδικό και δείτε " +
+                    "τις διαθέσιμες πληροφορίες της παραγγελίας σας.",
+
+                trust_secure: "Ασφαλής πρόσβαση",
+                trust_qr: "Σάρωση QR",
+                trust_support: "Υποστήριξη AI",
+
+                err_title: "Δεν βρέθηκε η παραγγελία",
+                err_desc:
+                    "Ελέγξτε τον κωδικό στην απόδειξή σας " +
+                    "ή χρησιμοποιήστε κάποια από τις παρακάτω επιλογές.",
+
+                opt_ai: "AI Assistant",
+                opt_ai_desc: "Βρείτε άμεσα βοήθεια",
+                opt_contact: "Επικοινωνία",
+                opt_contact_desc: "Μιλήστε μαζί μας",
+
+                card_title: "Order Tracking",
+                card_subtitle: "Η εμπειρία σας ξεκινά εδώ.",
+
+                input_label: "Ο προσωπικός σας κωδικός",
+
+                input_help:
+                    "Πληκτρολογήστε τον 4ψήφιο κωδικό που αναγράφεται στην απόδειξή σας.",
+
+                local_err:
+                    "Παρακαλώ εισάγετε έναν έγκυρο 4ψήφιο κωδικό.",
+
                 btn_search: "ΕΝΤΟΠΙΣΜΟΣ ΠΑΡΑΓΓΕΛΙΑΣ",
                 btn_scan: "SCAN QR",
-                local_err: "Παρακαλώ εισάγετε έναν έγκυρο 4ψήφιο κωδικό.",
-                info_title: "Πού θα βρείτε τον κωδικό;",
-                info_body: "Ο 4ψήφιος κωδικός αναγράφεται πάνω στο χαρτί που λάβατε από το κατάστημα. Επίσης, στο χαρτί αναγράφεται ένα QR code, το οποίο μπορείτε να σκανάρετε απευθείας με την κάμερά σας πατώντας το κουμπί SCAN QR.",
-                err_title: "Ο κωδικός δεν είναι έγκυρος",
-                err_desc: "Δεν βρέθηκε παραγγελία με αυτόν τον κωδικό. Ελέγξτε ξανά το χαρτί σας ή χρησιμοποιήστε τις παρακάτω επιλογές:",
-                opt_ai: "Μιλήστε με τον AI Assistant μας",
-                opt_contact: "Επικοινωνία με το κατάστημα",
-                scan_header: "Σκανάρετε το QR Code",
+
+                or: "Ή",
+
+                info_title: "Πού θα βρείτε τον κωδικό σας;",
+
+                info_body:
+                    "Ο κωδικός βρίσκεται στην απόδειξη που λάβατε " +
+                    "από το κατάστημα. Μπορείτε επίσης να σαρώσετε " +
+                    "το QR code της απόδειξης χρησιμοποιώντας την κάμερά σας.",
+
+                support_hint:
+                    "Χρειάζεστε βοήθεια; Ρωτήστε τον Ariston W&D AI Assistant.",
+
+                scan_header: "Σαρώστε την απόδειξή σας",
+                scan_subtitle: "Τοποθετήστε το QR μέσα στο πλαίσιο.",
+
                 btn_cancel: "Ακύρωση",
+
                 load_title: "ΑΝΑΚΤΗΣΗ ΔΕΔΟΜΕΝΩΝ",
+                load_subtitle: "Επεξεργαζόμαστε το αίτημά σας...",
+
+                footer_pricing: "Τιμοκατάλογος",
+                footer_pricing_desc: "Δείτε τις υπηρεσίες μας",
+
+                footer_contact: "Επικοινωνία",
+                footer_contact_desc: "Είμαστε εδώ για εσάς",
+
+                footer_motto: "Καθαρά ρούχα, καθαρό μυαλό.",
+                footer_rights: "Με επιφύλαξη παντός δικαιώματος.",
+
                 ai_status: "Online • Έτοιμος να βοηθήσει",
-                ai_welcome: "Γεια σας! 🧺 Είμαι ο ψηφιακός βοηθός του Ariston Wash & Dry. Πώς μπορώ να σας βοηθήσω με την παραγγελία ή τις υπηρεσίες μας;",
-                ai_placeholder: "Γράψτε το μήνυμά σας εδώ...",
-                ai_send: "Αποστολή"
+
+                ai_subtitle:
+                    "Ο ψηφιακός σας βοηθός για τις υπηρεσίες του Ariston Wash & Dry.",
+
+                ai_welcome:
+                    "Γεια σας! 🧺\n\n" +
+                    "Καλώς ήρθατε στο Ariston Wash & Dry. " +
+                    "Είμαι ο ψηφιακός σας βοηθός και μπορώ να σας βοηθήσω " +
+                    "με τις υπηρεσίες μας, τις πληροφορίες του καταστήματος " +
+                    "και την παραγγελία σας.\n\n" +
+                    "Πώς μπορώ να σας εξυπηρετήσω;",
+
+                just_now: "Μόλις τώρα",
+
+                ai_placeholder: "Γράψτε το μήνυμά σας...",
+                ai_send: "Αποστολή",
+
+                ai_disclaimer:
+                    "Μην κοινοποιείτε ευαίσθητα προσωπικά δεδομένα.",
+
+                suggest_prices: "Τιμές",
+                suggest_hours: "Ωράριο",
+                suggest_help: "Χρειάζομαι βοήθεια",
+
+                thinking: "Ετοιμάζω την απάντησή μου...",
+                connection_error:
+                    "Δεν ήταν δυνατή η σύνδεση με τον βοηθό. " +
+                    "Παρακαλώ δοκιμάστε ξανά.",
+
+                server_error:
+                    "Παρουσιάστηκε ένα προσωρινό πρόβλημα. " +
+                    "Παρακαλώ δοκιμάστε ξανά.",
+
+                camera_error:
+                    "Δεν ήταν δυνατή η ενεργοποίηση της κάμερας. " +
+                    "Ελέγξτε τις άδειες πρόσβασης και δοκιμάστε ξανά.",
+
+                scan_error:
+                    "Δεν μπορέσαμε να αναγνωρίσουμε έναν έγκυρο κωδικό από το QR.",
+
+                suggestions: {
+                    prices: "Θα ήθελα να μάθω τις τιμές των υπηρεσιών σας.",
+                    hours: "Ποιο είναι το ωράριο λειτουργίας σας;",
+                    help: "Χρειάζομαι βοήθεια με την παραγγελία μου."
+                }
             },
+
+
             en: {
-                main_title: "Live Tracking",
-                main_subtitle: "Track the status of your clothes in real time.",
-                btn_search: "TRACK ORDER",
+                brand_subtitle: "Smart Laundry Experience",
+                system_status: "System Online",
+
+                hero_badge: "YOUR LAUNDRY. YOUR CONTROL.",
+                hero_title_1: "Your laundry,",
+                hero_title_2: "under your control.",
+
+                hero_description:
+                    "Your order, always within reach. " +
+                    "Enter your personal code to access " +
+                    "the available information about your order.",
+
+                trust_secure: "Secure access",
+                trust_qr: "QR scanning",
+                trust_support: "AI assistance",
+
+                err_title: "Order not found",
+                err_desc:
+                    "Please check the code on your receipt " +
+                    "or choose one of the options below.",
+
+                opt_ai: "AI Assistant",
+                opt_ai_desc: "Get help instantly",
+                opt_contact: "Contact us",
+                opt_contact_desc: "Talk to our team",
+
+                card_title: "Order Tracking",
+                card_subtitle: "Your experience starts here.",
+
+                input_label: "Your personal order code",
+
+                input_help:
+                    "Enter the 4-character code printed on your receipt.",
+
+                local_err:
+                    "Please enter a valid 4-character order code.",
+
+                btn_search: "TRACK YOUR ORDER",
                 btn_scan: "SCAN QR",
-                local_err: "Please enter a valid 4-digit code.",
-                info_title: "Where can you find the code?",
-                info_body: "The 4-digit code is written on the receipt you received from the store. There is also a QR code printed on the receipt, which you can scan directly using your camera by clicking the SCAN QR button.",
-                err_title: "Invalid Code",
-                err_desc: "No order was found with this code. Please check your receipt again or choose one of the options below:",
-                opt_ai: "Talk to our AI Assistant",
-                opt_contact: "Contact the store",
-                scan_header: "Scan the QR Code",
+
+                or: "OR",
+
+                info_title: "Where can you find your code?",
+
+                info_body:
+                    "Your code is printed on the receipt you received " +
+                    "from our store. You can also scan the QR code " +
+                    "on your receipt using your camera.",
+
+                support_hint:
+                    "Need help? Ask the Ariston AI Assistant.",
+
+                scan_header: "Scan your receipt",
+                scan_subtitle: "Position the QR code inside the frame.",
+
                 btn_cancel: "Cancel",
+
                 load_title: "RETRIEVING DATA",
+                load_subtitle: "Processing your request...",
+
+                footer_pricing: "Pricing",
+                footer_pricing_desc: "Explore our services",
+
+                footer_contact: "Contact",
+                footer_contact_desc: "We are here to help",
+
+                footer_motto: "Clean clothes, clear mind.",
+                footer_rights: "All rights reserved.",
+
                 ai_status: "Online • Ready to help",
-                ai_welcome: "Hello! 🧺 I am the digital assistant of Ariston Wash & Dry. How can I assist you with your order or our services?",
-                ai_placeholder: "Type your message here...",
-                ai_send: "Send"
+
+                ai_subtitle:
+                    "Your digital assistant for Ariston Wash & Dry services.",
+
+                ai_welcome:
+                    "Hello! 🧺\n\n" +
+                    "Welcome to Ariston Wash & Dry. " +
+                    "I am your digital assistant, and I can help you " +
+                    "with our services, store information and your order.\n\n" +
+                    "How can I help you today?",
+
+                just_now: "Just now",
+
+                ai_placeholder: "Type your message...",
+                ai_send: "Send",
+
+                ai_disclaimer:
+                    "Please do not share sensitive personal information.",
+
+                suggest_prices: "Pricing",
+                suggest_hours: "Opening hours",
+                suggest_help: "I need help",
+
+                thinking: "Preparing your answer...",
+
+                connection_error:
+                    "Could not connect to the assistant. " +
+                    "Please try again.",
+
+                server_error:
+                    "A temporary problem occurred. Please try again.",
+
+                camera_error:
+                    "Could not start the camera. " +
+                    "Check your browser permissions and try again.",
+
+                scan_error:
+                    "We could not identify a valid code from this QR.",
+
+                suggestions: {
+                    prices: "I would like to know the prices of your services.",
+                    hours: "What are your opening hours?",
+                    help: "I need help with my order."
+                }
             }
+
         };
 
-        let currentLang = 'el';
+
+        let currentLang = "el";
+
         let html5QrCode = null;
+        let scannerRunning = false;
+        let scannerStarting = false;
 
-        // Συνάρτηση αλλαγής γλώσσας
-        function updateLanguageUI() {
-            document.querySelectorAll('[data-translate]').forEach(elem => {
-                const key = elem.getAttribute('data-translate');
-                if (translations[currentLang][key]) {
-                    elem.innerText = translations[currentLang][key];
-                }
-            });
+        let chatBusy = false;
+        let chatRequestId = 0;
 
-            document.querySelectorAll('[data-translate-holder]').forEach(elem => {
-                const key = elem.getAttribute('data-translate-holder');
-                if (translations[currentLang][key]) {
-                    elem.placeholder = translations[currentLang][key];
-                }
-            });
-            
-            // Αλλαγή των Links ανάλογα με τη γλώσσα
-            const contactLink = document.getElementById('contactLink');
-            const langBtnText = document.getElementById('langBtnText');
-            
-            if (currentLang === 'el') {
-                langBtnText.innerText = 'EN';
-                contactLink.href = 'https://aristonwashdry.gr/epikoinonia';
-            } else {
-                langBtnText.innerText = 'GR';
-                contactLink.href = 'https://aristonwashdry.gr/en/contact';
-            }
+        let previousFocus = null;
+
+
+        /* =========================================
+           2. LANGUAGE MANAGEMENT
+        ========================================= */
+
+        function t(key) {
+            return translations[currentLang][key] ||
+                   translations.el[key] ||
+                   key;
         }
+
+
+        function updateLanguageUI() {
+
+            document.documentElement.lang = currentLang;
+
+            document.querySelectorAll("[data-translate]").forEach(element => {
+
+                const key = element.getAttribute("data-translate");
+                const value = t(key);
+
+                if (value !== undefined) {
+                    element.textContent = value;
+                }
+
+            });
+
+
+            document.querySelectorAll("[data-translate-holder]").forEach(element => {
+
+                const key = element.getAttribute("data-translate-holder");
+
+                element.placeholder = t(key);
+
+            });
+
+
+            document.getElementById("langBtnText").textContent =
+                currentLang === "el" ? "EN" : "GR";
+
+
+            const contactPath = currentLang === "el"
+                ? "/epikoinonia"
+                : "/en/contact";
+
+
+            const pricingPath = currentLang === "el"
+                ? "/timokatalogos"
+                : "/en/pricing";
+
+
+            document.getElementById("contactLink").href = contactPath;
+
+            document.getElementById("footerContactLink").href = contactPath;
+
+            document.getElementById("footerPricingLink").href = pricingPath;
+
+
+            try {
+                localStorage.setItem("ariston_tracking_language", currentLang);
+            } catch (error) {
+                
+            }
+
+        }
+
 
         function toggleLanguage() {
-            currentLang = currentLang === 'el' ? 'en' : 'el';
+
+            currentLang = currentLang === "el" ? "en" : "el";
+
             updateLanguageUI();
+
         }
 
-        // 2. ΕΛΕΓΧΟΣ ΑΝ ΕΠΕΣΤΡΕΨΕ ΣΦΑΛΜΑ ΑΠΟ ΤΟ BACKEND (π.χ. /track?error=invalid)
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('error') === 'invalid') {
-                document.getElementById('invalidCodeBox').classList.remove('hidden');
+
+        function initializeLanguage() {
+
+            try {
+
+                const saved = localStorage.getItem("ariston_tracking_language");
+
+                if (saved === "el" || saved === "en") {
+                    currentLang = saved;
+                }
+
+            } catch (error) {
+                currentLang = "el";
             }
+
             updateLanguageUI();
+
+        }
+
+
+        /* =========================================
+           3. INITIALIZATION
+        ========================================= */
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            initializeLanguage();
+
+
+            document.getElementById("currentYear").textContent =
+                new Date().getFullYear();
+
+
+            const params = new URLSearchParams(window.location.search);
+
+            if (params.get("error") === "invalid") {
+
+                document.getElementById("invalidCodeBox")
+                    .classList.remove("hidden");
+
+            }
+
+
+            const input = document.getElementById("trackCode");
+
+
+            input.addEventListener("input", () => {
+
+                
+
+                input.value = input.value
+                    .replace(/\s/g, "")
+                    .slice(0, 4)
+                    .toUpperCase();
+
+
+                hideInputError();
+
+            });
+
+
+            input.addEventListener("keydown", event => {
+
+                if (event.key === "Enter") {
+
+                    event.preventDefault();
+
+                    startTracking();
+
+                }
+
+            });
+
+
+            document.getElementById("aiChatModal")
+                .addEventListener("click", event => {
+
+                    if (event.target.id === "aiChatModal") {
+                        closeAIChatModal();
+                    }
+
+                });
+
+
+            document.addEventListener("keydown", event => {
+
+                if (event.key === "Escape") {
+
+                    const modal = document.getElementById("aiChatModal");
+
+                    if (!modal.classList.contains("hidden")) {
+                        closeAIChatModal();
+                    }
+
+                    if (scannerRunning || scannerStarting) {
+                        closeQRScanner();
+                    }
+
+                }
+
+            });
+
+
+            window.addEventListener("pagehide", () => {
+
+                if (html5QrCode && scannerRunning) {
+
+                    html5QrCode.stop().catch(() => {});
+
+                }
+
+            });
+
         });
 
-        // 3. ΕΝТОΠΙΣΜΟΣ & REDIRECT
+
+        /* =========================================
+           4. TRACKING
+        ========================================= */
+
+        function hideInputError() {
+
+            document.getElementById("localError")
+                .classList.add("hidden");
+
+            document.getElementById("trackCode")
+                .setAttribute("aria-invalid", "false");
+
+            document.getElementById("trackCode")
+                .classList.remove("border-red-400");
+
+        }
+
+
+        function showInputError() {
+
+            const error = document.getElementById("localError");
+            const input = document.getElementById("trackCode");
+
+            error.classList.remove("hidden");
+
+            input.setAttribute("aria-invalid", "true");
+
+            input.classList.add("border-red-400");
+
+            input.focus();
+
+        }
+
+
         function startTracking() {
-            const input = document.getElementById('trackCode');
+
+            const input = document.getElementById("trackCode");
+
             const code = input.value.trim();
-            const localError = document.getElementById('localError');
+
             
-            if (code.length !== 4) {
-                localError.classList.remove('hidden');
-                input.classList.add('border-red-500');
+
+            if (!/^[a-zA-Z0-9]{4}$/.test(code)) {
+
+                showInputError();
+
+                return;
+
+            }
+
+
+            hideInputError();
+
+
+            document.getElementById("invalidCodeBox")
+                .classList.add("hidden");
+
+
+            document.getElementById("trackCard")
+                .classList.add("hidden");
+
+
+            document.getElementById("scannerCard")
+                .classList.add("hidden");
+
+
+            document.getElementById("loadingCodeText").textContent =
+                "CODE: " + code.toUpperCase();
+
+
+            document.getElementById("loadingCard")
+                .classList.remove("hidden");
+
+
+            document.getElementById("loadingCard")
+                .classList.add("flex");
+
+
+            // Το endpoint παραμένει ίδιο με το αρχικό backend.
+
+            window.location.assign(
+                "/track/" + encodeURIComponent(code.toUpperCase())
+            );
+
+        }
+
+
+        /* =========================================
+           5. QR SCANNER
+        ========================================= */
+
+        async function openQRScanner() {
+
+            if (scannerStarting || scannerRunning) {
                 return;
             }
-            
-            localError.classList.add('hidden');
-            input.classList.remove('border-red-500');
 
-            document.getElementById('loadingCodeText').innerText = 'CODE: ' + code.toUpperCase();
-            document.getElementById('trackCard').classList.add('hidden');
-            document.getElementById('invalidCodeBox').classList.add('hidden');
-            document.getElementById('loadingCard').classList.remove('hidden');
-            document.getElementById('loadingCard').classList.add('flex');
+
+            const scannerCard = document.getElementById("scannerCard");
+
+            const trackCard = document.getElementById("trackCard");
+
+            const errorBox = document.getElementById("scannerError");
+
+
+            errorBox.classList.add("hidden");
+
+            errorBox.textContent = "";
+
+
+            trackCard.classList.add("hidden");
+
+            scannerCard.classList.remove("hidden");
+
+            scannerCard.classList.add("flex");
+
+
+            scannerStarting = true;
+
+
+            try {
+
+                if (typeof Html5Qrcode === "undefined") {
+                    throw new Error("QR_LIBRARY_UNAVAILABLE");
+                }
+
+
+                if (!html5QrCode) {
+
+                    html5QrCode = new Html5Qrcode("qr-reader");
+
+                }
+
+
+                await html5QrCode.start(
+
+                    { facingMode: "environment" },
+
+                    {
+                        fps: 10,
+
+                        qrbox: function(viewfinderWidth, viewfinderHeight) {
+
+                            const size = Math.floor(
+                                Math.min(
+                                    viewfinderWidth * 0.75,
+                                    viewfinderHeight * 0.75,
+                                    280
+                                )
+                            );
+
+                            return {
+                                width: size,
+                                height: size
+                            };
+
+                        },
+
+                        aspectRatio: 1
+
+                    },
+
+                    async decodedText => {
+
+                        if (!scannerRunning) {
+                            return;
+                        }
+
+
+                        const code = extractTrackingCode(decodedText);
+
+
+                        if (!code) {
+
+                            errorBox.textContent = t("scan_error");
+
+                            errorBox.classList.remove("hidden");
+
+                            return;
+
+                        }
+
+
+                        document.getElementById("trackCode").value = code;
+
+
+                        await closeQRScanner();
+
+
+                        startTracking();
+
+                    },
+
+                    () => {
+                       
+                    }
+
+                );
+
+
+                scannerRunning = true;
+
+
+            } catch (error) {
+
+                console.error("QR scanner error:", error);
+
+
+                errorBox.textContent = t("camera_error");
+
+                errorBox.classList.remove("hidden");
+
+
+                if (html5QrCode) {
+
+                    try {
+
+                        await html5QrCode.stop();
+
+                    } catch (stopError) {
+                        // Ο scanner μπορεί να μην είχε ξεκινήσει.
+                    }
+
+                }
+
+
+            } finally {
+
+                scannerStarting = false;
+
+            }
+
+        }
+
+
+        function extractTrackingCode(decodedText) {
+
+            const value = String(decodedText || "").trim();
+
+
+            
+
+            try {
+
+                if (/^https?:\/\//i.test(value)) {
+
+                    const url = new URL(value);
+
+                    const segments = url.pathname
+                        .split("/")
+                        .filter(Boolean);
+
+
+                    const lastSegment = segments[segments.length - 1] || "";
+
+
+                    if (/^[a-zA-Z0-9]{4}$/.test(lastSegment)) {
+
+                        return lastSegment.toUpperCase();
+
+                    }
+
+                }
+
+            } catch (error) {
+                
+            }
+
+
+            if (/^[a-zA-Z0-9]{4}$/.test(value)) {
+
+                return value.toUpperCase();
+
+            }
+
+
+            return null;
+
+        }
+
+
+        async function closeQRScanner() {
+
+            const scannerCard = document.getElementById("scannerCard");
+
+
+            scannerCard.classList.add("hidden");
+
+            scannerCard.classList.remove("flex");
+
+
+            if (html5QrCode && scannerRunning) {
+
+                try {
+
+                    await html5QrCode.stop();
+
+                } catch (error) {
+
+                    console.warn("Scanner stop:", error);
+
+                }
+
+            }
+
+
+            scannerRunning = false;
+
+
+            document.getElementById("trackCard")
+                .classList.remove("hidden");
+
+        }
+
+
+        /* =========================================
+           6. AI CHAT MODAL
+        ========================================= */
+
+        function openAIChatModal() {
+
+            const modal = document.getElementById("aiChatModal");
+
+            previousFocus = document.activeElement;
+
+
+            modal.classList.remove("hidden");
+
+            modal.classList.add("flex");
+
+
+            document.body.style.overflow = "hidden";
+
 
             setTimeout(() => {
-                window.location.href = '/track/' + code;
-            }, 2000); 
+
+                document.getElementById("aiUserInput").focus();
+
+            }, 80);
+
         }
 
-        // 4. LIVE QR CODE SCANNER ENGINE
-        function openQRScanner() {
-            document.getElementById('trackCard').classList.add('hidden');
-            document.getElementById('invalidCodeBox').classList.add('hidden');
-            document.getElementById('scannerCard').classList.remove('hidden');
-            document.getElementById('scannerCard').classList.add('flex');
-
-            html5QrCode = new Html5Qrcode("qr-reader");
-            
-            html5QrCode.start(
-                { facingMode: "environment" }, 
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                (decodedText) => {
-                    let scannedCode = decodedText.trim();
-                    if (scannedCode.includes('/')) {
-                        scannedCode = scannedCode.split('/').pop();
-                    }
-                    scannedCode = scannedCode.substring(0, 4);
-                    
-                    document.getElementById('trackCode').value = scannedCode;
-                    closeQRScanner();
-                    startTracking();
-                },
-                (errorMessage) => { /* σιωπηλό fail κατά το ψάξιμο */ }
-            ).catch(err => {
-                alert("Σφάλμα κάμερας: " + err);
-                closeQRScanner();
-            });
-        }
-
-        function closeQRScanner() {
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    html5QrCode.clear();
-                }).catch(err => console.error(err));
-            }
-            document.getElementById('scannerCard').classList.add('hidden');
-            document.getElementById('scannerCard').classList.remove('flex');
-            document.getElementById('trackCard').classList.remove('hidden');
-        }
-
-        document.getElementById('trackCode').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') startTracking();
-        });
-
-        // 5. FUNCTIONS ΓΙΑ ΤΟ LARGE AI CHAT MODAL
-        function openAIChatModal() {
-            const modal = document.getElementById('aiChatModal');
-            modal.classList.remove('hidden');
-            document.getElementById('aiUserInput').focus();
-        }
 
         function closeAIChatModal() {
-            const modal = document.getElementById('aiChatModal');
-            modal.classList.add('hidden');
-        }
 
-        async function handleAISubmit(e) {
-            e.preventDefault();
-            const input = document.getElementById('aiUserInput');
-            const text = input.value.trim();
-            if (!text) return;
+            const modal = document.getElementById("aiChatModal");
 
-            const container = document.getElementById('aiMessagesContainer');
 
-            // 1. Προσθήκη μηνύματος χρήστη
-            const userMsgHTML = `
-                <div class="flex gap-3 justify-end">
-                    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white p-4 rounded-2xl rounded-tr-xs shadow-md max-w-[85%]">
-                        ${escapeHtml(text)}
-                    </div>
-                </div>
-            `;
-            container.innerHTML += userMsgHTML;
-            input.value = '';
-            container.scrollTop = container.scrollHeight;
+            modal.classList.add("hidden");
 
-            // 2. Προσθήκη Loading Indicator
-            const loadingId = 'ai-loading-' + Date.now();
-            const loadingHTML = `
-                <div id="${loadingId}" class="flex gap-3 max-w-[85%]">
-                    <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm flex-shrink-0 mt-1">
-                        <i class="fa-solid fa-robot animate-spin"></i>
-                    </div>
-                    <div class="bg-slate-800/80 border border-white/10 text-gray-400 p-4 rounded-2xl rounded-tl-xs italic">
-                        Σκέφτεται...
-                    </div>
-                </div>
-            `;
-            container.innerHTML += loadingHTML;
-            container.scrollTop = container.scrollHeight;
+            modal.classList.remove("flex");
 
-            // 3. Κλήση Backend API
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: text })
-                });
-                const data = await response.json();
-                
-                document.getElementById(loadingId).remove();
 
-                let reply = data.response || "Λυπάμαι, συνέβη κάποιο σφάλμα.";
-                let formattedReply = escapeHtml(reply).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-cyan-400 underline hover:text-cyan-300">$1</a>');
+            document.body.style.overflow = "";
 
-                const botMsgHTML = `
-                    <div class="flex gap-3 max-w-[85%]">
-                        <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm flex-shrink-0 mt-1">
-                            <i class="fa-solid fa-robot"></i>
-                        </div>
-                        <div class="bg-slate-800/80 border border-white/10 text-gray-200 p-4 rounded-2xl rounded-tl-xs shadow-md">
-                            ${formattedReply}
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += botMsgHTML;
-            } catch (err) {
-                document.getElementById(loadingId).remove();
-                const errorHTML = `
-                    <div class="flex gap-3 max-w-[85%]">
-                        <div class="w-8 h-8 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center text-sm flex-shrink-0 mt-1">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                        <div class="bg-red-950/40 border border-red-500/30 text-red-300 p-4 rounded-2xl rounded-tl-xs shadow-md">
-                            Αποτυχία σύνδεσης. Παρακαλώ ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += errorHTML;
+
+            if (previousFocus && typeof previousFocus.focus === "function") {
+
+                previousFocus.focus();
+
             }
 
-            container.scrollTop = container.scrollHeight;
         }
 
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+
+        /* =========================================
+           7. CHAT MESSAGE RENDERING
+        ========================================= */
+
+        function escapeHtml(value) {
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
         }
+
+
+        function formatMessage(value) {
+
+            
+
+            const escaped = escapeHtml(value);
+
+
+            const urlPattern = /https?:\/\/[^\s<>"']+/gi;
+
+
+            return escaped.replace(urlPattern, match => {
+
+                let url = match;
+
+                let trailing = "";
+
+
+                while (/[.,!?;:)\]]$/.test(url)) {
+
+                    trailing = url.slice(-1) + trailing;
+
+                    url = url.slice(0, -1);
+
+                }
+
+
+                try {
+
+                    const parsed = new URL(url);
+
+                    if (
+                        parsed.protocol !== "https:" &&
+                        parsed.protocol !== "http:"
+                    ) {
+                        return match;
+                    }
+
+                } catch (error) {
+
+                    return match;
+
+                }
+
+
+                const safeUrl = escapeHtml(url);
+
+
+                return '<a href="' + safeUrl +
+                    '" target="_blank" rel="noopener noreferrer">' +
+                    safeUrl +
+                    '</a>' +
+                    trailing;
+
+            }).replace(/\n/g, "<br>");
+
+        }
+
+
+        function appendUserMessage(message) {
+
+            const container = document.getElementById("aiMessagesContainer");
+
+            const wrapper = document.createElement("div");
+
+
+            wrapper.className = "chat-message flex justify-end";
+
+
+            wrapper.innerHTML = `
+                <div class="max-w-[88%]">
+
+                    <div class="mb-2 text-right text-xs font-bold text-cyan-200">
+                        ${currentLang === "el" ? "Εσείς" : "You"}
+                    </div>
+
+                    <div class="rounded-2xl rounded-tr-sm border border-cyan-300/10
+                                bg-gradient-to-br from-cyan-500/15 to-blue-500/15
+                                p-4 text-sm leading-7 text-slate-100">
+                    </div>
+
+                </div>
+            `;
+
+
+            
+
+            wrapper.querySelector(".rounded-2xl").textContent = message;
+
+
+            container.appendChild(wrapper);
+
+
+            container.scrollTop = container.scrollHeight;
+
+        }
+
+
+        function appendBotMessage(message) {
+
+            const container = document.getElementById("aiMessagesContainer");
+
+            const wrapper = document.createElement("div");
+
+
+            wrapper.className = "chat-message flex gap-3";
+
+
+            wrapper.innerHTML = `
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center
+                            rounded-xl border border-cyan-300/10
+                            bg-cyan-300/[0.08] text-cyan-300">
+
+                    <i class="fa-solid fa-robot"></i>
+
+                </div>
+
+                <div class="max-w-[88%] min-w-0">
+
+                    <div class="mb-2 text-xs font-extrabold text-slate-300">
+                        Ariston AI
+                    </div>
+
+                    <div class="chat-message rounded-2xl rounded-tl-sm
+                                border border-white/[0.07]
+                                bg-slate-800/55 p-4
+                                text-sm leading-7 text-slate-200">
+                    </div>
+
+                </div>
+            `;
+
+
+            wrapper.querySelector(".chat-message").innerHTML =
+                formatMessage(message);
+
+
+            container.appendChild(wrapper);
+
+
+            container.scrollTop = container.scrollHeight;
+
+        }
+
+
+        function appendLoadingMessage(id) {
+
+            const container = document.getElementById("aiMessagesContainer");
+
+            const wrapper = document.createElement("div");
+
+
+            wrapper.id = id;
+
+            wrapper.className = "chat-message flex gap-3";
+
+
+            wrapper.innerHTML = `
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center
+                            rounded-xl bg-cyan-300/[0.08] text-cyan-300">
+
+                    <i class="fa-solid fa-robot"></i>
+
+                </div>
+
+                <div class="min-w-0">
+
+                    <div class="mb-2 text-xs font-extrabold text-slate-300">
+                        Ariston AI
+                    </div>
+
+                    <div class="flex items-center gap-3 rounded-2xl rounded-tl-sm
+                                border border-white/[0.07]
+                                bg-slate-800/55 p-4 text-sm text-slate-400">
+
+                        <span class="flex items-center gap-1.5">
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                        </span>
+
+                        <span>${escapeHtml(t("thinking"))}</span>
+
+                    </div>
+
+                </div>
+            `;
+
+
+            container.appendChild(wrapper);
+
+            container.scrollTop = container.scrollHeight;
+
+        }
+
+
+        /* =========================================
+           8. CHAT API
+        ========================================= */
+
+        async function handleAISubmit(event) {
+
+            event.preventDefault();
+
+
+            if (chatBusy) {
+                return;
+            }
+
+
+            const input = document.getElementById("aiUserInput");
+
+            const sendButton = document.getElementById("aiSendButton");
+
+            const message = input.value.trim();
+
+
+            if (!message) {
+                return;
+            }
+
+
+            if (message.length > 2000) {
+                return;
+            }
+
+
+            chatBusy = true;
+
+            sendButton.disabled = true;
+
+            sendButton.classList.add("opacity-50", "cursor-not-allowed");
+
+
+            appendUserMessage(message);
+
+
+            input.value = "";
+
+
+            const requestId = ++chatRequestId;
+
+            const loadingId = "ai-loading-" + requestId;
+
+
+            appendLoadingMessage(loadingId);
+
+
+            try {
+
+                
+
+                const response = await fetch("/api/chat", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        message: message
+                    })
+
+                });
+
+
+                if (!response.ok) {
+
+                    throw new Error("HTTP_" + response.status);
+
+                }
+
+
+                const data = await response.json();
+
+
+                const loadingElement = document.getElementById(loadingId);
+
+                if (loadingElement) {
+                    loadingElement.remove();
+                }
+
+
+                const reply = typeof data.response === "string"
+                    ? data.response
+                    : t("server_error");
+
+
+                appendBotMessage(reply);
+
+
+            } catch (error) {
+
+                console.error("AI chat error:", error);
+
+
+                const loadingElement = document.getElementById(loadingId);
+
+                if (loadingElement) {
+                    loadingElement.remove();
+                }
+
+
+                appendBotMessage(
+                    error instanceof TypeError
+                        ? t("connection_error")
+                        : t("server_error")
+                );
+
+
+            } finally {
+
+                chatBusy = false;
+
+                sendButton.disabled = false;
+
+                sendButton.classList.remove(
+                    "opacity-50",
+                    "cursor-not-allowed"
+                );
+
+
+                input.focus();
+
+            }
+
+        }
+
+
+        /* =========================================
+           9. QUICK CHAT SUGGESTIONS
+        ========================================= */
+
+        function sendSuggestion(type) {
+
+            if (chatBusy) {
+                return;
+            }
+
+
+            const suggestions = translations[currentLang].suggestions;
+
+            const message = suggestions[type];
+
+
+            if (!message) {
+                return;
+            }
+
+
+            document.getElementById("aiUserInput").value = message;
+
+
+            document.getElementById("aiChatForm")
+                .requestSubmit();
+
+        }
+
     </script>
+
 </body>
 </html>
