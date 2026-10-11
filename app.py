@@ -3669,9 +3669,58 @@ ARISTON_SYSTEM_PROMPT = """
 Γενικές πληροφορίες: info@aristonwashdry.gr
 Τεχνική υποστήριξη/συνεργασίες: georgoudisk@aristonwashdry.gr
 
+ΣΕΛΙΔΕΣ ΙΣΤΟΤΟΠΟΥ — ΠΡΕΠΕΙ ΝΑ ΠΑΡΑΠΕΜΠΕΙΣ ΣΩΣΤΑ
+Όταν ο πελάτης ρωτά για ένα από τα παρακάτω, εξήγησε σύντομα και φυσικά τι θα βρει και βάλε τον αντίστοιχο σύνδεσμο ολόκληρο, ώστε να μπορεί να τον πατήσει. Μη δίνεις απλώς γενική απάντηση και μην τον αναγκάζεις να ψάχνει μόνος του.
+- Τιμές, κόστος, τιμοκατάλογος, πόσο κάνει το πλύσιμο/στέγνωμα: ελληνικά https://aristonwashdry.gr/timokatalogos — αγγλικά https://aristonwashdry.gr/en/pricing
+- Πόντοι, πώς προσθέτει/καταχωρίζει πόντους, πού βλέπει πόντους ή ιστορικό μέλους: εξήγησε ότι πρέπει να πάει με την απόδειξή του στον διαθέσιμο υπάλληλο από τις 17:30 και μετά, για να τον βοηθήσει να περαστούν οι πόντοι. Για να δει τις πληροφορίες του λογαριασμού του: ελληνικά https://aristonwashdry.gr/member-info — αγγλικά https://aristonwashdry.gr/en/member-info
+- Κουπόνια, προσφορές μελών, πού βρίσκει/βλέπει κουπόνια: ελληνικά https://aristonwashdry.gr/coupons — αγγλικά https://aristonwashdry.gr/en/coupons
+- Επικοινωνία, φόρμα επικοινωνίας, θέλει να στείλει μήνυμα στο κατάστημα: ελληνικά https://aristonwashdry.gr/epikoinonia — αγγλικά https://aristonwashdry.gr/en/contact. Μπορεί επίσης να καλέσει τα τηλέφωνα που αναφέρονται παραπάνω.
+- Κριτική, αξιολόγηση, Google review, θέλει να πει την εμπειρία του: ελληνικά https://aristonwashdry.gr/kritikes — αγγλικά https://aristonwashdry.gr/en/reviews. Ευχαρίστησέ τον και ενθάρρυνέ τον ευγενικά να αφήσει κριτική αν έμεινε ευχαριστημένος.
+- Οδηγίες πώς να χρησιμοποιήσει τα μηχανήματα: https://aristonwashdry.gr/how-to-use
+- Παρακολούθηση: https://aristonwashdry.gr/track
+
+ΚΑΝΟΝΕΣ ΣΥΝΔΕΣΜΩΝ ΚΑΙ ΓΛΩΣΣΑΣ
+- Αν το μήνυμα είναι στα αγγλικά, χρησιμοποίησε τις αγγλικές σελίδες όπου υπάρχει αγγλική έκδοση. Αν είναι ελληνικά ή greeklish, χρησιμοποίησε τις ελληνικές σελίδες.
+- Μην εφευρίσκεις URL. Χρησιμοποίησε ακριβώς τους συνδέσμους που αναφέρονται εδώ.
+- Όταν ο πελάτης ζητά πολλές πληροφορίες για το κατάστημα, σύνθεσε κάθε φορά μια καλοδομημένη απάντηση με τίτλους και κουκκίδες, και συμπερίλαβε μόνο τις ενότητες που είναι χρήσιμες. Πρόσθεσε τους σχετικούς συνδέσμους για τιμές, μέλη/πόντους, κουπόνια, οδηγίες χρήσης, επικοινωνία και κριτικές.
+- Να γράφεις το κείμενο φυσικά και προσαρμοσμένα στην ερώτηση, όχι να αντιγράφεις μια ενιαία έτοιμη απάντηση. Οι σύνδεσμοι και οι συγκεκριμένες οδηγίες όμως πρέπει να παραμένουν ακριβείς.
+- Αν ο πελάτης ζητά να δει ή να εξαργυρώσει προσωπικά κουπόνια/πόντους, μην ισχυρίζεσαι ότι μπορείς να δεις τον λογαριασμό του. Παρέπεμψέ τον στη σωστή σελίδα ή στον υπάλληλο.
+
 ΑΓΝΩΣΤΕΣ ΠΛΗΡΟΦΟΡΙΕΣ
 Αν κάτι δεν περιλαμβάνεται στις παραπάνω πληροφορίες, πες καθαρά ότι δεν έχεις επιβεβαιωμένη πληροφορία και πρότεινε επικοινωνία με το κατάστημα.
 """
+
+def _ariston_quick_reply(user_message):
+    """Σταθερές, ακριβείς παραπομπές για ερωτήσεις που χρειάζονται συγκεκριμένη σελίδα."""
+    msg = user_message.casefold().strip()
+    # Greeklish και αγγλικά υποστηρίζονται μέσω λέξεων-κλειδιών, χωρίς να μπλοκάρουμε το AI.
+    english = bool(re.search(r"\b(price|prices|pricing|cost|how much|coupon|coupons|points|loyalty|member info|contact|review|reviews|rate us|feedback|receipt|staff|employee)\b", msg))
+    is_price = any(x in msg for x in ["τιμή", "τιμες", "τιμές", "τιμοκατάλογ", "κοστίζ", "κοστιζ", "πόσο κάνει", "poso kanei", "times", "timokatalog", "price", "pricing", "how much", "cost"])
+    is_points = any(x in msg for x in ["πόντ", "pont", "points", "loyalty", "member info", "προσθέσω πόντους", "perasoyn oi pontoi", "peraso pontous"])
+    is_coupon = any(x in msg for x in ["κουπόν", "κουπον", "koypon", "coupon", "coupons", "προσφορές μελών", "prosfores melon"])
+    is_contact = any(x in msg for x in ["επικοινων", "epikoin", "φόρμα επικοινων", "forma epikoin", "contact", "μίλησω με το κατάστημα", "μιλησω me to katasthma", "send a message"])
+    is_review = any(x in msg for x in ["κριτικ", "kritik", "αξιολόγ", "axiolog", "google review", "reviews", "rate us", "feedback", "εμπειρία μου", "empeiria mou"])
+    if is_price:
+        url = "https://aristonwashdry.gr/en/pricing" if english else "https://aristonwashdry.gr/timokatalogos"
+        if english:
+            return f"You can find the current washing and drying prices here: {url}\n\nThe page lists the machine sizes and prices. If you tell me what you want to wash, I can also help you choose the most suitable option."
+        return f"Βεβαίως! Θα βρεις τον αναλυτικό και ενημερωμένο τιμοκατάλογο για πλύσιμο και στέγνωμα εδώ:\n{url}\n\nΑν μου πεις τι θέλεις να πλύνεις, μπορώ επίσης να σε βοηθήσω να επιλέξεις το κατάλληλο μηχάνημα."
+    if is_points:
+        url = "https://aristonwashdry.gr/en/member-info" if english else "https://aristonwashdry.gr/member-info"
+        if english:
+            return f"To add points from a purchase, please bring your receipt to the staff member available from 17:30 onwards, and they will help you register them. You can view your member information here: {url}"
+        return f"Για να περαστούν οι πόντοι από την αγορά σου, έλα με την απόδειξή σου στον διαθέσιμο υπάλληλο από τις 17:30 και μετά και θα σε βοηθήσει να τους καταχωρίσεις.\n\nΜπορείς να βλέπεις τις πληροφορίες του λογαριασμού σου εδώ: {url}"
+    if is_coupon:
+        url = "https://aristonwashdry.gr/en/coupons" if english else "https://aristonwashdry.gr/coupons"
+        return (f"You can view your member coupons here: {url}" if english else f"Μπορείς να δεις τα κουπόνια σου και τις διαθέσιμες προσφορές μελών εδώ: {url}")
+    if is_contact:
+        url = "https://aristonwashdry.gr/en/contact" if english else "https://aristonwashdry.gr/epikoinonia"
+        return (f"You can send the store a message using the contact form here: {url} You can also call the store using the phone numbers listed on the page." if english else f"Μπορείς να στείλεις μήνυμα στο κατάστημα μέσω της φόρμας επικοινωνίας εδώ: {url}\n\nΕναλλακτικά, θα βρεις και τα τηλέφωνα επικοινωνίας στην ίδια σελίδα.")
+    if is_review:
+        url = "https://aristonwashdry.gr/en/reviews" if english else "https://aristonwashdry.gr/kritikes"
+        return (f"If you enjoyed our service, we would really appreciate your feedback. You can leave a review here: {url}" if english else f"Αν έμεινες ευχαριστημένος/η από τις υπηρεσίες μας, θα χαρούμε πολύ να ακούσουμε την εμπειρία σου. Μπορείς να αφήσεις την κριτική σου εδώ: {url}")
+    return None
+
 
 @app.route('/api/chat', methods=['POST'])
 def ai_chat():
@@ -3686,6 +3735,21 @@ def ai_chat():
         return jsonify({"response": "Παρακαλώ γράψτε την ερώτησή σας."}), 400
     if len(user_message) > 1200:
         return jsonify({"response": "Το μήνυμά σας είναι μεγάλο. Παρακαλώ συντομεύστε το."}), 400
+
+    quick_reply = _ariston_quick_reply(user_message)
+    if quick_reply:
+        # Καταγράφουμε και τις παραπομπές στο ιστορικό, ώστε τα follow-ups να έχουν συνέχεια.
+        history = session.get("ariston_chat_history", [])
+        if not isinstance(history, list):
+            history = []
+        history = [x for x in history[-4:] if isinstance(x, dict) and x.get("role") in ("user", "assistant") and isinstance(x.get("content"), str)]
+        history.extend([
+            {"role": "user", "content": user_message[:500]},
+            {"role": "assistant", "content": quick_reply[:500]},
+        ])
+        session["ariston_chat_history"] = history[-6:]
+        session.modified = True
+        return jsonify({"response": quick_reply}), 200
 
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
