@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons για το εικονίδιο του AI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
@@ -47,12 +49,6 @@
             top: 0;
             z-index: 1000;
             border-bottom: 1px solid rgba(0, 112, 255, 0.3);
-        }
-
-        .store-notice {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white; padding: 8px; text-align: center; font-weight: 700; font-size: 0.75rem;
-            letter-spacing: 1px; text-transform: uppercase;
         }
 
         .header-top {
@@ -188,135 +184,318 @@
             .contact-box, .contact-form { padding: 30px 20px; margin: 0 15px 30px; }
         }
         
-        
-.admin-container {
-    max-width: 750px; /* Από 900 το πήγαμε 750 */
-    margin: 30px auto;
-    padding: 0 20px;
-}
+        .admin-container {
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
 
-.admin-support-card {
-    position: relative;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(0, 112, 255, 0.15);
-    border-radius: 24px; /* Πιο μικρή γωνία */
-    padding: 20px 25px; /* Λιγότερο padding */
-    transition: all 0.4s ease;
-}
+        .admin-support-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 112, 255, 0.15);
+            border-radius: 24px;
+            padding: 20px 25px;
+            transition: all 0.4s ease;
+        }
 
-.admin-support-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--secondary);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-}
+        .admin-support-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--secondary);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
 
-.admin-content-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* Μικρότερο κενό */
-    position: relative;
-    z-index: 2;
-}
+        .admin-content-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
 
-.admin-support-icon {
-    flex-shrink: 0;
-    width: 55px; /* Από 70 σε 55 */
-    height: 55px;
-    background: rgba(0, 112, 255, 0.1);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem; /* Πιο μικρό emoji */
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
+        .admin-support-icon {
+            flex-shrink: 0;
+            width: 55px;
+            height: 55px;
+            background: rgba(0, 112, 255, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-.admin-text-section h4 {
-    color: var(--white);
-    font-size: 1rem; /* Από 1.2 σε 1.0 */
-    margin-bottom: 4px;
-    font-weight: 700;
-}
+        .admin-text-section h4 {
+            color: var(--white);
+            font-size: 1rem;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
 
-.admin-text-section p {
-    font-size: 0.85rem; /* Από 0.95 σε 0.85 */
-    color: var(--text-dim);
-    line-height: 1.5;
-}
+        .admin-text-section p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
 
-.support-links-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
-}
+        .support-links-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
 
-.support-link {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 8px 15px; /* Πιο slim κουμπιά */
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: 0.3s;
-}
+        .support-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 15px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.3s;
+        }
 
-.support-link .text {
-    color: var(--white);
-    font-weight: 600;
-    font-size: 0.8rem; /* Πιο μικρά γράμματα στα links */
-}
+        .support-link .text {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
 
-.support-link:hover {
-    background: rgba(0, 112, 255, 0.2);
-    border-color: var(--secondary);
-}
+        .support-link:hover {
+            background: rgba(0, 112, 255, 0.2);
+            border-color: var(--secondary);
+        }
 
-.card-glow {
-    position: absolute;
-    top: -30px;
-    right: -30px;
-    width: 100px;
-    height: 100px;
-    background: var(--primary);
-    filter: blur(60px);
-    opacity: 0.15;
-    pointer-events: none;
-}
+        .card-glow {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            background: var(--primary);
+            filter: blur(60px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
 
-/* Responsive για κινητά */
-@media (max-width: 600px) {
-    .admin-content-wrapper {
-        flex-direction: column;
-        text-align: center;
-    }
-    .support-links-grid {
-        justify-content: center;
-    }
-}
-/* Responsive για κινητά */
-@media (max-width: 768px) {
-    .admin-content-wrapper {
-        flex-direction: column;
-        text-align: center;
-    }
-    .support-links-grid {
-        justify-content: center;
-    }
-    .admin-support-card {
-        padding: 30px 20px;
-    }
-}
+        @media (max-width: 600px) {
+            .admin-content-wrapper {
+                flex-direction: column;
+                text-align: center;
+            }
+            .support-links-grid {
+                justify-content: center;
+            }
+        }
+        @media (max-width: 768px) {
+            .admin-content-wrapper {
+                flex-direction: column;
+                text-align: center;
+            }
+            .support-links-grid {
+                justify-content: center;
+            }
+            .admin-support-card {
+                padding: 30px 20px;
+            }
+        }
+
+        /* --- STYLING ΓΙΑ ΤΟ FLOATING AI ASSISTANT WIDGET (Κάτω Δεξιά) --- */
+        .ariston-floating-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 99999;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .ariston-floating-btn {
+            background: linear-gradient(135deg, #0052cc 0%, #0284c7 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 82, 204, 0.45);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ariston-floating-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 82, 204, 0.65);
+            background: linear-gradient(135deg, #003d99 0%, #0369a1 100%);
+        }
+
+        .ariston-floating-icon-wrap {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .ariston-status-dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 9px;
+            height: 9px;
+            background-color: #22c55e;
+            border: 2px solid #0284c7;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        /* Chat Popup Modal (Bottom Right) */
+        #ariston-floating-modal {
+            display: none;
+            position: fixed;
+            bottom: 95px;
+            right: 25px;
+            width: 380px;
+            max-width: 90vw;
+            height: 520px;
+            background: #ffffff;
+            border-radius: 22px;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+            z-index: 99999;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            animation: floatingModalUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes floatingModalUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .ariston-f-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 16px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ariston-f-body {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f8fafc;
+            font-size: 14px;
+            scroll-behavior: smooth;
+        }
+
+        .ariston-f-bubble {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+        .ariston-f-bubble.user {
+            background: linear-gradient(135deg, #0052cc 0%, #0284c7 100%);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .ariston-f-bubble.bot {
+            background: #ffffff;
+            color: #0f172a;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .ariston-f-input {
+            padding: 12px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .ariston-f-input input {
+            flex: 1;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            padding: 10px 14px;
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+            color: #0f172a;
+        }
+        .ariston-f-input input:focus {
+            border-color: #0284c7;
+            background: #fff;
+        }
+        .ariston-f-input button {
+            background: linear-gradient(135deg, #0052cc 0%, #0284c7 100%);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Limit Exceeded Banner */
+        .ariston-limit-banner {
+            background: #fff9db;
+            border: 1px solid #ffe066;
+            color: #5c4e00;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+        .ariston-limit-banner a {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 16px;
+            background: #0052cc;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
 <header>
-    
     <div class="header-top">
         <div class="logo">
             <img src="{{ url_for('static', filename='images/logo3.png') }}" class="logo-icon">
@@ -400,7 +579,6 @@
                 <a href="mailto:info@aristonwashdry.gr" class="support-link" style="width: fit-content;">
                     <span class="text">📧 info@aristonwashdry.gr</span>
                 </a>
-                
             </div>
 
             <p><strong>📌 Ώρες λειτουργίας:</strong><br>
@@ -418,10 +596,12 @@
                 <a href="https://www.facebook.com/share/1Ar6tjcZpw/" target="_blank" class="support-link" style="width: fit-content; padding: 8px 15px;">
                     <span class="text">📘 Facebook</span>
                 </a>
+            </div>
         </div>
 
     </div>
 </div>
+
 <div class="admin-container reveal">
     <div class="admin-support-card">
         <div class="card-glow"></div>
@@ -524,6 +704,47 @@
     </div>
 </footer>
 
+<!-- FLOATING AI ASSISTANT WIDGET (Κάτω Δεξιά) -->
+<div class="ariston-floating-container">
+    <button class="ariston-floating-btn" onclick="toggleAristonFloatingChat()" title="ARISTON AI Assistant">
+        <div class="ariston-floating-icon-wrap">
+            <i class="fa-solid fa-robot"></i>
+            <span class="ariston-status-dot"></span>
+        </div>
+        <span>AI Assistant</span>
+    </button>
+</div>
+
+<!-- Chat Popup Modal (Bottom Right) -->
+<div id="ariston-floating-modal">
+    <div class="ariston-f-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #38bdf8;">
+                <i class="fas fa-robot" style="font-size: 15px;"></i>
+            </div>
+            <div>
+                <strong style="font-size: 14px; display: block;">ARISTON W&D AI Assistant</strong>
+                <span style="font-size: 10px; color: #38bdf8;">🟢 Online • Instant Support</span>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span id="ariston-msg-counter" style="font-size: 11px; background: rgba(255,255,255,0.12); padding: 3px 8px; border-radius: 10px; color: #cbd5e1;">5/5</span>
+            <button onclick="toggleAristonFloatingChat()" style="background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 18px;">✕</button>
+        </div>
+    </div>
+
+    <div class="ariston-f-body" id="ariston-f-messages">
+        <div class="ariston-f-bubble bot">
+            Γεια σας! 🧺 Έχετε 5 δωρεάν μηνύματα για να ρωτήσετε ό,τι θέλετε για το ARISTON Wash & Dry.
+        </div>
+    </div>
+
+    <div class="ariston-f-input" id="ariston-f-input-area">
+        <input type="text" id="ariston-f-input-text" placeholder="Γράψτε το μήνυμά σας..." onkeypress="if(event.key==='Enter') sendAristonFloatingMessage()">
+        <button onclick="sendAristonFloatingMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
 <script>
     // Premium Date Script
     function updatePremiumDate() {
@@ -598,7 +819,132 @@
         setTimeout(() => bubble.remove(), 8000);
     }
     setInterval(createBubble, 500);
-</script>
 
+    
+    const ARISTON_MAX_GUEST_MSGS = 5;
+    const ARISTON_LOCK_TIME_MS = 24 * 60 * 60 * 1000; // 24 ώρες
+
+    function checkAristonLockState() {
+        const lockTime = localStorage.getItem('ariston_widget_lock_time');
+        if (lockTime) {
+            if (Date.now() - parseInt(lockTime, 10) >= ARISTON_LOCK_TIME_MS) {
+                localStorage.removeItem('ariston_widget_msg_count');
+                localStorage.removeItem('ariston_widget_lock_time');
+            }
+        }
+    }
+
+    function getAristonUserMessageCount() {
+        checkAristonLockState();
+        return parseInt(localStorage.getItem('ariston_widget_msg_count') || '0', 10);
+    }
+
+    function updateAristonCounterUI() {
+        const userMsgsSent = getAristonUserMessageCount();
+        const remaining = Math.max(0, ARISTON_MAX_GUEST_MSGS - userMsgsSent);
+        const counterElem = document.getElementById('ariston-msg-counter');
+        
+        if (counterElem) {
+            counterElem.innerText = `${remaining}/${ARISTON_MAX_GUEST_MSGS}`;
+        }
+
+        if (userMsgsSent >= ARISTON_MAX_GUEST_MSGS) {
+            lockAristonWidgetInput();
+        }
+    }
+
+    function toggleAristonFloatingChat() {
+        const modal = document.getElementById('ariston-floating-modal');
+        const isOpen = (modal.style.display === 'flex');
+        modal.style.display = isOpen ? 'none' : 'flex';
+        if (!isOpen) {
+            updateAristonCounterUI();
+        }
+    }
+
+    function lockAristonWidgetInput() {
+        const inputArea = document.getElementById('ariston-f-input-area');
+        if (inputArea) {
+            inputArea.innerHTML = `
+                <div class="ariston-limit-banner" style="width: 100%;">
+                    🔒 Φτάσατε το όριο των 5 μηνυμάτων!<br>
+                    Συνδεθείτε για απεριόριστη χρήση.<br>
+                    <a href="https://aristonwashdry.gr/ai">Μετάβαση στο ARISTON W&D AI</a>
+                </div>
+            `;
+        }
+    }
+
+    async function sendAristonFloatingMessage() {
+        let userMsgsSent = getAristonUserMessageCount();
+        if (userMsgsSent >= ARISTON_MAX_GUEST_MSGS) {
+            lockAristonWidgetInput();
+            return;
+        }
+
+        const input = document.getElementById('ariston-f-input-text');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const container = document.getElementById('ariston-f-messages');
+
+        
+        container.innerHTML += `<div class="ariston-f-bubble user">${escapeAristonHtml(text)}</div>`;
+        input.value = '';
+        container.scrollTop = container.scrollHeight;
+
+        
+        userMsgsSent++;
+        localStorage.setItem('ariston_widget_msg_count', userMsgsSent.toString());
+        if (userMsgsSent >= ARISTON_MAX_GUEST_MSGS) {
+            localStorage.setItem('ariston_widget_lock_time', Date.now().toString());
+        }
+        updateAristonCounterUI();
+
+        
+        const loadId = 'ariston-load-' + Date.now();
+        container.innerHTML += `<div id="${loadId}" class="ariston-f-bubble bot"><i>Σκέφτεται...</i></div>`;
+        container.scrollTop = container.scrollHeight;
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await response.json();
+            
+            const loadElem = document.getElementById(loadId);
+            if (loadElem) loadElem.remove();
+
+            let reply = data.response || "Σφάλμα απόκρισης.";
+            
+            
+            let formattedReply = reply.replace(/\(?https?:\/\/[^\s\)]+\)?/g, function(match) {
+                let url = match.replace(/[\(\)]/g, '');
+                return `<a href="${url}" target="_blank" style="color: #0284c7; text-decoration: underline; font-weight: bold;">${url}</a>`;
+            });
+
+            container.innerHTML += `<div class="ariston-f-bubble bot">${formattedReply}</div>`;
+
+        } catch (err) {
+            const loadElem = document.getElementById(loadId);
+            if (loadElem) loadElem.remove();
+            container.innerHTML += `<div class="ariston-f-bubble bot" style="color:red;">Σφάλμα σύνδεσης.</div>`;
+        }
+
+        container.scrollTop = container.scrollHeight;
+
+        if (userMsgsSent >= ARISTON_MAX_GUEST_MSGS) {
+            lockAristonWidgetInput();
+        }
+    }
+
+    function escapeAristonHtml(str) {
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    document.addEventListener('DOMContentLoaded', updateAristonCounterUI);
+</script>
 </body>
 </html>
