@@ -3789,7 +3789,7 @@ def ai_chat():
             model="openai/gpt-oss-20b",
             messages=messages,
             temperature=0.2,
-            max_tokens=650,
+            max_tokens=1000,
             top_p=0.9,
             timeout=25
         )
