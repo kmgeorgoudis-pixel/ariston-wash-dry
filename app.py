@@ -3839,7 +3839,7 @@ def ai_chat():
             model="openai/gpt-oss-20b",
             messages=messages,
             temperature=0.2,
-            max_completion_tokens=1200,
+            max_completion_tokens=700,
             reasoning_effort="low",
             include_reasoning=False,
             timeout=30
