@@ -3734,6 +3734,7 @@ def _ariston_quick_reply(user_message):
 
 
 
+
 @app.route('/api/chat', methods=['POST'])
 def ai_chat():
     data = request.get_json(silent=True) or {}
@@ -3756,7 +3757,7 @@ def ai_chat():
             "response": "Το μήνυμά σας είναι μεγάλο. Παρακαλώ συντομεύστε το."
         }), 400
 
-    # Άμεσες, προκαθορισμένες απαντήσεις για συγκεκριμένες σελίδες.
+    # 1. Άμεσες απαντήσεις για συγκεκριμένες σελίδες.
     quick_reply = _ariston_quick_reply(user_message)
 
     if quick_reply:
@@ -3784,6 +3785,7 @@ def ai_chat():
 
         return jsonify({"response": quick_reply}), 200
 
+    # 2. Έλεγχος API key.
     api_key = os.environ.get("GROQ_API_KEY")
 
     if not api_key:
@@ -3796,7 +3798,7 @@ def ai_chat():
             )
         }), 200
 
-    # Ανάγνωση και έλεγχος του ιστορικού συνομιλίας.
+    # 3. Ανάγνωση ιστορικού.
     history = session.get("ariston_chat_history", [])
 
     if not isinstance(history, list):
@@ -3828,85 +3830,27 @@ def ai_chat():
         "content": user_message
     })
 
-    def extract_reply(completion):
-        """Επιστρέφει το κείμενο της απάντησης, εφόσον υπάρχει."""
-
-        if not completion.choices:
-            return ""
-
-        message = completion.choices[0].message
-        content = getattr(message, "content", None)
-
-        # Συνήθης μορφή απάντησης του Groq: απλό string.
-        if isinstance(content, str):
-            return content.strip()
-
-        # Εναλλακτική μορφή: λίστα από τμήματα περιεχομένου.
-        if isinstance(content, list):
-            text_parts = []
-
-            for part in content:
-                if isinstance(part, dict):
-                    part_text = part.get("text")
-                else:
-                    part_text = getattr(part, "text", None)
-
-                if isinstance(part_text, str):
-                    text_parts.append(part_text)
-
-            return "".join(text_parts).strip()
-
-        return ""
-
     try:
         client = Groq(api_key=api_key)
 
-        reply = ""
+        # Μία κλήση ανά ερώτηση, ώστε να περιορίζουμε
+        # την κατανάλωση tokens και τα σφάλματα ορίων.
+        completion = client.chat.completions.create(
+            model="openai/gpt-oss-20b",
+            messages=messages,
+            temperature=0.2,
+            max_completion_tokens=1200,
+            reasoning_effort="low",
+            include_reasoning=False,
+            timeout=30
+        )
 
-        # Δοκιμάζουμε έως δύο φορές ΜΟΝΟ όταν δεν επιστρέφεται κείμενο.
-        for attempt in range(1, 3):
-            completion = client.chat.completions.create(
-                model="openai/gpt-oss-20b",
-                messages=messages,
-                temperature=0.2,
-                max_tokens=1200 if attempt == 2 else 1000,
-                top_p=0.9,
-                timeout=25
-            )
-
-            reply = extract_reply(completion)
-
-            if reply:
-                break
-
-            choice = (
-                completion.choices[0]
-                if completion.choices
-                else None
-            )
-
-            finish_reason = (
-                getattr(choice, "finish_reason", None)
-                if choice is not None
-                else None
-            )
-
+        if not completion.choices:
             app.logger.warning(
-                "ARISTON AI returned empty content. "
-                "Attempt=%s, finish_reason=%s, response_id=%s",
-                attempt,
-                finish_reason,
+                "ARISTON AI: Model returned no choices. ID=%s",
                 getattr(completion, "id", None)
             )
 
-        if not reply:
-            app.logger.error(
-                "ARISTON AI: Empty response after retry. "
-                "No user message content was logged."
-            )
-
-            # Επιστρέφουμε κατανοητή απάντηση αντί για HTTP 500,
-            # ώστε το chat να μπορεί να εμφανίσει το μήνυμα.
             return jsonify({
                 "response": (
                     "Δεν κατάφερα να δημιουργήσω απάντηση αυτή τη στιγμή. "
@@ -3914,7 +3858,47 @@ def ai_chat():
                 )
             }), 200
 
-        # Αφαιρούμε τυχόν εξωτερικά Markdown code fences.
+        choice = completion.choices[0]
+        message = choice.message
+        content = getattr(message, "content", None)
+
+        # Κανονική απάντηση: string.
+        if isinstance(content, str):
+            reply = content.strip()
+
+        # Εναλλακτική μορφή: λίστα τμημάτων κειμένου.
+        elif isinstance(content, list):
+            parts = []
+
+            for part in content:
+                if isinstance(part, dict):
+                    text_part = part.get("text")
+                else:
+                    text_part = getattr(part, "text", None)
+
+                if isinstance(text_part, str):
+                    parts.append(text_part)
+
+            reply = "".join(parts).strip()
+
+        else:
+            reply = ""
+
+        if not reply:
+            app.logger.warning(
+                "ARISTON AI: Empty response. finish_reason=%s, ID=%s",
+                getattr(choice, "finish_reason", None),
+                getattr(completion, "id", None)
+            )
+
+            return jsonify({
+                "response": (
+                    "Δεν κατάφερα να δημιουργήσω απάντηση αυτή τη στιγμή. "
+                    "Παρακαλώ δοκιμάστε ξανά σε λίγο."
+                )
+            }), 200
+
+        # Αφαίρεση εξωτερικών Markdown code fences.
         reply = re.sub(
             r"^\s*```(?:markdown|text)?\s*",
             "",
@@ -3932,7 +3916,7 @@ def ai_chat():
                 )
             }), 200
 
-        # Αποθήκευση ιστορικού για να λειτουργούν τα follow-up.
+        # 4. Αποθήκευση ιστορικού.
         updated_history = clean_history + [
             {
                 "role": "user",
@@ -3949,7 +3933,22 @@ def ai_chat():
 
         return jsonify({"response": reply}), 200
 
-    except Exception:
+    except Exception as exc:
+        # Δεν καταγράφουμε το μήνυμα του πελάτη ή το API key.
+        from groq import RateLimitError
+
+        if isinstance(exc, RateLimitError):
+            app.logger.warning(
+                "ARISTON AI: Groq rate limit reached."
+            )
+
+            return jsonify({
+                "response": (
+                    "Η υπηρεσία συνομιλίας είναι προσωρινά απασχολημένη. "
+                    "Παρακαλώ περίμενε λίγα δευτερόλεπτα και δοκίμασε ξανά."
+                )
+            }), 200
+
         app.logger.exception(
             "ARISTON AI assistant request failed."
         )
@@ -3966,6 +3965,7 @@ def ai_chat():
 def reset_ai_chat():
     session.pop("ariston_chat_history", None)
     return jsonify({"ok": True}), 200
+
 
 
 #####AGGLIKA####
