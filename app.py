@@ -3589,7 +3589,7 @@ def save_user_note(order_code):
 import os
 import re
 from flask import request, jsonify, session
-from groq import Groq
+from groq import Groq, RateLimitError
 
 # Ρύθμισε το FLASK_SECRET_KEY στο Render. Το fallback είναι μόνο για τοπικές δοκιμές.
 if not app.secret_key:
