@@ -10,11 +10,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   
   <style>
-    /* =========================================================
-       MODERN PREVIEWS & STYLES FOR LIVE AI BUTTON & MODAL CHAT
-       ========================================================= */
+    
 
-    /* Premium Modern Live AI Button */
+    
     .live-ai-btn {
       background: linear-gradient(120deg, #003b8e 0%, #0066d6 48%, #0891b2 100%);
       color: #ffffff;
@@ -88,7 +86,7 @@
       50% { transform: scale(1.18); }
     }
 
-    /* Glassmorphism Ultra-Modern Chat Window */
+    
     #live-chat-modal {
       display: none;
       position: fixed;
@@ -210,7 +208,7 @@
       border-radius: 10px;
     }
 
-    /* Chat Bubbles */
+    
     .chat-bubble {
       max-width: 85%;
       padding: 12px 16px;
@@ -237,7 +235,7 @@
       border: 1px solid #e2e8f0;
     }
 
-    /* Chat Input Bar */
+    
     .live-chat-input {
       padding: 14px;
       background: #ffffff;
@@ -356,7 +354,7 @@
 
 </div>
 
-<!-- MODAL LIVE AI CHAT -->
+
 <div id="live-chat-modal" role="dialog" aria-modal="true" aria-label="ARISTON Wash & Dry Live AI Assistant">
   <div class="live-chat-header">
     <div class="chat-header-info">
@@ -425,7 +423,7 @@
         document.getElementById('ai-disclaimer-overlay').style.display = 'none';
     }
 
-    // Toggle full-screen Live AI Chat
+   
     function toggleLiveChat(forceOpen) {
         const modal = document.getElementById('live-chat-modal');
         const isOpen = modal.style.display === 'flex';
@@ -449,7 +447,7 @@
         }
     });
 
-    // Send Message to Groq Backend
+    
     async function sendLiveMessage() {
         const input = document.getElementById('modal-input');
         const text = input.value.trim();
@@ -462,7 +460,7 @@
         input.value = '';
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Loading bubble
+        
         const loadingId = 'loading-' + Date.now();
         messagesContainer.innerHTML += `<div id="${loadingId}" class="chat-bubble bot"><i>Thinking...</i></div>`;
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -477,7 +475,7 @@
             
             document.getElementById(loadingId).remove();
             
-            // Format links in response
+            
             const reply = (data && typeof data.response === 'string') ? data.response : "Sorry, I couldn't get a response. Please try again.";
             let formattedResponse = escapeHtml(reply).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: underline;">$1</a>');
             
