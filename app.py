@@ -3733,50 +3733,77 @@ def _ariston_quick_reply(user_message):
     return None
 
 
+
 @app.route('/api/chat', methods=['POST'])
 def ai_chat():
     data = request.get_json(silent=True) or {}
     user_message = data.get("message", "")
 
     if not isinstance(user_message, str):
-        return jsonify({"response": "Παρακαλώ γράψτε το μήνυμά σας σε κείμενο."}), 400
+        return jsonify({
+            "response": "Παρακαλώ γράψτε το μήνυμά σας σε κείμενο."
+        }), 400
 
     user_message = user_message.strip()
-    if not user_message:
-        return jsonify({"response": "Παρακαλώ γράψτε την ερώτησή σας."}), 400
-    if len(user_message) > 1200:
-        return jsonify({"response": "Το μήνυμά σας είναι μεγάλο. Παρακαλώ συντομεύστε το."}), 400
 
+    if not user_message:
+        return jsonify({
+            "response": "Παρακαλώ γράψτε την ερώτησή σας."
+        }), 400
+
+    if len(user_message) > 1200:
+        return jsonify({
+            "response": "Το μήνυμά σας είναι μεγάλο. Παρακαλώ συντομεύστε το."
+        }), 400
+
+    # Άμεσες, προκαθορισμένες απαντήσεις για συγκεκριμένες σελίδες.
     quick_reply = _ariston_quick_reply(user_message)
+
     if quick_reply:
-        # Καταγράφουμε και τις παραπομπές στο ιστορικό, ώστε τα follow-ups να έχουν συνέχεια.
         history = session.get("ariston_chat_history", [])
+
         if not isinstance(history, list):
             history = []
-        history = [x for x in history[-4:] if isinstance(x, dict) and x.get("role") in ("user", "assistant") and isinstance(x.get("content"), str)]
+
+        history = [
+            item for item in history[-4:]
+            if (
+                isinstance(item, dict)
+                and item.get("role") in ("user", "assistant")
+                and isinstance(item.get("content"), str)
+            )
+        ]
+
         history.extend([
             {"role": "user", "content": user_message[:500]},
-            {"role": "assistant", "content": quick_reply[:500]},
+            {"role": "assistant", "content": quick_reply[:500]}
         ])
+
         session["ariston_chat_history"] = history[-6:]
         session.modified = True
+
         return jsonify({"response": quick_reply}), 200
 
     api_key = os.environ.get("GROQ_API_KEY")
+
     if not api_key:
-        app.logger.error("GROQ_API_KEY is missing.")
+        app.logger.error("ARISTON AI: GROQ_API_KEY is missing.")
+
         return jsonify({
-            "response": "Η υπηρεσία εξυπηρέτησης δεν είναι προσωρινά διαθέσιμη. Παρακαλώ δοκιμάστε ξανά αργότερα."
-        }), 500
+            "response": (
+                "Η υπηρεσία συνομιλίας δεν είναι προσωρινά διαθέσιμη. "
+                "Παρακαλώ δοκιμάστε ξανά αργότερα."
+            )
+        }), 200
 
-    # Το Flask session διατηρεί ξεχωριστό, μικρό ιστορικό για κάθε επισκέπτη.
-
+    # Ανάγνωση και έλεγχος του ιστορικού συνομιλίας.
     history = session.get("ariston_chat_history", [])
+
     if not isinstance(history, list):
         history = []
 
-    # Κρατάμε μόνο πρόσφατα, έγκυρα μηνύματα και μικρό κείμενο για να μη μεγαλώνει το cookie.
     clean_history = []
+
     for item in history[-6:]:
         if (
             isinstance(item, dict)
@@ -3788,44 +3815,152 @@ def ai_chat():
                 "content": item["content"][:500]
             })
 
-    messages = [{"role": "system", "content": ARISTON_SYSTEM_PROMPT}]
+    messages = [
+        {
+            "role": "system",
+            "content": ARISTON_SYSTEM_PROMPT
+        }
+    ]
+
     messages.extend(clean_history)
-    messages.append({"role": "user", "content": user_message})
+    messages.append({
+        "role": "user",
+        "content": user_message
+    })
+
+    def extract_reply(completion):
+        """Επιστρέφει το κείμενο της απάντησης, εφόσον υπάρχει."""
+
+        if not completion.choices:
+            return ""
+
+        message = completion.choices[0].message
+        content = getattr(message, "content", None)
+
+        # Συνήθης μορφή απάντησης του Groq: απλό string.
+        if isinstance(content, str):
+            return content.strip()
+
+        # Εναλλακτική μορφή: λίστα από τμήματα περιεχομένου.
+        if isinstance(content, list):
+            text_parts = []
+
+            for part in content:
+                if isinstance(part, dict):
+                    part_text = part.get("text")
+                else:
+                    part_text = getattr(part, "text", None)
+
+                if isinstance(part_text, str):
+                    text_parts.append(part_text)
+
+            return "".join(text_parts).strip()
+
+        return ""
 
     try:
         client = Groq(api_key=api_key)
-        completion = client.chat.completions.create(
-            model="openai/gpt-oss-20b",
-            messages=messages,
-            temperature=0.2,
-            max_tokens=1000,
-            top_p=0.9,
-            timeout=25
+
+        reply = ""
+
+        # Δοκιμάζουμε έως δύο φορές ΜΟΝΟ όταν δεν επιστρέφεται κείμενο.
+        for attempt in range(1, 3):
+            completion = client.chat.completions.create(
+                model="openai/gpt-oss-20b",
+                messages=messages,
+                temperature=0.2,
+                max_tokens=1200 if attempt == 2 else 1000,
+                top_p=0.9,
+                timeout=25
+            )
+
+            reply = extract_reply(completion)
+
+            if reply:
+                break
+
+            choice = (
+                completion.choices[0]
+                if completion.choices
+                else None
+            )
+
+            finish_reason = (
+                getattr(choice, "finish_reason", None)
+                if choice is not None
+                else None
+            )
+
+            app.logger.warning(
+                "ARISTON AI returned empty content. "
+                "Attempt=%s, finish_reason=%s, response_id=%s",
+                attempt,
+                finish_reason,
+                getattr(completion, "id", None)
+            )
+
+        if not reply:
+            app.logger.error(
+                "ARISTON AI: Empty response after retry. "
+                "No user message content was logged."
+            )
+
+            # Επιστρέφουμε κατανοητή απάντηση αντί για HTTP 500,
+            # ώστε το chat να μπορεί να εμφανίσει το μήνυμα.
+            return jsonify({
+                "response": (
+                    "Δεν κατάφερα να δημιουργήσω απάντηση αυτή τη στιγμή. "
+                    "Παρακαλώ δοκιμάστε ξανά σε λίγο."
+                )
+            }), 200
+
+        # Αφαιρούμε τυχόν εξωτερικά Markdown code fences.
+        reply = re.sub(
+            r"^\s*```(?:markdown|text)?\s*",
+            "",
+            reply,
+            flags=re.IGNORECASE
         )
 
-        reply = completion.choices[0].message.content
-        if not isinstance(reply, str) or not reply.strip():
-            raise ValueError("The model returned an empty response.")
-
-        reply = reply.strip()
-        reply = re.sub(r"^\s*```(?:markdown|text)?\s*", "", reply, flags=re.IGNORECASE)
         reply = re.sub(r"\s*```\s*$", "", reply).strip()
 
-        # Αποθηκεύουμε τα τελευταία μηνύματα ώστε να καταλαβαίνει το «πες μου κι άλλα».
+        if not reply:
+            return jsonify({
+                "response": (
+                    "Δεν κατάφερα να δημιουργήσω απάντηση αυτή τη στιγμή. "
+                    "Παρακαλώ δοκιμάστε ξανά σε λίγο."
+                )
+            }), 200
+
+        # Αποθήκευση ιστορικού για να λειτουργούν τα follow-up.
         updated_history = clean_history + [
-            {"role": "user", "content": user_message[:500]},
-            {"role": "assistant", "content": reply[:500]}
+            {
+                "role": "user",
+                "content": user_message[:500]
+            },
+            {
+                "role": "assistant",
+                "content": reply[:500]
+            }
         ]
+
         session["ariston_chat_history"] = updated_history[-6:]
         session.modified = True
 
         return jsonify({"response": reply}), 200
 
     except Exception:
-        app.logger.exception("ARISTON AI assistant request failed.")
+        app.logger.exception(
+            "ARISTON AI assistant request failed."
+        )
+
         return jsonify({
-            "response": "Λυπάμαι, η υπηρεσία συνομιλίας δεν είναι διαθέσιμη αυτή τη στιγμή. Παρακαλώ δοκιμάστε ξανά σε λίγο."
-        }), 500
+            "response": (
+                "Η υπηρεσία συνομιλίας αντιμετωπίζει προσωρινό πρόβλημα. "
+                "Παρακαλώ δοκιμάστε ξανά σε λίγο."
+            )
+        }), 200
+
 
 @app.route('/api/chat/reset', methods=['POST'])
 def reset_ai_chat():
