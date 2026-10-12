@@ -3974,10 +3974,10 @@ def ai_chat():
         _ariston_save_history(user_message, quick_reply)
         return jsonify({"response": quick_reply}), 200
 
-    # 2. Αν δεν υπάρχει API key, δεν αφήνουμε τον χρήστη χωρίς βοήθεια.
-    api_key = os.environ.get("GROQ_API_KEY")
+    # 2. Αν δεν υπάρχει ούτε το βασικό API key, ενημερώνουμε τον χρήστη.
+    api_key_1 = os.environ.get("GROQ_API_KEY")
 
-    if not api_key:
+    if not api_key_1:
         app.logger.error("ARISTON AI: GROQ_API_KEY is missing.")
 
         return jsonify({
@@ -4021,9 +4021,11 @@ def ai_chat():
         }
     ]
 
+    # 4. Κλήση της Groq me Fallback σε 2ο API Key αν χτυπήσει Rate Limit
     try:
+        # Πρώτη προσπάθεια με το βασικό GROQ_API_KEY
         client = Groq(
-            api_key=api_key,
+            api_key=api_key_1,
             max_retries=0,
             timeout=25
         )
@@ -4067,15 +4069,43 @@ def ai_chat():
         return jsonify({"response": reply}), 200
 
     except RateLimitError as exc:
-        # Δεν επαναλαμβάνουμε αυτόματα το αίτημα:
-        # μπορεί να επιδεινώσει το όριο tokens ανά λεπτό.
         app.logger.warning(
-            "ARISTON AI: Groq rate limit reached. "
-            "Error type=%s",
+            "ARISTON AI: GROQ_API_KEY reached rate limit (%s). Attempting GROQ_API_KEY_2...",
             type(exc).__name__
         )
 
-        # Ξαναδοκιμάζουμε τις γνωστές, τοπικές απαντήσεις.
+        # Δοκιμή με το δεύτερο εναλλακτικό κλειδί (GROQ_API_KEY_2)
+        api_key_2 = os.environ.get("GROQ_API_KEY_2")
+
+        if api_key_2:
+            try:
+                client_fallback = Groq(
+                    api_key=api_key_2,
+                    max_retries=0,
+                    timeout=25
+                )
+
+                completion_fb = client_fallback.chat.completions.create(
+                    model="openai/gpt-oss-20b",
+                    messages=messages,
+                    temperature=0.2,
+                    max_completion_tokens=500,
+                    reasoning_effort="low",
+                    include_reasoning=False
+                )
+
+                if completion_fb.choices and completion_fb.choices[0].message.content:
+                    reply_fb = completion_fb.choices[0].message.content.strip()
+                    reply_fb = re.sub(r"^\s*```(?:markdown|text)?\s*", "", reply_fb, flags=re.IGNORECASE)
+                    reply_fb = re.sub(r"\s*```\s*$", "", reply_fb).strip()
+
+                    if reply_fb:
+                        _ariston_save_history(user_message, reply_fb)
+                        return jsonify({"response": reply_fb}), 200
+            except Exception as fb_exc:
+                app.logger.warning("ARISTON AI: Fallback GROQ_API_KEY_2 also failed (%s).", type(fb_exc).__name__)
+
+        # Αν εξαντληθούν και τα δύο κλειδιά, ελέγχουμε ξανά για τοπική απάντηση
         fallback = _ariston_quick_reply(user_message)
 
         if fallback:
