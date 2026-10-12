@@ -16,25 +16,57 @@
 
     /* Premium Modern Live AI Button */
     .live-ai-btn {
-      background: linear-gradient(135deg, #0052cc 0%, #0284c7 100%);
+      background: linear-gradient(120deg, #003b8e 0%, #0066d6 48%, #0891b2 100%);
       color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 14px 20px;
-      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      padding: 14px 16px;
+      border-radius: 16px;
       font-weight: 700;
       font-size: 15px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
+      justify-content: flex-start;
+      gap: 13px;
       width: 100%;
       margin-top: 18px;
-      box-shadow: 0 8px 20px rgba(0, 82, 204, 0.35);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 9px 24px rgba(0, 82, 204, 0.32), inset 0 1px 0 rgba(255,255,255,.18);
+      transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
       position: relative;
       overflow: hidden;
+      text-align: left;
+      isolation: isolate;
     }
+    .live-ai-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,.18) 45%, transparent 70%);
+      transform: translateX(-120%);
+      transition: transform .65s ease;
+      z-index: -1;
+    }
+    .live-ai-btn:hover::before { transform: translateX(120%); }
+    .live-ai-btn:focus-visible {
+      outline: 3px solid #7dd3fc;
+      outline-offset: 3px;
+    }
+    .live-ai-btn .live-ai-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.22);
+      font-size: 19px;
+    }
+    .live-ai-btn .live-ai-label { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .live-ai-btn .live-ai-title { font-size: 14px; line-height: 1.25; }
+    .live-ai-btn .live-ai-subtitle { font-size: 11px; font-weight: 500; color: rgba(255,255,255,.82); }
+    .live-ai-btn .live-ai-arrow { font-size: 13px; opacity: .9; }
 
     .live-ai-btn i {
       font-size: 18px;
@@ -42,9 +74,9 @@
     }
 
     .live-ai-btn:hover {
-      transform: translateY(-3px) scale(1.01);
-      box-shadow: 0 12px 28px rgba(0, 82, 204, 0.45);
-      background: linear-gradient(135deg, #003d99 0%, #0369a1 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0, 82, 204, 0.42), inset 0 1px 0 rgba(255,255,255,.2);
+      filter: saturate(1.12);
     }
 
     .live-ai-btn:active {
@@ -60,20 +92,31 @@
     #live-chat-modal {
       display: none;
       position: fixed;
-      bottom: 25px;
-      right: 25px;
-      width: 390px;
-      max-width: 92vw;
-      height: 540px;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+      padding: 0;
       background: #ffffff;
-      border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22);
-      z-index: 9999;
+      border-radius: 0;
+      box-shadow: none;
+      z-index: 10000;
       flex-direction: column;
       overflow: hidden;
-      border: 1px solid rgba(226, 232, 240, 0.8);
+      border: 0;
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: modalSlideUp 0.25s ease-out;
+      box-sizing: border-box;
+    }
+    #live-chat-modal * { box-sizing: border-box; }
+    #live-chat-modal .live-chat-header { padding-top: max(16px, env(safe-area-inset-top)); }
+    #live-chat-modal .live-chat-input { padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+    @media (prefers-reduced-motion: reduce) {
+      .live-ai-btn, .live-ai-btn::before, #live-chat-modal { animation: none !important; transition: none !important; }
+      .live-ai-btn i { animation: none !important; }
     }
 
     @keyframes modalSlideUp {
@@ -267,9 +310,13 @@
       <p>Premium Laundry Concierge</p>
 
       <!-- LIVE AI ASSISTANT BUTTON -->
-      <button class="live-ai-btn" onclick="toggleLiveChat()">
-        <i class="fas fa-robot"></i>
-        <span>Talk to Live AI Assistant</span>
+      <button class="live-ai-btn" type="button" onclick="toggleLiveChat()" aria-haspopup="dialog" aria-controls="live-chat-modal" aria-label="Open Live AI Assistant full screen">
+        <span class="live-ai-icon"><i class="fas fa-robot" aria-hidden="true"></i></span>
+        <span class="live-ai-label">
+          <span class="live-ai-title">Talk to Live AI Assistant</span>
+          <span class="live-ai-subtitle">Instant support • Tap to open full screen</span>
+        </span>
+        <i class="fas fa-arrow-up-right-from-square live-ai-arrow" aria-hidden="true"></i>
       </button>
     </div>
 
@@ -310,7 +357,7 @@
 </div>
 
 <!-- MODAL LIVE AI CHAT -->
-<div id="live-chat-modal">
+<div id="live-chat-modal" role="dialog" aria-modal="true" aria-label="ARISTON Wash & Dry Live AI Assistant">
   <div class="live-chat-header">
     <div class="chat-header-info">
       <div class="chat-header-avatar">
@@ -325,8 +372,8 @@
   </div>
 
   <div class="live-chat-messages" id="modal-messages">
-    <div class="chat-bubble bot">
-      Hello! 🤖 I am the AI Assistant of ARISTON Wash & Dry. How can I help you today?
+    <div class="chat-bubble bot" id="live-ai-welcome">
+      Hello{% if current_user.is_authenticated and current_user.fullname %}, {{ current_user.fullname | e }}{% endif %}! 🤖 I am the AI Assistant of ARISTON Wash & Dry. How can I help you today?
     </div>
   </div>
 
@@ -378,11 +425,29 @@
         document.getElementById('ai-disclaimer-overlay').style.display = 'none';
     }
 
-    // Toggle Live Chat Modal
-    function toggleLiveChat() {
+    // Toggle full-screen Live AI Chat
+    function toggleLiveChat(forceOpen) {
         const modal = document.getElementById('live-chat-modal');
-        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        const isOpen = modal.style.display === 'flex';
+        const shouldOpen = (typeof forceOpen === 'boolean') ? forceOpen : !isOpen;
+
+        modal.style.display = shouldOpen ? 'flex' : 'none';
+        document.body.style.overflow = shouldOpen ? 'hidden' : '';
+
+        if (shouldOpen) {
+            window.setTimeout(function () {
+                const input = document.getElementById('modal-input');
+                if (input) input.focus();
+            }, 80);
+        }
     }
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            const modal = document.getElementById('live-chat-modal');
+            if (modal && modal.style.display === 'flex') toggleLiveChat(false);
+        }
+    });
 
     // Send Message to Groq Backend
     async function sendLiveMessage() {
@@ -413,7 +478,8 @@
             document.getElementById(loadingId).remove();
             
             // Format links in response
-            let formattedResponse = escapeHtml(data.response).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #0284c7; text-decoration: underline;">$1</a>');
+            const reply = (data && typeof data.response === 'string') ? data.response : "Sorry, I couldn't get a response. Please try again.";
+            let formattedResponse = escapeHtml(reply).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: underline;">$1</a>');
             
             messagesContainer.innerHTML += `<div class="chat-bubble bot">${formattedResponse}</div>`;
         } catch (err) {

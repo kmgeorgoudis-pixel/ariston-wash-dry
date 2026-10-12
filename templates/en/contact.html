@@ -729,7 +729,7 @@
                 <i class="fas fa-robot" style="font-size: 15px;"></i>
             </div>
             <div>
-                <strong style="font-size: 14px; display: block;">ARISTON AI Assistant</strong>
+                <strong style="font-size: 14px; display: block;">ARISTON W&D  AI Assistant</strong>
                 <span style="font-size: 10px; color: #38bdf8;">🟢 Online • Instant Support</span>
             </div>
         </div>
@@ -752,7 +752,7 @@
 </div>
 
 <script>
-    // Premium Date Script (English Version)
+    
     function updatePremiumDate() {
         const now = new Date();
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -827,7 +827,7 @@
     }
     setInterval(createBubble, 500);
 
-    // --- FLOATING AI ASSISTANT LOGIC & USER MESSAGE RATE LIMIT (24h) ---
+    
     const ARISTON_MAX_GUEST_MSGS = 5;
     const ARISTON_LOCK_TIME_MS = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -876,7 +876,7 @@
                 <div class="ariston-limit-banner" style="width: 100%;">
                     🔒 You have reached the limit of 5 messages!<br>
                     Please log in for unlimited access.<br>
-                    <a href="https://aristonwashdry.gr/ai">Go to ARISTON AI</a>
+                    <a href="https://aristonwashdry.gr/ai">Go to ARISTON W&D AI</a>
                 </div>
             `;
         }
@@ -895,7 +895,7 @@
 
         const container = document.getElementById('ariston-f-messages');
 
-        // 1. Emfanisi minimatos xristi
+        
         container.innerHTML += `<div class="ariston-f-bubble user">${escapeAristonHtml(text)}</div>`;
         input.value = '';
         container.scrollTop = container.scrollHeight;
@@ -908,7 +908,7 @@
         }
         updateAristonCounterUI();
 
-        // 3. Loading bubble gia tin apantisi tou AI (den metraei sto orio)
+        
         const loadId = 'ariston-load-' + Date.now();
         container.innerHTML += `<div id="${loadId}" class="ariston-f-bubble bot"><i>Thinking...</i></div>`;
         container.scrollTop = container.scrollHeight;
@@ -926,7 +926,7 @@
 
             let reply = data.response || "Response error.";
             
-            // Katharismos parentheseon apo ta links & metatropi se energa links
+            
             let formattedReply = reply.replace(/\(?https?:\/\/[^\s\)]+\)?/g, function(match) {
                 let url = match.replace(/[\(\)]/g, '');
                 return `<a href="${url}" target="_blank" style="color: #0284c7; text-decoration: underline; font-weight: bold;">${url}</a>`;
