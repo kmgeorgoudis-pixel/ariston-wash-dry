@@ -3701,41 +3701,250 @@ ARISTON_SYSTEM_PROMPT = """
 Αν κάτι δεν περιλαμβάνεται στις παραπάνω πληροφορίες ή στο περιεχόμενο του ιστοτόπου, πες καθαρά ότι δεν έχεις επιβεβαιωμένη πληροφορία και πρότεινε επικοινωνία με το κατάστημα.
 """
 
+def _ariston_normalize(text):
+    """Κανονικοποιεί τόνους και πεζά για ευκολότερη αναζήτηση."""
+    text = unicodedata.normalize("NFD", text.casefold())
+    text = "".join(
+        char for char in text
+        if unicodedata.category(char) != "Mn"
+    )
+    return re.sub(r"\s+", " ", text).strip()
+
+
 def _ariston_quick_reply(user_message):
-    """Σταθερές, ακριβείς παραπομπές για ερωτήσεις που χρειάζονται συγκεκριμένη σελίδα."""
-    msg = user_message.casefold().strip()
-    # Greeklish και αγγλικά υποστηρίζονται μέσω λέξεων-κλειδιών, χωρίς να μπλοκάρουμε το AI.
-    english = bool(re.search(r"\b(price|prices|pricing|cost|how much|coupon|coupons|points|loyalty|member info|contact|review|reviews|rate us|feedback|receipt|staff|employee)\b", msg))
-    is_price = any(x in msg for x in ["τιμή", "τιμες", "τιμές", "τιμοκατάλογ", "κοστίζ", "κοστιζ", "πόσο κάνει", "poso kanei", "times", "timokatalog", "price", "pricing", "how much", "cost"])
-    is_points = any(x in msg for x in ["πόντ", "pont", "points", "loyalty", "member info", "προσθέσω πόντους", "perasoyn oi pontoi", "peraso pontous"])
-    is_coupon = any(x in msg for x in ["κουπόν", "κουπον", "koypon", "coupon", "coupons", "προσφορές μελών", "prosfores melon"])
-    is_contact = any(x in msg for x in ["επικοινων", "epikoin", "φόρμα επικοινων", "forma epikoin", "contact", "μίλησω με το κατάστημα", "μιλησω me to katasthma", "send a message"])
-    is_review = any(x in msg for x in ["κριτικ", "kritik", "αξιολόγ", "axiolog", "google review", "reviews", "rate us", "feedback", "εμπειρία μου", "empeiria mou"])
-    if is_price:
-        url = "https://aristonwashdry.gr/en/pricing" if english else "https://aristonwashdry.gr/timokatalogos"
+    """Απαντήσεις για συχνές ερωτήσεις χωρίς κλήση στο Groq."""
+    msg = _ariston_normalize(user_message)
+
+    english = bool(re.search(
+        r"\b(hello|hi|price|prices|pricing|cost|how much|"
+        r"coupon|coupons|points|loyalty|member|contact|"
+        r"review|reviews|address|location|hours|open|"
+        r"payment|card|cash|washing|drying|detergent)\b",
+        msg
+    ))
+
+    def has_any(*terms):
+        return any(term in msg for term in terms)
+
+    # Τιμές
+    if has_any(
+        "τιμη", "τιμοκαταλογ", "κοστιζ", "ποσο κανει",
+        "poso kanei", "times", "timokatalog", "price",
+        "pricing", "how much", "cost"
+    ):
+        url = (
+            "https://aristonwashdry.gr/en/pricing"
+            if english else
+            "https://aristonwashdry.gr/timokatalogos"
+        )
         if english:
-            return f"You can find the current washing and drying prices here: {url}\n\nThe page lists the machine sizes and prices. If you tell me what you want to wash, I can also help you choose the most suitable option."
-        return f"Βεβαίως! Θα βρεις τον αναλυτικό και ενημερωμένο τιμοκατάλογο για πλύσιμο και στέγνωμα εδώ:\n{url}\n\nΑν μου πεις τι θέλεις να πλύνεις, μπορώ επίσης να σε βοηθήσω να επιλέξεις το κατάλληλο μηχάνημα."
-    if is_points:
-        url = "https://aristonwashdry.gr/en/member-info" if english else "https://aristonwashdry.gr/member-info"
+            return (
+                f"You can find the washing and drying prices here: {url}\n\n"
+                "If you tell me what you want to wash, I can help you "
+                "choose the right machine."
+            )
+        return (
+            f"Μπορείς να δεις τον τιμοκατάλογο εδώ:\n{url}\n\n"
+            "Αν μου πεις τι θέλεις να πλύνεις, θα σε βοηθήσω "
+            "να επιλέξεις το κατάλληλο μηχάνημα."
+        )
+
+    # Ωράριο
+    if has_any(
+        "ωραριο", "τι ωρα", "ποτε ανοιγει", "ποτε κλεινει",
+        "anoigei", "kleinei", "opening hours", "business hours",
+        "what time", "open today", "closing time"
+    ):
         if english:
-            return f"To add points from a purchase, please bring your receipt to the staff member available from 17:30 onwards, and they will help you register them. You can view your member information here: {url}"
-        return f"Για να περαστούν οι πόντοι από την αγορά σου, έλα με την απόδειξή σου στον διαθέσιμο υπάλληλο από τις 17:30 και μετά και θα σε βοηθήσει να τους καταχωρίσεις.\n\nΜπορείς να βλέπεις τις πληροφορίες του λογαριασμού σου εδώ: {url}"
-    if is_coupon:
-        url = "https://aristonwashdry.gr/en/coupons" if english else "https://aristonwashdry.gr/coupons"
-        return (f"You can view your member coupons here: {url}" if english else f"Μπορείς να δεις τα κουπόνια σου και τις διαθέσιμες προσφορές μελών εδώ: {url}")
-    if is_contact:
-        url = "https://aristonwashdry.gr/en/contact" if english else "https://aristonwashdry.gr/epikoinonia"
-        return (f"You can send the store a message using the contact form here: {url} You can also call the store using the phone numbers listed on the page." if english else f"Μπορείς να στείλεις μήνυμα στο κατάστημα μέσω της φόρμας επικοινωνίας εδώ: {url}\n\nΕναλλακτικά, θα βρεις και τα τηλέφωνα επικοινωνίας στην ίδια σελίδα.")
-    if is_review:
-        url = "https://aristonwashdry.gr/en/reviews" if english else "https://aristonwashdry.gr/kritikes"
-        return (f"If you enjoyed our service, we would really appreciate your feedback. You can leave a review here: {url}" if english else f"Αν έμεινες ευχαριστημένος/η από τις υπηρεσίες μας, θα χαρούμε πολύ να ακούσουμε την εμπειρία σου. Μπορείς να αφήσεις την κριτική σου εδώ: {url}")
+            return (
+                "ARISTON Wash & Dry is open every day, all year round, "
+                "from 07:00 to 23:00."
+            )
+        return (
+            "Το ARISTON Wash & Dry λειτουργεί καθημερινά, όλο τον "
+            "χρόνο, από τις 07:00 έως τις 23:00."
+        )
+
+    # Διεύθυνση
+    if has_any(
+        "διευθυν", "που ειστε", "που βρισκεστε", "πως θα ερθω",
+        "address", "location", "where are you", "where is the store"
+    ):
+        if english:
+            return (
+                "You can find us at Dervenakion 10, Vathy, Samos 83100, "
+                "Greece. We are open daily from 07:00 to 23:00."
+            )
+        return (
+            "Θα μας βρεις στη διεύθυνση Δερβενακίων 10, "
+            "Βαθύ, Σάμος 83100. Λειτουργούμε καθημερινά "
+            "από τις 07:00 έως τις 23:00."
+        )
+
+    # Τρόποι πληρωμής
+    if has_any(
+        "πληρω", "τροποι πληρωμη", "με καρτα", "apple pay",
+        "google pay", "iris", "contactless", "payment methods",
+        "how can i pay", "pay by card", "cash", "credit card"
+    ):
+        if english:
+            return (
+                "Available payment methods include cash, credit/debit "
+                "cards, contactless payments, Apple Pay, Google Pay "
+                "and IRIS."
+            )
+        return (
+            "Μπορείς να πληρώσεις με μετρητά, πιστωτική ή χρεωστική "
+            "κάρτα, ανέπαφη πληρωμή, Apple Pay, Google Pay και IRIS."
+        )
+
+    # Απορρυπαντικό
+    if has_any(
+        "απορρυπαν", "μαλακτικ", "να φερω απορρυπαντικ",
+        "detergent", "fabric softener", "washing liquid"
+    ):
+        if english:
+            return (
+                "Detergent and fabric softener are automatically "
+                "dispensed by the machines, so you do not need to "
+                "bring your own."
+            )
+        return (
+            "Δεν χρειάζεται να φέρεις δικό σου απορρυπαντικό ή "
+            "μαλακτικό. Δοσομετρούνται αυτόματα από τα μηχανήματα."
+        )
+
+    # Διάρκεια πλύσης
+    if has_any(
+        "διαρκεια πλυση", "ποσο διαρκει η πλυση",
+        "ποση ωρα πλενει", "how long does washing take",
+        "washing time", "wash cycle duration"
+    ):
+        if english:
+            return (
+                "The standard wash cycle takes approximately 28 minutes. "
+                "The prewash cycle takes approximately 36 minutes."
+            )
+        return (
+            "Το απλό πρόγραμμα πλύσης διαρκεί περίπου 28 λεπτά, "
+            "ενώ το πρόγραμμα με πρόπλυση περίπου 36 λεπτά."
+        )
+
+    # Διάρκεια στεγνώματος
+    if has_any(
+        "διαρκεια στεγνω", "ποσο διαρκει το στεγνω",
+        "ποση ωρα στεγνων", "χρονος στεγνω",
+        "drying time", "how long does drying take"
+    ):
+        if english:
+            return (
+                "Drying runs in 15-minute cycles. One cycle may be "
+                "enough, but thicker fabrics or larger loads can "
+                "require additional time."
+            )
+        return (
+            "Το στέγνωμα γίνεται σε κύκλους των 15 λεπτών. Ένας "
+            "κύκλος μπορεί να αρκεί, αλλά τα πιο χοντρά υφάσματα "
+            "ή τα μεγαλύτερα φορτία ενδέχεται να χρειαστούν "
+            "επιπλέον χρόνο."
+        )
+
+    # Οδηγίες χρήσης
+    if has_any(
+        "οδηγι", "πως χρησιμοποι", "πως λειτουργ", "how to use",
+        "how do i use", "instructions", "use the machines"
+    ):
+        url = "https://aristonwashdry.gr/how-to-use"
+        if english:
+            return f"You can find the machine instructions here: {url}"
+        return f"Θα βρεις τις οδηγίες χρήσης των μηχανημάτων εδώ:\n{url}"
+
+    # Πόντοι μελών
+    if has_any(
+        "ποντ", "pont", "points", "loyalty", "member info",
+        "προσθεσω ποντους", "περαστουν οι ποντοι"
+    ):
+        url = (
+            "https://aristonwashdry.gr/en/member-info"
+            if english else
+            "https://aristonwashdry.gr/member-info"
+        )
+        if english:
+            return (
+                "To register points, bring your receipt to the staff "
+                "member available from 17:30 onwards. Member information: "
+                f"{url}"
+            )
+        return (
+            "Για να καταχωρίσεις πόντους, έλα με την απόδειξή σου "
+            "στον διαθέσιμο υπάλληλο από τις 17:30 και μετά.\n\n"
+            f"Πληροφορίες μέλους: {url}"
+        )
+
+    # Κουπόνια
+    if has_any("κουπον", "koypon", "coupon", "coupons"):
+        url = (
+            "https://aristonwashdry.gr/en/coupons"
+            if english else
+            "https://aristonwashdry.gr/coupons"
+        )
+        return (
+            f"You can view your member coupons here: {url}"
+            if english else
+            f"Μπορείς να δεις τα κουπόνια και τις προσφορές μελών εδώ:\n{url}"
+        )
+
+    # Επικοινωνία
+    if has_any(
+        "επικοινων", "epikoin", "contact", "send a message",
+        "μιλησω με το καταστημα", "τηλεφωνο καταστηματος"
+    ):
+        url = (
+            "https://aristonwashdry.gr/en/contact"
+            if english else
+            "https://aristonwashdry.gr/epikoinonia"
+        )
+        if english:
+            return (
+                f"You can contact the store here: {url}\n"
+                "For urgent assistance, call 698 759 8416."
+            )
+        return (
+            f"Μπορείς να επικοινωνήσεις μαζί μας εδώ:\n{url}\n\n"
+            "Για άμεση βοήθεια, κάλεσε στο 698 759 8416."
+        )
+
+    # Δεν αναγνωρίστηκε ως απλή ερώτηση.
     return None
 
 
 
 
-@app.route('/api/chat', methods=['POST'])
+def _ariston_save_history(user_message, reply):
+    history = session.get("ariston_chat_history", [])
+
+    if not isinstance(history, list):
+        history = []
+
+    history = [
+        item for item in history
+        if (
+            isinstance(item, dict)
+            and item.get("role") in ("user", "assistant")
+            and isinstance(item.get("content"), str)
+        )
+    ]
+
+    history.extend([
+        {"role": "user", "content": user_message[:350]},
+        {"role": "assistant", "content": reply[:350]}
+    ])
+
+    session["ariston_chat_history"] = history[-4:]
+    session.modified = True
+
+
+@app.route("/api/chat", methods=["POST"])
 def ai_chat():
     data = request.get_json(silent=True) or {}
     user_message = data.get("message", "")
@@ -3757,35 +3966,14 @@ def ai_chat():
             "response": "Το μήνυμά σας είναι μεγάλο. Παρακαλώ συντομεύστε το."
         }), 400
 
-    # 1. Άμεσες απαντήσεις για συγκεκριμένες σελίδες.
+    # 1. Πρώτα απαντάμε χωρίς AI, όπου έχουμε επιβεβαιωμένη γνώση.
     quick_reply = _ariston_quick_reply(user_message)
 
     if quick_reply:
-        history = session.get("ariston_chat_history", [])
-
-        if not isinstance(history, list):
-            history = []
-
-        history = [
-            item for item in history[-4:]
-            if (
-                isinstance(item, dict)
-                and item.get("role") in ("user", "assistant")
-                and isinstance(item.get("content"), str)
-            )
-        ]
-
-        history.extend([
-            {"role": "user", "content": user_message[:500]},
-            {"role": "assistant", "content": quick_reply[:500]}
-        ])
-
-        session["ariston_chat_history"] = history[-6:]
-        session.modified = True
-
+        _ariston_save_history(user_message, quick_reply)
         return jsonify({"response": quick_reply}), 200
 
-    # 2. Έλεγχος API key.
+    # 2. Αν δεν υπάρχει API key, δεν αφήνουμε τον χρήστη χωρίς βοήθεια.
     api_key = os.environ.get("GROQ_API_KEY")
 
     if not api_key:
@@ -3793,12 +3981,13 @@ def ai_chat():
 
         return jsonify({
             "response": (
-                "Η υπηρεσία συνομιλίας δεν είναι προσωρινά διαθέσιμη. "
-                "Παρακαλώ δοκιμάστε ξανά αργότερα."
+                "Ο ψηφιακός βοηθός δεν είναι προσωρινά διαθέσιμος. "
+                "Για βοήθεια, καλέστε στο 698 759 8416 ή επισκεφθείτε "
+                "το https://aristonwashdry.gr/epikoinonia"
             )
         }), 200
 
-    # 3. Ανάγνωση ιστορικού.
+    # 3. Κρατάμε μόνο τα τελευταία 4 έγκυρα μηνύματα.
     history = session.get("ariston_chat_history", [])
 
     if not isinstance(history, list):
@@ -3806,7 +3995,7 @@ def ai_chat():
 
     clean_history = []
 
-    for item in history[-6:]:
+    for item in history:
         if (
             isinstance(item, dict)
             and item.get("role") in ("user", "assistant")
@@ -3814,154 +4003,111 @@ def ai_chat():
         ):
             clean_history.append({
                 "role": item["role"],
-                "content": item["content"][:500]
+                "content": item["content"][:350]
             })
+
+    clean_history = clean_history[-4:]
 
     messages = [
         {
             "role": "system",
             "content": ARISTON_SYSTEM_PROMPT
+        },
+        *clean_history,
+        {
+            "role": "user",
+            "content": user_message
         }
     ]
 
-    messages.extend(clean_history)
-    messages.append({
-        "role": "user",
-        "content": user_message
-    })
-
     try:
-        client = Groq(api_key=api_key)
+        client = Groq(
+            api_key=api_key,
+            max_retries=0,
+            timeout=25
+        )
 
-        # Μία κλήση ανά ερώτηση, ώστε να περιορίζουμε
-        # την κατανάλωση tokens και τα σφάλματα ορίων.
         completion = client.chat.completions.create(
             model="openai/gpt-oss-20b",
             messages=messages,
             temperature=0.2,
-            max_completion_tokens=700,
+            max_completion_tokens=500,
             reasoning_effort="low",
-            include_reasoning=False,
-            timeout=30
+            include_reasoning=False
         )
 
         if not completion.choices:
-            app.logger.warning(
-                "ARISTON AI: Model returned no choices. ID=%s",
-                getattr(completion, "id", None)
-            )
-
-            return jsonify({
-                "response": (
-                    "Δεν κατάφερα να δημιουργήσω απάντηση αυτή τη στιγμή. "
-                    "Παρακαλώ δοκιμάστε ξανά σε λίγο."
-                )
-            }), 200
+            raise ValueError("Groq returned no choices")
 
         choice = completion.choices[0]
-        message = choice.message
-        content = getattr(message, "content", None)
+        content = choice.message.content
 
-        # Κανονική απάντηση: string.
-        if isinstance(content, str):
-            reply = content.strip()
-
-        # Εναλλακτική μορφή: λίστα τμημάτων κειμένου.
-        elif isinstance(content, list):
-            parts = []
-
-            for part in content:
-                if isinstance(part, dict):
-                    text_part = part.get("text")
-                else:
-                    text_part = getattr(part, "text", None)
-
-                if isinstance(text_part, str):
-                    parts.append(text_part)
-
-            reply = "".join(parts).strip()
-
-        else:
-            reply = ""
-
-        if not reply:
-            app.logger.warning(
-                "ARISTON AI: Empty response. finish_reason=%s, ID=%s",
-                getattr(choice, "finish_reason", None),
-                getattr(completion, "id", None)
+        if not isinstance(content, str) or not content.strip():
+            raise ValueError(
+                f"Groq returned empty content; "
+                f"finish_reason={choice.finish_reason}"
             )
 
-            return jsonify({
-                "response": (
-                    "Δεν κατάφερα να δημιουργήσω απάντηση αυτή τη στιγμή. "
-                    "Παρακαλώ δοκιμάστε ξανά σε λίγο."
-                )
-            }), 200
+        reply = content.strip()
 
-        # Αφαίρεση εξωτερικών Markdown code fences.
         reply = re.sub(
             r"^\s*```(?:markdown|text)?\s*",
             "",
             reply,
             flags=re.IGNORECASE
         )
-
         reply = re.sub(r"\s*```\s*$", "", reply).strip()
 
         if not reply:
-            return jsonify({
-                "response": (
-                    "Δεν κατάφερα να δημιουργήσω απάντηση αυτή τη στιγμή. "
-                    "Παρακαλώ δοκιμάστε ξανά σε λίγο."
-                )
-            }), 200
+            raise ValueError("Groq returned an empty cleaned response")
 
-        # 4. Αποθήκευση ιστορικού.
-        updated_history = clean_history + [
-            {
-                "role": "user",
-                "content": user_message[:500]
-            },
-            {
-                "role": "assistant",
-                "content": reply[:500]
-            }
-        ]
-
-        session["ariston_chat_history"] = updated_history[-6:]
-        session.modified = True
+        _ariston_save_history(user_message, reply)
 
         return jsonify({"response": reply}), 200
 
-    except Exception as exc:
-        # Δεν καταγράφουμε το μήνυμα του πελάτη ή το API key.
-        from groq import RateLimitError
+    except RateLimitError as exc:
+        # Δεν επαναλαμβάνουμε αυτόματα το αίτημα:
+        # μπορεί να επιδεινώσει το όριο tokens ανά λεπτό.
+        app.logger.warning(
+            "ARISTON AI: Groq rate limit reached. "
+            "Error type=%s",
+            type(exc).__name__
+        )
 
-        if isinstance(exc, RateLimitError):
-            app.logger.warning(
-                "ARISTON AI: Groq rate limit reached."
+        # Ξαναδοκιμάζουμε τις γνωστές, τοπικές απαντήσεις.
+        fallback = _ariston_quick_reply(user_message)
+
+        if fallback:
+            _ariston_save_history(user_message, fallback)
+            return jsonify({"response": fallback}), 200
+
+        return jsonify({
+            "response": (
+                "Αυτή τη στιγμή ο ψηφιακός βοηθός έχει αυξημένη "
+                "κίνηση και δεν μπόρεσε να επεξεργαστεί την ερώτησή σου. "
+                "Μπορείς να δοκιμάσεις ξανά αργότερα ή να επικοινωνήσεις "
+                "μαζί μας στο 698 759 8416.\n\n"
+                "https://aristonwashdry.gr/epikoinonia"
             )
+        }), 200
 
-            return jsonify({
-                "response": (
-                    "Η υπηρεσία συνομιλίας είναι προσωρινά απασχολημένη. "
-                    "Παρακαλώ περίμενε λίγα δευτερόλεπτα και δοκίμασε ξανά."
-                )
-            }), 200
-
+    except Exception as exc:
         app.logger.exception(
-            "ARISTON AI assistant request failed."
+            "ARISTON AI: Request failed. Error type=%s",
+            type(exc).__name__
         )
 
         return jsonify({
             "response": (
-                "Η υπηρεσία συνομιλίας αντιμετωπίζει προσωρινό πρόβλημα. "
-                "Παρακαλώ δοκιμάστε ξανά σε λίγο."
+                "Παρουσιάστηκε προσωρινό τεχνικό πρόβλημα. "
+                "Μπορείς να δοκιμάσεις ξανά ή να επικοινωνήσεις "
+                "με το κατάστημα στο 698 759 8416.\n\n"
+                "https://aristonwashdry.gr/epikoinonia"
             )
         }), 200
 
 
-@app.route('/api/chat/reset', methods=['POST'])
+@app.route("/api/chat/reset", methods=["POST"])
 def reset_ai_chat():
     session.pop("ariston_chat_history", None)
     return jsonify({"ok": True}), 200
