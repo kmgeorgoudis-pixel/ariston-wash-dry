@@ -3974,12 +3974,18 @@ def ai_chat():
         _ariston_save_history(user_message, quick_reply)
         return jsonify({"response": quick_reply}), 200
 
-    # 2. Αν δεν υπάρχει ούτε το βασικό API key, ενημερώνουμε τον χρήστη.
-    api_key_1 = os.environ.get("GROQ_API_KEY")
+    # 2. Συλλογή των διαθέσιμων API Keys.
+    api_keys = []
+    key1 = os.environ.get("GROQ_API_KEY")
+    key2 = os.environ.get("GROQ_API_KEY_2")
 
-    if not api_key_1:
-        app.logger.error("ARISTON AI: GROQ_API_KEY is missing.")
+    if key1:
+        api_keys.append(key1)
+    if key2:
+        api_keys.append(key2)
 
+    if not api_keys:
+        app.logger.error("ARISTON AI: No GROQ API key found.")
         return jsonify({
             "response": (
                 "Ο ψηφιακός βοηθός δεν είναι προσωρινά διαθέσιμος. "
@@ -4021,121 +4027,85 @@ def ai_chat():
         }
     ]
 
-    # 4. Κλήση της Groq me Fallback σε 2ο API Key αν χτυπήσει Rate Limit
-    try:
-        # Πρώτη προσπάθεια με το βασικό GROQ_API_KEY
+    # 4. Λίστα μοντέλων με τη σειρά που θέλουμε να δοκιμάζονται
+    MODELS_TO_TRY = [
+        "openai/gpt-oss-20b",
+        "qwen/qwen3.8-27b",
+        "openai/gpt-oss-120b"
+    ]
+
+    # 5. Δοκιμάζουμε συνδυαστικά API Keys & Μοντέλα
+    for key_index, current_key in enumerate(api_keys, start=1):
         client = Groq(
-            api_key=api_key_1,
+            api_key=current_key,
             max_retries=0,
             timeout=25
         )
 
-        completion = client.chat.completions.create(
-            model="openai/gpt-oss-20b",
-            messages=messages,
-            temperature=0.2,
-            max_completion_tokens=500,
-            reasoning_effort="low",
-            include_reasoning=False
-        )
-
-        if not completion.choices:
-            raise ValueError("Groq returned no choices")
-
-        choice = completion.choices[0]
-        content = choice.message.content
-
-        if not isinstance(content, str) or not content.strip():
-            raise ValueError(
-                f"Groq returned empty content; "
-                f"finish_reason={choice.finish_reason}"
-            )
-
-        reply = content.strip()
-
-        reply = re.sub(
-            r"^\s*```(?:markdown|text)?\s*",
-            "",
-            reply,
-            flags=re.IGNORECASE
-        )
-        reply = re.sub(r"\s*```\s*$", "", reply).strip()
-
-        if not reply:
-            raise ValueError("Groq returned an empty cleaned response")
-
-        _ariston_save_history(user_message, reply)
-
-        return jsonify({"response": reply}), 200
-
-    except RateLimitError as exc:
-        app.logger.warning(
-            "ARISTON AI: GROQ_API_KEY reached rate limit (%s). Attempting GROQ_API_KEY_2...",
-            type(exc).__name__
-        )
-
-        # Δοκιμή με το δεύτερο εναλλακτικό κλειδί (GROQ_API_KEY_2)
-        api_key_2 = os.environ.get("GROQ_API_KEY_2")
-
-        if api_key_2:
+        for model_name in MODELS_TO_TRY:
             try:
-                client_fallback = Groq(
-                    api_key=api_key_2,
-                    max_retries=0,
-                    timeout=25
+                # Παράμετροι κλήσης
+                kwargs = {
+                    "model": model_name,
+                    "messages": messages,
+                    "temperature": 0.2,
+                    "max_completion_tokens": 500
+                }
+                
+                # Προσθήκη ειδικών παραμέτρων αν πρόκειται για gpt-oss
+                if "gpt-oss" in model_name:
+                    kwargs["reasoning_effort"] = "low"
+                    kwargs["include_reasoning"] = False
+
+                completion = client.chat.completions.create(**kwargs)
+
+                if not completion.choices:
+                    continue
+
+                choice = completion.choices[0]
+                content = choice.message.content
+
+                if not isinstance(content, str) or not content.strip():
+                    continue
+
+                reply = content.strip()
+                reply = re.sub(r"^\s*```(?:markdown|text)?\s*", "", reply, flags=re.IGNORECASE)
+                reply = re.sub(r"\s*```\s*$", "", reply).strip()
+
+                if reply:
+                    _ariston_save_history(user_message, reply)
+                    return jsonify({"response": reply}), 200
+
+            except RateLimitError as exc:
+                app.logger.warning(
+                    "ARISTON AI: Rate limit on Key #%d, Model %s (%s). Trying next...",
+                    key_index, model_name, type(exc).__name__
                 )
-
-                completion_fb = client_fallback.chat.completions.create(
-                    model="openai/gpt-oss-20b",
-                    messages=messages,
-                    temperature=0.2,
-                    max_completion_tokens=500,
-                    reasoning_effort="low",
-                    include_reasoning=False
+                continue
+            except Exception as exc:
+                app.logger.warning(
+                    "ARISTON AI: Error on Key #%d, Model %s (%s). Trying next...",
+                    key_index, model_name, type(exc).__name__
                 )
+                continue
 
-                if completion_fb.choices and completion_fb.choices[0].message.content:
-                    reply_fb = completion_fb.choices[0].message.content.strip()
-                    reply_fb = re.sub(r"^\s*```(?:markdown|text)?\s*", "", reply_fb, flags=re.IGNORECASE)
-                    reply_fb = re.sub(r"\s*```\s*$", "", reply_fb).strip()
+    # 6. Αν αποτύχουν όλα τα μοντέλα και όλα τα keys, επιστρέφουμε τοπική απάντηση
+    app.logger.error("ARISTON AI: All API keys and models failed or reached limits.")
+    fallback = _ariston_quick_reply(user_message)
 
-                    if reply_fb:
-                        _ariston_save_history(user_message, reply_fb)
-                        return jsonify({"response": reply_fb}), 200
-            except Exception as fb_exc:
-                app.logger.warning("ARISTON AI: Fallback GROQ_API_KEY_2 also failed (%s).", type(fb_exc).__name__)
+    if fallback:
+        _ariston_save_history(user_message, fallback)
+        return jsonify({"response": fallback}), 200
 
-        # Αν εξαντληθούν και τα δύο κλειδιά, ελέγχουμε ξανά για τοπική απάντηση
-        fallback = _ariston_quick_reply(user_message)
-
-        if fallback:
-            _ariston_save_history(user_message, fallback)
-            return jsonify({"response": fallback}), 200
-
-        return jsonify({
-            "response": (
-                "Αυτή τη στιγμή ο ψηφιακός βοηθός έχει αυξημένη "
-                "κίνηση και δεν μπόρεσε να επεξεργαστεί την ερώτησή σου. "
-                "Μπορείς να δοκιμάσεις ξανά αργότερα ή να επικοινωνήσεις "
-                "μαζί μας στο 698 759 8416.\n\n"
-                "https://aristonwashdry.gr/epikoinonia"
-            )
-        }), 200
-
-    except Exception as exc:
-        app.logger.exception(
-            "ARISTON AI: Request failed. Error type=%s",
-            type(exc).__name__
+    return jsonify({
+        "response": (
+            "Αυτή τη στιγμή ο ψηφιακός βοηθός έχει αυξημένη "
+            "κίνηση και δεν μπόρεσε να επεξεργαστεί την ερώτησή σου. "
+            "Μπορείς να δοκιμάσεις ξανά αργότερα ή να επικοινωνήσεις "
+            "μαζί μας στο 698 759 8416.\n\n"
+            "https://aristonwashdry.gr/epikoinonia"
         )
-
-        return jsonify({
-            "response": (
-                "Παρουσιάστηκε προσωρινό τεχνικό πρόβλημα. "
-                "Μπορείς να δοκιμάσεις ξανά ή να επικοινωνήσεις "
-                "με το κατάστημα στο 698 759 8416.\n\n"
-                "https://aristonwashdry.gr/epikoinonia"
-            )
-        }), 200
+    }), 200
 
 
 @app.route("/api/chat/reset", methods=["POST"])
